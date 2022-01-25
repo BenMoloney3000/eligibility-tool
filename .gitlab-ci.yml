@@ -1,0 +1,159 @@
+variables:
+    # Change pip's cache directory to be inside the project directory since we can
+    # only cache local items.
+    PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
+
+stages:
+    - test
+    - build
+    - deploy
+
+#
+# The tasks.
+#
+
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+sast:
+  stage: test
+  include:
+  - template: Security/SAST.gitlab-ci.yml
+
+test:
+    stage: test
+    needs: []
+    image: carboncoop/python-gis-testing
+    services:
+        - mdillon/postgis:10-alpine
+        - redis:latest
+    variables:
+        DEBUG: 1
+        POSTGRES_DB: prospector
+        REDIS_HOST: redis
+        REDIS_PORT: 6379
+        DATABASE_URL: 'postgresql://postgres:postgres@mdillon__postgis:5432/$POSTGRES_DB'
+        USE_AUTH_SERVICE: 'False'
+        PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
+    cache:
+        key: test
+        when: 'always'
+        paths:
+            - ${PIP_CACHE_DIR}
+            - venv
+
+    script:
+        - python -V
+        - virtualenv venv
+        - source venv/bin/activate
+        - pip install pip-tools==6.3.0
+        - pip-sync requirements/local.txt
+        - pytest --cov=prospector
+        - flake8 prospector
+
+pre-commit:
+    stage: test
+    needs: []
+    image: carboncoop/python-plus-node:3.8-and-14.16
+    variables:
+        PIP_CACHE_DIR: '${CI_PROJECT_DIR}/.cache/pip'
+        PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
+    cache:
+        key: pre-commit
+        when: 'always'
+        paths:
+            - ${PIP_CACHE_DIR}
+            - ${PRE_COMMIT_HOME}
+            - node_modules
+
+    before_script:
+        - npm install
+    script:
+        - python -V
+        - pip install pre-commit==2.13.0
+        - pre-commit run --all
+
+pages:
+    stage: deploy
+    needs: []
+    image: python:3.8
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+          changes:
+          - docs/**/*
+
+    artifacts:
+        paths:
+            - public
+
+    script:
+        - pip install -r requirements/docs.txt
+        - make clean -C docs/
+        - make html -C docs/
+        - mv docs/_build/html/ public/
+
+get aws docker key:
+    stage: build
+    needs: []
+    image:
+        name: amazon/aws-cli:2.2.36
+        entrypoint: [""]
+    artifacts:
+        paths:
+            - ecr-password
+    script:
+        - aws ecr get-login-password > ecr-password
+
+# TODO: only push if on dev/master
+build container:
+    stage: build
+    needs: ["get aws docker key"]
+    image: carboncoop/python-builds:2
+    services:
+        - docker:dind
+    script:
+        - deploy/script/build_and_push_images.sh ${CI_BUILD_REF} carbon-coop/prospector/django
+
+staging:
+    stage: deploy
+    needs: ["test", "pre-commit", "build container"]
+    image:
+        name: amazon/aws-cli:2.2.36
+        entrypoint: [""]
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+    environment:
+        name: staging
+        url: https://prospector-staging.carbon.coop/
+    variables:
+        AWS_ACCESS_KEY_ID: $STAGING_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY: $STAGING_SECRET_ACCESS_KEY
+    script:
+        - yum install -y zip
+        - echo ${CI_BUILD_REF} > image-tag.txt
+        - zip deploy.zip -r image-tag.txt
+        - aws s3 cp deploy.zip s3://prospector-staging-deploy/
+
+production:
+    stage: deploy
+    needs: ["staging"]
+    image:
+        name: amazon/aws-cli:2.2.36
+        entrypoint: [""]
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+          when: manual
+    environment:
+        name: production
+        url: https://prospector.carbon.coop/
+    variables:
+        AWS_ACCESS_KEY_ID: $PROD_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY: $PROD_SECRET_ACCESS_KEY
+    script:
+        - yum install -y zip
+        - echo ${CI_BUILD_REF} > image-tag.txt
+        - zip deploy.zip -r image-tag.txt
+        - aws s3 cp deploy.zip s3://prospector-production-deploy/

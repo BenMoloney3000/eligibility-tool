@@ -1,0 +1,21 @@
+# ! When you alter this file, make sure that you recompile the output .txt files too.
+
+argon2-cffi              # Password hashing for when you don't use Auth0
+psycopg2-binary          # Postgres driver
+requests                 # For making HTTP requests
+python-dateutil          # Various datetime manipulation functions
+
+django
+django-environ           # Environment variable access
+django-waffle            # Feature flags
+
+sentry-sdk               # Sentry for error logging
+rq                       # Redis Queue library
+django-rq                # Django integration for rq
+rq-scheduler             # RQ scheduler component
+
+# Production deps
+ssm-parameter-store      # Extract env vars from AWS parameter store
+gunicorn                 # Web server
+django-anymail[mailgun]  # Sending mail
+whitenoise[brotli]       # Better static file serving

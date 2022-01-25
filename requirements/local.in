@@ -1,0 +1,42 @@
+# ! When you alter this file, make sure that you recompile the output .txt files too.
+#
+# The only dependencies that should be put here are the ones you need additionally
+# for local dev.  If you need something both locally and in production then it should
+# go in the base file.
+
+-r ./base.txt
+-r ./docs.in
+
+pip-tools
+Werkzeug
+ipdb
+pdbpp
+
+coloredlogs
+
+# Testing
+# ------------------------------------------------------------------------------
+pytest  # https://github.com/pytest-dev/pytest
+pytest-sugar
+pytest-django  # https://github.com/pytest-dev/pytest-django
+pytest-cov
+requests-mock
+factory-boy
+pytest-watch
+pytest-testmon
+pytest-pspec
+time_machine
+django-test-migrations
+
+# Code quality
+# ------------------------------------------------------------------------------
+flake8  # https://github.com/PyCQA/flake8
+flake8-docstrings
+black  # https://github.com/black/black
+coverage  # https://github.com/nedbat/coveragepy
+pre-commit   # https://pre-commit.com/
+
+# Django
+# ------------------------------------------------------------------------------
+django-debug-toolbar==3.2.2  # Work around a bug with W006 warning flag
+django-extensions
