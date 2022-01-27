@@ -53,8 +53,9 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-# The externally-accessible URL of the site
-SITE_URL = env.str("SITE_URL")
+# The externally-accessible URL of the site.
+# NB this needs a fallback to provide proper configuration for testing
+SITE_URL = env.str("SITE_URL", "http://prospector_placeholder.carbon.coop")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
