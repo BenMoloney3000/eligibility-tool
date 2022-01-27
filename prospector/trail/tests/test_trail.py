@@ -63,7 +63,7 @@ def test_get_prev_url_2():
     assert view.get_prev_url() is None
 
 
-@override_settings(ROOT_URLCONF="core.views.tests.test_trail")
+@override_settings(ROOT_URLCONF="prospector.trail.tests.test_trail")
 def test_redirect():
     """Navigating to page 3 from page 2 should put page 3 in the trail."""
 
@@ -78,7 +78,7 @@ def test_redirect():
     assert view.saved_trail == ["Page1", "Page2", "Page3"]
 
 
-@override_settings(ROOT_URLCONF="core.views.tests.test_trail")
+@override_settings(ROOT_URLCONF="prospector.trail.tests.test_trail")
 def test_allowed_view():
     """Navigating to Page2 should be allowed if it's in the trail."""
 
@@ -91,7 +91,7 @@ def test_allowed_view():
     assert view.dispatch(None) is True
 
 
-@override_settings(ROOT_URLCONF="core.views.tests.test_trail")
+@override_settings(ROOT_URLCONF="prospector.trail.tests.test_trail")
 def test_disallowed_view():
     """Navigating to Page3 should redirect to Page2 if Page3 is not in the trail."""
 

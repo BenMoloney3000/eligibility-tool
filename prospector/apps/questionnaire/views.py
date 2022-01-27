@@ -59,7 +59,6 @@ class Question(mixin.TrailMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self._init_answers()
-
         return super().dispatch(request, *args, **kwargs)
 
     # Make the signup accessible to the form logic
