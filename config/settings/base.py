@@ -139,6 +139,7 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "prospector",
+    "prospector.apps.questionnaire",
     "prospector.apps.users",
     "prospector.dataformats",
 ]

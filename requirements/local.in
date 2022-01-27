@@ -40,3 +40,4 @@ pre-commit   # https://pre-commit.com/
 # ------------------------------------------------------------------------------
 django-debug-toolbar==3.2.2  # Work around a bug with W006 warning flag
 django-extensions
+django-shortcuts

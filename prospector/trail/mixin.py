@@ -165,9 +165,18 @@ class TrailMixin:
         else:
             return super().dispatch(request, *args, **kwargs)
 
-    def redirect(self, next_view: str, query: str = None):
+    def redirect(self, next_view: str = None, query: str = None):
+        """
+        Redirect to the next view, adding it to the trail.
+
+        If next_view is not supplied, get_next() is called.
+        """
+
         trail = self.get_trail()
         this_view = self.get_view_name()
+
+        if not next_view:
+            next_view = self.get_next()
 
         assert this_view in trail
 
@@ -181,6 +190,17 @@ class TrailMixin:
         if query:
             url += "?" + urlencode(query)
         return HttpResponseRedirect(url)
+
+    def get_next(self):
+        """
+        Return the name of the next class to navigate to.
+
+        Note this is the class name as a string, e.g "LovesClubbingSeals", and not a
+        reference to the class itself.
+
+        Override this to get dynamic redirection behaviour.
+        """
+        return self.next
 
     def get_prev_url(self) -> Optional[str]:
         trail = self.get_trail()

@@ -5,7 +5,9 @@ from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
 
+
 urlpatterns = [
+    path("", include("prospector.apps.questionnaire.urls")),
     # Has to go above the main admin bit
     path(f"{settings.ADMIN_URL}django-rq/", include("django_rq.urls")),
     path(settings.ADMIN_URL, admin.site.urls),

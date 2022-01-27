@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Welcome to the Home Upgrade Eligibilty Tool</h2>
+
+    <p>Intro blurb to go here</p>
+
+    <p>This is a custom template but the form logic is based off the SingleQuestion class, allowing maximum possession and consumption of cake.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <input
+                type="checkbox"
+                id="{{ form.field.auto_id }}_{{ value }}"
+                name="{{ form.field.html_name }}"
+                value="True"
+            >
+            <label for="{{ form.field.auto_id }}_{{ value }}">
+                {{ question_text }}
+            </label>
+        </p>
+
+        {% for error in form.field.errors %}
+            <p>Please accept our privacy terms to continue.</p>
+        {% endfor %}
+
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}
