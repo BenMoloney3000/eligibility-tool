@@ -18,10 +18,8 @@ stages:
 # Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-sast:
-  stage: test
-  include:
-  - template: Security/SAST.gitlab-ci.yml
+include:
+- template: Security/SAST.gitlab-ci.yml
 
 test:
     stage: test
