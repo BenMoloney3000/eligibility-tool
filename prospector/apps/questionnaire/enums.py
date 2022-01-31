@@ -10,6 +10,14 @@ class PropertyOwnership(models.TextChoices):
     )
 
 
+class RespondentRelationship(models.TextChoices):
+    FRIEND = "FRIEND", "I am a friend of the occupant"
+    PARENT = "PARENT", "I am a parent of the occupant"
+    CHILD = "CHILD", "I am a child of the occupant"
+    OTHER_FAMILY = "FAMILY", "I am another relative of the occupant"
+    OTHER = "OTHER", "Other"
+
+
 class PropertyDataSource(models.TextChoices):
     # If we found data for this property from a third party, what was it?
     EPC = "EPC", "EPC"

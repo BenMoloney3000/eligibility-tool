@@ -65,3 +65,17 @@ class TestQuestionsRender(TrailTest):
 
         response = self._get_page("questionnaire:respondent-name")
         assert response.status_code == 200
+
+    def test_respondent_role_renders(self):
+        self.trail = ["Start", "RespondentRole"]
+        self.view = views.RespondentRole
+
+        response = self._get_page("questionnaire:respondent-role")
+        assert response.status_code == 200
+
+    def test_respondent_relationsihp_renders(self):
+        self.trail = ["Start", "RespondentRelationship"]
+        self.view = views.RespondentRelationship
+
+        response = self._get_page("questionnaire:respondent-relationship")
+        assert response.status_code == 200

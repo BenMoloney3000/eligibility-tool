@@ -54,7 +54,7 @@ docker-local-clean:  ## Clean system volumes (helpful for resetting broken datab
 
 .PHONY: coverage
 coverage:  ## Run tests & generate line-by-line coverage
-	pytest --cov=mhep
+	pytest --cov=prospector
 	coverage html
 
 .PHONY: test

@@ -1,16 +1,11 @@
 import re
 
 
-def normalise_postcode(code: str) -> str:
+def normalise(code: str) -> str:
     """Make some text into something resembling a postcode."""
     regex = re.compile("[A-Z0-9]")
     stripped = "".join(c for c in code.upper() if re.match(regex, c))
     return stripped[:-3] + " " + stripped[-3:]
-
-
-assert normalise_postcode("SK4 4BX") == "SK4 4BX"
-assert normalise_postcode("C__C9;;€€#;W ;0F'''F") == "CC9W 0FF"
-assert normalise_postcode("m13 0pq") == "M13 0PQ"
 
 
 def validate_household_postcode(code: str) -> bool:

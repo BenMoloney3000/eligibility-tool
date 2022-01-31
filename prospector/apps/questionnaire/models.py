@@ -55,21 +55,36 @@ class Answers(models.Model):
         max_length=10, choices=enums.PropertyOwnership.choices, blank=True
     )
 
+    respondent_relationship = models.CharField(
+        max_length=6,
+        choices=enums.RespondentRelationship.choices,
+        blank=True,
+        verbose_name="Relationship of responder to occupant",
+    )
+
+    respondent_relationship_other = models.CharField(
+        max_length=128, blank=True, verbose_name="'Other' relationship detail"
+    )
+
+    respondent_has_permission = models.BooleanField(null=True, blank=True)
+
     """
     # DATA SOURCE DETAILS
-
+    """
     selected_epc = models.CharField(max_length=100, blank=True)
 
     # UPRN is 12 digits, too big for a PositiveIntegerField
     uprn = models.PositiveBigIntegerField(null=True, blank=True)
 
     data_source = models.CharField(
-        max_length=10, choices=enums.PropertyDataSource.choices, blank=True, verbose_name="Initial property data source"
+        max_length=10,
+        choices=enums.PropertyDataSource.choices,
+        blank=True,
+        verbose_name="Initial property data source",
     )
 
     """
     # PROPERTY ENERGY PERFORMANCE DETAILS
-    """
 
     # All below fields are duplicated for user data and original data
     # If the user agrees with the presented data, the _orig field is left empty

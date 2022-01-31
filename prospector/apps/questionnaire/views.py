@@ -8,6 +8,7 @@ from django import forms
 from django.utils import timezone
 from django.views.generic.edit import FormView
 
+from . import enums
 from . import forms as questionnaire_forms
 from . import models
 from prospector.trail import mixin
@@ -61,7 +62,7 @@ class Question(mixin.TrailMixin, FormView):
         self._init_answers()
         return super().dispatch(request, *args, **kwargs)
 
-    # Make the signup accessible to the form logic
+    # Make the answers accessible to the form logic
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["answers"] = self.answers
@@ -69,25 +70,25 @@ class Question(mixin.TrailMixin, FormView):
 
     def form_valid(self, form):
         """
-        Save form fields to the Signup.
+        Save form fields to the answers.
 
-        Fields that match Signup fields will be saved, anything else discarded.
+        Fields that match Answers fields will be saved, anything else discarded.
         """
         for k, v in form.cleaned_data.items():
-            setattr(self.signup, k, v)
+            setattr(self.answers, k, v)
 
         # This gives questions an opportunity to do extra processing, lookups etc.
         # before we save, saving unnecessary round trips to the database.
         if hasattr(self, "pre_save"):
             self.pre_save()
 
-        self.signup.save()
+        self.answers.save()
 
         return self.redirect(self.get_next())
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-
+        context["prev_url"] = self.get_prev_url()
         context["title"] = self.get_title()
 
         return context
@@ -106,8 +107,8 @@ class SingleQuestion(Question, mixin.TrailMixin):
     Produces a 'standard' single question view.
 
     This uses a load of metaprogramming to make the question definitions as simple
-    and concise as possible.  It inherits from the Question class above and
-    cannot run independently from it.
+    and concise as possible, meaning that a separate form class definition is
+    not required this view. It inherits from the Question class above.
     """
 
     type_: QuestionType
@@ -117,7 +118,7 @@ class SingleQuestion(Question, mixin.TrailMixin):
     unit: Optional[str]
     next: Optional[str]
 
-    template_name = "impact_tracker/question.html"
+    template_name = "questionnaire/single_question.html"
 
     def _type_to_field(self):
         if self.type_ is QuestionType.Int:
@@ -255,6 +256,67 @@ class Start(SingleQuestion):
 
 
 class RespondentName(Question):
+    title = "Your name"
     template_name = "questionnaire/respondent_name.html"
     next = "RespondentRole"
     form_class = questionnaire_forms.RespondentName
+
+
+class RespondentRole(SingleQuestion):
+    title = "Your role"
+    type_ = QuestionType.Choices
+    question = "Are you the occupant of the property for which you're enquiring?"
+    answer_field = "is_occupant"
+    choices = (
+        (True, "Yes, I am the homeowner or tenant of this property."),
+        (False, "No, I am acting on behalf of the tenant or homeowner."),
+    )
+
+    def pre_save(self):
+        self.answers.is_occupant = self.answers.is_occupant == "True"
+
+    def get_next(self):
+        if self.answers.is_occupant:
+            return "Email"
+        else:
+            return "RespondentRelationship"
+
+
+class RespondentRelationship(Question):
+    title = "Your relationship to the occupant"
+    question = "What is your relationship to the occupant of the property for which you're enquiring?"
+    form_class = questionnaire_forms.RespondentRelationship
+    template_name = "questionnaire/respondent_relationship.html"
+
+    def get_initial(self):
+        data = super().get_initial()
+        if self.answers.respondent_has_permission is not None:
+            self.answers.respondent_has_permission = (
+                "True" if self.answers.respondent_has_permission else "False"
+            )
+        data["respondent_has_permission"] = (self.answers.respondent_has_permission,)
+
+        return data
+
+    def pre_save(self):
+        if self.answers.respondent_relationship != enums.RespondentRelationship.OTHER:
+            self.answers.respondent_relationship_other = ""
+        self.answers.respondent_has_permission = (
+            self.answers.respondent_has_permission == "True"
+        )
+
+    def get_next(self):
+        if not self.answers.respondent_has_permission:
+            return "GoAway"
+        else:
+            return "RespondentAddress"
+
+
+class GoAway(Question):
+    title = "Sorry, we can't help you."
+
+
+class Email(SingleQuestion):
+    title = "Your email address"
+    type_ = QuestionType.Text
+    question = "Enter your email address"
