@@ -28,6 +28,7 @@ class Answers(models.Model):
     address_1 = models.CharField(max_length=128, blank=True)
     address_2 = models.CharField(max_length=128, blank=True)
     address_3 = models.CharField(max_length=128, blank=True)
+
     postcode = models.CharField(max_length=16, blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)
     contact_preference = models.CharField(max_length=128, blank=True)
@@ -210,14 +211,14 @@ class Answers(models.Model):
     )
 
     # TODO: heating systems, planning constraints, preferences, income assessment
+    """
 
 
-class ConsentsGranted(models.Model):
+class ConsentGranted(models.Model):
     granted_for = models.ForeignKey(
         Answers, on_delete=models.CASCADE, blank=False, null=False
     )
     granted_at = models.DateTimeField(auto_now_add=True)
     consent = models.CharField(
-        max_length=10, choices=enums.Consents.choices, blank=False
+        max_length=10, choices=enums.Consent.choices, blank=False
     )
-    """

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Whose home is this?</h2>
+
+    <p>Please tell us the name of the person on whose behalf you are enquiring.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="id_occupant_first_name">
+                First name
+            </label>
+            {{ form.occupant_first_name }}
+            {{ form.occupant_first_name.errors }}
+        </p>
+
+        <p>
+            <label for="id_occupant_first_name">
+                Last name
+            </label>
+            {{ form.occupant_last_name }}
+            {{ form.occupant_last_name.errors }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

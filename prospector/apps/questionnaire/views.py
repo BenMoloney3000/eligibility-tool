@@ -5,12 +5,16 @@ from enum import Enum
 from typing import Optional
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.utils import timezone
 from django.views.generic.edit import FormView
 
 from . import enums
 from . import forms as questionnaire_forms
 from . import models
+from prospector.apis import ideal_postcodes
+from prospector.dataformats import postcodes
 from prospector.trail import mixin
 
 
@@ -37,6 +41,7 @@ class Question(mixin.TrailMixin, FormView):
 
     trail_session_id = SESSION_TRAIL_ID
     trail_url_prefix = "questionnaire:"
+    form_class = questionnaire_forms.DummyForm
 
     def _init_answers(self):
         # Don't let us get called more than once.
@@ -67,6 +72,20 @@ class Question(mixin.TrailMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["answers"] = self.answers
         return kwargs
+
+    def get_initial(self):
+        # Populate form fields from model first.
+        # This will need to be overridden if non-model form fields are present
+        data = {}
+
+        # Do we have any model form fields in the form?
+        form_class = self.get_form_class()
+        if hasattr(form_class, "_meta"):
+            for field in self.get_form_class()._meta.fields:
+                if hasattr(self.answers, field):
+                    data[field] = getattr(self.answers, field)
+
+        return data
 
     def form_valid(self, form):
         """
@@ -290,11 +309,11 @@ class RespondentRelationship(Question):
 
     def get_initial(self):
         data = super().get_initial()
-        if self.answers.respondent_has_permission is not None:
-            self.answers.respondent_has_permission = (
-                "True" if self.answers.respondent_has_permission else "False"
-            )
-        data["respondent_has_permission"] = (self.answers.respondent_has_permission,)
+
+        # Specific case here - initial data from DB can only be true or null, otherwise
+        # the whole Answers object gets deleted.
+        if data.get("respondent_has_permission"):
+            data["respondent_has_permission"] = "True"
 
         return data
 
@@ -307,16 +326,190 @@ class RespondentRelationship(Question):
 
     def get_next(self):
         if not self.answers.respondent_has_permission:
-            return "GoAway"
+            return "NeedPermission"
         else:
-            return "RespondentAddress"
+            return "Postcode"
 
 
-class GoAway(Question):
+class NeedPermission(Question):
     title = "Sorry, we can't help you."
+    template_name = "questionnaire/need_permission.html"
+
+    def get_initial(self):
+        # If we don't have permission, we need to delete everything entered so far
+        self.answers.delete()
+
+
+class Postcode(SingleQuestion):
+    title = "Your postcode"
+    type_ = QuestionType.Text
+    question = "Enter your postcode"
+    supplementary = (
+        "This is the postcode for your own address, which may be different from the property "
+        "about which you're enquiring."
+    )
+    next = "RespondentAddress"
+
+    def sanitise_answer(self, data):
+        data = postcodes.normalise(data)
+        return data
+
+    @staticmethod
+    def validate_answer(value):
+        if not postcodes.validate_household_postcode(value):
+            raise ValidationError(
+                "This does not appear to be a valid UK domestic postcode. Please check and re-enter"
+            )
+        if value[0:2] != "PL":
+            raise ValidationError(
+                "This tool is only available to properties within the Plymouth Council area."
+            )
+
+
+class RespondentAddress(Question):
+    title = "Your address"
+    form_class = questionnaire_forms.RespondentAddress
+    template_name = "questionnaire/respondent_address.html"
+    next = "Email"
+    prefilled_addresses = {}
+
+    # Perform the API call to provide the choices for the address
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        try:
+            data = ideal_postcodes.get_for_postcode(self.answers.postcode)
+            if data:
+                # TODO - edge case: no UPRN, currently forces user to enter address
+                self.prefilled_addresses = {
+                    house.uprn: house for house in data if house.uprn
+                }
+        except ValueError:
+            pass
+
+        kwargs["prefilled_addresses"] = self.prefilled_addresses
+        return kwargs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["postcode"] = self.answers.postcode
+        context["all_postcode_addresses"] = self.prefilled_addresses
+        return context
+
+    def pre_save(self):
+        if self.answers.uprn and not self.answers.address_1:
+            # Populate fields if it wasn't already done by JS
+            selected_address = self.prefilled_addresses[self.answers.uprn]
+            self.answers.address_1 = (
+                self.answers.address_1 or selected_address.address_1
+            )
+            self.answers.address_2 = (
+                self.answers.address_2 or selected_address.address_2
+            )
+            self.answers.address_3 = (
+                self.answers.address_3 or selected_address.address_3
+            )
+        """ # TODO (maybe)
+        There is an edge case where a user with JS disabled selects an
+        address from the API-supplied list (which populates the address fields
+        within self.answers), but then goes back and selects a
+        different address from the list. Upon returning to the form, the
+        individual address fields will be populated, but upon submission the
+        existing address fields are not overwritten by the new value from the
+        list. The view does not know whether JS is enabled when it sets the
+        initial address field values so it provides the user-submitted values,
+        which may have been edited from the API-supplied values. Possible
+        solutions are:
+        - Test to see whether the UPRN has changed but address_1 has not
+        - Split this into an additional step:
+            1. postcode -> 2. select property/not in list -> 3. confirm address
+          (would still have to check for a change in URPN before overwriting address?)
+        - hide address selector if address fields are populated
+        """
 
 
 class Email(SingleQuestion):
     title = "Your email address"
     type_ = QuestionType.Text
     question = "Enter your email address"
+    next = "ContactPhone"
+
+    @staticmethod
+    def validate_answer(field):
+        validate_email(field)
+
+
+class ContactPhone(Question):
+    title = "Your phone number"
+    form_class = questionnaire_forms.RespondentPhone
+    template_name = "questionnaire/respondent_phone.html"
+
+    def get_next(self):
+        if self.answers.is_occupant:
+            return "PropertyAddress"
+        else:
+            return "OccupantName"
+
+
+class OccupantName(Question):
+    title = "Occupant name"
+    template_name = "questionnaire/occupant_name.html"
+    form_class = questionnaire_forms.OccupantName
+    next = "PropertyAddress"
+
+
+class PropertyAddress(Question):
+    title = "Property address"
+    form_class = questionnaire_forms.PropertyAddress
+    template_name = "questionnaire/property_address.html"
+    next = "PropertyOwnership"
+
+
+class PropertyOwnership(SingleQuestion):
+    title = "Property ownership"
+    type_ = QuestionType.Choices
+    question = "What is the tenure of the property - how is it occupied?"
+    choices = enums.PropertyOwnership.choices
+    next = "Consents"
+
+
+class Consents(Question):
+    title = "Your consent to our use of your data"
+    question = "Please confirm how we can use your data"
+    template_name = "questionnaire/consents.html"
+    form_class = questionnaire_forms.Consents
+    next = "SelectEPC"
+
+    def get_initial(self):
+        data = super().get_initial()
+
+        granted = models.ConsentGranted.objects.filter(granted_for=self.answers)
+        for grant in granted:
+            consent = enums.Consent(grant.consent)
+            data[consent.name.lower()] = True
+
+        return data
+
+    def pre_save(self):
+        # Sync the consents, which will have been temporarily saved onto the answers object
+
+        # Could save a few DB calls by compiling the consents into a list
+        for consent, data in self.get_form().fields.items():
+            if getattr(self.answers, consent, False):
+                models.ConsentGranted.objects.update_or_create(
+                    granted_for=self.answers,
+                    consent=enums.Consent[consent.upper()],
+                    defaults={"granted_at": timezone.now()},
+                )
+            else:
+                models.ConsentGranted.objects.filter(
+                    granted_for=self.answers,
+                    consent=enums.Consent[consent.upper()],
+                ).delete()
+
+
+class SelectEPC(SingleQuestion):
+    title = "Your EPC"
+    question = "Are any of these your EPC?"
+    type_ = QuestionType.Choices
+    next = "PropertyType"

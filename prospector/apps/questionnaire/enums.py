@@ -56,7 +56,7 @@ class WallType(models.TextChoices):
     CAVITY = "CAVITY", "Cavity walls"
 
 
-class Consents(models.TextChoices):
+class Consent(models.TextChoices):
     CALL_BACK = "CALLBACK", "To call/email you back to provide advice"
     RETAIN_DETAILS = (
         "RETAIN",
@@ -64,6 +64,10 @@ class Consents(models.TextChoices):
             "To hold your details on file and contact you when we think there are schemes "
             "that are relevant for you"
         ),
+    )
+    ASSESS_ELIGIBILITY = (
+        "ASSESS",
+        "To use the details you have provided to assess eligibility for current schemes",
     )
     ANONYMOUS_REPORTING = (
         "REPORTING",

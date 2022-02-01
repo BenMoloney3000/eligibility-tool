@@ -280,3 +280,4 @@ else:
     RQ_SHOW_ADMIN_LINK = True
 
 EPC_API_KEY = env.str("EPC_API_KEY", default="")
+IDEAL_POSTCODES_API_KEY = env.str("IDEAL_POSTCODES_API_KEY", default="")

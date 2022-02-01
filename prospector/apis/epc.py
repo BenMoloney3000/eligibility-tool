@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from requests.adapters import HTTPAdapter
 
-from prospector.dataformats.normalise_postcode import normalise_postcode
+from prospector.dataformats import postcodes
 
 
 @dataclass
@@ -52,7 +52,7 @@ def get_for_postcode(postcode: str) -> Optional[list]:
 
             results = s.get(
                 "https://epc.opendatacommunities.org/api/v1/domestic/search",
-                params={"postcode": normalise_postcode(postcode)},
+                params={"postcode": postcodes.normalise(postcode)},
                 headers={
                     "Authorization": f"Basic {settings.EPC_API_KEY}",
                     "Accept": "application/json",

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Property address</h2>
+    <p>Please tell us the address of the property about which you're enquiring.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="id_property_address_1">
+                Address
+            </label><br>
+            {{ form.property_address_1 }}
+            {{ form.property_address_1.errors }}
+        </p>
+
+        <p>
+            {{ form.property_address_2 }}
+            {{ form.property_address_2.errors }}
+        </p>
+
+        <p>
+            {{ form.property_address_3 }}
+            {{ form.property_address_3.errors }}
+        </p>
+
+        <p>
+            <label for="id_town_city_dummy">
+                Town/city/locality
+            </label><br>
+            <input type="text" name="town_city_dummy" readonly value="Plymouth">
+        </p>
+
+        <p>
+            <label for="id_property_postcode">
+                Postcode
+            </label><br>
+            {{ form.property_postcode }}
+            {{ form.property_postcode.errors }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

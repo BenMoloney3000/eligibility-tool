@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import override_settings
 from django.test import RequestFactory
@@ -73,9 +75,50 @@ class TestQuestionsRender(TrailTest):
         response = self._get_page("questionnaire:respondent-role")
         assert response.status_code == 200
 
-    def test_respondent_relationsihp_renders(self):
+    def test_respondent_relationship_renders(self):
         self.trail = ["Start", "RespondentRelationship"]
         self.view = views.RespondentRelationship
 
         response = self._get_page("questionnaire:respondent-relationship")
         assert response.status_code == 200
+
+    def test_need_permission_renders(self):
+        self.trail = ["Start", "NeedPermission"]
+        self.view = views.NeedPermission
+
+        response = self._get_page("questionnaire:need-permission")
+        assert response.status_code == 200
+
+        # As this view should delete the answers we'll set some more.
+        # (NB this should be tested elsewhere)
+        self.answers = factories.AnswersFactory()
+
+    @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
+    def test_respondent_address_renders(self, get_for_postcode):
+        get_for_postcode.return_value = []
+
+        self.trail = ["Start", "RespondentAddress"]
+        self.view = views.RespondentAddress
+
+        response = self._get_page("questionnaire:your-address")
+        assert response.status_code == 200
+
+    def test_respondent_email_renders(self):
+        self.trail = ["Start", "Email"]
+        self.view = views.Email
+
+        response = self._get_page("questionnaire:email")
+        assert response.status_code == 200
+
+    def test_contact_phone_renders(self):
+        self.trail = ["Start", "ContactPhone"]
+        self.view = views.ContactPhone
+
+        response = self._get_page("questionnaire:contact-phone")
+        assert response.status_code == 200
+
+
+# TODO tests to write
+# confirm that reaching needs_permission deletes the Answers
+# confirm that relationship_other is required if selecting other
+# confirm that ContactPhone redirects according to is_occupant

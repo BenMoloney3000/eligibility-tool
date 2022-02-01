@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Your consent in how your data is used</h2>
+    <p>Please tell us for which of the following purposes you are happy for us to store and use your data:</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>
+                {{ form.call_back }}
+                To call/email you back to provide advice
+            </label>
+            {{ form.call_back.errors }}
+        </p>
+
+        <p>
+            <label>
+                {{ form.assess_eligibility }}
+                To use the details you have provided to assess eligibility for current schemes
+            </label>
+            {{ form.assess_eligibility.errors }}
+        </p>
+
+        <p>
+            <label>
+                {{ form.retain_details }}
+                To hold your details on file and contact you when we think there
+                are schemes that are relevant for you
+            </label>
+            {{ form.retain_details.errors }}
+        </p>
+
+        <p>
+            <label>
+                {{ form.anonymous_reporting }}
+                To use in anonymised reporting that relates to the energy efficiency
+                of properties in the Plymouth City Council administrative area
+            </label>
+            {{ form.anonymous_reporting.errors }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

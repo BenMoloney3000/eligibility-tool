@@ -11,3 +11,4 @@ class AnswersFactory(DjangoModelFactory):
 
     terms_accepted_at = timezone.now()
     email = Faker("email")
+    postcode = Faker("postcode", locale="en-GB")

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Contacting you by phone</h2>
+
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="id_contact_phone">
+                Please let us know your preferred contact telephone number
+            </label><br>
+            {{ form.contact_phone }}
+            {{ form.contact_phone.errors }}
+        </p>
+
+        <p>
+            <label for="id_contact_preferences">
+                When are the best times to call you?
+            </label><br>
+            {{ form.contact_preference }}
+            {{ form.contact_preference.errors }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

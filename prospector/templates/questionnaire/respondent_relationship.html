@@ -43,7 +43,7 @@
                 id="respondent_has_permission_yes"
                 name="respondent_has_permission"
                 value="True"
-                {% if form.respondent_has_permission.data == "True" or form.respondent_has_permission.initial == "True" %}checked{% endif %}
+                {% if form.respondent_has_permission.initial == "True" %}checked{% endif %}
             >
             <label
                 for="respondent_has_permission_yes">Yes</label>
@@ -55,7 +55,7 @@
                 id="respondent_has_permission_no"
                 name="respondent_has_permission"
                 value="False"
-                {% if form.respondent_has_permission.data == "False" or form.respondent_has_permission.initial == "False" %}checked{% endif %}
+                {% if form.respondent_has_permission.initial == "False" %}checked{% endif %}
             >
             <label
                 for="respondent_has_permission_no">No</label>

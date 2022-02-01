@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Your address</h2>
+    <p>Note this is <em>your</em> correspondence address, which may be different to the address of the property about which you are enquiring.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        {% if form.uprn.field.widget.choices %}
+            <p>
+                <label for="id_uprn">
+                    Choose your address from the list:
+                </label>
+                {{ form.uprn }}
+                {{ form.uprn.errors }}
+            </p>
+        {% endif %}
+
+        <p>
+            If your address is not in the list, please check that you entered the correct postcode ({{ postcode }}) and if necessary
+            <a href="{% url "questionnaire:postcode" %}">go back to change it</a>.
+        </p>
+        <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
+        <p>
+            <label for="id_address_1">
+                Address
+            </label><br>
+            {{ form.address_1 }}
+            {{ form.address_1.errors }}
+        </p>
+
+        <p>
+            {{ form.address_2 }}
+            {{ form.address_2.errors }}
+        </p>
+
+        <p>
+            {{ form.address_3 }}
+            {{ form.address_3.errors }}
+        </p>
+        <p>
+            <label for="id_town_city_dummy">
+                Town/city/locality
+            </label><br>
+            <input type="text" name="town_city_dummy" readonly value="Plymouth">
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}
