@@ -2,7 +2,6 @@
 import datetime
 import json
 import logging
-from dataclasses import dataclass
 from typing import Optional
 
 import requests
@@ -10,17 +9,8 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from requests.adapters import HTTPAdapter
 
+from .dataclass import EPCData
 from prospector.dataformats import postcodes
-
-
-@dataclass
-class EPCData:
-    id: str
-    date: datetime.date
-    address_1: str
-    address_2: str
-    address_3: str
-    floor_area: int
 
 
 def _process_results(rows):
@@ -31,7 +21,7 @@ def _process_results(rows):
             row["address1"],
             row["address2"],
             row["address3"],
-            int(float(row["total-floor-area"])),
+            row["uprn"],
         )
         for row in rows
     ]

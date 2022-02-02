@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Do you have a recent EPC?</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label for="id_selected_epc">
+                We have found the following EPCs that may relate to the property. Please select one to confirm it is for the correct property and no significant renovation has happened since the date of inspection, or otherwise please select 'No valid EPC'.<br>
+
+            </label>
+            {{ form.selected_epc }}
+            {{ form.selected_epc.error }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

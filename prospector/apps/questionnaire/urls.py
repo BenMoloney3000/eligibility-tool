@@ -19,6 +19,9 @@ urlpatterns = [
     path("your-email", views.Email.as_view(), name="email"),
     path("phone-number", views.ContactPhone.as_view(), name="contact-phone"),
     path("occupant-name", views.OccupantName.as_view(), name="occupant-name"),
+    path(
+        "property-postcode", views.PropertyPostcode.as_view(), name="property-postcode"
+    ),
     path("property-address", views.PropertyAddress.as_view(), name="property-address"),
     path(
         "property-ownership",
@@ -27,4 +30,5 @@ urlpatterns = [
     ),
     path("consents", views.Consents.as_view(), name="consents"),
     path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
+    path("type", views.PropertyType.as_view(), name="property-type"),
 ]

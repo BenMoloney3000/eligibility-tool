@@ -1,4 +1,5 @@
 import contextlib
+import dataclasses
 import logging
 from enum import auto
 from enum import Enum
@@ -13,6 +14,7 @@ from django.views.generic.edit import FormView
 from . import enums
 from . import forms as questionnaire_forms
 from . import models
+from prospector.apis import epc
 from prospector.apis import ideal_postcodes
 from prospector.dataformats import postcodes
 from prospector.trail import mixin
@@ -23,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 SESSION_ANSWERS_ID = "questionnaire:answer_id"
 SESSION_TRAIL_ID = "questionnaire:trail_id"
+SESSION_POSTCODE_CACHE = "cached_postcodes"
 
 
 class QuestionType(Enum):
@@ -32,6 +35,29 @@ class QuestionType(Enum):
     Decimal = auto()
     Choices = auto()
     MultipleChoices = auto()
+
+
+class PostcodeCacherMixin:
+    def get_postcode(self, postcode):
+        """Check session-cached postcodes before hitting the API.
+
+        Uses normalised postcodes. Possible TODO: put this into the DB with a TTL.
+        """
+        if SESSION_POSTCODE_CACHE not in self.request.session:
+            self.request.session[SESSION_POSTCODE_CACHE] = {}
+
+        if postcode in self.request.session[SESSION_POSTCODE_CACHE]:
+            return ideal_postcodes._process_results(
+                self.request.session[SESSION_POSTCODE_CACHE][postcode]
+            )
+        else:
+            addresses = ideal_postcodes.get_for_postcode(postcode)
+            self.request.session[SESSION_POSTCODE_CACHE][postcode] = [
+                dataclasses.asdict(address) for address in addresses
+            ]
+            # session change detector won't look into our dict so needs nudge
+            self.request.session.modified = True
+            return addresses
 
 
 class Question(mixin.TrailMixin, FormView):
@@ -294,6 +320,17 @@ class RespondentRole(SingleQuestion):
     def pre_save(self):
         self.answers.is_occupant = self.answers.is_occupant == "True"
 
+        if self.answers.is_occupant:
+            # For safety, erase all the details describing a non-occupant respondent
+            self.answers.address_1 = ""
+            self.answers.address_2 = ""
+            self.answers.address_3 = ""
+            self.answers.udprn = None
+            self.answers.postcode = ""
+            self.answers.respondent_has_permission = None
+            self.answers.respondent_relationship = ""
+            self.answers.respondent_relationship_other = ""
+
     def get_next(self):
         if self.answers.is_occupant:
             return "Email"
@@ -360,13 +397,9 @@ class Postcode(SingleQuestion):
             raise ValidationError(
                 "This does not appear to be a valid UK domestic postcode. Please check and re-enter"
             )
-        if value[0:2] != "PL":
-            raise ValidationError(
-                "This tool is only available to properties within the Plymouth Council area."
-            )
 
 
-class RespondentAddress(Question):
+class RespondentAddress(Question, PostcodeCacherMixin):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
@@ -378,12 +411,10 @@ class RespondentAddress(Question):
         kwargs = super().get_form_kwargs()
 
         try:
-            data = ideal_postcodes.get_for_postcode(self.answers.postcode)
-            if data:
-                # TODO - edge case: no UPRN, currently forces user to enter address
-                self.prefilled_addresses = {
-                    house.uprn: house for house in data if house.uprn
-                }
+            self.prefilled_addresses = {
+                address.udprn: address
+                for address in self.get_postcode(self.answers.postcode)
+            }
         except ValueError:
             pass
 
@@ -397,18 +428,13 @@ class RespondentAddress(Question):
         return context
 
     def pre_save(self):
-        if self.answers.uprn and not self.answers.address_1:
-            # Populate fields if it wasn't already done by JS
-            selected_address = self.prefilled_addresses[self.answers.uprn]
-            self.answers.address_1 = (
-                self.answers.address_1 or selected_address.address_1
-            )
-            self.answers.address_2 = (
-                self.answers.address_2 or selected_address.address_2
-            )
-            self.answers.address_3 = (
-                self.answers.address_3 or selected_address.address_3
-            )
+        if self.answers.udprn and int(self.answers.udprn) in self.prefilled_addresses:
+            selected_address = self.prefilled_addresses[int(self.answers.udprn)]
+            if not self.answers.address_1:
+                # Populate fields if it wasn't already done by JS
+                self.answers.address_1 = selected_address.line_1
+                self.answers.address_2 = selected_address.line_2
+                self.answers.address_3 = selected_address.line_3
         """ # TODO (maybe)
         There is an edge case where a user with JS disabled selects an
         address from the API-supplied list (which populates the address fields
@@ -420,10 +446,10 @@ class RespondentAddress(Question):
         initial address field values so it provides the user-submitted values,
         which may have been edited from the API-supplied values. Possible
         solutions are:
-        - Test to see whether the UPRN has changed but address_1 has not
+        - Test to see whether the UDPRN has changed but address_1 has not
         - Split this into an additional step:
             1. postcode -> 2. select property/not in list -> 3. confirm address
-          (would still have to check for a change in URPN before overwriting address?)
+          (would still have to check for a change in UDPRN before overwriting address?)
         - hide address selector if address fields are populated
         """
 
@@ -455,14 +481,79 @@ class OccupantName(Question):
     title = "Occupant name"
     template_name = "questionnaire/occupant_name.html"
     form_class = questionnaire_forms.OccupantName
+    next = "PropertyPostcode"
+
+
+class PropertyPostcode(SingleQuestion):
+    title = "Property postcode"
+    type_ = QuestionType.Text
+    question = "Enter the property postcode"
+    supplementary = (
+        "This is the postcode for the property about which you're enquiring."
+    )
     next = "PropertyAddress"
 
+    def sanitise_answer(self, data):
+        data = postcodes.normalise(data)
+        return data
 
-class PropertyAddress(Question):
+    @staticmethod
+    def validate_answer(value):
+        if not postcodes.validate_household_postcode(value):
+            raise ValidationError(
+                "This does not appear to be a valid UK domestic postcode. Please check and re-enter"
+            )
+        if value[0:2] != "PL":
+            raise ValidationError(
+                "This tool is only available to properties within the Plymouth Council area."
+            )
+
+
+class PropertyAddress(Question, PostcodeCacherMixin):
     title = "Property address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
     next = "PropertyOwnership"
+    prefilled_addresses = {}
+
+    # Perform the API call to provide the choices for the address
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        try:
+            # Cache these in the session to avoid another call on POST
+            self.prefilled_addresses = {
+                address.udprn: address
+                for address in self.get_postcode(self.answers.property_postcode)
+            }
+        except ValueError:
+            pass
+
+        kwargs["prefilled_addresses"] = self.prefilled_addresses
+        return kwargs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["property_postcode"] = self.answers.property_postcode
+        context["all_postcode_addresses"] = self.prefilled_addresses
+        return context
+
+    def pre_save(self):
+        if (
+            self.answers.property_udprn
+            and int(self.answers.property_udprn) in self.prefilled_addresses
+        ):
+            selected_address = self.prefilled_addresses[
+                int(self.answers.property_udprn)
+            ]
+            self.answers.uprn = selected_address.uprn
+            if not self.answers.property_address_1:
+                # Populate fields if it wasn't already done by JS
+                self.answers.property_address_1 = selected_address.line_1
+                self.answers.property_address_2 = selected_address.line_2
+                self.answers.property_address_3 = selected_address.line_3
+
+        # TODO (maybe) same edge case as with RespondentAddress above.
 
 
 class PropertyOwnership(SingleQuestion):
@@ -508,8 +599,56 @@ class Consents(Question):
                 ).delete()
 
 
-class SelectEPC(SingleQuestion):
+class SelectEPC(Question):
     title = "Your EPC"
-    question = "Are any of these your EPC?"
+    template_name = "questionnaire/select_epc.html"
+    form_class = questionnaire_forms.SelectEPC
+    next = "PropertyType"
+    candidate_epcs = {}
+
+    def get_form_kwargs(self):
+        """Pass the possible EPCs into the form."""
+        kwargs = super().get_form_kwargs()
+        kwargs["candidate_epcs"] = self.candidate_epcs
+        return kwargs
+
+    def prereq(self):
+        try:
+            postcode_epcs = epc.get_for_postcode(self.answers.property_postcode)
+
+            # Try to reduce the possible EPCs by UPRN
+            # (can only filter out anything with a different EPC)
+            # TODO could be some attempt to match the (full) address itself but it will
+            # require a lot of experimentation for possibly not much benefit.
+            if self.answers.uprn:
+                postcode_epcs = [
+                    epc
+                    for epc in postcode_epcs
+                    if epc.uprn == "" or epc.uprn == str(self.answers.uprn)
+                ]
+                # At this point anything with a UPRN will be our UPRN, move
+                # that/them to the top of the list
+                postcode_epcs.sort(reverse=True, key=lambda x: bool(x.uprn))
+            self.candidate_epcs = {epc.id: epc for epc in postcode_epcs}
+        except ValueError:
+            pass
+
+        if len(self.candidate_epcs) == 0:
+            # No valid EPC. Continue.
+            return self.redirect()
+
+    def pre_save(self):
+        # If we selected an EPC, this is where we interrogate its data to
+        # pre-populate all the property energy performance questions
+        if self.answers.selected_epc:
+            # TODO selected_epc = self.candidate_epcs[self.answers.selected_epc]
+            # TODO services.prepopulate_from_epc(self.answers, selected_epc)
+            pass
+
+
+class PropertyType(SingleQuestion):
+    title = "Property type"
+    question = "What type of property is this?"
     type_ = QuestionType.Choices
     next = "PropertyType"
+    # TODO - NB this needs to be two questions - type and built_form

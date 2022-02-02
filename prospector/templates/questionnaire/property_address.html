@@ -9,6 +9,26 @@
 
     <form method="POST">
         {% csrf_token %}
+        {% if form.property_udprn.field.widget.choices %}
+            <p>
+                <label for="id_udprn">
+                    Choose the address from the list:
+                </label>
+                {{ form.property_udprn }}
+                {{ form.property_udprn.errors }}
+            </p>
+            <p>
+                If your address is not in the list, please check that you entered the correct postcode ({{ property_postcode }}) and if necessary
+                <a href="{% url "questionnaire:property-postcode" %}">go back to change it</a>.
+            </p>
+            <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
+        {% else %}
+            <p>
+                We could not find any addresses for the property you entered. If're sure that you entered the correct postcode ({{ property_postcode }}) then please enter your address below. Otherwise you can
+                <a href="{% url "questionnaire:property-postcode" %}">go back to change it</a>.
+            </p>
+
+        {% endif %}
 
         <p>
             <label for="id_property_address_1">
@@ -34,15 +54,6 @@
             </label><br>
             <input type="text" name="town_city_dummy" readonly value="Plymouth">
         </p>
-
-        <p>
-            <label for="id_property_postcode">
-                Postcode
-            </label><br>
-            {{ form.property_postcode }}
-            {{ form.property_postcode.errors }}
-        </p>
-
         <button>
             Next&nbsp;&rarr;
         </button>

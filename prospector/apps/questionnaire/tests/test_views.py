@@ -1,3 +1,4 @@
+import datetime
 from unittest import mock
 
 from django.contrib.sessions.middleware import SessionMiddleware
@@ -7,6 +8,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from . import factories
+from prospector.apis.epc import dataclass as epc_dataclass
 from prospector.apps.questionnaire import views
 from prospector.testutils import add_middleware_to_request
 
@@ -14,6 +16,16 @@ from prospector.testutils import add_middleware_to_request
 def _html(response):
     response.render()
     return response.content.decode("utf-8")
+
+
+FAKE_EPC = epc_dataclass.EPCData(
+    "19747490192737",
+    datetime.date(2020, 10, 10),
+    "20 Testington Pastures",
+    "Eggborough",
+    "Royal Leamington Spa",
+    "1234",
+)
 
 
 @override_settings(DEBUG=True)
@@ -93,6 +105,13 @@ class TestQuestionsRender(TrailTest):
         # (NB this should be tested elsewhere)
         self.answers = factories.AnswersFactory()
 
+    def test_respondent_postcode_renders(self):
+        self.trail = ["Start", "Postcode"]
+        self.view = views.Postcode
+
+        response = self._get_page("questionnaire:postcode")
+        assert response.status_code == 200
+
     @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
     def test_respondent_address_renders(self, get_for_postcode):
         get_for_postcode.return_value = []
@@ -115,6 +134,55 @@ class TestQuestionsRender(TrailTest):
         self.view = views.ContactPhone
 
         response = self._get_page("questionnaire:contact-phone")
+        assert response.status_code == 200
+
+    def test_occupant_name_renders(self):
+        self.trail = ["Start", "OccupantName"]
+        self.view = views.OccupantName
+
+        response = self._get_page("questionnaire:occupant-name")
+        assert response.status_code == 200
+
+    def test_property_postcode_renders(self):
+        self.trail = ["Start", "PropertyPostcode"]
+        self.view = views.PropertyPostcode
+
+        response = self._get_page("questionnaire:property-postcode")
+        assert response.status_code == 200
+
+    @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
+    def test_property_address_renders(self, get_for_postcode):
+        get_for_postcode.return_value = []
+
+        self.trail = ["Start", "PropertyAddress"]
+        self.view = views.PropertyAddress
+
+        response = self._get_page("questionnaire:property-address")
+        assert response.status_code == 200
+
+    def test_property_ownership_renders(self):
+        self.trail = ["Start", "PropertyOwnership"]
+        self.view = views.PropertyOwnership
+
+        response = self._get_page("questionnaire:property-ownership")
+        assert response.status_code == 200
+
+    def test_consents_renders(self):
+        self.trail = ["Start", "Consents"]
+        self.view = views.Consents
+
+        response = self._get_page("questionnaire:consents")
+        assert response.status_code == 200
+
+    @mock.patch("prospector.apis.epc.get_for_postcode")
+    def test_select_epc_renders(self, get_for_postcode):
+        get_for_postcode.return_value = [FAKE_EPC]
+
+        self.trail = ["Start", "SelectEPC"]
+        self.view = views.SelectEPC
+        self.answers.uprn = FAKE_EPC.uprn
+
+        response = self._get_page("questionnaire:select-e-p-c")
         assert response.status_code == 200
 
 

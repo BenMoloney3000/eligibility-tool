@@ -17,12 +17,13 @@ BASE_URL = "https://api.ideal-postcodes.co.uk/v1/"
 
 @dataclass
 class AddressData:
-    address_1: str
-    address_2: str
-    address_3: str
+    line_1: str
+    line_2: str
+    line_3: str
     post_town: str
     district: str
     postcode: str
+    udprn: str
     uprn: str
 
 
@@ -35,6 +36,7 @@ def _process_results(rows):
             row["post_town"],
             row["district"],
             row["postcode"],
+            row["udprn"],
             row["uprn"],
         )
         for row in rows

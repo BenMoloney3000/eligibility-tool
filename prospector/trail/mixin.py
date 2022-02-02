@@ -3,6 +3,7 @@ from typing import Optional
 from urllib.parse import urlencode
 
 from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.shortcuts import reverse
@@ -141,6 +142,10 @@ class TrailMixin:
     def get_view_name(self):
         return self.__class__.__name__
 
+    def prereq(self) -> Optional[HttpResponse]:
+        """Override to perform check(s) before displaying the page."""
+        return None
+
     def get_url_from_class_name(self, class_name):
         """
         Turn a class name into something we can give to Django's `reverse` function.
@@ -159,11 +164,23 @@ class TrailMixin:
             return None
 
     def dispatch(self, request, *args, **kwargs):
-        action = self._check_trail()
-        if action:
-            return action
+        """Check whether anything prevents us seeing this page."""
+
+        # Like it not being in the trail
+        trail_check_action = self._check_trail()
+
+        if trail_check_action:
+            return trail_check_action
+
         else:
-            return super().dispatch(request, *args, **kwargs)
+            # Or not meeting the prerequisites
+            prereq_action = self.prereq()
+
+            if prereq_action:
+                return prereq_action
+            else:
+                # Looks like we can see the page.
+                return super().dispatch(request, *args, **kwargs)
 
     def redirect(self, next_view: str = None, query: str = None):
         """

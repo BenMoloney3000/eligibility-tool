@@ -29,6 +29,10 @@ class Answers(models.Model):
     address_2 = models.CharField(max_length=128, blank=True)
     address_3 = models.CharField(max_length=128, blank=True)
 
+    udprn = models.CharField(
+        max_length=10, blank=True, verbose_name="Respondent UDPRN from API"
+    )
+
     postcode = models.CharField(max_length=16, blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)
     contact_preference = models.CharField(max_length=128, blank=True)
@@ -51,10 +55,15 @@ class Answers(models.Model):
     property_address_2 = models.CharField(max_length=128, blank=True)
     property_address_3 = models.CharField(max_length=128, blank=True)
     property_postcode = models.CharField(max_length=16, blank=True)
+    property_udprn = models.CharField(
+        max_length=10, blank=True, verbose_name="Property UDPRN from API"
+    )
 
     property_ownership = models.CharField(
         max_length=10, choices=enums.PropertyOwnership.choices, blank=True
     )
+    # UPRN is 12 digits, too big for a PositiveIntegerField
+    uprn = models.PositiveBigIntegerField(null=True, blank=True)
 
     respondent_relationship = models.CharField(
         max_length=6,
@@ -73,9 +82,6 @@ class Answers(models.Model):
     # DATA SOURCE DETAILS
     """
     selected_epc = models.CharField(max_length=100, blank=True)
-
-    # UPRN is 12 digits, too big for a PositiveIntegerField
-    uprn = models.PositiveBigIntegerField(null=True, blank=True)
 
     data_source = models.CharField(
         max_length=10,

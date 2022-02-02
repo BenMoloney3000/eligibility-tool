@@ -9,21 +9,26 @@
 
     <form method="POST">
         {% csrf_token %}
-        {% if form.uprn.field.widget.choices %}
+        {% if form.udprn.field.widget.choices %}
             <p>
-                <label for="id_uprn">
+                <label for="id_selected_address">
                     Choose your address from the list:
                 </label>
-                {{ form.uprn }}
-                {{ form.uprn.errors }}
+                {{ form.udprn }}
+                {{ form.udprn.errors }}
+            </p>
+            <p>
+                If your address is not in the list, please check that you entered the correct postcode ({{ postcode }}) and if necessary
+                <a href="{% url "questionnaire:postcode" %}">go back to change it</a>.
+            </p>
+            <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
+        {% else %}
+            <p>
+                We could not find any addresses for the property you entered. If're sure that you entered the correct postcode ({{ postcode }}) then please enter your address below. Otherwise you can
+                <a href="{% url "questionnaire:postcode" %}">go back to change it</a>.
             </p>
         {% endif %}
 
-        <p>
-            If your address is not in the list, please check that you entered the correct postcode ({{ postcode }}) and if necessary
-            <a href="{% url "questionnaire:postcode" %}">go back to change it</a>.
-        </p>
-        <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
         <p>
             <label for="id_address_1">
                 Address

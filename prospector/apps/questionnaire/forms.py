@@ -6,7 +6,6 @@ from django.utils.safestring import mark_safe
 from . import enums
 from . import models
 from prospector.dataformats import phone_numbers
-from prospector.dataformats import postcodes
 
 
 logger = logging.getLogger(__name__)
@@ -100,39 +99,28 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
 
         self.prefilled_addresses = prefilled_addresses
 
-        uprn_choices = [
-            (uprn, house.address_1) for uprn, house in prefilled_addresses.items()
+        udprn_choices = [
+            (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
+            for udprn, house in prefilled_addresses.items()
         ]
-        uprn_choices.insert(0, (None, "Address not in list"))
-
-        self.fields["uprn"] = forms.ChoiceField(required=False, choices=uprn_choices)
+        udprn_choices.append((None, "Address not in list"))
+        self.fields["udprn"] = forms.ChoiceField(required=False, choices=udprn_choices)
 
     class Meta:
         model = models.Answers
-        optional_fields = ["address_1", "address_2", "address_3", "uprn"]
+        optional_fields = ["address_1", "address_2", "address_3", "udprn"]
         fields = [
             "address_1",
             "address_2",
             "address_3",
-            "uprn",
+            "udprn",
         ]
-
-    def clean_uprn(self):
-        uprn = self.cleaned_data["uprn"]
-        if uprn not in self.prefilled_addresses:
-            self.add_error("uprn", "Invalid value selected")
-        else:
-            if self.prefilled_addresses[uprn].district != "Plymouth":
-                self.add_error(
-                    "uprn", "This property is not within the Plymouth Council area."
-                )
-        return uprn
 
     def clean(self):
         """Check we got enough data, since no field is actually required."""
         data = super().clean()
 
-        if not data.get("uprn") and not data.get("address_1"):
+        if not data.get("udprn") and not data.get("address_1"):
             self.add_error(
                 "address_1",
                 "Please enter the first line of an address or select an address from the list",
@@ -170,27 +158,61 @@ class OccupantName(AnswerFormMixin, forms.ModelForm):
 
 
 class PropertyAddress(AnswerFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # Get the prefilled addresses to populate the select field
+        prefilled_addresses = kwargs.pop("prefilled_addresses")
+        super().__init__(*args, **kwargs)
+
+        self.prefilled_addresses = prefilled_addresses
+
+        udprn_choices = [
+            (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
+            for udprn, house in prefilled_addresses.items()
+        ]
+        udprn_choices.append((None, "Address not in list"))
+
+        self.fields["property_udprn"] = forms.ChoiceField(
+            required=False, choices=udprn_choices
+        )
+
     class Meta:
         model = models.Answers
-        optional_fields = ["property_address_2", "property_address_3"]
+        optional_fields = [
+            "property_address_1",
+            "property_address_2",
+            "property_address_3",
+            "property_udprn",
+        ]
         fields = [
             "property_address_1",
             "property_address_2",
             "property_address_3",
-            "property_postcode",
+            "property_udprn",
         ]
 
-    def clean_property_postcode(self):
-        postcode = self.cleaned_data["property_postcode"]
-        postcode = postcodes.normalise(postcode)
+    def clean_udprn(self):
+        udprn = self.cleaned_data["property_udprn"]
+        if udprn not in self.prefilled_addresses:
+            self.add_error("property_udprn", "Invalid value selected")
+        else:
+            if self.prefilled_addresses[udprn].district != "Plymouth":
+                self.add_error(
+                    "property_udprn",
+                    "This property is not within the Plymouth Council area.",
+                )
+        return udprn
 
-        if not postcodes.validate_household_postcode(postcode):
+    def clean(self):
+        """Check we got enough data, since no field is actually required."""
+        data = super().clean()
+
+        if not data.get("property_udprn") and not data.get("property_address_1"):
             self.add_error(
-                "property_postcode",
-                "This does not appear to be a valid UK domestic postcode. Please check and re-enter",
+                "property_address_1",
+                "Please enter the first line of an address or select an address from the list",
             )
 
-        return postcode
+        return data
 
 
 class Consents(AnswerFormMixin, forms.Form):
@@ -225,3 +247,28 @@ class Consents(AnswerFormMixin, forms.Form):
             )
 
         return assess_eligibility_consent
+
+
+class SelectEPC(AnswerFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # Get the candidate EPCs to populate the select field
+        candidate_epcs = kwargs.pop("candidate_epcs")
+        super().__init__(*args, **kwargs)
+
+        self.candidate_epcs = candidate_epcs
+
+        epc_choices = [(lmk_id, str(epc)) for lmk_id, epc in candidate_epcs.items()]
+        epc_choices.append((None, "No valid EPC"))
+        self.fields["selected_epc"] = forms.ChoiceField(
+            required=False, choices=epc_choices, initial=epc_choices[0][0]
+        )
+
+    class Meta:
+        model = models.Answers
+        optional_fields = ["address_1", "address_2", "address_3", "udprn"]
+        fields = [
+            "address_1",
+            "address_2",
+            "address_3",
+            "udprn",
+        ]
