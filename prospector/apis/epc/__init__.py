@@ -22,6 +22,22 @@ def _process_results(rows):
             row["address2"],
             row["address3"],
             row["uprn"],
+            row["property-type"],
+            row["built-form"],
+            row["construction-age-band"],
+            row["walls-description"],
+            row["floor-description"],
+            row["roof-description"],
+            row["mainheat-description"],
+            row["hotwater-description"],
+            (
+                int(row["main-heating-controls"])
+                if (
+                    row["main-heating-controls"].isdecimal()
+                    and int(row["main-heating-controls"]) > 0
+                )
+                else None
+            ),
         )
         for row in rows
     ]

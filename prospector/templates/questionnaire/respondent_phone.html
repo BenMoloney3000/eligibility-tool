@@ -6,25 +6,26 @@
 {% block content %}
     <h2>Contacting you by phone</h2>
 
+    <p>Please give us at least one telephone number:</p>
 
     <form method="POST">
         {% csrf_token %}
 
         <p>
             <label for="id_contact_phone">
-                Please let us know your preferred contact telephone number
+                Home phone number
             </label><br>
             {{ form.contact_phone }}
             {{ form.contact_phone.errors }}
         </p>
-
         <p>
-            <label for="id_contact_preferences">
-                When are the best times to call you?
+            <label for="id_contact_mobile">
+                Mobile phone number
             </label><br>
-            {{ form.contact_preference }}
-            {{ form.contact_preference.errors }}
+            {{ form.contact_mobile }}
+            {{ form.contact_mobile.errors }}
         </p>
+
 
         <button>
             Next&nbsp;&rarr;

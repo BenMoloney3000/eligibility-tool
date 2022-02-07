@@ -10,6 +10,15 @@ class EPCData:
     address_2: str
     address_3: str
     uprn: str
+    property_type: str
+    built_form: str
+    construction_age_band: str
+    walls_description: str
+    floor_description: str
+    roof_description: str
+    mainheat_description: str
+    hotwater_description: str
+    main_heating_controls: int
 
     def __repr__(self):
         return (f"{self.address_1}, {self.address_2}".strip(", ")) + (

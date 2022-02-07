@@ -36,7 +36,7 @@ class AnswerFormMixin:
     """Set the error class and receive questionnaire data."""
 
     def __init__(self, *args, **kwargs):
-        self.signup = kwargs.pop("answers")
+        self.answers = kwargs.pop("answers")
         super().__init__(*args, **kwargs)
 
         # Most fields are required in the form but not the model, reflect this.
@@ -132,20 +132,40 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
 class RespondentPhone(AnswerFormMixin, forms.ModelForm):
     class Meta:
         model = models.Answers
-        fields = [
-            "contact_phone",
-            "contact_preference",
-        ]
+        fields = ["contact_phone", "contact_mobile"]
+        optional_fields = ["contact_phone", "contact_mobile"]
 
     def clean_contact_phone(self):
         phone = self.cleaned_data["contact_phone"]
-        try:
-            phone = phone_numbers.normalise(phone)
+        if phone:
+            try:
+                phone = phone_numbers.normalise(phone)
 
-        except phone_numbers.ParseError as e:
-            self.add_error("contact_phone", e)
+            except phone_numbers.ParseError as e:
+                self.add_error("contact_phone", e)
 
         return phone
+
+    def clean_contact_mobile(self):
+        phone = self.cleaned_data["contact_mobile"]
+        if phone:
+            try:
+                phone = phone_numbers.normalise(phone)
+
+            except phone_numbers.ParseError as e:
+                self.add_error("contact_mobile", e)
+
+        return phone
+
+    def clean(self):
+        # Ensure we've got at least one phone number
+        if (
+            not self.cleaned_data["contact_mobile"]
+            and not self.cleaned_data["contact_phone"]
+        ):
+            self.add_error(
+                "contact_phone", "Please enter at least one telephone number"
+            )
 
 
 class OccupantName(AnswerFormMixin, forms.ModelForm):

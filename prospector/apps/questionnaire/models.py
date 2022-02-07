@@ -35,7 +35,7 @@ class Answers(models.Model):
 
     postcode = models.CharField(max_length=16, blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)
-    contact_preference = models.CharField(max_length=128, blank=True)
+    contact_mobile = models.CharField(max_length=20, blank=True)
 
     # Whether all the above details are those of the occupant/property
     is_occupant = models.BooleanField(null=True, blank=True)
@@ -90,7 +90,6 @@ class Answers(models.Model):
         verbose_name="Initial property data source",
     )
 
-    """
     # PROPERTY ENERGY PERFORMANCE DETAILS
 
     # All below fields are duplicated for user data and original data
@@ -106,10 +105,10 @@ class Answers(models.Model):
         verbose_name="Property type according to property data source before correction",
     )
     property_form = models.CharField(
-        max_length=12, choices=enums.PropertyForm.choices, blank=True
+        max_length=15, choices=enums.PropertyForm.choices, blank=True
     )
     property_form_orig = models.CharField(
-        max_length=12,
+        max_length=15,
         choices=enums.PropertyForm.choices,
         blank=True,
         verbose_name="Property form according to property data source before correction",
@@ -124,6 +123,7 @@ class Answers(models.Model):
         verbose_name="Property age band according to property data source before correction",
     )
 
+    """
     wall_type = models.CharField(
         max_length=10, choices=enums.WallType.choices, blank=True
     )
@@ -132,12 +132,6 @@ class Answers(models.Model):
         choices=enums.WallType.choices,
         blank=True,
         verbose_name="Wall type according to property data source before correction",
-    )
-    # Wall type can be inferred from the age band
-    wall_type_inferred = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Wall type before correction was inferred from property age"
     )
     walls_insulated = models.BooleanField(
         null=True,
@@ -216,7 +210,68 @@ class Answers(models.Model):
         verbose_name="Main part of property has a flat roof, according to property data source before correction",
     )
 
-    # TODO: heating systems, planning constraints, preferences, income assessment
+    gas_boiler_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a gas central heating boiler",
+    )
+    gas_boiler_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a gas central heating boiler according to property data before correction",
+    )
+    hwt_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a hot water tank",
+    )
+    trvs_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has themostatic radiator valves",
+    )
+    trvs_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has thermostatic radiator valves according to property data before correction",
+    )
+    room_thermostat = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a room thermostat",
+    )
+    room_thermostat_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a room thermostat according to property data before correction",
+    )
+    ch_timer = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a heating timer control",
+    )
+    ch_timer_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a heating timer control according to property data before correction",
+    )
+    programmable_thermostat = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a programmable thermostat control",
+    )
+    programmable_thermostat_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a programmable thermostat control according to property data before correction",
+    )
+    smart_thermostat = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a programmable thermostat control",
+    )
+
+    # TODO: planning constraints, preferences, income assessment
     """
 
 

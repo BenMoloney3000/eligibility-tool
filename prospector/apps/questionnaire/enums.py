@@ -25,8 +25,7 @@ class PropertyDataSource(models.TextChoices):
 
 
 class PropertyType(models.TextChoices):
-    FLAT = "FLAT", "Flat"
-    MAISONETTE = "MAISONETTE", "Maisonette"
+    FLAT = "FLAT", "Flat or maisonette"
     HOUSE = "HOUSE", "House"
     BUNGALOW = "BUNGALOW", "Bungalow"
     PARK_HOME = "PARK_HOME", "Park Home"
@@ -34,9 +33,15 @@ class PropertyType(models.TextChoices):
 
 class PropertyForm(models.TextChoices):
     DETACHED = "DETACHED", "Detached"
-    SEMI_DETACHED = "SEMI", "Semi-detached"
+    SEMI_DETACHED = "SEMI_DETACHED", "Semi-detached"
     MID_TERRACE = "MID_TERRACE", "Mid-terrace"
     END_TERRACE = "END_TERRACE", "End-terrace"
+    MAISONNETTE = "MAISONNETTE", "Maisonette"
+    FLAT_SMALL = "FLAT_CONVERSION", "Flat (converted house or block of 5 or less flats)"
+    FLAT_BLOCK = (
+        "FLAT_BLOCK",
+        "Flat (block of 5 or more flats or flat in mixed use building)",
+    )
 
 
 class PropertyAgeBand(models.IntegerChoices):
@@ -76,3 +81,119 @@ class Consent(models.TextChoices):
             "of properties in the Plymouth City Council administrative area"
         ),
     )
+
+
+class HeatingSystemControls(models.IntegerChoices):
+    """These are taken from SAP table 4e.
+
+    - see https://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf
+    """
+
+    NO_HEATING_SYSTEM = 2699, "No heating system present"
+    DHW_ONLY = 2100, "Not applicable (boiler or HP provides DHW only)"
+
+    # GROUP 1: BOILER SYSTEMS WITH RADIATORS OR UNDERFLOOR HEATING (and micro-CHP)
+    BOILER_NO_CONTROLS = 2101, "No time or thermostatic control of room temperature"
+    BOILER_PROGRAMMER = 2102, "Programmer, no room thermostat"
+    BOILER_ROOM_THERMOSTAT = 2103, "Room thermostat only"
+    BOILER_PROGRAMMER_AND_ROOM = 2104, "Programmer and room thermostat"
+    BOILER_PROGRAMMER_AND_ROOMS = 2105, "Programmer and at least two room thermostats"
+    BOILER_PROGRAMMER_ROOM_TRVS = 2106, "Programmer, room thermostat and TRVs"
+    BOILER_TRVS_BYPASS = 2111, "TRVs and bypass"
+    BOILER_PROGRAMMER_TRVS_BYPASS = 2107, "Programmer, TRVs and bypass"
+    BOILER_PROGRAMMER_TRVS_FLOW_SWITCH = 2108, "Programmer, TRVs and flow switch"
+    BOILER_PROGRAMMER_TRVS_BEM = 2109, "Programmer, TRVs and boiler energy manager"
+    BOILER_TIME_AND_TEMP_SERVICES = (
+        2110,
+        "Time and temperature zone control by suitable arrangement of plumbing and electrical services",
+    )
+    BOILER_TIME_AND_TEMP_DEVICE = (
+        2112,
+        "Time and temperature zone control by device in database",
+    )
+
+    # GROUP 2: HEAT PUMPS WITH RADIATORS OR UNDERFLOOR HEATING
+    HP_NO_CONTROLS = 2201, "No time or thermostatic control of room temperature"
+    HP_PROGRAMMER = 2202, "Programmer, no room thermostat"
+    HP_ROOM_THERMOSTAT = 2203, "Room thermostat only"
+    HP_PROGRAMMER_AND_ROOM = 2204, "Programmer and room thermostat"
+    HP_PROGRAMMER_AND_ROOMS = 2205, "Programmer and at least two room thermostats"
+    HP_PROGRAMMER_TRVS_BYPASS = 2206, "Programmer, TRVs and bypass"
+    HP_TIME_AND_TEMP_SERVICES = (
+        2207,
+        "Time and temperature zone control by suitable arrangement of plumbing and electrical services",
+    )
+    HP_TIME_AND_TEMP_DEVICE = (
+        2208,
+        "Time and temperature zone control by device in database",
+    )
+
+    # GROUP 3: COMMUNITY HEATING SCHEMES
+    DHS_FLAT_RATE_NO_CONTROL = (
+        2301,
+        "Flat rate charging, no thermostatic control of room temperature",
+    )
+    DHS_FLAT_RATE_PROGRAMMER = (
+        2302,
+        "Flat rate charging, programmer, no room thermostat",
+    )
+    DHS_FLAT_RATE_ROOM_ONLY = 2303, "Flat rate charging, room thermostat only"
+    DHS_FLAT_RATE_PROGRAMMER_ROOM = (
+        2304,
+        "Flat rate charging, programmer and room thermostat",
+    )
+    DHS_FLAT_RATE_TRVS = 2307, "Flat rate charging, TRVs"
+    DHS_FLAT_RATE_PROGRAMMER_TRVS = 2305, "Flat rate charging, programmer and TRVs"
+    DHS_FLAT_RATE_PROGRAMMER_ROOMS = (
+        2311,
+        "Flat rate charging*, programmer and at least two room thermostats",
+    )
+    DHS_USE_CHARGE_ROOM = (
+        2308,
+        "Charging system linked to use of community heating, room thermostat only",
+    )
+    DHS_USE_CHARGE_PROGRAMMER_ROOM = (
+        2309,
+        "Charging system linked to use of community heating, programmer and room thermostat",
+    )
+    DHS_USE_CHARGE_TRVS = (
+        2310,
+        "Charging system linked to use of community heating, TRVs",
+    )
+    DHS_USE_CHARGE_PROGRAMMER_TRVS = (
+        2306,
+        "Charging system linked to use of community heating, programmer and TRVs",
+    )
+    DHS_USE_CHARGE_PROGRAMMER_ROOM2 = (
+        2312,
+        "Charging system linked to use of community heating, programmer and at least two room thermostats",
+    )
+
+    # GROUP 4: ELECTRIC STORAGE SYSTEMS
+    STORAGE_MANUAL = 2401, "Manual charge control"
+    STORAGE_AUTOMATIC = 2402, "Automatic charge control"
+    STORAGE_CELECT = 2403, "Celect-type controls"
+    STORAGE_HHRSH = 2404, "Controls for high heat retention storage heaters"
+
+    # GROUP 5: WARM AIR SYSTEMS (including heat pumps with warm air distribution)
+    AIR_NO_CONTROL = 2501, "No time or thermostatic control of room temperature"
+    AIR_PROGRAMMER = 2502, "Programmer, no room thermostat"
+    AIR_ROOM = 2503, "Room thermostat only"
+    AIR_PROGRAMMER_ROOM = 2504, "Programmer and room thermostat"
+    AIR_PROGRAMMER_ROOMS = 2505, "Programmer and at least two room thermostats"
+    AIR_TIME_AND_TEMP_ZONED = 2506, "Time and temperature zone control"
+
+    # GROUP 6: ROOM HEATER SYSTEMS
+    ROOM_NO_CONTROL = 2601, "No thermostatic control of room temperature"
+    ROOM_APPLIANCE = 2602, "Appliance thermostats"
+    ROOM_PROGRAMMER_APPLIANCE = 2603, "Programmer and appliance thermostats"
+    ROOM_ROOM = 2604, "Room thermostats only"
+    ROOM_PROGRAMMER_ROOM = 2605, "Programmer and room thermostats"
+
+    # GROUP 7: OTHER SYSTEMS
+    OTHER_NO_CONTROL = 2701, "No time or thermostatic control of room temperature"
+    OTHER_PROGRAMMER = 2702, "Programmer, no room thermostat"
+    OTHER_ROOM = 2703, "Room thermostat only"
+    OTHER_PROGRAMMER_ROOM = 2704, "Programmer and room thermostat"
+    OTHER_TEMP_ZONED = 2705, "Temperature zone control"
+    OTHER_TIME_AND_TEMP_ZONED = 2706, "Time and temperature zone control"

@@ -25,6 +25,15 @@ FAKE_EPC = epc_dataclass.EPCData(
     "Eggborough",
     "Royal Leamington Spa",
     "1234",
+    "Bungalow",
+    "Semi-Detached",
+    "England and Wales: 1976-1982",
+    "Cavity wall, filled cavity",
+    "To unheated space, limited insulation (assumed)",
+    "Flat, no insulation (assumed)",
+    "Boiler and radiators, electric",
+    "From main system",
+    2302,
 )
 
 

@@ -14,6 +14,7 @@ from django.views.generic.edit import FormView
 from . import enums
 from . import forms as questionnaire_forms
 from . import models
+from . import services
 from prospector.apis import epc
 from prospector.apis import ideal_postcodes
 from prospector.dataformats import postcodes
@@ -203,7 +204,7 @@ class SingleQuestion(Question, mixin.TrailMixin):
             return data
 
         # Instead of defining a separate form for each page, which is repetitious,
-        #  difficult to maintain, and splits forms and views that are intimately related
+        # difficult to maintain, and splits forms and views that are intimately related
         # across files, we instead specify a limited number of question types.
         #
         # Each question view has one type, and we generate the form dynamically here.
@@ -641,9 +642,9 @@ class SelectEPC(Question):
         # If we selected an EPC, this is where we interrogate its data to
         # pre-populate all the property energy performance questions
         if self.answers.selected_epc:
-            # TODO selected_epc = self.candidate_epcs[self.answers.selected_epc]
-            # TODO services.prepopulate_from_epc(self.answers, selected_epc)
-            pass
+            selected_epc = self.candidate_epcs[self.answers.selected_epc]
+            self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
+            self.answers.save()
 
 
 class PropertyType(SingleQuestion):

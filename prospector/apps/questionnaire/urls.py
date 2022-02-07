@@ -17,7 +17,7 @@ urlpatterns = [
     path("your-postcode", views.Postcode.as_view(), name="postcode"),
     path("your-address", views.RespondentAddress.as_view(), name="respondent-address"),
     path("your-email", views.Email.as_view(), name="email"),
-    path("phone-number", views.ContactPhone.as_view(), name="contact-phone"),
+    path("phone-numbers", views.ContactPhone.as_view(), name="contact-phone"),
     path("occupant-name", views.OccupantName.as_view(), name="occupant-name"),
     path(
         "property-postcode", views.PropertyPostcode.as_view(), name="property-postcode"
