@@ -314,10 +314,16 @@ class Answers(models.Model):
     smart_thermostat = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Property has a programmable thermostat control",
+        verbose_name="Property has a smart thermostat control",
     )
-
-    # TODO: planning constraints, preferences, income assessment
+    """
+    in_conservation_area = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property is in a conservation area",
+    )
+    """
+    # TODO: preferences, income assessment
 
 
 class ConsentGranted(models.Model):

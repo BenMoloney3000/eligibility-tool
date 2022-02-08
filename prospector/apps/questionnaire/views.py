@@ -311,6 +311,11 @@ class SinglePrePoppedQuestion(SingleQuestion):
 
         # TODO: catch where the field is a YesNo, in which case the 'data_correct'
         # field will tell us the correct answer!
+
+        # "Data is correct" field is required if we have a data-derived answer
+        prepopped_data_is_present = (
+            self.get_prepop_data() is not None and self.get_prepop_data() != ""
+        )
         QuestionForm = type(
             "QuestionForm",
             (questionnaire_forms.AnswerFormMixin, forms.Form),
@@ -323,7 +328,7 @@ class SinglePrePoppedQuestion(SingleQuestion):
                         (False, "I want to correct this"),
                     ),
                     widget=forms.RadioSelect,
-                    required=True,
+                    required=prepopped_data_is_present,
                 ),
                 "clean_field": clean_field,
             },
@@ -367,7 +372,7 @@ class SinglePrePoppedQuestion(SingleQuestion):
     def form_valid(self, form):
         # If they answer "Yes it's correct" ignore anything set underneath
         if form.cleaned_data["data_correct"] and self.get_prepop_data():
-            setattr(self.answers, self.get_prepop_data())
+            setattr(self.answers, self.get_answer_field(), self.get_prepop_data())
         else:
             sanitised = self.sanitise_answer(form.cleaned_data["field"])
             field_name = self.get_answer_field()
@@ -828,6 +833,16 @@ class UnheatedLoft(SinglePrePoppedQuestion):
     note = "If you live in a non-top-floor flat, the answer is 'No'."
     next = "UnheatedLoftSpace"
 
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.unheated_loft:
+            self.answers.room_in_roof = None
+            self.answers.rir_insulated = None
+            self.answers.flat_roof = None
+            self.answers.flat_roof_modern = None
+        else:
+            self.answers.roof_space_insulated = None
+
     def get_next(self):
         if self.answers.unheated_loft:
             return "RoofSpaceInsulated"
@@ -840,6 +855,14 @@ class RoomInRoof(SinglePrePoppedQuestion):
     question = "Is there a room in the roof space of the property, as a loft conversion or otherwise?"
     type_ = QuestionType.YesNo
     next = "RirInsulated"
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.room_in_roof:
+            self.answers.flat_roof = None
+            self.answers.flat_roof_modern = None
+        else:
+            self.answers.rir_insulated = None
 
     def get_next(self):
         if self.answers.room_in_roof:
@@ -872,6 +895,11 @@ class FlatRoof(SinglePrePoppedQuestion):
         "to the largest roof area."
     )
 
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if not self.answers.flat_roof:
+            self.answers.flat_roof_modern = None
+
     def get_next(self):
         if self.answers.flat_roof:
             return "FlatRoofModern"
@@ -893,8 +921,135 @@ class GasBoilerPresent(SinglePrePoppedQuestion):
     )
     type_ = QuestionType.YesNo
 
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.gas_boiler_present:
+            self.answers.other_heating_present = None
+            self.answers.other_heating_fuel = ""
+            self.answers.storage_heaters_present = None
+            self.answers.hhrshs_present = None
+        else:
+            self.answers.gas_boiler_age = ""
+            self.answers.gas_boiler_broken = None
+
     def get_next(self):
         if self.answers.gas_boiler_present:
             return "HwtPresent"
         else:
-            return "OtherCentralHeating"
+            return "OtherHeatingPresent"
+
+
+class OtherHeatingPresent(SinglePrePoppedQuestion):
+    title = "Other central heating system"
+    question = "Does the property have a non-gas central heating system?"
+    type_ = QuestionType.YesNo
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.other_heating_present:
+            self.answers.storage_heaters_present = None
+            self.answers.hhrshs_present = None
+        else:
+            self.answers.hwt_present = None
+            self.answers.other_heating_fuel = ""
+
+    def get_next(self):
+        if self.answers.other_heating_present:
+            return "HwtPresent"
+        else:
+            return "StorageHeatersPresent"
+
+
+class HwtPresent(SingleQuestion):
+    title = "Hot water tank"
+    question = "Does the property have a hot water tank?"
+    type_ = QuestionType.YesNo
+
+    def get_next(self):
+        if self.answers.gas_boiler_present:
+            return "GasBoilerAge"
+        else:
+            return "OtherHeatingFuel"
+
+
+class OtherHeatingFuel(SinglePrePoppedQuestion):
+    title = "Heating fuel source"
+    question = "What fuel does your central heating system run on?"
+    type_ = QuestionType.Choices
+    choices = enums.NonGasFuel.choices
+    next = "ConservationArea"
+
+
+class GasBoilerAge(SingleQuestion):
+    title = "Boiler age"
+    question = "When was the current boiler installed?"
+    type_ = QuestionType.Choices
+    choices = enums.BoilerAgeBand.choices
+    next = "GasBoilerBroken"
+
+
+class GasBoilerBroken(SingleQuestion):
+    title = "Boiler condition"
+    question = "Is the gas boiler currently broken?"
+    type_ = QuestionType.YesNo
+    next = "HeatingControls"
+
+
+class HeatingControls(Question):
+    title = "Heating controls"
+    template_name = "questionnaire/heating_controls.html"
+    form_class = questionnaire_forms.HeatingControls
+    next = "ConservationArea"
+
+    def get_initial(self):
+        data = super().get_initial()
+        for field in self.get_form_class().declared_fields:
+            orig_field = field + "_orig"
+            data[field] = getattr(self.answers, field)
+            if data[field] is None:
+                data[field] = getattr(self.answers, orig_field, None)
+
+        return data
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        for field in self.get_form_class().declared_fields:
+            orig_field = field + "_orig"
+            context[orig_field] = getattr(self.answers, orig_field, None)
+            if context[orig_field]:
+                context["any_orig"] = True
+
+        return context
+
+
+class StorageHeatersPresent(SinglePrePoppedQuestion):
+    title = "Storage heaters"
+    question = "Are there storage heaters in the property?"
+    type_ = QuestionType.YesNo
+    next = "HhrshsPresent"
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if not self.answers.storage_heaters_present:
+            self.answers.hhrshs_present = None
+
+    def get_next(self):
+        if self.answers.storage_heaters_present:
+            return "HhrshsPresent"
+        else:
+            return "ConservationArea"
+
+
+class HhrshsPresent(SingleQuestion):
+    title = "Storage heater performance"
+    question = "Are the storage heaters in the property Diplex Quantum or other high heat retention storage heaters?"
+    type_ = QuestionType.YesNo
+    next = "ConservationArea"
+
+
+class ConservationArea(SingleQuestion):
+    title = "Conservation area"
+    question = "Is this property in a conservation area?"
+    type_ = QuestionType.YesNo
+    next = "AccuracyWarning"

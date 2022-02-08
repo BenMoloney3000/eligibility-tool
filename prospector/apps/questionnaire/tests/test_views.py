@@ -183,6 +183,30 @@ class TestQuestionsRender(TrailTest):
     def test_gas_boiler_present_renders(self):
         assert self._get_trail_view("GasBoilerPresent").status_code == 200
 
+    def test_hwt_present_renders(self):
+        assert self._get_trail_view("HwtPresent").status_code == 200
+
+    def test_other_hearing_renders(self):
+        assert self._get_trail_view("OtherHeatingPresent").status_code == 200
+
+    def test_other_hearing_fuel_renders(self):
+        assert self._get_trail_view("OtherHeatingFuel").status_code == 200
+
+    def test_gas_boiler_age_renders(self):
+        assert self._get_trail_view("GasBoilerAge").status_code == 200
+
+    def test_gas_boiler_broken_renders(self):
+        assert self._get_trail_view("GasBoilerBroken").status_code == 200
+
+    def test_heating_controls_renders(self):
+        assert self._get_trail_view("HeatingControls").status_code == 200
+
+    def test_storage_heaters_renders(self):
+        assert self._get_trail_view("StorageHeatersPresent").status_code == 200
+
+    def test_hhrshs_present_renders(self):
+        assert self._get_trail_view("HhrshsPresent").status_code == 200
+
 
 # TODO tests to write
 # confirm that reaching needs_permission deletes the Answers

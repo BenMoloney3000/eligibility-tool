@@ -335,3 +335,46 @@ class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
             "property_type",
             "property_form",
         ]
+
+
+class HeatingControls(AnswerFormMixin, forms.ModelForm):
+    trvs_present = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=((True, "Yes"), (False, "No")),
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    room_thermostat = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=((True, "Yes"), (False, "No")),
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    ch_timer = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=((True, "Yes"), (False, "No")),
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    programmable_thermostat = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=((True, "Yes"), (False, "No")),
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    smart_thermostat = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=((True, "Yes"), (False, "No")),
+        widget=forms.RadioSelect,
+        required=True,
+    )
+
+    class Meta:
+        model = models.Answers
+        fields = [
+            "trvs_present",
+            "room_thermostat",
+            "ch_timer",
+            "programmable_thermostat",
+            "smart_thermostat",
+        ]

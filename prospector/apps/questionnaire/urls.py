@@ -48,4 +48,27 @@ urlpatterns = [
     path("flat-roof", views.FlatRoof.as_view(), name="flat-roof"),
     path("flat-roof-age", views.FlatRoofModern.as_view(), name="flat-roof-modern"),
     path("gas-boiler", views.GasBoilerPresent.as_view(), name="gas-boiler-present"),
+    path("hot-water-tank", views.HwtPresent.as_view(), name="hwt-present"),
+    path(
+        "other-heating-system",
+        views.OtherHeatingPresent.as_view(),
+        name="other-heating-present",
+    ),
+    path("heating-fuel", views.OtherHeatingFuel.as_view(), name="other-heating-fuel"),
+    path("boiler-age", views.GasBoilerAge.as_view(), name="gas-boiler-age"),
+    path("boiler-condition", views.GasBoilerBroken.as_view(), name="gas-boiler-broken"),
+    path("heating-controls", views.HeatingControls.as_view(), name="heating-controls"),
+    path(
+        "storage-heaters",
+        views.StorageHeatersPresent.as_view(),
+        name="storage-heaters-present",
+    ),
+    path(
+        "storage-heater-performance",
+        views.HhrshsPresent.as_view(),
+        name="hhrshs-present",
+    ),
+    path(
+        "conservation-area", views.ConservationArea.as_view(), name="conservation-area"
+    ),
 ]
