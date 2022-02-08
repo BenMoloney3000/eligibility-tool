@@ -35,6 +35,11 @@ urlpatterns = [
     path("wall-type", views.WallType.as_view(), name="wall-type"),
     path("wall-insulation", views.WallsInsulated.as_view(), name="walls-insulated"),
     path("floor-type", views.SuspendedFloor.as_view(), name="suspended-floor"),
+    path(
+        "floor-insulation",
+        views.SuspendedFloorInsulated.as_view(),
+        name="suspended-floor-insulated",
+    ),
     path("unheated-loft", views.UnheatedLoft.as_view(), name="unheated-loft"),
     path("loft-conversion", views.RoomInRoof.as_view(), name="room-in-roof"),
     path(
@@ -69,6 +74,21 @@ urlpatterns = [
         name="hhrshs-present",
     ),
     path(
-        "conservation-area", views.ConservationArea.as_view(), name="conservation-area"
+        "conservation-area",
+        views.InConservationArea.as_view(),
+        name="in-conservation-area",
+    ),
+    path("accuracy-warning", views.AccuracyWarning.as_view(), name="accuracy-warning"),
+    path(
+        "recommendations",
+        views.RecommendedMeasures.as_view(),
+        name="recommended-measures",
+    ),
+    path(
+        "disruption", views.ToleratedDisruption.as_view(), name="tolerated-disruption"
+    ),
+    path("motivations", views.Motivations.as_view(), name="motivations"),
+    path(
+        "eligibility", views.PropertyEligibility.as_view(), name="property-eligibility"
     ),
 ]

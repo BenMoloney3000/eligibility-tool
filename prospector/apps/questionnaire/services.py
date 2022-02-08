@@ -1,4 +1,5 @@
 import re
+from typing import List
 from typing import Optional
 
 from . import enums
@@ -9,12 +10,15 @@ from prospector.apis.epc.dataclass import EPCData
 def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     """Parse EPC contents to populate initial values for property energy data."""
 
-    answers.property_type_orig = _detect_property_type(selected_epc)
-    answers.property_form_orig = _detect_property_form(selected_epc)
-    answers.property_age_band_orig = _detect_property_age(selected_epc)
-    answers.wall_type_orig = _detect_wall_type(selected_epc)
+    answers.property_type_orig = _detect_property_type(selected_epc) or ""
+    answers.property_form_orig = _detect_property_form(selected_epc) or ""
+    answers.property_age_band_orig = _detect_property_age(selected_epc) or ""
+    answers.wall_type_orig = _detect_wall_type(selected_epc) or ""
     answers.walls_insulated_orig = _detect_walls_insulated(selected_epc)
     answers.suspended_floor_orig = _detect_suspended_floor(selected_epc)
+    answers.suspended_floor_insulated_orig = _detect_suspended_floor_insulation(
+        selected_epc
+    )
     answers.unheated_loft_orig = _detect_unheated_loft(selected_epc)
     answers.room_in_roof_orig = _detect_room_in_roof(selected_epc)
     answers.rir_insulated_orig = _detect_rir_insulated(selected_epc)
@@ -22,7 +26,7 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.flat_roof_orig = _detect_flat_roof(selected_epc)
     answers.gas_boiler_present_orig = _detect_gas_boiler(selected_epc)
     answers.other_heating_present_orig = _detect_other_ch(selected_epc)
-    answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc)
+    answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc) or ""
     answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
     answers.trvs_present_orig = _detect_trvs(selected_epc)
     answers.room_thermostat_orig = _detect_room_thermostat(selected_epc)
@@ -142,11 +146,30 @@ def _detect_suspended_floor(epc: EPCData) -> Optional[bool]:
     things_that_arent_suspended_floors = [
         "(ANOTHER DWELLING BELOW)",
         "(OTHER PREMISES BELOW)",
-        "CONSERVATORY" "To unheated space",
+        "CONSERVATORY",
+        "To unheated space",
         "To external air",
     ]
     if any([indic in floor_desc for indic in things_that_arent_suspended_floors]):
         return False
+
+
+def _detect_suspended_floor_insulation(epc: EPCData) -> Optional[bool]:
+    floor_desc = epc.floor_description.upper()
+
+    if _detect_suspended_floor(epc) is False:
+        return False
+
+    things_that_are_uninsulated_floors = [
+        "UNINSULATED",
+        "NO INSULATION",
+        "LIMITED INSULATION",
+    ]
+    if any([indic in floor_desc for indic in things_that_are_uninsulated_floors]):
+        return False
+
+    if "INSULATED" in floor_desc:
+        return True
 
 
 def _detect_unheated_loft(epc: EPCData) -> Optional[bool]:
@@ -399,3 +422,49 @@ def _detect_programmable_thermostat(epc: EPCData) -> Optional[bool]:
             [indic in controls.name for indic in things_that_definitely_arent_timed]
         ):
             return False
+
+
+def determine_recommended_measures(
+    answers: models.Answers,
+) -> List[enums.PossibleMeasures]:
+    measures = []
+
+    if answers.wall_type == enums.WallType.CAVITY and answers.walls_insulated is False:
+        measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
+
+    if answers.wall_type == enums.WallType.SOLID and answers.walls_insulated is False:
+        measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
+
+    if answers.suspended_floor is True and answers.suspended_floor_insulated is False:
+        measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
+
+    if answers.room_in_roof is True and answers.rir_insulated is False:
+        measures.append(enums.PossibleMeasures.RIR_INSULATION)
+
+    if answers.flat_roof is True and answers.flat_roof_modern is False:
+        measures.append(enums.PossibleMeasures.FLAT_ROOF_INSULATION)
+
+    if (
+        answers.gas_boiler_present is True
+        and answers.gas_boiler_age == enums.BoilerAgeBand.BEFORE_2004
+    ):
+        measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
+
+    if answers.storage_heaters_present is True and answers.hhrshs_present is False:
+        measures.append(enums.PossibleMeasures.STORAGE_HEATER_UPGRADE)
+
+    if answers.gas_boiler_present is False and answers.other_heating_present is False:
+        measures.append(enums.PossibleMeasures.CENTRAL_HEATING_INSTALL)
+
+    party_walled_forms = [
+        enums.PropertyForm.SEMI_DETACHED,
+        enums.PropertyForm.MID_TERRACE,
+        enums.PropertyForm.END_TERRACE,
+    ]
+    if (
+        answers.wall_type == enums.WallType.CAVITY
+        and answers.property_form in party_walled_forms
+    ):
+        measures.append(enums.PossibleMeasures.PARTY_WALL_INSULATION)
+
+    return measures

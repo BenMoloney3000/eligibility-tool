@@ -9,6 +9,8 @@ from django.urls import reverse
 
 from . import factories
 from prospector.apis.epc import dataclass as epc_dataclass
+from prospector.apps.questionnaire import enums
+from prospector.apps.questionnaire import models
 from prospector.apps.questionnaire import views
 from prospector.testutils import add_middleware_to_request
 from prospector.trail.mixin import snake_case
@@ -73,12 +75,6 @@ class TrailTest(TestCase):
 
         return self.view.as_view()(request)
 
-
-class TestQuestionsRender(TrailTest):
-    @classmethod
-    def setUpTestData(cls):
-        cls.answers = factories.AnswersFactory()
-
     def _get_trail_view(self, view_class):
         # The same trail jumping code for all tests
         self.trail = ["Start", view_class]
@@ -86,6 +82,20 @@ class TestQuestionsRender(TrailTest):
         url_name = snake_case(view_class, separator="-")
 
         return self._get_page(f"questionnaire:{url_name}")
+
+    def _post_trail_data(self, view_class, postdata):
+        # The same trail jumping code for all tests
+        self.trail = ["Start", view_class]
+        self.view = getattr(views, view_class)
+        url_name = snake_case(view_class, separator="-")
+
+        return self._submit_form(postdata, f"questionnaire:{url_name}")
+
+
+class TestQuestionsRender(TrailTest):
+    @classmethod
+    def setUpTestData(cls):
+        cls.answers = factories.AnswersFactory()
 
     def test_start_renders(self):
         response = self._get_page()
@@ -162,6 +172,9 @@ class TestQuestionsRender(TrailTest):
     def test_floor_type_renders(self):
         assert self._get_trail_view("SuspendedFloor").status_code == 200
 
+    def test_floor_insulated_renders(self):
+        assert self._get_trail_view("SuspendedFloorInsulated").status_code == 200
+
     def test_unheated_loft_renders(self):
         assert self._get_trail_view("UnheatedLoft").status_code == 200
 
@@ -207,8 +220,94 @@ class TestQuestionsRender(TrailTest):
     def test_hhrshs_present_renders(self):
         assert self._get_trail_view("HhrshsPresent").status_code == 200
 
+    def test_in_conservation_area_renders(self):
+        assert self._get_trail_view("InConservationArea").status_code == 200
 
-# TODO tests to write
-# confirm that reaching needs_permission deletes the Answers
-# confirm that relationship_other is required if selecting other
-# confirm that ContactPhone redirects according to is_occupant
+    def test_accuracy_warning_renders(self):
+        assert self._get_trail_view("AccuracyWarning").status_code == 200
+
+    def test_recommended_measures_renders(self):
+        assert self._get_trail_view("RecommendedMeasures").status_code == 200
+
+    def test_tolerated_disruption_renders(self):
+        assert self._get_trail_view("ToleratedDisruption").status_code == 200
+
+    def test_property_eligibility_renders(self):
+        assert self._get_trail_view("PropertyEligibility").status_code == 200
+
+
+class TestDataPosts(TrailTest):
+    """Test page submission logic in views.py."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.answers = factories.AnswersFactory()
+
+    def test_generic_single_question_saves(self):
+        # Test an example of a generic SingleQuestion view
+
+        submitted_value = enums.PropertyOwnership.PRIVATE_TENANCY
+
+        response = self._post_trail_data(
+            "PropertyOwnership", {"field": submitted_value.value}
+        )
+
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert self.answers.property_ownership == submitted_value
+
+    def test_generic_prepopped_question_saves_confirm(self):
+        # Test an example of a generic SinglePrepoppedQuestion confirming data
+
+        self.answers.property_age_band_orig = enums.PropertyAgeBand.FROM_1930
+        self.answers.save()
+
+        submitted_value_to_be_ignored = enums.PropertyAgeBand.FROM_1976
+
+        response = self._post_trail_data(
+            "PropertyAgeBand",
+            {
+                "field": submitted_value_to_be_ignored.value,
+                "data_correct": "True",
+            },
+        )
+
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert self.answers.property_age_band == self.answers.property_age_band_orig
+
+    def test_generic_prepopped_question_saves_overwrite(self):
+        # Test an example of a generic SinglePrepoppedQuestion overwriting data
+
+        self.answers.property_age_band_orig = enums.PropertyAgeBand.FROM_1930
+        self.answers.save()
+
+        submitted_corrected_value = enums.PropertyAgeBand.FROM_1976
+
+        response = self._post_trail_data(
+            "PropertyAgeBand",
+            {
+                "field": submitted_corrected_value.value,
+                "data_correct": "False",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert self.answers.property_age_band == submitted_corrected_value
+
+
+class SpecialCases(TrailTest):
+    def setUp(self):
+        self.answers = factories.AnswersFactory()
+
+    def test_needs_permission_deletes(self):
+        # Test the selective redirect to needs_permission and consequent deletion of the answers
+
+        response = self._get_trail_view("NeedPermission")
+
+        assert response.status_code == 200
+        with self.assertRaises(models.Answers.DoesNotExist):
+            self.answers.refresh_from_db()

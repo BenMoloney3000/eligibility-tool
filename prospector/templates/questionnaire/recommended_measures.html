@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Recommended measures</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>Based on what you've told us, we think the following measures would be suitable for this property:</p>
+
+        {% for measure in measures %}
+            <details>
+                <summary>{{ measure.label }}</summary>
+                Content to be supplied.
+            </details>
+            {% if measure.name == "SOLID_WALL_INSULATION" and sw_insulation_warning %}
+                <p>As your home is in a conservation area solid wall insulation may not be possible</p>
+            {% endif %}
+        {% endfor %}
+
+        <p>Next we'll ask you about what your preferences for renovation would be.</p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

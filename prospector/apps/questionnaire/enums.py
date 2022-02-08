@@ -213,3 +213,46 @@ class HeatingSystemControls(models.IntegerChoices):
     OTHER_PROGRAMMER_ROOM = 2704, "Programmer and room thermostat"
     OTHER_TEMP_ZONED = 2705, "Temperature zone control"
     OTHER_TIME_AND_TEMP_ZONED = 2706, "Time and temperature zone control"
+
+
+class ToleratedDisruption(models.TextChoices):
+    UP_TO_ONE_DAY = (
+        "UP_TO_ONE_DAY",
+        "Jobs that take up to three hours inside home, up to one day outside home",
+    )
+    ONE_TO_FOUR_DAYS = (
+        "ONE_TO_FOUR_DAYS",
+        (
+            "One or two days of work inside home, or three to four days taking place "
+            "on exterior to property (involving scaffolding etc.)"
+        ),
+    )
+    THREE_TO_TEN_DAYS = (
+        "THREE_TO_TEN_DAYS",
+        "Up to five days of work inside home, up to ten days outside the home",
+    )
+    TWO_WEEKS_TO_A_MONTH = (
+        "TWO_WEEKS_TO_A_MONTH",
+        "Up to two weeks of work inside home, up to one month outside the home",
+    )
+
+
+class PossibleMeasures(models.TextChoices):
+    CAVITY_WALL_INSULATION = "CAVITY_WALL_INSULATION", "Cavity wall insulation"
+    SOLID_WALL_INSULATION = "SOLID_WALL_INSULATION", "Solid wall insulation"
+    UNDERFLOOR_INSULATION = (
+        "UNDERFLOOR_INSULATION",
+        "Underfloor insulation for suspended floors",
+    )
+    RIR_INSULATION = "RIR_INSULATION", "Room-in-roof insulation"
+    FLAT_ROOF_INSULATION = "FLAT_ROOF_INSULATION", "Flat roof insulation"
+    BOILER_UPGRADE = "BOILER_UPGRADE", "Boiler upgrade"
+    STORAGE_HEATER_UPGRADE = (
+        "STORAGE_HEATER_UPGRADE",
+        "Replacement or upgrade or night storage heaters",
+    )
+    CENTRAL_HEATING_INSTALL = (
+        "CENTRAL_HEATING_INSTALL",
+        "Installation of a central heating system",
+    )
+    PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"

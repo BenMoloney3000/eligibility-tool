@@ -14,6 +14,7 @@ from django.views.generic.edit import FormView
 from . import enums
 from . import forms as questionnaire_forms
 from . import models
+from . import selectors
 from . import services
 from prospector.apis import epc
 from prospector.apis import ideal_postcodes
@@ -364,7 +365,8 @@ class SinglePrePoppedQuestion(SingleQuestion):
         data_orig_display = "get_" + self.get_prepop_field() + "_display"
         if context["data_orig"] and hasattr(self.answers, data_orig_display):
             context["data_orig"] = getattr(self.answers, data_orig_display)()
-        if self.type_ == QuestionType.YesNo:
+
+        if self.type_ == QuestionType.YesNo and context["data_orig"] not in ["", None]:
             context["data_orig"] = "Yes" if context["data_orig"] else "No"
 
         return context
@@ -700,7 +702,7 @@ class Consents(Question):
 
 
 class SelectEPC(Question):
-    title = "Your EPC"
+    title = "Energy Performance Certificate (EPC)"
     template_name = "questionnaire/select_epc.html"
     form_class = questionnaire_forms.SelectEPC
     next = "PropertyType"
@@ -794,7 +796,7 @@ class PropertyAgeBand(SinglePrePoppedQuestion):
 
 class WallType(SinglePrePoppedQuestion):
     title = "Wall type"
-    question = "What type of outside walls does your property have?"
+    question = "What type of outside walls does the property have?"
     type_ = QuestionType.Choices
     choices = enums.WallType.choices
     note = (
@@ -806,7 +808,7 @@ class WallType(SinglePrePoppedQuestion):
 
 class WallsInsulated(SinglePrePoppedQuestion):
     title = "Wall type"
-    question = "Are the outside walls in your house insulated?"
+    question = "Are the outside walls in this property insulated?"
     type_ = QuestionType.YesNo
     note = (
         "If only some of the outside walls are insulated, choose the option that "
@@ -820,9 +822,26 @@ class SuspendedFloor(SinglePrePoppedQuestion):
     question = "Does the property have a suspended timber floor with a void underneath?"
     type_ = QuestionType.YesNo
     note = (
-        "If your property has different types of floor, choose the option that applies "
-        "to the largest floor area. If you live in a non-ground-floor flat, select 'No'."
+        "If the property has different types of floor, choose the option that applies "
+        "to the largest floor area. If the property is a non-ground-floor flat, select 'No'."
     )
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if not self.answers.suspended_floor:
+            self.answers.suspended_floor_insulated = None
+
+    def get_next(self):
+        if self.answers.suspended_floor:
+            return "SuspendedFloorInsulated"
+        else:
+            return "UnheatedLoft"
+
+
+class SuspendedFloorInsulated(SinglePrePoppedQuestion):
+    title = "Floor insulation"
+    question = "Is the suspended timber floor insulated?"
+    type_ = QuestionType.YesNo
     next = "UnheatedLoft"
 
 
@@ -830,7 +849,7 @@ class UnheatedLoft(SinglePrePoppedQuestion):
     title = "Property roof"
     question = "Does the property have an unheated loft space directly above it?"
     type_ = QuestionType.YesNo
-    note = "If you live in a non-top-floor flat, the answer is 'No'."
+    note = "If the property is a non-top-floor flat, the answer is 'No'."
     next = "UnheatedLoftSpace"
 
     def pre_save(self):
@@ -974,10 +993,10 @@ class HwtPresent(SingleQuestion):
 
 class OtherHeatingFuel(SinglePrePoppedQuestion):
     title = "Heating fuel source"
-    question = "What fuel does your central heating system run on?"
+    question = "What fuel does the central heating system run on?"
     type_ = QuestionType.Choices
     choices = enums.NonGasFuel.choices
-    next = "ConservationArea"
+    next = "InConservationArea"
 
 
 class GasBoilerAge(SingleQuestion):
@@ -999,7 +1018,7 @@ class HeatingControls(Question):
     title = "Heating controls"
     template_name = "questionnaire/heating_controls.html"
     form_class = questionnaire_forms.HeatingControls
-    next = "ConservationArea"
+    next = "InConservationArea"
 
     def get_initial(self):
         data = super().get_initial()
@@ -1038,18 +1057,67 @@ class StorageHeatersPresent(SinglePrePoppedQuestion):
         if self.answers.storage_heaters_present:
             return "HhrshsPresent"
         else:
-            return "ConservationArea"
+            return "InConservationArea"
 
 
 class HhrshsPresent(SingleQuestion):
     title = "Storage heater performance"
     question = "Are the storage heaters in the property Diplex Quantum or other high heat retention storage heaters?"
     type_ = QuestionType.YesNo
-    next = "ConservationArea"
+    next = "InConservationArea"
 
 
-class ConservationArea(SingleQuestion):
+class InConservationArea(SingleQuestion):
     title = "Conservation area"
     question = "Is this property in a conservation area?"
     type_ = QuestionType.YesNo
-    next = "AccuracyWarning"
+
+    def get_next(self):
+        if selectors.data_was_changed(self.answers):
+            return "AccuracyWarning"
+        else:
+            return "RecommendedMeasures"
+
+
+class AccuracyWarning(Question, mixin.TrailMixin):
+    template_name = "questionnaire/accuracy_warning.html"
+    title = "Data has been changed"
+    next = "RecommendedMeasures"
+
+
+class RecommendedMeasures(Question, mixin.TrailMixin):
+    template_name = "questionnaire/recommended_measures.html"
+    title = "Recommendations for this property"
+    next = "ToleratedDisruption"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["measures"] = services.determine_recommended_measures(self.answers)
+        context["sw_insulation_warning"] = (
+            enums.PossibleMeasures.SOLID_WALL_INSULATION in context["measures"]
+            and self.answers.in_conservation_area is True
+        )
+
+        return context
+
+
+class ToleratedDisruption(SingleQuestion):
+    title = "Disruption preference"
+    question = "What level of disruption would be acceptable during home upgrade works?"
+    type_ = QuestionType.Choices
+    choices = enums.ToleratedDisruption.choices
+    next = "Motivations"
+
+
+class Motivations(Question):
+    title = "Motivations"
+    template_name = "questionnaire/motivations.html"
+    question = "What are the motivations to carry out works to the property?"
+    form_class = questionnaire_forms.Motivations
+    next = "PropertyEligibility"
+
+
+class PropertyEligibility(Question, mixin.TrailMixin):
+    title = "Eligibility for current schemes"
+    template_name = "questionnaire/property_eligibility.html"
+    next = ""

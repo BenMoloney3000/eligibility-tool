@@ -378,3 +378,19 @@ class HeatingControls(AnswerFormMixin, forms.ModelForm):
             "programmable_thermostat",
             "smart_thermostat",
         ]
+
+
+class Motivations(AnswerFormMixin, forms.ModelForm):
+    class Meta:
+        model = models.Answers
+        fields = [
+            "motivation_better_comfort",
+            "motivation_lower_bills",
+            "motivation_environment",
+        ]
+        optional_fields = fields
+        widgets = {
+            "motivation_better_comfort": forms.CheckboxInput(),
+            "motivation_lower_bills": forms.CheckboxInput(),
+            "motivation_environment": forms.CheckboxInput(),
+        }

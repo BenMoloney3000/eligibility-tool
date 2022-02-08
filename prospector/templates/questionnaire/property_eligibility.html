@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Your eligibility</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>Your home would be suitable for the following schemes</p>
+
+        <details>
+            <summary>Content to come</summary>
+            Content to be supplied.
+        </details>
+
+        <p>You now need to check if the homeowner/tenant is eligible for support as a household.</p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Motivations</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>What are the aims for upgrading this property? Please select any that apply.</p>
+
+        <p>
+            <label for="id_motivation_better_comfort">Better comfort</label>
+            {{ form.motivation_better_comfort }}
+            {{ form.motivation_better_comfort.errors }}
+        </p>
+        <p>
+            <label for="id_motivation_lower_bills">Lower bills</label>
+            {{ form.motivation_lower_bills }}
+            {{ form.motivation_lower_bills.errors }}
+        </p>
+        <p>
+            <label for="id_motivation_environment">A more environmentally friendly home</label>
+            {{ form.motivation_environment }}
+            {{ form.motivation_environment.errors }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

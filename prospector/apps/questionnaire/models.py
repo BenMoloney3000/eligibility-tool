@@ -153,6 +153,17 @@ class Answers(models.Model):
         verbose_name="Property has a suspended timber floor, according to property data source before correction",
     )
 
+    suspended_floor_insulated = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has an insulated suspended timber floor",
+    )
+    suspended_floor_insulated_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has an insulated suspended floor, according to property data source before correction",
+    )
+
     unheated_loft = models.BooleanField(
         null=True,
         blank=True,
@@ -316,14 +327,38 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property has a smart thermostat control",
     )
+
+    """
+    # CONSTRAINTS: planning area and householder preferences
     """
     in_conservation_area = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="Property is in a conservation area",
     )
-    """
-    # TODO: preferences, income assessment
+    tolerated_disruption = models.CharField(
+        max_length=20,
+        choices=enums.ToleratedDisruption.choices,
+        blank=True,
+        verbose_name="Maximum length of disruption tolerated",
+    )
+    motivation_better_comfort = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Motivated by improving comfort",
+    )
+    motivation_lower_bills = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Motivated by reducing bills",
+    )
+    motivation_environment = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Motivated to make the home more environmentally friendly",
+    )
+
+    # TODO: income assessment
 
 
 class ConsentGranted(models.Model):
