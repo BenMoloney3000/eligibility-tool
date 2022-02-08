@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Property Type</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if form.data_correct %}
+            <p>From the publicly available data on your property we think that this property is a
+                <strong>{{ initial_form }} {{ initial_type|lower }}</strong>
+            </p>
+
+            <p>
+                <label for="id_data_correct">Is this correct?</label>
+                {{ form.data_correct }}
+            </p>
+            <p><em>nb: the below will be hidden by default, revealed if the user clicks "No"</em></p>
+            <p> If not please select the correct option below:</p>
+        {% else %}
+            <p>
+                Please select the options that best describe your property
+            </p>
+
+        {% endif %}
+        <p>
+            {{ form.property_form }}
+            {{ form.property_form.errors }}
+        </p>
+        <p>
+            {{ form.property_type }}
+            {{ form.property_type.errors }}
+        </p>
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

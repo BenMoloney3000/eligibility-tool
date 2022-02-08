@@ -113,17 +113,17 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property form according to property data source before correction",
     )
-    property_age_band = models.CharField(
-        max_length=12, choices=enums.PropertyAgeBand.choices, blank=True
+    property_age_band = models.PositiveSmallIntegerField(
+        choices=enums.PropertyAgeBand.choices, blank=True, null=True
     )
-    property_age_band_orig = models.CharField(
-        max_length=12,
+
+    property_age_band_orig = models.PositiveSmallIntegerField(
         choices=enums.PropertyAgeBand.choices,
         blank=True,
+        null=True,
         verbose_name="Property age band according to property data source before correction",
     )
 
-    """
     wall_type = models.CharField(
         max_length=10, choices=enums.WallType.choices, blank=True
     )
@@ -145,9 +145,7 @@ class Answers(models.Model):
     )
 
     suspended_floor = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a suspended timber floor"
+        null=True, blank=True, verbose_name="Property has a suspended timber floor"
     )
     suspended_floor_orig = models.BooleanField(
         null=True,
@@ -209,16 +207,64 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Main part of property has a flat roof, according to property data source before correction",
     )
-
+    flat_roof_modern = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="The property's flat roof was build or insulated after 1980",
+    )
     gas_boiler_present = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Property has a gas central heating boiler",
+        verbose_name="Property has a mains gas central heating boiler",
     )
     gas_boiler_present_orig = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Property has a gas central heating boiler according to property data before correction",
+        verbose_name="Property has a mains gas central heating boiler according to property data before correction",
+    )
+    gas_boiler_age = models.CharField(
+        max_length=11, choices=enums.BoilerAgeBand.choices, blank=True
+    )
+    gas_boiler_broken = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property's mains gas central heating boiler is currently not working",
+    )
+    other_heating_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a non-gas-powered central heating system",
+    )
+    other_heating_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has non-gas-powered central heating according to property data before correction",
+    )
+    other_heating_fuel = models.CharField(
+        max_length=11,
+        choices=enums.NonGasFuel.choices,
+        blank=True,
+        verbose_name="Non-gas central heating fuel used in property",
+    )
+    other_heating_fuel_orig = models.CharField(
+        max_length=11,
+        choices=enums.NonGasFuel.choices,
+        blank=True,
+    )
+    storage_heaters_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has electric storage heaters",
+    )
+    storage_heaters_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has electric storage heaters according to property data before correction",
+    )
+    hhrshs_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has high heat retention storage heaters",
     )
     hwt_present = models.BooleanField(
         null=True,
@@ -272,7 +318,6 @@ class Answers(models.Model):
     )
 
     # TODO: planning constraints, preferences, income assessment
-    """
 
 
 class ConsentGranted(models.Model):

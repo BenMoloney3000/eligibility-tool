@@ -21,6 +21,9 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.roof_space_insulated_orig = _detect_roof_insulated(selected_epc)
     answers.flat_roof_orig = _detect_flat_roof(selected_epc)
     answers.gas_boiler_present_orig = _detect_gas_boiler(selected_epc)
+    answers.other_heating_present_orig = _detect_other_ch(selected_epc)
+    answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc)
+    answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
     answers.trvs_present_orig = _detect_trvs(selected_epc)
     answers.room_thermostat_orig = _detect_room_thermostat(selected_epc)
     answers.ch_timer_orig = _detect_timer(selected_epc)
@@ -230,23 +233,26 @@ def _detect_flat_roof(epc: EPCData) -> Optional[bool]:
         return False
 
 
-def _detect_gas_boiler(epc: EPCData) -> bool:
+def _detect_gas_boiler(epc: EPCData) -> Optional[bool]:
     mainheat_desc = epc.mainheat_description.upper()
 
     if "BOILER" in mainheat_desc:
-        if "GAS" in mainheat_desc or "LPG" in mainheat_desc:
+        if "GAS" in mainheat_desc:
             return True
         # Exclude boiler systems that specify a different fuel
         other_fules = [
-            "oil",
-            "wood",
-            "anthracite",
-            "electric",
-            "coal",
-            "smokeless fuel",
+            "OIL",
+            "WOOD",
+            "ANTHRACITE",
+            "ELECTRIC",
+            "COAL",
+            "SMOKELESS FUEL",
+            "LPG",
         ]
-        if any([indic in mainheat_desc for indic in other_fules]):
-            return False
+        for fule in other_fules:
+            # Don't match words in other words (e.g. "oil" in "boiler")
+            if re.search(rf"\b{fule}\b", mainheat_desc):
+                return False
     else:
         # If the EPC specifies another heating system then we can be reasonably
         # sure that there isn't a boiler.
@@ -273,8 +279,63 @@ def _detect_gas_boiler(epc: EPCData) -> bool:
 
     # One last check: the heating controls may tell us the technology:
     heating_controls = epc.main_heating_controls
-    if heating_controls > 2200 and heating_controls < 2700:
+    if heating_controls and heating_controls > 2200 and heating_controls < 2700:
         return False
+
+
+def _detect_other_ch(epc: EPCData) -> Optional[bool]:
+    mainheat_desc = epc.mainheat_description.upper()
+
+    # Any non-gas boiler
+    if "BOILER" in mainheat_desc and not _detect_gas_boiler(epc):
+        return True
+
+    things_that_are_central_heating = ["HEAT_PUMP", "COMMUNITY"]
+    # HPs or community schemes will be central heating
+    if any([indic in mainheat_desc for indic in things_that_are_central_heating]):
+        return True
+
+    things_that_definitely_arent_central_heating = [
+        "ROOM_HEATERS",
+        "WARM AIR",  # For now - this may need to be refined
+        "ELECTRIC UNDERFLOOR HEATING",
+        "STORAGE HEATERS",
+        "CEILING HEATING",
+        "PORTABLE ELECTRIC",
+        "ELECTRIC HEATERS",
+    ]
+    if any(
+        [
+            indic in mainheat_desc
+            for indic in things_that_definitely_arent_central_heating
+        ]
+    ):
+        return False
+
+
+def _detect_other_ch_fuel(epc: EPCData) -> Optional[enums.NonGasFuel]:
+    mainheat_desc = epc.mainheat_description.upper()
+
+    # Only works if there is a non-gas CH system
+    if _detect_other_ch(epc):
+        # Some special cases
+        if "COMMUNITY" in mainheat_desc:
+            return enums.NonGasFuel.DISTRICT
+        if "ELECTRICITY" in mainheat_desc:
+            return enums.NonGasFuel.ELECTRICITY
+        if "ANTHRACITE" in mainheat_desc or "SMOKELESS FUEL" in mainheat_desc:
+            return enums.NonGasFuel.COAL
+
+        for fuel in enums.NonGasFuel:
+            # Don't match words in other words (e.g. "oil" in "boiler")
+            if re.search(rf"\b{fuel.value}\b", mainheat_desc):
+                return fuel
+
+
+def _detect_storage_heaters(epc: EPCData) -> bool:
+    mainheat_desc = epc.mainheat_description.upper()
+
+    return "STORAGE HEATER" in mainheat_desc
 
 
 def _detect_trvs(epc: EPCData) -> Optional[bool]:

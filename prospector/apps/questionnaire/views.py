@@ -289,6 +289,100 @@ class SingleQuestion(Question, mixin.TrailMixin):
         return self.redirect(self.get_next())
 
 
+class SinglePrePoppedQuestion(SingleQuestion):
+    """
+    Produce a 'standard' single question view with prepopulated property data.
+
+    Mirrors the PrePoppedMixin for forms. Adds in a 'data_correct' boolean field
+    and uses the data field value as the initial field value (if no value for the
+    field already) as well as putting it into context.
+    """
+
+    template_name = "questionnaire/single_prepopped_question.html"
+
+    def get_form_class(self):
+        this = self
+
+        def clean_field(self):
+            data = self.cleaned_data["field"]
+            if hasattr(this, "validate_answer"):
+                this.validate_answer(data)
+            return data
+
+        # TODO: catch where the field is a YesNo, in which case the 'data_correct'
+        # field will tell us the correct answer!
+        QuestionForm = type(
+            "QuestionForm",
+            (questionnaire_forms.AnswerFormMixin, forms.Form),
+            {
+                "field": self._type_to_field(),
+                "data_correct": forms.TypedChoiceField(
+                    coerce=lambda x: x == "True",
+                    choices=(
+                        (True, "This is correct"),
+                        (False, "I want to correct this"),
+                    ),
+                    widget=forms.RadioSelect,
+                    required=True,
+                ),
+                "clean_field": clean_field,
+            },
+        )
+
+        return QuestionForm
+
+    def get_prepop_field(self):
+        return self.get_answer_field() + "_orig"
+
+    def get_prepop_data(self):
+        # Return any data-derived prediction for this field.
+        return getattr(self.answers, self.get_prepop_field())
+
+    def get_initial(self):
+        # Populate form fields from model, using the _orig field as an initial initial
+        data = {}
+
+        if getattr(self.answers, self.get_answer_field()):
+            data["field"] = getattr(self.answers, self.get_answer_field())
+            data["data_correct"] = data["field"] == self.get_prepop_data()
+        else:
+            data["field"] = self.get_prepop_data()
+
+        return data
+
+    def get_context_data(self, *args, **kwargs):
+        # Get the default value and un-Enum if it necessary.
+        context = super().get_context_data(*args, **kwargs)
+        context["data_orig"] = self.get_prepop_data()
+
+        # Check for enum or other model property formatter
+        data_orig_display = "get_" + self.get_prepop_field() + "_display"
+        if context["data_orig"] and hasattr(self.answers, data_orig_display):
+            context["data_orig"] = getattr(self.answers, data_orig_display)()
+        if self.type_ == QuestionType.YesNo:
+            context["data_orig"] = "Yes" if context["data_orig"] else "No"
+
+        return context
+
+    def form_valid(self, form):
+        # If they answer "Yes it's correct" ignore anything set underneath
+        if form.cleaned_data["data_correct"] and self.get_prepop_data():
+            setattr(self.answers, self.get_prepop_data())
+        else:
+            sanitised = self.sanitise_answer(form.cleaned_data["field"])
+            field_name = self.get_answer_field()
+            setattr(self.answers, field_name, sanitised)
+
+        # This gives questions an opportunity to do extra processing, lookups etc.
+        # before we save, saving unnecessary round trips to the database.
+        if hasattr(self, "pre_save"):
+            self.pre_save()
+
+        self.answers.save()
+
+        return self.redirect(self.get_next())
+
+
 class Start(SingleQuestion):
     template_name = "questionnaire/start.html"
     type_ = QuestionType.YesNo
@@ -647,9 +741,160 @@ class SelectEPC(Question):
             self.answers.save()
 
 
-class PropertyType(SingleQuestion):
+class PropertyType(Question):
     title = "Property type"
     question = "What type of property is this?"
+    template_name = "questionnaire/property_type.html"
+    form_class = questionnaire_forms.PropertyType
+    next = "PropertyAgeBand"
+
+    def get_initial(self):
+        data = super().get_initial()
+        if data.get("property_type"):
+            data["data_correct"] = bool(
+                data.get("property_type_orig")
+                and data.get("property_form_orig")
+                and data["property_type"] == data["property_type_orig"]
+                and data["property_form"] == data["property_form_orig"]
+            )
+        return data
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        # Send in the enums
+        if self.answers.property_type_orig:
+            context["initial_type"] = enums.PropertyType(
+                self.answers.property_type_orig
+            ).label
+            context["initial_form"] = enums.PropertyForm(
+                self.answers.property_form_orig
+            ).label
+
+        return context
+
+
+class PropertyAgeBand(SinglePrePoppedQuestion):
+    title = "Property age"
+    question = "When was the property built?"
     type_ = QuestionType.Choices
-    next = "PropertyType"
-    # TODO - NB this needs to be two questions - type and built_form
+    choices = enums.PropertyAgeBand.choices
+    next = "WallType"
+
+    def pre_save(self):
+        # If we didn't get the likely wall type, infer from the age now.
+        if not self.answers.wall_type_orig:
+            self.answers.wall_type_orig = int(self.answers.property_age_band) < 1930
+
+
+class WallType(SinglePrePoppedQuestion):
+    title = "Wall type"
+    question = "What type of outside walls does your property have?"
+    type_ = QuestionType.Choices
+    choices = enums.WallType.choices
+    note = (
+        "If the property has more than one type of outside wall, choose the one "
+        "that makes up the most of the external area."
+    )
+    next = "WallsInsulated"
+
+
+class WallsInsulated(SinglePrePoppedQuestion):
+    title = "Wall type"
+    question = "Are the outside walls in your house insulated?"
+    type_ = QuestionType.YesNo
+    note = (
+        "If only some of the outside walls are insulated, choose the option that "
+        "applies to the largest external area."
+    )
+    next = "SuspendedFloor"
+
+
+class SuspendedFloor(SinglePrePoppedQuestion):
+    title = "Floor type"
+    question = "Does the property have a suspended timber floor with a void underneath?"
+    type_ = QuestionType.YesNo
+    note = (
+        "If your property has different types of floor, choose the option that applies "
+        "to the largest floor area. If you live in a non-ground-floor flat, select 'No'."
+    )
+    next = "UnheatedLoft"
+
+
+class UnheatedLoft(SinglePrePoppedQuestion):
+    title = "Property roof"
+    question = "Does the property have an unheated loft space directly above it?"
+    type_ = QuestionType.YesNo
+    note = "If you live in a non-top-floor flat, the answer is 'No'."
+    next = "UnheatedLoftSpace"
+
+    def get_next(self):
+        if self.answers.unheated_loft:
+            return "RoofSpaceInsulated"
+        else:
+            return "RoomInRoof"
+
+
+class RoomInRoof(SinglePrePoppedQuestion):
+    title = "Room in roof"
+    question = "Is there a room in the roof space of the property, as a loft conversion or otherwise?"
+    type_ = QuestionType.YesNo
+    next = "RirInsulated"
+
+    def get_next(self):
+        if self.answers.room_in_roof:
+            return "RirInsulated"
+        else:
+            return "FlatRoof"
+
+
+class RirInsulated(SinglePrePoppedQuestion):
+    title = "Room in roof insulation"
+    question = "Has the room in the roof space been well insulated?"
+    type_ = QuestionType.YesNo
+    next = "GasBoilerPresent"
+
+
+class RoofSpaceInsulated(SinglePrePoppedQuestion):
+    title = "Loft insulation"
+    question = "Has the unheated loft space been well insulated?"
+    type_ = QuestionType.YesNo
+    next = "GasBoilerPresent"
+    note = "By 'well insulated' we mean with at least 250mm of mineral wool, or equivalent."
+
+
+class FlatRoof(SinglePrePoppedQuestion):
+    title = "Flat roof"
+    question = "Does the property have a flat roof?"
+    type_ = QuestionType.YesNo
+    note = (
+        "If the property has different roof types, choose the answer that applies "
+        "to the largest roof area."
+    )
+
+    def get_next(self):
+        if self.answers.flat_roof:
+            return "FlatRoofModern"
+        else:
+            return "GasBoilerPresent"
+
+
+class FlatRoofModern(SingleQuestion):
+    title = "Flat roof type"
+    question = "Was the flat roof built or insulated since 1980?"
+    type_ = QuestionType.YesNo
+    next = "GasBoilerPresent"
+
+
+class GasBoilerPresent(SinglePrePoppedQuestion):
+    title = "Gas boiler"
+    question = (
+        "Does the property have a heating system with a boiler running off mains gas?"
+    )
+    type_ = QuestionType.YesNo
+
+    def get_next(self):
+        if self.answers.gas_boiler_present:
+            return "HwtPresent"
+        else:
+            return "OtherCentralHeating"

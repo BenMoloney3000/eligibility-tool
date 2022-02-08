@@ -49,3 +49,6 @@ def test_that_gets_processed():
     assert answers.room_thermostat_orig is False
     assert answers.ch_timer_orig is True
     assert answers.programmable_thermostat_orig is None
+    assert answers.other_heating_present_orig is True
+    assert answers.other_heating_fuel_orig is enums.NonGasFuel.ELECTRICITY
+    assert answers.storage_heaters_present_orig is False

@@ -11,6 +11,7 @@ from . import factories
 from prospector.apis.epc import dataclass as epc_dataclass
 from prospector.apps.questionnaire import views
 from prospector.testutils import add_middleware_to_request
+from prospector.trail.mixin import snake_case
 
 
 def _html(response):
@@ -78,121 +79,109 @@ class TestQuestionsRender(TrailTest):
     def setUpTestData(cls):
         cls.answers = factories.AnswersFactory()
 
+    def _get_trail_view(self, view_class):
+        # The same trail jumping code for all tests
+        self.trail = ["Start", view_class]
+        self.view = getattr(views, view_class)
+        url_name = snake_case(view_class, separator="-")
+
+        return self._get_page(f"questionnaire:{url_name}")
+
     def test_start_renders(self):
         response = self._get_page()
         assert response.status_code == 200
 
     def test_respondent_name_renders(self):
-        self.trail = ["Start", "RespondentName"]
-        self.view = views.RespondentName
-
-        response = self._get_page("questionnaire:respondent-name")
-        assert response.status_code == 200
+        assert self._get_trail_view("RespondentName").status_code == 200
 
     def test_respondent_role_renders(self):
-        self.trail = ["Start", "RespondentRole"]
-        self.view = views.RespondentRole
-
-        response = self._get_page("questionnaire:respondent-role")
-        assert response.status_code == 200
+        assert self._get_trail_view("RespondentRole").status_code == 200
 
     def test_respondent_relationship_renders(self):
-        self.trail = ["Start", "RespondentRelationship"]
-        self.view = views.RespondentRelationship
-
-        response = self._get_page("questionnaire:respondent-relationship")
-        assert response.status_code == 200
+        assert self._get_trail_view("RespondentRelationship").status_code == 200
 
     def test_need_permission_renders(self):
-        self.trail = ["Start", "NeedPermission"]
-        self.view = views.NeedPermission
-
-        response = self._get_page("questionnaire:need-permission")
-        assert response.status_code == 200
+        assert self._get_trail_view("NeedPermission").status_code == 200
 
         # As this view should delete the answers we'll set some more.
-        # (NB this should be tested elsewhere)
+        # (TODO NB this should be tested elsewhere)
         self.answers = factories.AnswersFactory()
 
     def test_respondent_postcode_renders(self):
-        self.trail = ["Start", "Postcode"]
-        self.view = views.Postcode
-
-        response = self._get_page("questionnaire:postcode")
-        assert response.status_code == 200
+        assert self._get_trail_view("Postcode").status_code == 200
 
     @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
     def test_respondent_address_renders(self, get_for_postcode):
         get_for_postcode.return_value = []
 
-        self.trail = ["Start", "RespondentAddress"]
-        self.view = views.RespondentAddress
-
-        response = self._get_page("questionnaire:your-address")
-        assert response.status_code == 200
+        assert self._get_trail_view("RespondentAddress").status_code == 200
 
     def test_respondent_email_renders(self):
-        self.trail = ["Start", "Email"]
-        self.view = views.Email
-
-        response = self._get_page("questionnaire:email")
-        assert response.status_code == 200
+        assert self._get_trail_view("Email").status_code == 200
 
     def test_contact_phone_renders(self):
-        self.trail = ["Start", "ContactPhone"]
-        self.view = views.ContactPhone
-
-        response = self._get_page("questionnaire:contact-phone")
-        assert response.status_code == 200
+        assert self._get_trail_view("ContactPhone").status_code == 200
 
     def test_occupant_name_renders(self):
-        self.trail = ["Start", "OccupantName"]
-        self.view = views.OccupantName
-
-        response = self._get_page("questionnaire:occupant-name")
-        assert response.status_code == 200
+        assert self._get_trail_view("OccupantName").status_code == 200
 
     def test_property_postcode_renders(self):
-        self.trail = ["Start", "PropertyPostcode"]
-        self.view = views.PropertyPostcode
-
-        response = self._get_page("questionnaire:property-postcode")
-        assert response.status_code == 200
+        assert self._get_trail_view("PropertyPostcode").status_code == 200
 
     @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
     def test_property_address_renders(self, get_for_postcode):
         get_for_postcode.return_value = []
 
-        self.trail = ["Start", "PropertyAddress"]
-        self.view = views.PropertyAddress
-
-        response = self._get_page("questionnaire:property-address")
-        assert response.status_code == 200
+        assert self._get_trail_view("PropertyAddress").status_code == 200
 
     def test_property_ownership_renders(self):
-        self.trail = ["Start", "PropertyOwnership"]
-        self.view = views.PropertyOwnership
-
-        response = self._get_page("questionnaire:property-ownership")
-        assert response.status_code == 200
+        assert self._get_trail_view("PropertyOwnership").status_code == 200
 
     def test_consents_renders(self):
-        self.trail = ["Start", "Consents"]
-        self.view = views.Consents
-
-        response = self._get_page("questionnaire:consents")
-        assert response.status_code == 200
+        assert self._get_trail_view("Consents").status_code == 200
 
     @mock.patch("prospector.apis.epc.get_for_postcode")
     def test_select_epc_renders(self, get_for_postcode):
         get_for_postcode.return_value = [FAKE_EPC]
-
-        self.trail = ["Start", "SelectEPC"]
-        self.view = views.SelectEPC
         self.answers.uprn = FAKE_EPC.uprn
 
-        response = self._get_page("questionnaire:select-e-p-c")
-        assert response.status_code == 200
+        assert self._get_trail_view("SelectEPC").status_code == 200
+
+    def test_property_type_renders(self):
+        assert self._get_trail_view("PropertyType").status_code == 200
+
+    def test_property_age_band_renders(self):
+        assert self._get_trail_view("PropertyAgeBand").status_code == 200
+
+    def test_wall_type_renders(self):
+        assert self._get_trail_view("WallType").status_code == 200
+
+    def test_walls_insulated_renders(self):
+        assert self._get_trail_view("WallsInsulated").status_code == 200
+
+    def test_floor_type_renders(self):
+        assert self._get_trail_view("SuspendedFloor").status_code == 200
+
+    def test_unheated_loft_renders(self):
+        assert self._get_trail_view("UnheatedLoft").status_code == 200
+
+    def test_room_in_roof_renders(self):
+        assert self._get_trail_view("RoomInRoof").status_code == 200
+
+    def test_rir_insulated_renders(self):
+        assert self._get_trail_view("RoomInRoof").status_code == 200
+
+    def test_roof_space_insulated_renders(self):
+        assert self._get_trail_view("RoofSpaceInsulated").status_code == 200
+
+    def test_flat_roof_renders(self):
+        assert self._get_trail_view("FlatRoof").status_code == 200
+
+    def test_flat_roof_age_renders(self):
+        assert self._get_trail_view("FlatRoofModern").status_code == 200
+
+    def test_gas_boiler_present_renders(self):
+        assert self._get_trail_view("GasBoilerPresent").status_code == 200
 
 
 # TODO tests to write

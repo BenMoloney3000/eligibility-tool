@@ -61,6 +61,22 @@ class WallType(models.TextChoices):
     CAVITY = "CAVITY", "Cavity walls"
 
 
+class NonGasFuel(models.TextChoices):
+    OIL = "OIL", "Oil"
+    LPG = "LPG", "LPG"
+    COAL = "COAL", "Coal"
+    WOOD = "WOOD", "Wood"
+    ELECTRICITY = "ELECTRIC", "Electricity"
+    DISTRICT = "DISTRICT", "Shared/district heating network"
+
+
+class BoilerAgeBand(models.TextChoices):
+    BEFORE_2004 = "BEFORE_2004", "Before 2004"
+    FROM_2004 = "2004-2014", "Between 2004 and 2014 (inclusive)"
+    FROM_2015 = "2015-2017", "Between 2015 and 2017 (inclusive)"
+    FROM_2018 = "AFTER_2018", "Since 2018"
+
+
 class Consent(models.TextChoices):
     CALL_BACK = "CALLBACK", "To call/email you back to provide advice"
     RETAIN_DETAILS = (

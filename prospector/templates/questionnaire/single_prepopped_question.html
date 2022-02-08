@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>{{ question_text|safe }}</h2>
+
+    {% if messages %}
+        <p>
+            {% for message in messages %}
+                {% if message.tags %}
+                    <span class="{{ message.tags }}">{{ message }}</span>
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+    {% if question_supplement %}
+        <p>{{ question_supplement|safe }}</p>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {% if data_orig %}
+
+            <p>Based on the publicly available data on your property we think that the answer is
+                <strong>{{ data_orig }}</strong>
+            </p>
+
+            <p>
+                <label for="id_data_correct">Is this correct?</label>
+                {{ form.data_correct }}
+            </p>
+            <p><em>nb: the below question will be hidden by default, revealed if the user clicks "I want to correct this"</em></p>
+            <p> If not please select the correct option below:</p>
+        {% endif %}
+
+        {% if form.field.widget_type == 'radioselect' %}
+            {% for value, label in form.field.field.widget.choices %}
+                <p>
+                    <input
+                        type="radio"
+                        id="{{ form.field.auto_id }}_{{ value }}"
+                        name="{{ form.field.html_name }}"
+                        value="{{ value }}"
+                        {% if value == form.field.initial %}checked{% endif %}>
+                    <label
+                        for="{{ form.field.auto_id }}_{{ value }}">{{ label }}</label>
+                </p>
+            {% endfor %}
+        {% elif form.field.widget_type == 'checkboxselectmultiple' %}
+            {% for value, label in form.field.field.widget.choices %}
+                <p>
+                    <input
+                        type="checkbox"
+                        id="{{ form.field.auto_id }}_{{ value }}"
+                        name="{{ form.field.html_name }}"
+                        value="{{ value }}"
+                        {% if value in form.field.initial %}checked{% endif %}>
+                    <label
+                        for="{{ form.field.auto_id }}_{{ value }}">{{ label }}</label>
+                </p>
+            {% endfor %}
+        {% elif form.field.widget_type == 'text' or form.field.widget_type == 'number' %}
+            <input
+                type="text"
+                id="{{ form.field.auto_id }}"
+                name="{{ form.field.html_name }}"
+                {% if form.field.widget_type == 'number' %}inputmode="decimal"{% endif %}
+                value="{% if form.field.data %}{{ form.field.data }}{% elif form.field.initial %}{{ form.field.initial }}{% endif %}">
+            {% if unit %}
+                <span>{{ unit }}</span>
+            {% endif %}
+        {% endif %}
+
+        {% for error in form.field.errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+
+        {% if question_note %}
+            <p>{{ question_note|safe }}</p>
+        {% endif %}
+
+        <button>
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

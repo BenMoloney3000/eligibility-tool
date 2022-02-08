@@ -48,6 +48,40 @@ class AnswerFormMixin:
         self.error_class = StyledErrorList
 
 
+class PrePoppedMixin:
+    """Pre-populate fields with guesses from property data.
+
+    Look through the form fields to see if any have _orig data. If so use this as
+    the initial value, and add in an 'agree' field.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Only one agree field per page.
+        add_agree_field = False
+
+        if hasattr(self, "Meta"):
+            for field in self.fields:
+                epc_datafield = field + "_orig"
+                if hasattr(self.answers, epc_datafield):
+                    # Check there's a value else we keep quiet
+                    value = getattr(self.answers, epc_datafield)
+                    if value:
+                        # We have one.
+                        add_agree_field = True
+                        if not self.initial[field]:
+                            self.initial[field] = value
+
+            if add_agree_field:
+                self.fields["data_correct"] = forms.TypedChoiceField(
+                    coerce=lambda x: x == "True",
+                    choices=((True, "Yes"), (False, "No")),
+                    widget=forms.RadioSelect,
+                    required=True,
+                )
+
+
 class DummyForm(AnswerFormMixin, forms.Form):
     """Use on pages on which there aren't any questions."""
 
@@ -291,4 +325,13 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
             "address_2",
             "address_3",
             "udprn",
+        ]
+
+
+class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
+    class Meta:
+        model = models.Answers
+        fields = [
+            "property_type",
+            "property_form",
         ]

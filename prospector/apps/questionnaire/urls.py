@@ -31,4 +31,21 @@ urlpatterns = [
     path("consents", views.Consents.as_view(), name="consents"),
     path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
     path("type", views.PropertyType.as_view(), name="property-type"),
+    path("age", views.PropertyAgeBand.as_view(), name="property-age-band"),
+    path("wall-type", views.WallType.as_view(), name="wall-type"),
+    path("wall-insulation", views.WallsInsulated.as_view(), name="walls-insulated"),
+    path("floor-type", views.SuspendedFloor.as_view(), name="suspended-floor"),
+    path("unheated-loft", views.UnheatedLoft.as_view(), name="unheated-loft"),
+    path("loft-conversion", views.RoomInRoof.as_view(), name="room-in-roof"),
+    path(
+        "loft-conversion-insulated", views.RirInsulated.as_view(), name="rir-insulated"
+    ),
+    path(
+        "loft-insulation",
+        views.RoofSpaceInsulated.as_view(),
+        name="roof-space-insulated",
+    ),
+    path("flat-roof", views.FlatRoof.as_view(), name="flat-roof"),
+    path("flat-roof-age", views.FlatRoofModern.as_view(), name="flat-roof-modern"),
+    path("gas-boiler", views.GasBoilerPresent.as_view(), name="gas-boiler-present"),
 ]
