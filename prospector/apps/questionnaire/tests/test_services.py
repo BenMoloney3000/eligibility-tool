@@ -1,27 +1,6 @@
-import datetime
-
 from . import factories
-from prospector.apis import epc
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import services
-
-FAKE_EPC = epc.dataclass.EPCData(
-    "19747490192737",
-    datetime.date(2020, 10, 10),
-    "20 Testington Pastures",
-    "Eggborough",
-    "Royal Leamington Spa",
-    "1234",
-    "Bungalow",
-    "Semi-Detached",
-    "England and Wales: 1976-1982",
-    "Cavity wall, filled cavity",
-    "To unheated space, limited insulation (assumed)",
-    "Flat, no insulation (assumed)",
-    "Boiler and radiators, electric",
-    "From main system",
-    2302,  # DHS_FLAT_RATE_PROGRAMMER
-)
 
 
 def test_that_gets_processed():
@@ -31,7 +10,9 @@ def test_that_gets_processed():
     nothing!
     """
 
-    answers = services.prepopulate_from_epc(factories.AnswersFactory.build(), FAKE_EPC)
+    answers = services.prepopulate_from_epc(
+        factories.AnswersFactory.build(), factories.FAKE_EPC
+    )
 
     assert answers.property_type_orig == enums.PropertyType.BUNGALOW
     assert answers.property_form_orig == enums.PropertyForm.SEMI_DETACHED

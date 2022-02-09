@@ -4,7 +4,7 @@ from typing import Optional
 
 from . import enums
 from . import models
-from prospector.apis.epc.dataclass import EPCData
+from prospector.apis.epc import EPCData
 
 
 def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
@@ -32,6 +32,7 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.room_thermostat_orig = _detect_room_thermostat(selected_epc)
     answers.ch_timer_orig = _detect_timer(selected_epc)
     answers.programmable_thermostat_orig = _detect_programmable_thermostat(selected_epc)
+    answers.sap_rating = int(selected_epc.current_energy_rating)
 
     return answers
 

@@ -9,18 +9,39 @@
     <form method="POST">
         {% csrf_token %}
 
-        <p>Your home would be suitable for the following schemes</p>
+        {% if epc_score %}
+            {% if epc_score <= 45 and house_or_bungalow %}
+                The EPC score for this property is 45 or lower and it is a house or bungalow. This means it is likely to be eligible for a current funding scheme. You now need to check if the householder is eligible for additional funding schemes based on income.
+            {% elif epc_score < 55 %}
+                The EPC score for this property is 54 or lower - the property may be eligible for a current funding scheme but may need a new EPC. We will need to check if the householder is eligible for additional funding schemes based on income.
+            {% elif epc_score > 54 %}
+                Your EPC is 55 or higher - your property is unlikely to be eligible for current funding but we will be in contact if suitable funding comes up in the future if you have given us permission to do so.
+            {% endif %}
+        {% elif gas_heating %}
+            {% if walls_insulated %}
+                Your property is heated by gas and the walls are insulated - your property is unlikely to be eligible, but it would need a valid EPC to check.
+            {% else %}
+                Your property is heated by gas and the walls are not insulated - your property may be eligible; it would need a valid EPC to check.
+            {% endif %}
+        {% else %}
+            {% if uninsulated_loft_or_wall %}
+                Your property isn't gas heated and has an uninsultated/under insulated loft or wall - your property is likely to be eligible, but it would need a valid EPC to check.
+            {% else %}
+                Your property isn't gas heated and the walls and loft are well insulated - your property is unlikely to be eligible but could be, it would need a valid EPC to check.
+            {% endif %}
+        {% endif %}
 
-        <details>
-            <summary>Content to come</summary>
-            Content to be supplied.
-        </details>
+        {% if epc_score and epc_score <= 54 %}
 
-        <p>You now need to check if the homeowner/tenant is eligible for support as a household.</p>
+            <p>Click 'next' to start the household income assessment</p>
 
-        <button>
-            Next&nbsp;&rarr;
-        </button>
+            <p><em>Not implemented in prototype - could also be an option here to quit and do the assessment over the phone. TBC</em></p>
+
+            <button>
+                Next&nbsp;&rarr;
+            </button>
+
+        {% endif %}
 
         {% if prev_url %}
             <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>

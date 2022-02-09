@@ -19,6 +19,7 @@ class EPCData:
     mainheat_description: str
     hotwater_description: str
     main_heating_controls: int
+    current_energy_rating: int
 
     def __repr__(self):
         return (f"{self.address_1}, {self.address_2}".strip(", ")) + (

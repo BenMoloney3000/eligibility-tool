@@ -432,7 +432,7 @@ class RespondentRole(SingleQuestion):
             self.answers.address_1 = ""
             self.answers.address_2 = ""
             self.answers.address_3 = ""
-            self.answers.udprn = None
+            self.answers.udprn = ""
             self.answers.postcode = ""
             self.answers.respondent_has_permission = None
             self.answers.respondent_relationship = ""
@@ -1126,3 +1126,17 @@ class PropertyEligibility(Question, mixin.TrailMixin):
     title = "Eligibility for current schemes"
     template_name = "questionnaire/property_eligibility.html"
     next = ""
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["epc_score"] = self.answers.sap_rating
+        context["house_or_bungalow"] = self.answers.property_type in [
+            enums.PropertyType.HOUSE,
+            enums.PropertyType.BUNGALOW,
+        ]
+        context["gas_heating"] = self.answers.gas_boiler_present
+        context["walls_insulated"] = self.answers.walls_insulated
+        context["uninsulated_loft_or_wall"] = self.answers.walls_insulated is False or (
+            self.answers.unheated_loft and not self.answers.roof_space_insulated
+        )
+        return context

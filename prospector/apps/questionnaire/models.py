@@ -83,6 +83,8 @@ class Answers(models.Model):
     """
     selected_epc = models.CharField(max_length=100, blank=True)
 
+    sap_rating = models.PositiveSmallIntegerField(blank=True, null=True)
+
     data_source = models.CharField(
         max_length=10,
         choices=enums.PropertyDataSource.choices,

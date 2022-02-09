@@ -1,4 +1,3 @@
-import datetime
 from unittest import mock
 
 from django.contrib.sessions.middleware import SessionMiddleware
@@ -8,7 +7,6 @@ from django.test import TestCase
 from django.urls import reverse
 
 from . import factories
-from prospector.apis.epc import dataclass as epc_dataclass
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import models
 from prospector.apps.questionnaire import views
@@ -19,25 +17,6 @@ from prospector.trail.mixin import snake_case
 def _html(response):
     response.render()
     return response.content.decode("utf-8")
-
-
-FAKE_EPC = epc_dataclass.EPCData(
-    "19747490192737",
-    datetime.date(2020, 10, 10),
-    "20 Testington Pastures",
-    "Eggborough",
-    "Royal Leamington Spa",
-    "1234",
-    "Bungalow",
-    "Semi-Detached",
-    "England and Wales: 1976-1982",
-    "Cavity wall, filled cavity",
-    "To unheated space, limited insulation (assumed)",
-    "Flat, no insulation (assumed)",
-    "Boiler and radiators, electric",
-    "From main system",
-    2302,
-)
 
 
 @override_settings(DEBUG=True)
@@ -151,8 +130,8 @@ class TestQuestionsRender(TrailTest):
 
     @mock.patch("prospector.apis.epc.get_for_postcode")
     def test_select_epc_renders(self, get_for_postcode):
-        get_for_postcode.return_value = [FAKE_EPC]
-        self.answers.uprn = FAKE_EPC.uprn
+        get_for_postcode.return_value = [factories.FAKE_EPC]
+        self.answers.uprn = factories.FAKE_EPC.uprn
 
         assert self._get_trail_view("SelectEPC").status_code == 200
 
@@ -230,6 +209,9 @@ class TestQuestionsRender(TrailTest):
 
     def test_tolerated_disruption_renders(self):
         assert self._get_trail_view("ToleratedDisruption").status_code == 200
+
+    def test_moitivations_renders(self):
+        assert self._get_trail_view("Motivations").status_code == 200
 
     def test_property_eligibility_renders(self):
         assert self._get_trail_view("PropertyEligibility").status_code == 200
@@ -310,3 +292,5 @@ class SpecialCases(TrailTest):
         assert response.status_code == 200
         with self.assertRaises(models.Answers.DoesNotExist):
             self.answers.refresh_from_db()
+
+    # TODO test postcode caching
