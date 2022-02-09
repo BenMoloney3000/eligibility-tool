@@ -54,8 +54,7 @@ USE_I18N = True
 USE_TZ = True
 
 # The externally-accessible URL of the site.
-# NB this needs a fallback to provide proper configuration for testing
-SITE_URL = env.str("SITE_URL", "http://prospector_placeholder.carbon.coop")
+SITE_URL = env.str("SITE_URL", "")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -80,25 +79,22 @@ if SENTRY_DSN:
     else:
         SENTRY_RELEASE = None
 
-    # We keep this as a function so that we only invoke it when needed
-    # because it slows down testing.
-    def setup_sentry():
-        sentry_sdk.init(
-            dsn=SENTRY_DSN,
-            integrations=[
-                sentry_logging,
-                DjangoIntegration(),
-                RqIntegration(),
-                RedisIntegration(),
-            ],
-            environment=ENV,
-            release=SENTRY_RELEASE,
-        )
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            sentry_logging,
+            DjangoIntegration(),
+            RqIntegration(),
+            RedisIntegration(),
+        ],
+        environment=ENV,
+        release=SENTRY_RELEASE,
+    )
 
-        # DisallowedHost errors are basically spam
-        from sentry_sdk.integrations.logging import ignore_logger
+    # DisallowedHost errors are basically spam
+    from sentry_sdk.integrations.logging import ignore_logger
 
-        ignore_logger("django.security.DisallowedHost")
+    ignore_logger("django.security.DisallowedHost")
 
 
 # DATABASES
@@ -130,7 +126,6 @@ DJANGO_APPS = [
     "django.contrib.humanize",  # Handy template tags
     "django.contrib.admin",
     "django.contrib.admindocs",
-    "django.contrib.gis",
 ]
 THIRD_PARTY_APPS = [
     "django_rq",

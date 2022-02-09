@@ -3,7 +3,6 @@ import requests
 from .base import *  # noqa
 from .base import ENV
 from .base import env
-from .base import setup_sentry
 
 
 # GENERAL
@@ -172,8 +171,6 @@ INSTALLED_APPS += ["gunicorn"]  # noqa F405
 
 # Logging
 # ------------------------------------------------------------------------------
-setup_sentry()
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,

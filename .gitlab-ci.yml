@@ -93,31 +93,41 @@ pages:
         - make html -C docs/
         - mv docs/_build/html/ public/
 
-get aws docker key:
+docker-build:
     stage: build
     needs: []
-    image:
-        name: amazon/aws-cli:2.2.36
-        entrypoint: [""]
-    artifacts:
-        paths:
-            - ecr-password
-    script:
-        - aws ecr get-login-password > ecr-password
-
-# TODO: only push if on dev/master
-build container:
-    stage: build
-    needs: ["get aws docker key"]
-    image: carboncoop/python-builds:2
+    image: docker:latest
     services:
         - docker:dind
+    variables:
+        SERVICE_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+        SERVICE_IMAGE_TAG_REF: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+        ECR_IMAGE_TAG: $ECR_REGISTRY_IMAGE:$CI_COMMIT_SHA
+        AWS_ACCESS_KEY_ID: $STAGING_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY: $STAGING_SECRET_ACCESS_KEY
+    before_script:
+        - apk add aws-cli
     script:
-        - deploy/script/build_and_push_images.sh ${CI_BUILD_REF} carbon-coop/prospector/django
+        - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+        - docker pull "$SERVICE_IMAGE_TAG_REF" || true
+        - docker build
+          --cache-from="$SERVICE_IMAGE_TAG_REF"
+          --pull
+          --build-arg COMMIT_ID=$CI_COMMIT_SHA
+          --tag "$SERVICE_IMAGE_TAG"
+          --tag "$SERVICE_IMAGE_TAG_REF"
+          .
+        - docker push "$SERVICE_IMAGE_TAG_REF"
+        - docker push "$SERVICE_IMAGE_TAG"
+        - if test $CI_COMMIT_BRANCH = "main"; then
+            $(aws ecr get-login --no-include-email) &&
+            docker tag $SERVICE_IMAGE_TAG $ECR_IMAGE_TAG &&
+            docker push $ECR_IMAGE_TAG; echo $ECR_IMAGE_TAG;
+          fi
 
 staging:
     stage: deploy
-    needs: ["test", "pre-commit", "build container"]
+    needs: ["test", "pre-commit", "docker-build"]
     image:
         name: amazon/aws-cli:2.2.36
         entrypoint: [""]
@@ -131,27 +141,6 @@ staging:
         AWS_SECRET_ACCESS_KEY: $STAGING_SECRET_ACCESS_KEY
     script:
         - yum install -y zip
-        - echo ${CI_BUILD_REF} > image-tag.txt
+        - echo ${CI_COMMIT_SHA} > image-tag.txt
         - zip deploy.zip -r image-tag.txt
         - aws s3 cp deploy.zip s3://prospector-staging-deploy/
-
-production:
-    stage: deploy
-    needs: ["staging"]
-    image:
-        name: amazon/aws-cli:2.2.36
-        entrypoint: [""]
-    rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-          when: manual
-    environment:
-        name: production
-        url: https://prospector.carbon.coop/
-    variables:
-        AWS_ACCESS_KEY_ID: $PROD_ACCESS_KEY_ID
-        AWS_SECRET_ACCESS_KEY: $PROD_SECRET_ACCESS_KEY
-    script:
-        - yum install -y zip
-        - echo ${CI_BUILD_REF} > image-tag.txt
-        - zip deploy.zip -r image-tag.txt
-        - aws s3 cp deploy.zip s3://prospector-production-deploy/
