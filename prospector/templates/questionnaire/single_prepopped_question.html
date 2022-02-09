@@ -28,55 +28,24 @@
                 <strong>{{ data_orig }}</strong>
             </p>
 
-            <p>
-                <label for="id_data_correct">Is this correct?</label>
-                {{ form.data_correct }}
-            </p>
-            <p><em>nb: the below question will be hidden by default, revealed if the user clicks "I want to correct this"</em></p>
-            <p> If not please select the correct option below:</p>
-        {% endif %}
+            {% if question_type.name != 'YesNo' %}
+                <p>
+                    <label for="id_data_correct">Is this correct?</label>
+                    {{ form.data_correct }}
+                </p>
+                <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
+                    <p> If not please select the correct option below:</p>
 
-        {% if form.field.widget_type == 'radioselect' %}
-            {% for value, label in form.field.field.widget.choices %}
-                <p>
-                    <input
-                        type="radio"
-                        id="{{ form.field.auto_id }}_{{ value }}"
-                        name="{{ form.field.html_name }}"
-                        value="{{ value }}"
-                        {% if value == form.field.initial %}checked{% endif %}>
-                    <label
-                        for="{{ form.field.auto_id }}_{{ value }}">{{ label }}</label>
-                </p>
-            {% endfor %}
-        {% elif form.field.widget_type == 'checkboxselectmultiple' %}
-            {% for value, label in form.field.field.widget.choices %}
-                <p>
-                    <input
-                        type="checkbox"
-                        id="{{ form.field.auto_id }}_{{ value }}"
-                        name="{{ form.field.html_name }}"
-                        value="{{ value }}"
-                        {% if value in form.field.initial %}checked{% endif %}>
-                    <label
-                        for="{{ form.field.auto_id }}_{{ value }}">{{ label }}</label>
-                </p>
-            {% endfor %}
-        {% elif form.field.widget_type == 'text' or form.field.widget_type == 'number' %}
-            <input
-                type="text"
-                id="{{ form.field.auto_id }}"
-                name="{{ form.field.html_name }}"
-                {% if form.field.widget_type == 'number' %}inputmode="decimal"{% endif %}
-                value="{% if form.field.data %}{{ form.field.data }}{% elif form.field.initial %}{{ form.field.initial }}{% endif %}">
-            {% if unit %}
-                <span>{{ unit }}</span>
+                    {% include 'questionnaire/dynamic_question_subview.html' %}
+                </div>
+            {% else %}
+                <p>You can correct this below if necessary:</p>
+                {% include 'questionnaire/dynamic_question_subview.html' %}
             {% endif %}
-        {% endif %}
 
-        {% for error in form.field.errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
+        {% else %}
+            {% include 'questionnaire/dynamic_question_subview.html' %}
+        {% endif %}
 
         {% if question_note %}
             <p>{{ question_note|safe }}</p>

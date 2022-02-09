@@ -310,29 +310,31 @@ class SinglePrePoppedQuestion(SingleQuestion):
                 this.validate_answer(data)
             return data
 
-        # TODO: catch where the field is a YesNo, in which case the 'data_correct'
-        # field will tell us the correct answer!
+        form_fields = {
+            "field": self._type_to_field(),
+            "clean_field": clean_field,
+        }
 
-        # "Data is correct" field is required if we have a data-derived answer
+        # Add 'Data is correct' field if this isn't a boolean field
+        # and we have a data-derived answer.
         prepopped_data_is_present = (
             self.get_prepop_data() is not None and self.get_prepop_data() != ""
         )
+        if prepopped_data_is_present and self.type_ != QuestionType.YesNo:
+            form_fields["data_correct"] = forms.TypedChoiceField(
+                coerce=lambda x: x == "True",
+                choices=(
+                    (True, "This is correct"),
+                    (False, "I want to correct this"),
+                ),
+                widget=forms.RadioSelect,
+                required=True,
+            )
+
         QuestionForm = type(
             "QuestionForm",
             (questionnaire_forms.AnswerFormMixin, forms.Form),
-            {
-                "field": self._type_to_field(),
-                "data_correct": forms.TypedChoiceField(
-                    coerce=lambda x: x == "True",
-                    choices=(
-                        (True, "This is correct"),
-                        (False, "I want to correct this"),
-                    ),
-                    widget=forms.RadioSelect,
-                    required=prepopped_data_is_present,
-                ),
-                "clean_field": clean_field,
-            },
+            form_fields,
         )
 
         return QuestionForm
@@ -348,7 +350,7 @@ class SinglePrePoppedQuestion(SingleQuestion):
         # Populate form fields from model, using the _orig field as an initial initial
         data = {}
 
-        if getattr(self.answers, self.get_answer_field()):
+        if getattr(self.answers, self.get_answer_field()) not in ["", None]:
             data["field"] = getattr(self.answers, self.get_answer_field())
             data["data_correct"] = data["field"] == self.get_prepop_data()
         else:
@@ -361,19 +363,22 @@ class SinglePrePoppedQuestion(SingleQuestion):
         context = super().get_context_data(*args, **kwargs)
         context["data_orig"] = self.get_prepop_data()
 
-        # Check for enum or other model property formatter
+        # Check for enum (or other model property formatter)
         data_orig_display = "get_" + self.get_prepop_field() + "_display"
         if context["data_orig"] and hasattr(self.answers, data_orig_display):
             context["data_orig"] = getattr(self.answers, data_orig_display)()
 
+        # Humanise booleans
         if self.type_ == QuestionType.YesNo and context["data_orig"] not in ["", None]:
             context["data_orig"] = "Yes" if context["data_orig"] else "No"
+
+        context["question_type"] = self.type_
 
         return context
 
     def form_valid(self, form):
         # If they answer "Yes it's correct" ignore anything set underneath
-        if form.cleaned_data["data_correct"] and self.get_prepop_data():
+        if form.cleaned_data.get("data_correct") and self.get_prepop_data():
             setattr(self.answers, self.get_answer_field(), self.get_prepop_data())
         else:
             sanitised = self.sanitise_answer(form.cleaned_data["field"])
@@ -849,7 +854,7 @@ class UnheatedLoft(SinglePrePoppedQuestion):
     title = "Property roof"
     question = "Does the property have an unheated loft space directly above it?"
     type_ = QuestionType.YesNo
-    note = "If the property is a non-top-floor flat, the answer is 'No'."
+    note = "If the property is a non-top-floor flat, select 'No'."
     next = "UnheatedLoftSpace"
 
     def pre_save(self):

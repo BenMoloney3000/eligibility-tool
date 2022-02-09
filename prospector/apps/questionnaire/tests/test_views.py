@@ -114,7 +114,6 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("NeedPermission").status_code == 200
 
         # As this view should delete the answers we'll set some more.
-        # (TODO NB this should be tested elsewhere)
         self.answers = factories.AnswersFactory()
 
     def test_respondent_postcode_renders(self):

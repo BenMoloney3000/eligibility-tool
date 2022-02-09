@@ -4,11 +4,11 @@
         "es6": true
     },
     "parserOptions": {
-        "ecmaVersion": 2019,
+        "ecmaVersion": 2019
     },
     "extends": ["eslint:recommended", "plugin:compat/recommended", "prettier"],
     "globals": {
-        "Sentry": "readonly",
+        "Sentry": "readonly"
     },
     "rules": {
         "linebreak-style": ["error", "unix"],
