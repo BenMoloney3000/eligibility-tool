@@ -6,6 +6,7 @@ from enum import Enum
 from typing import Optional
 
 from django import forms
+from django.core.cache import caches
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 SESSION_ANSWERS_ID = "questionnaire:answer_id"
 SESSION_TRAIL_ID = "questionnaire:trail_id"
-SESSION_POSTCODE_CACHE = "cached_postcodes"
+POSTCODE_CACHE = caches["postcodes"]
 
 
 class QuestionType(Enum):
@@ -41,24 +42,17 @@ class QuestionType(Enum):
 
 class PostcodeCacherMixin:
     def get_postcode(self, postcode):
-        """Check session-cached postcodes before hitting the API.
+        """Check cached postcodes before hitting the API.
 
-        Uses normalised postcodes. Possible TODO: put this into the DB with a TTL.
+        Uses normalised postcodes.
         """
-        if SESSION_POSTCODE_CACHE not in self.request.session:
-            self.request.session[SESSION_POSTCODE_CACHE] = {}
-
-        if postcode in self.request.session[SESSION_POSTCODE_CACHE]:
-            return ideal_postcodes._process_results(
-                self.request.session[SESSION_POSTCODE_CACHE][postcode]
-            )
+        if POSTCODE_CACHE.get(postcode, None):
+            return ideal_postcodes._process_results(POSTCODE_CACHE.get(postcode))
         else:
             addresses = ideal_postcodes.get_for_postcode(postcode)
-            self.request.session[SESSION_POSTCODE_CACHE][postcode] = [
-                dataclasses.asdict(address) for address in addresses
-            ]
-            # session change detector won't look into our dict so needs nudge
-            self.request.session.modified = True
+            POSTCODE_CACHE.set(
+                postcode, [dataclasses.asdict(address) for address in addresses]
+            )
             return addresses
 
 
@@ -579,7 +573,7 @@ class ContactPhone(Question):
 
     def get_next(self):
         if self.answers.is_occupant:
-            return "PropertyAddress"
+            return "PropertyPostcode"
         else:
             return "OccupantName"
 

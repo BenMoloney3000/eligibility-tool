@@ -30,7 +30,15 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "",
-    }
+    },
+    "postcodes": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "postcodecache",
+        "TIMEOUT": 2620800,  # cache postcodes for ~ a month
+        "OPTIONS": {
+            "MAX_ENTRIES": 10000,
+        },
+    },
 }
 
 # PASSWORDS

@@ -12,7 +12,7 @@ dev: server ## Bring up the DB, run the server
 
 .PHONY: server
 server: docker-local-up ## Bring docker up and run the local server
-	python manage.py runserver
+	python manage.py runserver & python manage.py createcachetable
 
 .PHONY: pip-compile
 pip-compile:  ## Recompile requirements file after a change
