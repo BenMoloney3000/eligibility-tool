@@ -6,6 +6,9 @@ from . import enums
 
 
 class Answers(models.Model):
+    class Meta:
+        verbose_name_plural = "answers"
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(null=True, blank=True)
@@ -361,6 +364,10 @@ class Answers(models.Model):
     )
 
     # TODO: income assessment
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class ConsentGranted(models.Model):
