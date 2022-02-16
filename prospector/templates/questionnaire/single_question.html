@@ -4,7 +4,7 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h2>{{ question_text|safe }}</h2>
+    <h3>{{ question_text|safe }}</h3>
 
     {% if messages %}
         <p>
@@ -28,7 +28,7 @@
             <p>{{ question_note|safe }}</p>
         {% endif %}
 
-        <button>
+        <button class="button">
             Next&nbsp;&rarr;
         </button>
 

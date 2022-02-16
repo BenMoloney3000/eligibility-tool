@@ -1,0 +1,44 @@
+body {
+    font-family: 'Dosis', sans-serif;
+    color: #4a4a4a;
+    font-size: 1.25rem;
+}
+h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    vertical-align: middle;
+}
+h2 {
+    font-weight: 800;
+    color: #005fa7;
+    font-size: 3.4rem;
+    text-transform: uppercase;
+}
+h3 {
+    font-size: 1.25rem;
+}
+header svg {
+    width: 180px;
+    fill: #005fa7;
+    margin-right: 3rem;
+}
+
+.button {
+    border-color: #005fa7;
+    color: #005fa7;
+    margin: 0 0.3125rem 0.3125rem;
+    font-size: 1rem;
+    padding: 0.25rem 1.125rem 0.3125rem;
+    border-radius: 50px;
+    font-weight: 600;
+}
+form input,
+form select {
+    border-radius: 14px;
+    border: 2px solid rgba(74, 74, 74, 0.2);
+    padding: 0.8rem 1.2rem;
+    outline: 0;
+    margin-bottom: 0.5rem;
+    background: #fff;
+    font-size: 1rem;
+}

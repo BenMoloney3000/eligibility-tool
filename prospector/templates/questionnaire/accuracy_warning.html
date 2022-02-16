@@ -4,7 +4,7 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h2>You have changed data</h2>
+    <h3>You have changed data</h3>
 
     <form method="POST">
         {% csrf_token %}
@@ -12,7 +12,7 @@
         <p>Some of your eligibility schemes may be based on your EPC rating, but you have indicated that the information in your EPC is incorrect or outdated.</p>
         <p>This means that the rating may no longer be accurate and it may be necessary to carry out a new EPC before applying for funding.</p>
 
-        <button>
+        <button class="button">
             Next&nbsp;&rarr;
         </button>
 

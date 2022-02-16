@@ -4,7 +4,7 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h2>Your eligibility</h2>
+    <h3>Your eligibility</h3>
 
     <form method="POST">
         {% csrf_token %}
@@ -37,7 +37,7 @@
 
             <p><em>Not implemented in prototype - could also be an option here to quit and do the assessment over the phone. TBC</em></p>
 
-            <button>
+            <button class="button">
                 Next&nbsp;&rarr;
             </button>
 

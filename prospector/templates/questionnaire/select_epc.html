@@ -4,7 +4,7 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h2>Do you have a recent EPC?</h2>
+    <h3>Do you have a recent EPC?</h3>
 
     <form method="POST">
         {% csrf_token %}
@@ -17,7 +17,7 @@
             {{ form.selected_epc.error }}
         </p>
 
-        <button>
+        <button class="button">
             Next&nbsp;&rarr;
         </button>
 
