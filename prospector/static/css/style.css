@@ -2,6 +2,7 @@ body {
     font-family: 'Dosis', sans-serif;
     color: #4a4a4a;
     font-size: 1.25rem;
+    line-height: 1.5;
 }
 h1 {
     font-size: 1.25rem;
@@ -22,6 +23,10 @@ header svg {
     margin-right: 3rem;
     vertical-align: middle;
     max-width: 30%;
+}
+p,
+label {
+    margin: 0 0 1rem;
 }
 p a,
 ul a {

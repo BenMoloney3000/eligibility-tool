@@ -9,10 +9,9 @@
     <form method="POST">
         {% csrf_token %}
         <p>
-            <label for="id_selected_epc">
-                We have found the following EPCs that may relate to the property. Please select one to confirm it is for the correct property and no significant renovation has happened since the date of inspection, or otherwise please select 'No valid EPC'.<br>
-
-            </label>
+            We have found the following EPCs that may relate to the property. Please select one to confirm it is for the correct property and no significant renovation has happened since the date of inspection, or otherwise please select 'No valid EPC'.
+        </p>
+        <p>
             {{ form.selected_epc }}
             {{ form.selected_epc.error }}
         </p>

@@ -4,12 +4,10 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h2>Heating controls</h2>
+    <h3>How is the heating in this property controlled?</h3>
 
     <form method="POST">
         {% csrf_token %}
-
-        <p>How is the heating in this property controlled?</p>
 
         {% if any_orig %}
             <p>From the publicly available data on your property we think that there are:</p>
