@@ -6,7 +6,6 @@ body {
 h1 {
     font-size: 1.25rem;
     font-weight: 800;
-    vertical-align: middle;
 }
 h2 {
     font-weight: 800;
@@ -21,16 +20,12 @@ header svg {
     width: 180px;
     fill: #005fa7;
     margin-right: 3rem;
+    vertical-align: middle;
+    max-width: 30%;
 }
-
-.button {
-    border-color: #005fa7;
-    color: #005fa7;
-    margin: 0 0.3125rem 0.3125rem;
-    font-size: 1rem;
-    padding: 0.25rem 1.125rem 0.3125rem;
-    border-radius: 50px;
-    font-weight: 600;
+p a,
+ul a {
+    color: #ee3d8a;
 }
 form input,
 form select {
@@ -41,4 +36,21 @@ form select {
     margin-bottom: 0.5rem;
     background: #fff;
     font-size: 1rem;
+}
+.button {
+    border-color: #005fa7;
+    color: #005fa7;
+    margin: 0 0.3125rem 0.3125rem;
+    font-size: 1rem;
+    padding: 0.25rem 1.125rem 0.3125rem;
+    border-radius: 50px;
+    font-weight: 600;
+}
+.wrapper {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 1rem;
+    overflow: hidden;
 }
