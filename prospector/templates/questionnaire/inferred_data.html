@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+{% load indefinite_article %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h3>About your property</h3>
+    <p>We have tried to build a picture of the property from available data. Please check over the description below and indicate if there are any sections that you would like to correct.</p>
+    <!-- NB will have to alter the sentence based on whether there is any inferred data to correct! -->
+
+    <form method="POST">
+        {% csrf_token %}
+        <h4>Property type</h4>
+        <ul>
+            {% if not initial_form and not initial_type %}
+                <li>We could not identify the property type. You will have to enter this data.</li>
+            {% else %}
+                <li>The property is <strong>{{ initial_form|an }} {{ initial_form|lower }} {{ initial_type|lower }}</strong>.</li>
+            {% endif %}
+
+            {% if not answers.property_age_band_orig %}
+                <li>We could not identify when the property was built. You will have to enter this data.</li>
+            {% else %}
+                <li>The property was built in the period <strong>{{ answers.get_property_age_band_orig_display|lower }}</strong>.</li>
+            {% endif %}
+        </ul>
+        {% if type_inferences_complete %}
+            <p>
+                {{ form.correct_type }}
+                {{ form.correct_type.errors }}
+            </p>
+        {% endif %}
+        <h4>Walls</h4>
+        <ul>
+            {% if not answers.wall_type_orig %}
+                <li>We could not identify the type of walls. You will have to enter this data</li>
+            {% else %}
+                <li>The property has <strong>{{ answers.get_wall_type_orig_display|lower }}</strong>.</li>
+            {% endif %}
+            {% if answers.walls_insulated_orig == None %}
+                <li>We could not tell if the walls are well insulated or not. You will have to enter this data.</li>
+            {% else %}
+                <li>The walls <strong>are {% if answers.wall_insulated_orig == False %}not{% endif %}</strong> well insulated.</li>
+            {% endif %}
+        </ul>
+        {% if wall_inferences_complete %}
+            <!-- if wall inferences are not complete the user will have to enter this so no point asking -->
+            <p>
+                {{ form.correct_walls }}
+                {{ form.correct_walls.errors }}
+            </p>
+        {% endif %}
+        <h4>Floor</h4>
+        <ul>
+            {% if answers.suspended_floor_orig == None %}
+                <li>We could not identify the type of floor. You will have to enter this data</li>
+            {% else %}
+                <li>The property <strong>{% if answers.suspended_floor_orig %}has{% else %}does not have{% endif %}</strong> suspended timber floors in all or most areas.</li>
+            {% endif %}
+            {% if answers.suspended_floor_insulated_orig == None %}
+                <li>We could not tell if the floors are well insulated or not. You will have to enter this data.</li>
+            {% else %}
+                <li>The floors <strong>are {% if answers.suspended_floor_insulated_orig == False %}not{% endif %}</strong> well insulated.</li>
+            {% endif %}
+        </ul>
+        {% if floor_inferences_complete %}
+            <p>
+                {{ form.correct_floor }}
+                {{ form.correct_floor.errors }}
+            </p>
+        {% endif %}
+        <h4>Roof</h4>
+        <ul>
+            {% if answers.unheated_loft_orig == None and answers.flat_roof_orig == None %}
+                <li>We could not identify the type of roof. You will have to enter this data</li>
+            {% elif answers.unheated_loft_orig %}
+                <li>The property has <strong>an unheated loft space</strong> directly over all or most of its area.</li>
+                {% if roof_space_insulated_orig == None %}
+                    <li>We could not tell if this roof space is well insulated. You will have to enter this data.</li>
+                {% else %}
+                    <li>This roof space <strong>is {% if answers.roof_space_insulated_orig == False %}not {% endif %}</strong> well insulated.</li>
+                {% endif %}
+            {% elif answers.flat_roof_orig %}
+                <li>The property has <strong>a flat roof</strong> directly over all or most of its area.</li>
+                <li>We cannot tell if the roof is well insulated. You will have to enter this data.</li>
+            {% endif %}
+
+            {% if not answers.flat_roof_orig %}
+                {% if answers.room_in_roof_orig == None %}
+                    <li>We could not tell if there is a room (or rooms) in the roof space. You will have to supply this data</li>
+                {% else %}
+                    <li>There <strong>is {% if answers.room_in_roof_orig == False %}not {% endif %}</strong> a room (or rooms) in this roof space.</li>
+                    {% if answers.room_in_roof_orig %}
+                        {% if answers.rir_insulated_orig == None %}
+                            <li>We could not tell if this room-in-roof is well insulated. You will have to supply this data</li>
+                        {% else %}
+                            <li>This room-in-roof <strong>is {% if answers.rir_insulated_orig == False %}not {% endif %}</strong> well insulated.</li></li>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </ul>
+        {% if roof_inferences_complete %}
+            <p>
+                {{ form.correct_roof }}
+                {{ form.correct_roof.errors }}
+            </p>
+        {% endif %}
+        <h4>Your heating system</h4>
+        <ul>
+            {% if answers.gas_boiler_present_orig == None %}
+                <li>We could not tell if there is a gas boiler connected to the gas grid. You will have to supply this data.</li>
+            {% else %}
+                <li>The property <strong>{% if answers.gas_boiler_present_orig %}has{% else %}does not have{% endif %} a gas boiler running from mains gas</strong>.</li>
+                {% if not answers.gas_boiler_present_orig %}
+                    {% if answers.other_heating_present_orig == None %}
+                        <li>We could not tell if the property has another type of central heating system. You will have to supply this data.</li>
+                    {% else %}
+                        <li>The property <strong>{% if answers.other_heating_present_orig %}has{% else %}does not have{% endif %} another type of central heating system</strong>.</li>
+                        {% if answers.other_heating_present_orig %}
+                            {% if answers.other_heating_fuel_orig == None %}
+                                <li>We could not identify a fuel for this heating system. You will have to supply this data.</li>
+                            {% else %}
+                                <li>This heating system is powered by <strong>{{ answers.get_other_heating_fuel_orig_display|lower }}</strong>.</li>
+                            {% endif %}
+                        {% else %}
+                            {% if answers.storage_heaters_present_orig == None %}
+                                <li>We could not tell if electric storage heaters are present in the property. You will have to supply this data.</li>
+                            {% else %}
+                                <li>The property <strong>{% if answers.storage_heaters_present_orig %}has{% else %}does not have{% endif %} electric storage heaters</strong>.</li>
+                                {% if answers.storage_heaters_present %}
+                                    <li>We could not tell if these storage heaters are modern, high-heat-retention storage heaters. You will have to supply this data.</li>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            {% if answers.gas_boiler_present_orig or answers.other_heating_present_orig %}
+                <li>We could not tell if there is a hot water tank in the property. You will have to supply this data</li>
+            {% endif %}
+        </ul>
+        {% if heating_inferences_complete %}
+            <p>
+                {{ form.correct_heating }}
+                {{ form.correct_heating.errors }}
+            </p>
+        {% endif %}
+
+        {% if answers.gas_boiler_present_orig or answers.other_heating_present_orig %}
+            <h4>Heating controls</h4>
+            <ul>
+                {% if answers.trvs_present_orig == None %}
+                    <li>We could not tell if there were thermostatically-controlled radiator valves in the property. You will have to supply this data.</li>
+                {% else %}
+                    <li>There <strong>are {% if not answers.trvs_present_orig %}not{% endif %} thermostatically-controlled radiator valves</strong> in the property.</li>
+                {% endif %}
+                {% if answers.room_thermostat_orig == None %}
+                    <li>We could not tell if there is one or more room thermostats in the property. You will have to supply this data.</li>
+                {% else %}
+                    <li>There <strong>is {% if not answers.room_thermostat_orig %}not{% endif %} one or more room thermostats</strong> in the property.</li>
+                {% endif %}
+                {% if answers.gas_boiler_present_orig or answers.other_heating_present_orig %}
+                    {% if answers.ch_timer_orig == None %}
+                        <li>We could not tell if the central heating system is controlled by a timer. You will have to supply this data.</li>
+                    {% else %}
+                        <li>The central heating system <strong>is {% if not answers.ch_timer_orig %}not{% endif %} controlled by a timer</strong>.</li>
+                    {% endif %}
+                {% endif %}
+                {% if answers.programmable_thermostat_orig == None %}
+                    <li>We could not tell if the central heating system has a programmable thermostat control. You will have to supply this data.</li>
+                {% else %}
+                    <li>The central heating system <strong>{% if answers.programmable_thermostat_orig %}has{% else %}does not have{% endif %} a programmable thermostat control.</li>
+                {% endif %}
+                <li>We could not tell if there is a smart thermostat controller in the property. You will have to supply this data.</li>
+            </ul>
+        {% endif %}
+
+        <button class="button">
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

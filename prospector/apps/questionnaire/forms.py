@@ -12,6 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 BOOLEAN_FIELD_CHOICES = [("True", True), ("False", False)]
+CORRECTION_FIELD_CHOICES = [
+    (False, "This seems right"),
+    (True, "I would like to correct this"),
+]
 
 
 class BooleanChoiceField(forms.ChoiceField):
@@ -318,6 +322,39 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
         fields = [
             "selected_epc",
         ]
+
+
+class InferredData(AnswerFormMixin, forms.Form):
+    correct_type = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=CORRECTION_FIELD_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    correct_walls = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=CORRECTION_FIELD_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    correct_roof = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=CORRECTION_FIELD_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    correct_floor = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=CORRECTION_FIELD_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    correct_heating = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=CORRECTION_FIELD_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+    )
 
 
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):

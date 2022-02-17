@@ -674,7 +674,7 @@ class SelectEPC(Question):
     title = "Energy Performance Certificate (EPC)"
     template_name = "questionnaire/select_epc.html"
     form_class = questionnaire_forms.SelectEPC
-    next = "PropertyType"
+    next = "InferredData"  # "PropertyType"
     candidate_epcs = {}
 
     def get_form_kwargs(self):
@@ -715,6 +715,39 @@ class SelectEPC(Question):
             selected_epc = self.candidate_epcs[self.answers.selected_epc]
             self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
             self.answers.save()
+
+
+"""
+Experimental shiz
+"""
+
+
+class InferredData(Question):
+    title = "What we think about your property"
+    template_name = "questionnaire/inferred_data.html"
+    form_class = questionnaire_forms.InferredData
+    next = "PropertyType"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["answers"] = self.answers
+
+        # Send in the enums
+        if self.answers.property_type_orig:
+            context["initial_type"] = enums.PropertyType(
+                self.answers.property_type_orig
+            ).label
+            context["initial_form"] = enums.PropertyForm(
+                self.answers.property_form_orig
+            ).label
+
+        # Fake for now
+        context["type_inferences_complete"] = True
+        context["wall_inferences_complete"] = True
+        context["floor_inferences_complete"] = True
+        context["roof_inferences_complete"] = False
+        context["heating_inferences_complete"] = False
+        return context
 
 
 class PropertyType(Question):
