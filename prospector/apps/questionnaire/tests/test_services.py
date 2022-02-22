@@ -19,7 +19,7 @@ def test_that_gets_processed():
     assert answers.property_age_band_orig == enums.PropertyAgeBand.FROM_1976
     assert answers.wall_type_orig == enums.WallType.CAVITY
     assert answers.walls_insulated_orig is True
-    assert answers.suspended_floor_orig is None
+    assert answers.suspended_floor_orig is False
     assert answers.unheated_loft_orig is False
     assert answers.room_in_roof_orig is False
     assert answers.rir_insulated_orig is False

@@ -18,20 +18,20 @@ class AnswersFactory(DjangoModelFactory):
 
 
 FAKE_EPC = epc.EPCData(
-    "19747490192737",
-    datetime.date(2020, 10, 10),
-    "20 Testington Pastures",
-    "Eggborough",
-    "Royal Leamington Spa",
-    "1234",
-    "Bungalow",
-    "Semi-Detached",
-    "England and Wales: 1976-1982",
-    "Cavity wall, filled cavity",
-    "To unheated space, limited insulation (assumed)",
-    "Flat, no insulation (assumed)",
-    "Boiler and radiators, electric",
-    "From main system",
-    2302,  # DHS_FLAT_RATE_PROGRAMMER
-    66,
+    "19747490192737",  # id
+    datetime.date(2020, 10, 10),  # date
+    "20 Testington Pastures",  # address_1
+    "Eggborough",  # address_2
+    "Royal Leamington Spa",  # address_3
+    "1234",  # uprn
+    "Bungalow",  # property_type
+    "Semi-Detached",  # built_form
+    "England and Wales: 1976-1982",  # construction_age_band
+    "Cavity wall, filled cavity",  # walls_description
+    "To unheated space, limited insulation (assumed)",  # floor_description
+    "Flat, no insulation (assumed)",  # roof_description
+    "Boiler and radiators, electric",  # mainheat_description
+    "From main system",  # hotwater_description
+    2302,  # main_heating_controls  (DHS_FLAT_RATE_PROGRAMMER)
+    66,  # current_energy_rating
 )

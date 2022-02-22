@@ -934,9 +934,7 @@ class FlatRoofModern(SingleQuestion):
 
 class GasBoilerPresent(SinglePrePoppedQuestion):
     title = "Gas boiler"
-    question = (
-        "Does the property have a heating system with a boiler running off mains gas?"
-    )
+    question = "Does the property have a central heating system with a boiler running off mains gas?"
     type_ = QuestionType.YesNo
 
     def pre_save(self):

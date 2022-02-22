@@ -118,7 +118,7 @@ def _detect_wall_type(epc: EPCData) -> Optional[enums.WallType]:
 def _detect_walls_insulated(epc: EPCData) -> Optional[bool]:
     wall_desc = epc.walls_description.upper()
 
-    if "NO INSULATION" in wall_desc:
+    if "NO INSULATION" in wall_desc or "PARTIAL INSULATION" in wall_desc:
         return False
     elif "FILLED CAVITY" in wall_desc:
         return True
@@ -139,20 +139,7 @@ def _detect_walls_insulated(epc: EPCData) -> Optional[bool]:
 def _detect_suspended_floor(epc: EPCData) -> Optional[bool]:
     floor_desc = epc.floor_description.upper()
 
-    if "SUSPENDED" in floor_desc:
-        return True
-    elif "SOLID" in floor_desc:
-        return False
-
-    things_that_arent_suspended_floors = [
-        "(ANOTHER DWELLING BELOW)",
-        "(OTHER PREMISES BELOW)",
-        "CONSERVATORY",
-        "To unheated space",
-        "To external air",
-    ]
-    if any([indic in floor_desc for indic in things_that_arent_suspended_floors]):
-        return False
+    return "SUSPENDED" in floor_desc
 
 
 def _detect_suspended_floor_insulation(epc: EPCData) -> Optional[bool]:
@@ -261,7 +248,7 @@ def _detect_gas_boiler(epc: EPCData) -> Optional[bool]:
     mainheat_desc = epc.mainheat_description.upper()
 
     if "BOILER" in mainheat_desc:
-        if "GAS" in mainheat_desc:
+        if "MAINS GAS" in mainheat_desc:
             return True
         # Exclude boiler systems that specify a different fuel
         other_fules = [
@@ -297,14 +284,15 @@ def _detect_gas_boiler(epc: EPCData) -> Optional[bool]:
     # If the EPC doesn't mention a boiler but also doesn't specify another
     # heating system, it may be that the information is missing (or in Welsh)
 
-    # There may be a gas boiler for DHW
-    if "GAS BOILER" in epc.hotwater_description.upper():
-        return True
-
-    # One last check: the heating controls may tell us the technology:
+    # One last check: the heating controls may rule out
     heating_controls = epc.main_heating_controls
-    if heating_controls and heating_controls > 2200 and heating_controls < 2700:
-        return False
+    if heating_controls:
+        if heating_controls > 2200 and heating_controls < 2700:
+            # Heat pumps, DHS, electric storage heaters, warm air or room heaters
+            return False
+        elif heating_controls < 2102:
+            # No heating system present or system is DHW only
+            return False
 
 
 def _detect_other_ch(epc: EPCData) -> Optional[bool]:
