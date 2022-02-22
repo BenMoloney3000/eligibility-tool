@@ -27,8 +27,8 @@
         </ul>
         {% if type_inferences_complete %}
             <p>
-                {{ form.correct_type }}
-                {{ form.correct_type.errors }}
+                {{ form.will_correct_type }}
+                {{ form.will_correct_type.errors }}
             </p>
         {% endif %}
         <h4>Walls</h4>
@@ -41,14 +41,14 @@
             {% if answers.walls_insulated_orig == None %}
                 <li>We could not tell if the walls are well insulated or not. You will have to enter this data.</li>
             {% else %}
-                <li>The walls <strong>are {% if answers.wall_insulated_orig == False %}not{% endif %}</strong> well insulated.</li>
+                <li>The walls <strong>are {% if answers.wall_insulated_orig == False %}not{% endif %} well insulated</strong>.</li>
             {% endif %}
         </ul>
         {% if wall_inferences_complete %}
             <!-- if wall inferences are not complete the user will have to enter this so no point asking -->
             <p>
-                {{ form.correct_walls }}
-                {{ form.correct_walls.errors }}
+                {{ form.will_correct_walls }}
+                {{ form.will_correct_walls.errors }}
             </p>
         {% endif %}
         <h4>Floor</h4>
@@ -61,13 +61,13 @@
             {% if answers.suspended_floor_insulated_orig == None %}
                 <li>We could not tell if the floors are well insulated or not. You will have to enter this data.</li>
             {% else %}
-                <li>The floors <strong>are {% if answers.suspended_floor_insulated_orig == False %}not{% endif %}</strong> well insulated.</li>
+                <li>The floors <strong>are {% if answers.suspended_floor_insulated_orig == False %}not{% endif %} well insulated</strong>.</li>
             {% endif %}
         </ul>
         {% if floor_inferences_complete %}
             <p>
-                {{ form.correct_floor }}
-                {{ form.correct_floor.errors }}
+                {{ form.will_correct_floor }}
+                {{ form.will_correct_floor.errors }}
             </p>
         {% endif %}
         <h4>Roof</h4>
@@ -103,8 +103,8 @@
         </ul>
         {% if roof_inferences_complete %}
             <p>
-                {{ form.correct_roof }}
-                {{ form.correct_roof.errors }}
+                {{ form.will_correct_roof }}
+                {{ form.will_correct_roof.errors }}
             </p>
         {% endif %}
         <h4>Your heating system</h4>
@@ -143,8 +143,8 @@
         </ul>
         {% if heating_inferences_complete %}
             <p>
-                {{ form.correct_heating }}
-                {{ form.correct_heating.errors }}
+                {{ form.will_correct_heating }}
+                {{ form.will_correct_heating.errors }}
             </p>
         {% endif %}
 
@@ -176,6 +176,8 @@
                 <li>We could not tell if there is a smart thermostat controller in the property. You will have to supply this data.</li>
             </ul>
         {% endif %}
+
+        <p>Click 'Next' to continue to the first section that that you wish to correct or for which further data is needed.</p>
 
         <button class="button">
             Next&nbsp;&rarr;

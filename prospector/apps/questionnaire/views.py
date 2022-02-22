@@ -106,7 +106,6 @@ class Question(mixin.TrailMixin, FormView):
             for field in self.get_form_class()._meta.fields:
                 if hasattr(self.answers, field):
                     data[field] = getattr(self.answers, field)
-
         return data
 
     def form_valid(self, form):
@@ -741,13 +740,73 @@ class InferredData(Question):
                 self.answers.property_form_orig
             ).label
 
-        # Fake for now
-        context["type_inferences_complete"] = True
-        context["wall_inferences_complete"] = True
-        context["floor_inferences_complete"] = True
-        context["roof_inferences_complete"] = False
-        context["heating_inferences_complete"] = False
+        context["type_inferences_complete"] = self.answers.type_inferences_complete()
+        context["wall_inferences_complete"] = self.answers.wall_inferences_complete()
+        context["floor_inferences_complete"] = self.answers.floor_inferences_complete()
+        context["roof_inferences_complete"] = self.answers.roof_inferences_complete()
+        context[
+            "heating_inferences_complete"
+        ] = self.answers.heating_inferences_complete()
         return context
+
+    def pre_save(self):
+        # Anything the user doesn't want to correct should be populated from the
+        # origin data. If it's not complete then they shouldn't be able to skip.
+        if (
+            self.answers.type_inferences_complete()
+            and self.answers.will_correct_type is False
+        ):
+            self.answers = services.set_type_from_orig(self.answers)
+        if (
+            self.answers.wall_inferences_complete()
+            and self.answers.will_correct_walls is False
+        ):
+            self.answers = services.set_walls_from_orig(self.answers)
+        if (
+            self.answers.roof_inferences_complete()
+            and self.answers.will_correct_roof is False
+        ):
+            self.answers = services.set_roof_from_orig(self.answers)
+        if (
+            self.answers.floor_inferences_complete()
+            and self.answers.will_correct_floor is False
+        ):
+            self.answers = services.set_floor_from_orig(self.answers)
+        if (
+            self.answers.heating_inferences_complete()
+            and self.answers.will_correct_heating is False
+        ):
+            self.answers = services.set_heating_from_orig(self.answers)
+
+    def get_next(self):
+        if (
+            not self.answers.type_inferences_complete()
+            or self.answers.will_correct_type
+        ):
+            return "PropertyType"
+        elif (
+            not self.answers.wall_inferences_complete()
+            or self.answers.will_correct_walls
+        ):
+            return "WallType"
+        elif (
+            not self.answers.floor_inferences_complete()
+            or self.answers.will_correct_floor
+        ):
+            return "SuspendedFloor"
+        elif (
+            not self.answers.roof_inferences_complete()
+            or self.answers.will_correct_roof
+        ):
+            return "UnheatedLoft"
+        elif (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            return "GasBoilerPresent"
+        else:
+            # Really unlikely!
+            return "InConservationArea"
 
 
 class PropertyType(Question):
@@ -788,12 +847,37 @@ class PropertyAgeBand(SinglePrePoppedQuestion):
     question = "When was the property built?"
     type_ = QuestionType.Choices
     choices = enums.PropertyAgeBand.choices
-    next = "WallType"
 
     def pre_save(self):
         # If we didn't get the likely wall type, infer from the age now.
         if not self.answers.wall_type_orig:
             self.answers.wall_type_orig = int(self.answers.property_age_band) < 1930
+
+    def get_next(self):
+        # We may have decided to skip ahead
+        if (
+            not self.answers.wall_inferences_complete()
+            or self.answers.will_correct_walls
+        ):
+            # the most common situation - don't skip anything
+            return "WallType"
+        elif (
+            not self.answers.floor_inferences_complete()
+            or self.answers.will_correct_floor
+        ):
+            return "SuspendedFloor"
+        elif (
+            not self.answers.roof_inferences_complete()
+            or self.answers.will_correct_roof
+        ):
+            return "UnheatedLoft"
+        elif (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            return "GasBoilerPresent"
+        else:
+            return "InConservationArea"
 
 
 class WallType(SinglePrePoppedQuestion):
@@ -816,7 +900,27 @@ class WallsInsulated(SinglePrePoppedQuestion):
         "If only some of the outside walls are insulated, choose the option that "
         "applies to the largest external area."
     )
-    next = "SuspendedFloor"
+
+    def get_next(self):
+        # We may have decided to skip ahead
+        if (
+            not self.answers.floor_inferences_complete()
+            or self.answers.will_correct_floor
+        ):
+            # the most common situation - don't skip anything
+            return "SuspendedFloor"
+        elif (
+            not self.answers.roof_inferences_complete()
+            or self.answers.will_correct_roof
+        ):
+            return "UnheatedLoft"
+        elif (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            return "GasBoilerPresent"
+        else:
+            return "InConservationArea"
 
 
 class SuspendedFloor(SinglePrePoppedQuestion):
@@ -828,6 +932,14 @@ class SuspendedFloor(SinglePrePoppedQuestion):
         "to the largest floor area. If the property is a non-ground-floor flat, select 'No'."
     )
 
+    def prereq(self):
+        # We may have decided to skip this part
+        if (
+            self.answers.floor_inferences_complete()
+            and self.answers.will_correct_floor is False
+        ):
+            return self.redirect("UnheatedLoft")
+
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
         if not self.answers.suspended_floor:
@@ -837,14 +949,42 @@ class SuspendedFloor(SinglePrePoppedQuestion):
         if self.answers.suspended_floor:
             return "SuspendedFloorInsulated"
         else:
-            return "UnheatedLoft"
+            # We may have decided to skip ahead
+            if (
+                not self.answers.roof_inferences_complete()
+                or self.answers.will_correct_roof
+            ):
+                # the most common situation - don't skip anything
+                return "UnheatedLoft"
+            elif (
+                not self.answers.heating_inferences_complete()
+                or self.answers.will_correct_heating
+            ):
+                return "GasBoilerPresent"
+            else:
+                return "InConservationArea"
 
 
 class SuspendedFloorInsulated(SinglePrePoppedQuestion):
     title = "Floor insulation"
     question = "Is the suspended timber floor insulated?"
     type_ = QuestionType.YesNo
-    next = "UnheatedLoft"
+
+    def get_next(self):
+        # We may have decided to skip ahead
+        if (
+            not self.answers.roof_inferences_complete()
+            or self.answers.will_correct_roof
+        ):
+            # the most common situation - don't skip anything
+            return "UnheatedLoft"
+        elif (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            return "GasBoilerPresent"
+        else:
+            return "InConservationArea"
 
 
 class UnheatedLoft(SinglePrePoppedQuestion):
@@ -852,7 +992,14 @@ class UnheatedLoft(SinglePrePoppedQuestion):
     question = "Does the property have an unheated loft space directly above it?"
     type_ = QuestionType.YesNo
     note = "If the property is a non-top-floor flat, select 'No'."
-    next = "UnheatedLoftSpace"
+
+    def prereq(self):
+        # We may have decided to skip this part
+        if (
+            self.answers.roof_inferences_complete()
+            and self.answers.will_correct_roof is False
+        ):
+            return self.redirect("GasBoilerPresent")
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -875,7 +1022,6 @@ class RoomInRoof(SinglePrePoppedQuestion):
     title = "Room in roof"
     question = "Is there a room in the roof space of the property, as a loft conversion or otherwise?"
     type_ = QuestionType.YesNo
-    next = "RirInsulated"
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -896,15 +1042,35 @@ class RirInsulated(SinglePrePoppedQuestion):
     title = "Room in roof insulation"
     question = "Has the room in the roof space been well insulated?"
     type_ = QuestionType.YesNo
-    next = "GasBoilerPresent"
+
+    def get_next(self):
+        # We may have decided to skip ahead
+        if (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            # the most common situation - don't skip anything
+            return "GasBoilerPresent"
+        else:
+            return "InConservationArea"
 
 
 class RoofSpaceInsulated(SinglePrePoppedQuestion):
     title = "Loft insulation"
     question = "Has the unheated loft space been well insulated?"
     type_ = QuestionType.YesNo
-    next = "GasBoilerPresent"
     note = "By 'well insulated' we mean with at least 250mm of mineral wool, or equivalent."
+
+    def get_next(self):
+        # We may have decided to skip ahead
+        if (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            # the most common situation - don't skip anything
+            return "GasBoilerPresent"
+        else:
+            return "InConservationArea"
 
 
 class FlatRoof(SinglePrePoppedQuestion):
@@ -925,7 +1091,15 @@ class FlatRoof(SinglePrePoppedQuestion):
         if self.answers.flat_roof:
             return "FlatRoofInsulated"
         else:
-            return "GasBoilerPresent"
+            # We may have decided to skip ahead
+            if (
+                not self.answers.heating_inferences_complete()
+                or self.answers.will_correct_heating
+            ):
+                # the most common situation - don't skip anything
+                return "GasBoilerPresent"
+            else:
+                return "InConservationArea"
 
 
 class FlatRoofInsulated(SingleQuestion):
@@ -940,6 +1114,14 @@ class GasBoilerPresent(SinglePrePoppedQuestion):
     title = "Gas boiler"
     question = "Does the property have a central heating system with a boiler running off mains gas?"
     type_ = QuestionType.YesNo
+
+    def prereq(self):
+        # We may have decided to skip this part (unlikely that we had the option!)
+        if (
+            self.answers.heating_inferences_complete()
+            and self.answers.will_correct_heating is False
+        ):
+            return self.redirect("InConservationArea")
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)

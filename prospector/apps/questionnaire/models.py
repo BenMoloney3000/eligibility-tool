@@ -364,6 +364,36 @@ class Answers(models.Model):
     )
 
     """
+    # Store whether the user wishes to correct the inferred data.
+    # We need this to know whether to jump ahead at the end of each section.
+    """
+    will_correct_type = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent chose to correct property type or age fields",
+    )
+    will_correct_walls = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent chose to correct walls characteristics",
+    )
+    will_correct_roof = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent chose to correct roof characteristics",
+    )
+    will_correct_floor = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent chose to correct floor characteristics",
+    )
+    will_correct_heating = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent chose to correct heating system fields",
+    )
+
+    """
     # CONSTRAINTS: planning area and householder preferences
     """
     in_conservation_area = models.BooleanField(
@@ -524,3 +554,70 @@ class Answers(models.Model):
             enums.RespondentRole.RESIDENT_HOUSEHOLDER.value,
             enums.RespondentRole.NON_RESIDENT_HOUSEHOLDER.value,
         ]
+        
+    """
+    # The following logic is used to determine if the user can skip sections
+    # of the questionnaire.
+    """
+
+    def type_inferences_complete(self):
+        # Includes age
+        return (
+            self.property_type_orig is not None
+            and self.property_form_orig is not None
+            and self.property_age_band_orig is not None
+        )
+
+    def wall_inferences_complete(self):
+        return self.wall_type_orig is not None and self.walls_insulated_orig is not None
+
+    def floor_inferences_complete(self):
+        # Bit more complicated.
+        return self.suspended_floor_orig is False or (
+            self.suspended_floor_orig is True
+            and self.suspended_floor_insulated_orig is not None
+        )
+
+    def roof_inferences_complete(self):
+        # Yet more complicated.
+        if self.unheated_loft_orig is None:
+            return False
+        elif self.unheated_loft_orig is True:
+            return self.roof_space_insulated_orig is not None
+        else:
+            # We think there's no loft
+            if self.room_in_roof_orig is None:
+                return False
+            elif self.room_in_roof_orig is True:
+                return self.rir_insulated_orig is not None
+            else:
+                # No room in roof
+                if self.flat_roof_orig is None:
+                    return False
+                elif self.flat_roof_orig is True:
+                    # can't infer certainty on insulation
+                    return False
+                else:
+                    return True
+
+    def heating_inferences_complete(self):
+        # More complicated still
+        if self.gas_boiler_present_orig is None:
+            return False
+        elif self.gas_boiler_present_orig is True:
+            # Can't infer presence of HWT, boiler age or state.
+            return False
+        else:
+            # No gas boiler then.
+            if self.other_heating_present_orig is False:
+                if self.storage_heaters_present_orig is False:
+                    # A very narrow window of possibility!
+                    return True
+                else:
+                    # Either couldn't tell if there are storage heaters, or we
+                    # think there are, in which case we can't tell if they're HHRSHs
+                    return False
+            else:
+                # Either couldn't tell if there is another CH system, or we think
+                # there is, in which case we can't infer presence of HWT.
+                return False

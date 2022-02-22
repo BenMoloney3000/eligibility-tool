@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import List
 from typing import Optional
@@ -5,6 +6,9 @@ from typing import Optional
 from . import enums
 from . import models
 from prospector.apis.epc import EPCData
+
+
+logger = logging.getLogger(__name__)
 
 
 def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
@@ -465,6 +469,7 @@ def _detect_programmable_thermostat(epc: EPCData) -> Optional[bool]:
 def determine_recommended_measures(
     answers: models.Answers,
 ) -> List[enums.PossibleMeasures]:
+    # Based on logic by JB in "Copy of SWEH Eligibility Tool  Data Fields v1.xlsx"
     measures = []
 
     if answers.wall_type == enums.WallType.CAVITY and answers.walls_insulated is False:
@@ -533,3 +538,69 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
             return 34500
         else:
             return 39000
+
+            
+"""
+# The below functions populate data from external data if the user declines to
+# correct them.
+"""
+
+
+def set_type_from_orig(answers: models.Answers) -> models.Answers:
+    answers.property_type = answers.property_type_orig
+    answers.property_form = answers.property_form_orig
+    answers.property_age_band = answers.property_age_band_orig
+
+    return answers
+
+
+def set_walls_from_orig(answers: models.Answers) -> models.Answers:
+    answers.wall_type = answers.wall_type_orig
+    answers.walls_insulated = answers.walls_insulated_orig
+
+    return answers
+
+
+def set_floor_from_orig(answers: models.Answers) -> models.Answers:
+    answers.suspended_floor = answers.suspended_floor_orig
+
+    if answers.suspended_floor:
+        answers.suspended_floor_insulated = answers.suspended_floor_insulated_orig
+
+    return answers
+
+
+def set_roof_from_orig(answers: models.Answers) -> models.Answers:
+    answers.unheated_loft = answers.unheated_loft_orig
+
+    if answers.unheated_loft:
+        answers.roof_space_insulated = answers.roof_space_insulated_orig
+    else:
+        answers.room_in_roof = answers.room_in_roof_orig
+
+        if answers.room_in_roof:
+            answers.rir_insulated = answers.rir_insulated_orig
+        elif answers.room_in_roof is False:
+            answers.flat_roof = answers.flat_roof_orig
+            # Can't populate flat_roof_insulated
+
+    # TODO this will change with #6
+
+    return answers
+
+
+def set_heating_from_orig(answers: models.Answers) -> models.Answers:
+    answers.gas_boiler_present = answers.gas_boiler_present_orig
+    # Can't populate HWT present, boiler age or broken down state
+    # (and therefore no point in populating the heating controls data
+    # or 'other CH fuel' data)
+
+    # TODO this will change with #9
+    if answers.gas_boiler_present is False:
+        answers.other_heating_present = answers.other_heating_present_orig
+
+        if answers.other_heating_present is False:
+            answers.storage_heaters_present = answers.storage_heaters_present_orig
+            # Likewise can't populate whether HHRSHs are present
+
+    return answers

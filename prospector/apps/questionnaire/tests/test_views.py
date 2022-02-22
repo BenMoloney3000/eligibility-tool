@@ -54,9 +54,10 @@ class TrailTest(TestCase):
 
         return self.view.as_view()(request)
 
-    def _get_trail_view(self, view_class):
+    def _get_trail_view(self, view_class: str):
         # The same trail jumping code for all tests
-        self.trail = ["Start", view_class]
+        if view_class != "Start":
+            self.trail = ["Start", view_class]
         self.view = getattr(views, view_class)
         url_name = snake_case(view_class, separator="-")
 
@@ -77,7 +78,7 @@ class TestQuestionsRender(TrailTest):
         cls.answers = factories.AnswersFactory()
 
     def test_start_renders(self):
-        response = self._get_page()
+        response = self._get_trail_view("Start")
         assert response.status_code == 200
 
     def test_respondent_name_renders(self):
@@ -134,6 +135,9 @@ class TestQuestionsRender(TrailTest):
         self.answers.uprn = factories.FAKE_EPC.uprn
 
         assert self._get_trail_view("SelectEPC").status_code == 200
+
+    def test_inferred_data_renders(self):
+        assert self._get_trail_view("InferredData").status_code == 200
 
     def test_property_type_renders(self):
         assert self._get_trail_view("PropertyType").status_code == 200
@@ -335,3 +339,644 @@ class SpecialCases(TrailTest):
             self.answers.refresh_from_db()
 
     # TODO test postcode caching
+
+
+class TestInferredData(TrailTest):
+    """Test the various redirections & saves that may happen from this page."""
+
+    _no_correction_postdata = {
+        "will_correct_type": "False",
+        "will_correct_walls": "False",
+        "will_correct_roof": "False",
+        "will_correct_floor": "False",
+        "will_correct_heating": "False",
+    }
+
+    def test_no_correction_missing_property_type(self):
+        # Should not save any data and send the user to PropertyType
+        self.answers = factories.AnswersFactory()
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:property-type")
+        assert self.answers.property_age_band is None
+        assert self.answers.property_type == ""
+        assert self.answers.property_form == ""
+
+    def test_no_correction_missing_property_form(self):
+        # Should not save any data and send the user to PropertyType
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:property-type")
+        assert self.answers.property_age_band is None
+        assert self.answers.property_type == ""
+        assert self.answers.property_form == ""
+
+    def test_no_correction_missing_property_age(self):
+        # Should not save any data and send the user to PropertyType
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:property-type")
+        assert self.answers.property_type == ""
+        assert self.answers.property_form == ""
+
+    def test_no_correction_missing_wall_type(self):
+        # Should save property type data and send the user to WallType
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:wall-type")
+        assert self.answers.property_type == enums.PropertyType.BUNGALOW.value
+        assert self.answers.property_form == enums.PropertyForm.SEMI_DETACHED.value
+        assert self.answers.property_age_band == enums.PropertyAgeBand.FROM_1950.value
+
+    def test_no_correction_missing_wall_insulation(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:wall-type")
+        assert self.answers.wall_type == ""
+
+    def test_no_correction_missing_floor_type(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:suspended-floor")
+        assert self.answers.wall_type == enums.WallType.CAVITY.value
+        assert self.answers.walls_insulated is True
+
+    def test_no_correction_missing_required_floor_insulation(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:suspended-floor")
+        assert self.answers.suspended_floor is None
+
+    def test_no_correction_missing_non_required_floor_insulation(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.suspended_floor is False
+
+    def test_no_correction_missing_unheated_loft(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+            suspended_floor_insulated_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.suspended_floor is True
+        assert self.answers.suspended_floor_insulated is True
+
+    def test_no_correction_missing_room_in_roof(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+            suspended_floor_insulated_orig=True,
+            unheated_loft_orig=False,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.unheated_loft is None
+
+    def test_no_correction_missing_rir_insulated(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+            suspended_floor_insulated_orig=True,
+            unheated_loft_orig=False,
+            room_in_roof_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.unheated_loft is None
+        assert self.answers.room_in_roof is None
+
+    def test_no_correction_missing_flat_roof(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+            suspended_floor_insulated_orig=True,
+            unheated_loft_orig=False,
+            room_in_roof_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.unheated_loft is None
+        assert self.answers.room_in_roof is None
+
+    def test_no_correction_missing_flat_roof_insulated(self):
+        # It will always be missing in this circumstance.
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+            suspended_floor_insulated_orig=True,
+            unheated_loft_orig=False,
+            room_in_roof_orig=True,
+            flat_roof_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.unheated_loft is None
+        assert self.answers.room_in_roof is None
+        assert self.answers.flat_roof is None
+
+    def test_no_correction_missing_loft_insulation(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.unheated_loft is None
+
+    def test_no_correction_missing_gas_boiler(self):
+        # Complete the whole of the roof section
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+            roof_space_insulated_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:gas-boiler-present")
+        assert self.answers.unheated_loft is True
+        assert self.answers.roof_space_insulated is True
+
+    def test_no_correction_missing_other_heating(self):
+        # Complete the whole of the roof section
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+            roof_space_insulated_orig=True,
+            gas_boiler_present_orig=False,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:gas-boiler-present")
+        assert self.answers.gas_boiler_present is None
+
+    def test_no_correction_missing_storage_heaters(self):
+        # Tests that controls get ignored
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+            roof_space_insulated_orig=True,
+            gas_boiler_present_orig=False,
+            other_heating_present_orig=False,
+            room_thermostat_orig=True,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:gas-boiler-present")
+        assert self.answers.gas_boiler_present is None
+        assert self.answers.other_heating_present is None
+        assert self.answers.room_thermostat is None
+
+    def test_no_corrections_to_complete_set_of_inferences(self):
+        # Tests that controls get ignored
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+            roof_space_insulated_orig=True,
+            gas_boiler_present_orig=False,
+            other_heating_present_orig=False,
+            storage_heaters_present_orig=False,
+        )
+        response = self._post_trail_data("InferredData", self._no_correction_postdata)
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert self.answers.gas_boiler_present is False
+        assert self.answers.other_heating_present is False
+        assert self.answers.storage_heaters_present is False
+
+    """
+    # Now test the scenarios where the user *does* want to correct stuff
+    """
+
+    def test_correct_complete_property_type(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+        )
+        response = self._post_trail_data(
+            "InferredData",
+            {
+                "will_correct_type": "True",
+                "will_correct_walls": "True",
+                "will_correct_floor": "True",
+                "will_correct_roof": "True",
+                "will_correct_heating": "True",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:property-type")
+        assert self.answers.property_type == ""
+        assert self.answers.property_form == ""
+        assert self.answers.property_age_band is None
+
+    def test_correct_complete_walls(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+        )
+        response = self._post_trail_data(
+            "InferredData",
+            {
+                "will_correct_type": "False",
+                "will_correct_walls": "True",
+                "will_correct_floor": "True",
+                "will_correct_roof": "True",
+                "will_correct_heating": "True",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:wall-type")
+        assert self.answers.property_type == enums.PropertyType.BUNGALOW.value
+        assert self.answers.property_form == enums.PropertyForm.SEMI_DETACHED.value
+        assert self.answers.property_age_band == enums.PropertyAgeBand.FROM_1950.value
+        assert self.answers.wall_type == ""
+        assert self.answers.walls_insulated is None
+
+    def test_correct_complete_floors(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=True,
+            suspended_floor_insulated_orig=True,
+        )
+        response = self._post_trail_data(
+            "InferredData",
+            {
+                "will_correct_type": "False",
+                "will_correct_walls": "False",
+                "will_correct_floor": "True",
+                "will_correct_roof": "True",
+                "will_correct_heating": "True",
+            },
+        )
+
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:suspended-floor")
+        assert self.answers.wall_type == enums.WallType.CAVITY.value
+        assert self.answers.walls_insulated is True
+
+    def test_correct_complete_roof(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+            roof_space_insulated_orig=True,
+        )
+        response = self._post_trail_data(
+            "InferredData",
+            {
+                "will_correct_type": "False",
+                "will_correct_walls": "False",
+                "will_correct_floor": "False",
+                "will_correct_roof": "True",
+                "will_correct_heating": "True",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.wall_type == enums.WallType.CAVITY.value
+        assert self.answers.walls_insulated is True
+
+    def test_correct_complete_heating(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            unheated_loft_orig=True,
+            roof_space_insulated_orig=True,
+            gas_boiler_present_orig=False,
+            other_heating_present_orig=False,
+            storage_heaters_present_orig=False,
+        )
+        response = self._post_trail_data(
+            "InferredData",
+            {
+                "will_correct_type": "False",
+                "will_correct_walls": "False",
+                "will_correct_floor": "False",
+                "will_correct_roof": "False",
+                "will_correct_heating": "True",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:gas-boiler-present")
+        assert self.answers.unheated_loft is True
+        assert self.answers.roof_space_insulated is True
+
+
+class TestSkipForwards(TrailTest):
+    """Test that the respondent's wishes to skip bits are respected."""
+
+    def setUp(self):
+        self.answers = factories.AnswersFactory(
+            property_type_orig=enums.PropertyType.BUNGALOW,
+            property_form_orig=enums.PropertyForm.SEMI_DETACHED,
+            property_age_band_orig=enums.PropertyAgeBand.FROM_1950,
+            wall_type_orig=enums.WallType.CAVITY,
+            walls_insulated_orig=True,
+            suspended_floor_orig=False,
+            suspended_floor_insulated_orig=False,
+            unheated_loft_orig=True,
+            rir_insulated_orig=False,
+            flat_roof_orig=False,
+            roof_space_insulated_orig=True,
+            gas_boiler_present_orig=False,
+            other_heating_present_orig=False,
+            storage_heaters_present_orig=False,
+        )
+
+    def test_skip_walls_from_age_band(self):
+        # Skip from PropertyAgeBand to SuspendedFloor
+        self.answers.will_correct_walls = False
+        self.answers.will_correct_floor = True
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "PropertyAgeBand",
+            {
+                "data_correct": "True",
+                "field": str(enums.PropertyAgeBand.FROM_1950.value),
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:suspended-floor")
+        assert self.answers.property_age_band == enums.PropertyAgeBand.FROM_1950.value
+
+    def test_skip_floors_from_walls_insulated(self):
+        # Skip from WallsInsulated to UnheatedLoft
+        self.answers.will_correct_floor = False
+        self.answers.will_correct_roof = True
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "WallsInsulated",
+            {
+                "data_correct": "True",
+                "field": "True",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:unheated-loft")
+        assert self.answers.walls_insulated is True
+
+    def test_skip_roof_from_suspended_floor(self):
+        # Skip from SuspendedFloor to GasBoilerPresent
+        self.answers.will_correct_roof = False
+        self.answers.will_correct_heating = True
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "SuspendedFloor",
+            {
+                "data_correct": "True",
+                "field": "False",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:gas-boiler-present")
+        assert self.answers.suspended_floor is False
+
+    def test_skip_roof_from_suspended_floor_insulated(self):
+        # Skip from SuspendedFloorInsulated to GasBoilerPresent
+        self.answers.will_correct_roof = False
+        self.answers.will_correct_heating = True
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "SuspendedFloorInsulated",
+            {
+                "data_correct": "True",
+                "field": "False",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:gas-boiler-present")
+        assert self.answers.suspended_floor_insulated is False
+
+    def test_skip_heating_from_rir_insulated(self):
+        # Skip from RirInsulated to ConservationArea
+        self.answers.will_correct_heating = False
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "RirInsulated",
+            {
+                "data_correct": "True",
+                "field": "False",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert self.answers.rir_insulated is False
+
+    def test_skip_heating_from_flat_roof(self):
+        # Skip from FlatRoof to ConservationArea
+        self.answers.will_correct_heating = False
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "FlatRoof",
+            {
+                "data_correct": "True",
+                "field": "False",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert self.answers.flat_roof is False
+
+    def test_skip_heating_from_flat_roof_insulated(self):
+        # Skip from FlatRoof to ConservationArea
+        self.answers.will_correct_heating = False
+        self.answers.save()
+
+        response = self._post_trail_data("FlatRoofInsulated", {"field": "PROBABLY"})
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert self.answers.flat_roof_insulated is True
+
+    def test_skip_heating_from_roof_space_insulated(self):
+        # Skip from RoofSpaceInsulated to ConservationArea
+        self.answers.will_correct_heating = False
+        self.answers.save()
+
+        response = self._post_trail_data(
+            "RoofSpaceInsulated",
+            {
+                "data_correct": "True",
+                "field": "True",
+            },
+        )
+        self.answers.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert self.answers.roof_space_insulated is True

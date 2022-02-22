@@ -324,37 +324,73 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
         ]
 
 
-class InferredData(AnswerFormMixin, forms.Form):
-    correct_type = forms.TypedChoiceField(
+class InferredData(AnswerFormMixin, forms.ModelForm):
+    will_correct_type = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=CORRECTION_FIELD_CHOICES,
         widget=forms.RadioSelect,
         required=True,
     )
-    correct_walls = forms.TypedChoiceField(
+    will_correct_walls = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=CORRECTION_FIELD_CHOICES,
         widget=forms.RadioSelect,
-        required=True,
+        required=False,
     )
-    correct_roof = forms.TypedChoiceField(
+    will_correct_roof = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=CORRECTION_FIELD_CHOICES,
         widget=forms.RadioSelect,
-        required=True,
+        required=False,
     )
-    correct_floor = forms.TypedChoiceField(
+    will_correct_floor = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=CORRECTION_FIELD_CHOICES,
         widget=forms.RadioSelect,
-        required=True,
+        required=False,
     )
-    correct_heating = forms.TypedChoiceField(
+    will_correct_heating = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=CORRECTION_FIELD_CHOICES,
         widget=forms.RadioSelect,
-        required=True,
+        required=False,
     )
+
+    def __init__(self, *args, **kwargs):
+        """Dynamically set which fields are required.
+
+        Depends on which inferences have been drawn from the EPC.
+        """
+
+        # get self.answers populated:
+        super().__init__(*args, **kwargs)
+
+        # The user only gets an option to skip bits if we can infer all the data we need.
+        self.fields[
+            "will_correct_type"
+        ].required = self.answers.type_inferences_complete()
+        self.fields[
+            "will_correct_walls"
+        ].required = self.answers.wall_inferences_complete()
+        self.fields[
+            "will_correct_roof"
+        ].required = self.answers.roof_inferences_complete()
+        self.fields[
+            "will_correct_floor"
+        ].required = self.answers.floor_inferences_complete()
+        self.fields[
+            "will_correct_heating"
+        ].required = self.answers.heating_inferences_complete()
+
+    class Meta:
+        model = models.Answers
+        fields = [
+            "will_correct_type",
+            "will_correct_walls",
+            "will_correct_roof",
+            "will_correct_floor",
+            "will_correct_heating",
+        ]
 
 
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
