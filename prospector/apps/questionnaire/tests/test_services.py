@@ -3,7 +3,7 @@ from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import services
 
 
-def test_that_gets_processed():
+def test_fake_epc_gets_processed():
     """Test that the fake EPC gets processed.
 
     A bit artificial to get the coverage where it needs to be, and better than
@@ -23,7 +23,7 @@ def test_that_gets_processed():
     assert answers.unheated_loft_orig is False
     assert answers.room_in_roof_orig is False
     assert answers.rir_insulated_orig is False
-    assert answers.roof_space_insulated_orig is None  # No roof space
+    assert answers.roof_space_insulated_orig is False
     assert answers.flat_roof_orig is True
     assert answers.gas_boiler_present_orig is False
     assert answers.trvs_present_orig is False

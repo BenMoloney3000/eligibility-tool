@@ -14,8 +14,11 @@ class EPCData:
     built_form: str
     construction_age_band: str
     walls_description: str
+    walls_rating: int
     floor_description: str
+    floor_rating: int
     roof_description: str
+    roof_rating: int
     mainheat_description: str
     hotwater_description: str
     main_heating_controls: int

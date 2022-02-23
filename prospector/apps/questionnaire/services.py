@@ -135,6 +135,10 @@ def _detect_walls_insulated(epc: EPCData) -> Optional[bool]:
     if wall_desc == "COB, AS BUILT":
         return False
 
+    # Finally, try to decide it by the energy-eff rating
+    if epc.walls_rating:
+        return epc.walls_rating > 2
+
 
 def _detect_suspended_floor(epc: EPCData) -> Optional[bool]:
     floor_desc = epc.floor_description.upper()
@@ -144,9 +148,6 @@ def _detect_suspended_floor(epc: EPCData) -> Optional[bool]:
 
 def _detect_suspended_floor_insulation(epc: EPCData) -> Optional[bool]:
     floor_desc = epc.floor_description.upper()
-
-    if _detect_suspended_floor(epc) is False:
-        return False
 
     things_that_are_uninsulated_floors = [
         "UNINSULATED",
@@ -158,6 +159,10 @@ def _detect_suspended_floor_insulation(epc: EPCData) -> Optional[bool]:
 
     if "INSULATED" in floor_desc:
         return True
+
+    # Finally, try to decide it by the energy-eff rating
+    if epc.floor_rating:
+        return epc.floor_rating > 2
 
 
 def _detect_unheated_loft(epc: EPCData) -> Optional[bool]:
@@ -203,21 +208,22 @@ def _detect_rir_insulated(epc: EPCData) -> Optional[bool]:
 
 
 def _detect_roof_insulated(epc: EPCData) -> Optional[bool]:
-    # This is question is only asked for unheated lofts, so explicitly exclude
-    # flat roofs and RiRs
+    # This is question is only asked for unheated lofts; if the loft isn't
+    # pitched then the roof_insulated field shouldn't be set from
+    # roof_insulated_orig.
     roof_desc = epc.roof_description.upper()
 
     things_that_arent_insulated = ["NO INSULATION", "LIMITED INSULATION", "UNINSULATED"]
 
-    if "PITCHED" not in roof_desc:
-        return None
-    elif any([indic in roof_desc for indic in things_that_arent_insulated]):
+    if any([indic in roof_desc for indic in things_that_arent_insulated]):
         return False
     elif " INSULATED" in roof_desc:
         return True
 
     # Check for insulation depth pattern
-    parsed = re.search(r"Pitched, ([\d]+)(.*)mm loft insulation", roof_desc)
+    parsed = re.search(
+        r"Pitched, ([\d]+)(.*)mm loft insulation", roof_desc, re.IGNORECASE
+    )
     if parsed:
         try:
             if parsed.group(1).isdecimal():
@@ -225,6 +231,10 @@ def _detect_roof_insulated(epc: EPCData) -> Optional[bool]:
                 return depth >= 250
         except IndexError:
             pass
+
+    # Try to decide it by the roof-energy-eff rating
+    if epc.roof_rating:
+        return epc.roof_rating > 2
 
 
 def _detect_flat_roof(epc: EPCData) -> Optional[bool]:

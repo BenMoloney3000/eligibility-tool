@@ -13,6 +13,10 @@ from .dataclass import EPCData
 from prospector.dataformats import postcodes
 
 
+# zeroth element is a dummy value, N/A should translate to None
+RATING_STRINGS = ["DUMMY", "VERY POOR", "POOR", "AVERAGE", "GOOD", "VERY GOOD"]
+
+
 def _process_results(rows):
     return [
         EPCData(
@@ -26,8 +30,23 @@ def _process_results(rows):
             row["built-form"],
             row["construction-age-band"],
             row["walls-description"],
+            (
+                RATING_STRINGS.index(row["walls-energy-eff"].upper())
+                if row["walls-energy-eff"].upper() in RATING_STRINGS
+                else None
+            ),
             row["floor-description"],
+            (
+                RATING_STRINGS.index(row["floor-energy-eff"].upper())
+                if row["floor-energy-eff"].upper() in RATING_STRINGS
+                else None
+            ),
             row["roof-description"],
+            (
+                RATING_STRINGS.index(row["roof-energy-eff"].upper())
+                if row["roof-energy-eff"].upper() in RATING_STRINGS
+                else None
+            ),
             row["mainheat-description"],
             row["hotwater-description"],
             (

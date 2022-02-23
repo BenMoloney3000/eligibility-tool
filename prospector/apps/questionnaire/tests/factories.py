@@ -28,8 +28,11 @@ FAKE_EPC = epc.EPCData(
     "Semi-Detached",  # built_form
     "England and Wales: 1976-1982",  # construction_age_band
     "Cavity wall, filled cavity",  # walls_description
+    4,  # walls_rating
     "To unheated space, limited insulation (assumed)",  # floor_description
+    3,  # floor rating
     "Flat, no insulation (assumed)",  # roof_description
+    2,  # roof rating
     "Boiler and radiators, electric",  # mainheat_description
     "From main system",  # hotwater_description
     2302,  # main_heating_controls  (DHS_FLAT_RATE_PROGRAMMER)
