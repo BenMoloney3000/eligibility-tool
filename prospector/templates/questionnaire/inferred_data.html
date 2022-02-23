@@ -113,7 +113,9 @@
                 <li>We could not tell if there is a gas boiler connected to the gas grid. You will have to supply this data.</li>
             {% else %}
                 <li>The property <strong>{% if answers.gas_boiler_present_orig %}has{% else %}does not have{% endif %} a gas boiler running from mains gas</strong>.</li>
-                {% if not answers.gas_boiler_present_orig %}
+                {% if answers.gas_boiler_present_orig %}
+                    <li>We could not tell how old the gas boiler is. You will have to supply this data.</li>
+                {% else  %}
                     {% if answers.other_heating_present_orig == None %}
                         <li>We could not tell if the property has another type of central heating system. You will have to supply this data.</li>
                     {% else %}
@@ -148,7 +150,7 @@
             </p>
         {% endif %}
 
-        {% if answers.gas_boiler_present_orig or answers.other_heating_present_orig %}
+        {% if answers.gas_boiler_present_orig %}
             <h4>Heating controls</h4>
             <ul>
                 {% if answers.trvs_present_orig == None %}
