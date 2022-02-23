@@ -256,3 +256,4 @@ class PossibleMeasures(models.TextChoices):
         "Installation of a central heating system",
     )
     PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"
+    LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"

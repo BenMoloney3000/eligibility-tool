@@ -433,6 +433,9 @@ def determine_recommended_measures(
     if answers.flat_roof is True and answers.flat_roof_modern is False:
         measures.append(enums.PossibleMeasures.FLAT_ROOF_INSULATION)
 
+    if answers.unheated_loft is True and answers.roof_space_insulated is False:
+        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
+
     if (
         answers.gas_boiler_present is True
         and answers.gas_boiler_age == enums.BoilerAgeBand.BEFORE_2004
