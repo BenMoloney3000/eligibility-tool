@@ -4,9 +4,9 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h3>
+    <h2>
         Find out if you are eligible for funding to make energy efficiency and low carbon improvements to your home
-    </h3>
+    </h2>
     <p>
         Welcome to the retrofit funding eligibility tool. You can use this tool to find out if you and your property may be eligible for funding towards the cost of energy and carbon saving improvements for your home.
     </p>
@@ -35,11 +35,10 @@
             <label for="{{ form.field.auto_id }}_{{ value }}">
                 {{ question_text }}
             </label>
+            {% for error in form.field.errors %}
+                <span class="input-error">Please accept our privacy terms to continue.</span>
+            {% endfor %}
         </p>
-
-        {% for error in form.field.errors %}
-            <p>Please accept our privacy terms to continue.</p>
-        {% endfor %}
 
 
         <button class="button">
@@ -47,7 +46,7 @@
         </button>
 
         {% if prev_url %}
-            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
         {% endif %}
     </form>
 {% endblock %}

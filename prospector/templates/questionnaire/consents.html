@@ -4,7 +4,7 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h3>Your consent in how your data is used</h3>
+    <h2>Your consent in how your data is used</h2>
     <p>Please tell us for which of the following purposes you are happy for us to store and use your data:</p>
 
     <form method="POST">
@@ -30,7 +30,7 @@
         </button>
 
         {% if prev_url %}
-            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
         {% endif %}
     </form>
 {% endblock %}

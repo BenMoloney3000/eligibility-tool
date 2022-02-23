@@ -4,7 +4,7 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h3>You have changed data</h3>
+    <h2>You have changed data</h2>
 
     <form method="POST">
         {% csrf_token %}
@@ -17,7 +17,7 @@
         </button>
 
         {% if prev_url %}
-            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
         {% endif %}
     </form>
 {% endblock %}

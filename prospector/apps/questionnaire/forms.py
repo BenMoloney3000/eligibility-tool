@@ -29,7 +29,7 @@ class StyledErrorList(forms.utils.ErrorList):
     def as_divs(self):
         if not self:
             return ""
-        return mark_safe('<div class="input-error">%s</div>' % "<br>".join(self))
+        return mark_safe('<span class="input-error">%s</span>' % "<br>".join(self))
 
 
 class AnswerFormMixin:
