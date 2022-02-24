@@ -26,6 +26,7 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.flat_roof_orig = _detect_flat_roof(selected_epc)
     answers.gas_boiler_present_orig = _detect_gas_boiler(selected_epc)
     answers.other_heating_present_orig = _detect_other_ch(selected_epc)
+    answers.heat_pump_present_orig = _detect_heat_pump(selected_epc)
     answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc) or ""
     answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
     answers.trvs_present_orig = _detect_trvs(selected_epc)
@@ -333,6 +334,21 @@ def _detect_other_ch(epc: EPCData) -> Optional[bool]:
         ]
     ):
         return False
+
+
+def _detect_heat_pump(epc: EPCData) -> Optional[bool]:
+    mainheat_desc = epc.mainheat_description.upper()
+
+    if "HEAT PUMP" in mainheat_desc:
+        return True
+
+    # Check the controls
+    heating_controls = epc.main_heating_controls
+    if heating_controls:
+        return heating_controls > 2200 and heating_controls < 2300
+
+    # Safe to assume not then
+    return False
 
 
 def _detect_other_ch_fuel(epc: EPCData) -> Optional[enums.NonGasFuel]:

@@ -59,6 +59,7 @@ urlpatterns = [
         views.OtherHeatingPresent.as_view(),
         name="other-heating-present",
     ),
+    path("heat-pump", views.HeatPumpPresent.as_view(), name="heat-pump-present"),
     path("heating-fuel", views.OtherHeatingFuel.as_view(), name="other-heating-fuel"),
     path("boiler-age", views.GasBoilerAge.as_view(), name="gas-boiler-age"),
     path("boiler-condition", views.GasBoilerBroken.as_view(), name="gas-boiler-broken"),

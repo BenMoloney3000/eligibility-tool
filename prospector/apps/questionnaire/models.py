@@ -256,6 +256,16 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property has non-gas-powered central heating according to property data before correction",
     )
+    heat_pump_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a heat pump",
+    )
+    heat_pump_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has a heat pump, according to property data before correction",
+    )
     other_heating_fuel = models.CharField(
         max_length=11,
         choices=enums.NonGasFuel.choices,

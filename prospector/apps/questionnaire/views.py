@@ -985,6 +985,18 @@ class HwtPresent(SingleQuestion):
         if self.answers.gas_boiler_present:
             return "GasBoilerAge"
         else:
+            return "HeatPumpPresent"
+
+
+class HeatPumpPresent(SinglePrePoppedQuestion):
+    title = "Heat pump"
+    question = "Is the heating system powered by a heat pump?"
+    type_ = QuestionType.YesNo
+
+    def get_next(self):
+        if self.answers.heat_pump_present:
+            return "InConservationArea"
+        else:
             return "OtherHeatingFuel"
 
 

@@ -180,7 +180,10 @@ class TestQuestionsRender(TrailTest):
     def test_other_hearing_renders(self):
         assert self._get_trail_view("OtherHeatingPresent").status_code == 200
 
-    def test_other_hearing_fuel_renders(self):
+    def test_heat_pump_present_renders(self):
+        assert self._get_trail_view("HeatPumpPresent").status_code == 200
+
+    def test_other_heating_fuel_renders(self):
         assert self._get_trail_view("OtherHeatingFuel").status_code == 200
 
     def test_gas_boiler_age_renders(self):
