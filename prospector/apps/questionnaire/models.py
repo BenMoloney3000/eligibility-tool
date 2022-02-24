@@ -246,6 +246,16 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property's mains gas central heating boiler is currently not working",
     )
+    on_mains_gas = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property is connected to the mains gas network",
+    )
+    on_mains_gas_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property is connected to the mains gas network according to property data before correction",
+    )
     other_heating_present = models.BooleanField(
         null=True,
         blank=True,

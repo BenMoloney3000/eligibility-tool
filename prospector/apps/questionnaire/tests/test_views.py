@@ -177,7 +177,10 @@ class TestQuestionsRender(TrailTest):
     def test_hwt_present_renders(self):
         assert self._get_trail_view("HwtPresent").status_code == 200
 
-    def test_other_hearing_renders(self):
+    def test_on_mains_gas_renders(self):
+        assert self._get_trail_view("OnMainsGas").status_code == 200
+
+    def test_other_heating_renders(self):
         assert self._get_trail_view("OtherHeatingPresent").status_code == 200
 
     def test_heat_pump_present_renders(self):

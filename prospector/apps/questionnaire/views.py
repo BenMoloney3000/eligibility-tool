@@ -917,6 +917,8 @@ class GasBoilerPresent(SinglePrePoppedQuestion):
             self.answers.other_heating_fuel = ""
             self.answers.storage_heaters_present = None
             self.answers.hhrshs_present = None
+            self.answers.on_mains_gas = None
+            self.answers.heat_pump_present = None
         else:
             self.answers.gas_boiler_age = ""
             self.answers.gas_boiler_broken = None
@@ -925,7 +927,14 @@ class GasBoilerPresent(SinglePrePoppedQuestion):
         if self.answers.gas_boiler_present:
             return "HwtPresent"
         else:
-            return "OtherHeatingPresent"
+            return "OnMainsGas"
+
+
+class OnMainsGas(SinglePrePoppedQuestion):
+    title = "Mains gas"
+    question = "Is the property connected to the mains gas network?"
+    type_ = QuestionType.YesNo
+    next = "OtherHeatingPresent"
 
 
 class OtherHeatingPresent(SinglePrePoppedQuestion):
@@ -965,6 +974,11 @@ class HeatPumpPresent(SinglePrePoppedQuestion):
     title = "Heat pump"
     question = "Is the heating system powered by a heat pump?"
     type_ = QuestionType.YesNo
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.heat_pump_present:
+            self.answers.other_heating_fuel = None
 
     def get_next(self):
         if self.answers.heat_pump_present:

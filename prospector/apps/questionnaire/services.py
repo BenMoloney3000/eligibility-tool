@@ -26,6 +26,7 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.flat_roof_orig = _detect_flat_roof(selected_epc)
     answers.gas_boiler_present_orig = _detect_gas_boiler(selected_epc)
     answers.other_heating_present_orig = _detect_other_ch(selected_epc)
+    answers.on_mains_gas_orig = _detect_mains_gas(selected_epc)
     answers.heat_pump_present_orig = _detect_heat_pump(selected_epc)
     answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc) or ""
     answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
@@ -304,6 +305,13 @@ def _detect_gas_boiler(epc: EPCData) -> Optional[bool]:
         elif heating_controls < 2102:
             # No heating system present or system is DHW only
             return False
+
+
+def _detect_mains_gas(epc: EPCData) -> Optional[bool]:
+    mainheat_desc = epc.mainheat_description.upper()
+
+    if "MAINS GAS" in mainheat_desc:
+        return True
 
 
 def _detect_other_ch(epc: EPCData) -> Optional[bool]:

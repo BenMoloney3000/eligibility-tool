@@ -54,6 +54,7 @@ urlpatterns = [
     path("flat-roof-age", views.FlatRoofModern.as_view(), name="flat-roof-modern"),
     path("gas-boiler", views.GasBoilerPresent.as_view(), name="gas-boiler-present"),
     path("hot-water-tank", views.HwtPresent.as_view(), name="hwt-present"),
+    path("mains-gas", views.OnMainsGas.as_view(), name="on-mains-gas"),
     path(
         "other-heating-system",
         views.OtherHeatingPresent.as_view(),
