@@ -269,38 +269,32 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         return data
 
 
-class Consents(AnswerFormMixin, forms.Form):
-    call_back = forms.BooleanField(
+class Consents(AnswerFormMixin, forms.ModelForm):
+    consented_callback = forms.BooleanField(
         required=False, label="To call/email you back to provide advice"
     )
-    assess_eligibility = forms.BooleanField(
-        required=False,
-        label="To use the details you have provided to assess eligibility for current schemes",
-    )
-    retain_details = forms.BooleanField(
+    consented_future_schemes = forms.BooleanField(
         required=False,
         label=(
-            "To hold your details on file and contact you when we think there are schemes "
-            "that are relevant for you"
-        ),
-    )
-    anonymous_reporting = forms.BooleanField(
-        required=False,
-        label=(
-            "To use in anonymised reporting that relates to the energy efficiency "
-            "of properties in the Plymouth City Council administrative area"
+            "To contact you if and when we think there are schemes that are relevant for you in future"
         ),
     )
 
-    def clean_assess_eligibility(self):
-        assess_eligibility_consent = self.cleaned_data["assess_eligibility"]
-        if not assess_eligibility_consent:
-            self.add_error(
-                "assess_eligibility",
-                "If you do not give us consent to assess your eligibility we cannot help you.",
-            )
+    class Meta:
+        model = models.Answers
+        optional_fields = ["consented_callback", "consented_future_schemes"]
+        fields = ["consented_callback", "consented_future_schemes"]
 
-        return assess_eligibility_consent
+    def clean(self):
+        """If fields weren't submitted, make them False."""
+
+        data = super().clean()
+        if data.get("consented_callback") is None:
+            data["consented_callback"] = False
+        if data.get("consented_future_schemes") is None:
+            data["consented_future_schemes"] = False
+
+        return data
 
 
 class SelectEPC(AnswerFormMixin, forms.ModelForm):

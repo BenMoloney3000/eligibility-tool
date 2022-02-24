@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
                 null=True,
             ),
         ),
-        migrations.RunPython(blank_to_null),
+        migrations.RunPython(blank_to_null, null_to_blank),
         migrations.AddField(
             model_name="answers",
             name="ch_timer",

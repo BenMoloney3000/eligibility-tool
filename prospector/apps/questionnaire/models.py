@@ -372,19 +372,19 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Motivated to make the home more environmentally friendly",
     )
+    consented_callback = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent consented to being called / emailed back to provide advice",
+    )
+    consented_future_schemes = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent consented to being contacted regarding relevant schemes in future.",
+    )
 
     # TODO: income assessment
 
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
-
-
-class ConsentGranted(models.Model):
-    granted_for = models.ForeignKey(
-        Answers, on_delete=models.CASCADE, blank=False, null=False
-    )
-    granted_at = models.DateTimeField(auto_now_add=True)
-    consent = models.CharField(
-        max_length=10, choices=enums.Consent.choices, blank=False
-    )

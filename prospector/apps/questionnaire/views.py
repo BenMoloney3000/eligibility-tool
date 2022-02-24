@@ -672,33 +672,6 @@ class Consents(Question):
     form_class = questionnaire_forms.Consents
     next = "SelectEPC"
 
-    def get_initial(self):
-        data = super().get_initial()
-
-        granted = models.ConsentGranted.objects.filter(granted_for=self.answers)
-        for grant in granted:
-            consent = enums.Consent(grant.consent)
-            data[consent.name.lower()] = True
-
-        return data
-
-    def pre_save(self):
-        # Sync the consents, which will have been temporarily saved onto the answers object
-
-        # Could save a few DB calls by compiling the consents into a list
-        for consent, data in self.get_form().fields.items():
-            if getattr(self.answers, consent, False):
-                models.ConsentGranted.objects.update_or_create(
-                    granted_for=self.answers,
-                    consent=enums.Consent[consent.upper()],
-                    defaults={"granted_at": timezone.now()},
-                )
-            else:
-                models.ConsentGranted.objects.filter(
-                    granted_for=self.answers,
-                    consent=enums.Consent[consent.upper()],
-                ).delete()
-
 
 class SelectEPC(Question):
     title = "Energy Performance Certificate (EPC)"

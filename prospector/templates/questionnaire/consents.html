@@ -11,36 +11,18 @@
         {% csrf_token %}
         <p>
             <label>
-                {{ form.call_back }}
+                {{ form.consented_callback }}
                 To call/email you back to provide advice
             </label>
-            {{ form.call_back.errors }}
+            {{ form.consented_callback.errors }}
         </p>
 
         <p>
             <label>
-                {{ form.assess_eligibility }}
-                To use the details you have provided to assess eligibility for current schemes
+                {{ form.consented_future_schemes }}
+                To contact you if and when we think there are schemes that are relevant for you in future
             </label>
-            {{ form.assess_eligibility.errors }}
-        </p>
-
-        <p>
-            <label>
-                {{ form.retain_details }}
-                To hold your details on file and contact you when we think there
-                are schemes that are relevant for you
-            </label>
-            {{ form.retain_details.errors }}
-        </p>
-
-        <p>
-            <label>
-                {{ form.anonymous_reporting }}
-                To use in anonymised reporting that relates to the energy efficiency
-                of properties in the Plymouth City Council administrative area
-            </label>
-            {{ form.anonymous_reporting.errors }}
+            {{ form.consented_future_schemes.errors }}
         </p>
 
         <button class="button">

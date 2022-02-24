@@ -77,28 +77,6 @@ class BoilerAgeBand(models.TextChoices):
     FROM_2018 = "AFTER_2018", "Since 2018"
 
 
-class Consent(models.TextChoices):
-    CALL_BACK = "CALLBACK", "To call/email you back to provide advice"
-    RETAIN_DETAILS = (
-        "RETAIN",
-        (
-            "To hold your details on file and contact you when we think there are schemes "
-            "that are relevant for you"
-        ),
-    )
-    ASSESS_ELIGIBILITY = (
-        "ASSESS",
-        "To use the details you have provided to assess eligibility for current schemes",
-    )
-    ANONYMOUS_REPORTING = (
-        "REPORTING",
-        (
-            "To use in anonymised reporting that relates to the energy efficiency "
-            "of properties in the Plymouth City Council administrative area"
-        ),
-    )
-
-
 class HeatingSystemControls(models.IntegerChoices):
     """These are taken from SAP table 4e.
 
