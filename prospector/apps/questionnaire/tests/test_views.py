@@ -204,6 +204,9 @@ class TestQuestionsRender(TrailTest):
     def test_hhrshs_present_renders(self):
         assert self._get_trail_view("HhrshsPresent").status_code == 200
 
+    def test_electric_radiators_present_renders(self):
+        assert self._get_trail_view("ElectricRadiatorsPresent").status_code == 200
+
     def test_in_conservation_area_renders(self):
         assert self._get_trail_view("InConservationArea").status_code == 200
 

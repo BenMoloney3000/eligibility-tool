@@ -30,6 +30,7 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.heat_pump_present_orig = _detect_heat_pump(selected_epc)
     answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc) or ""
     answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
+    answers.electric_radiators_present_orig = _detect_electric_radiators(selected_epc)
     answers.trvs_present_orig = _detect_trvs(selected_epc)
     answers.room_thermostat_orig = _detect_room_thermostat(selected_epc)
     answers.ch_timer_orig = _detect_timer(selected_epc)
@@ -382,6 +383,20 @@ def _detect_storage_heaters(epc: EPCData) -> bool:
     mainheat_desc = epc.mainheat_description.upper()
 
     return "STORAGE HEATER" in mainheat_desc
+
+
+def _detect_electric_radiators(epc: EPCData) -> bool:
+    mainheat_desc = epc.mainheat_description.upper()
+
+    things_that_are_electric_heaters = [
+        "ROOM HEATERS, ELECTRIC",
+        "ELECTRIC HEATERS",
+        "PORTABLE ELECTRIC HEATING",
+        "ELECTRIC CEILING HEATING",
+        "RADIATORS, ELECTRIC",
+    ]
+
+    return any([indic in mainheat_desc for indic in things_that_are_electric_heaters])
 
 
 def _detect_trvs(epc: EPCData) -> Optional[bool]:

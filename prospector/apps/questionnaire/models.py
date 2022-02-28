@@ -302,6 +302,16 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property has high heat retention storage heaters",
     )
+    electric_radiators_present = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has instantaneous electric heaters",
+    )
+    electric_radiators_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has instantaneous electric heaters according to property data before correction",
+    )
     hwt_present = models.BooleanField(
         null=True,
         blank=True,

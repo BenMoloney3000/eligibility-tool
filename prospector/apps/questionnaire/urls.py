@@ -71,6 +71,11 @@ urlpatterns = [
         name="storage-heaters-present",
     ),
     path(
+        "electric-radiators",
+        views.ElectricRadiatorsPresent.as_view(),
+        name="electric-radiators-present",
+    ),
+    path(
         "storage-heater-performance",
         views.HhrshsPresent.as_view(),
         name="hhrshs-present",

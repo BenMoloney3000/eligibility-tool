@@ -1053,7 +1053,15 @@ class StorageHeatersPresent(SinglePrePoppedQuestion):
         if self.answers.storage_heaters_present:
             return "HhrshsPresent"
         else:
-            return "InConservationArea"
+            return "ElectricRadiatorsPresent"
+
+
+class ElectricRadiatorsPresent(SinglePrePoppedQuestion):
+    title = "Electric radiators"
+    question = "Are there other electric radiators in the property?"
+    note = "These may be fixed panel radiators or freestanding heaters."
+    type_ = QuestionType.YesNo
+    next = "InConservationArea"
 
 
 class HhrshsPresent(SingleQuestion):
