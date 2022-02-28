@@ -223,10 +223,11 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Main part of property has a flat roof, according to property data source before correction",
     )
-    flat_roof_modern = models.BooleanField(
-        null=True,
+    flat_roof_insulated = models.CharField(
+        max_length=14,
+        choices=enums.InsulationConfidence.choices,
         blank=True,
-        verbose_name="The property's flat roof was build or insulated after 1980",
+        verbose_name="The property's flat roof is well insulated",
     )
     gas_boiler_present = models.BooleanField(
         null=True,

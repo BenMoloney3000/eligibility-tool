@@ -830,7 +830,7 @@ class UnheatedLoft(SinglePrePoppedQuestion):
             self.answers.room_in_roof = None
             self.answers.rir_insulated = None
             self.answers.flat_roof = None
-            self.answers.flat_roof_modern = None
+            self.answers.flat_roof_insulated = None
         else:
             self.answers.roof_space_insulated = None
 
@@ -851,7 +851,7 @@ class RoomInRoof(SinglePrePoppedQuestion):
         # Obliterate values from the path never taken (in case of reversing)
         if self.answers.room_in_roof:
             self.answers.flat_roof = None
-            self.answers.flat_roof_modern = None
+            self.answers.flat_roof_insulated = None
         else:
             self.answers.rir_insulated = None
 
@@ -889,20 +889,21 @@ class FlatRoof(SinglePrePoppedQuestion):
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
         if not self.answers.flat_roof:
-            self.answers.flat_roof_modern = None
+            self.answers.flat_roof_insulated = None
 
     def get_next(self):
         if self.answers.flat_roof:
-            return "FlatRoofModern"
+            return "FlatRoofInsulated"
         else:
             return "GasBoilerPresent"
 
 
-class FlatRoofModern(SingleQuestion):
+class FlatRoofInsulated(SingleQuestion):
     title = "Flat roof type"
-    question = "Was the flat roof built or insulated since 1980?"
-    type_ = QuestionType.YesNo
+    question = "Is your flat roof well insulated?"
+    type_ = QuestionType.Choices
     next = "GasBoilerPresent"
+    choices = enums.InsulationConfidence.choices
 
 
 class GasBoilerPresent(SinglePrePoppedQuestion):
@@ -1046,7 +1047,9 @@ class StorageHeatersPresent(SinglePrePoppedQuestion):
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
-        if not self.answers.storage_heaters_present:
+        if self.answers.storage_heaters_present:
+            self.answers.electric_radiators_present = None
+        else:
             self.answers.hhrshs_present = None
 
     def get_next(self):

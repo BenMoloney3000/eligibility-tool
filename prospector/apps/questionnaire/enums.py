@@ -61,6 +61,14 @@ class WallType(models.TextChoices):
     CAVITY = "CAVITY", "Cavity walls"
 
 
+class InsulationConfidence(models.TextChoices):
+    DEFINITELY = "DEFINITELY", "Yes definitely"
+    PROBABLY = "PROBABLY", "Yes I think so"
+    PROBABLY_NOT = "PROBABLY_NOT", "I think not"
+    DEFINITELY_NOT = "DEFINITELY_NOT", "I know it isn't"
+    UNKNOWN = "UNKNOWN", "I don't know"
+
+
 class NonGasFuel(models.TextChoices):
     OIL = "OIL", "Oil"
     LPG = "LPG", "LPG"

@@ -168,8 +168,8 @@ class TestQuestionsRender(TrailTest):
     def test_flat_roof_renders(self):
         assert self._get_trail_view("FlatRoof").status_code == 200
 
-    def test_flat_roof_age_renders(self):
-        assert self._get_trail_view("FlatRoofModern").status_code == 200
+    def test_flat_roof_insulated_renders(self):
+        assert self._get_trail_view("FlatRoofInsulated").status_code == 200
 
     def test_gas_boiler_present_renders(self):
         assert self._get_trail_view("GasBoilerPresent").status_code == 200

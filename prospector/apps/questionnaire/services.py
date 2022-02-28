@@ -479,7 +479,10 @@ def determine_recommended_measures(
     if answers.room_in_roof is True and answers.rir_insulated is False:
         measures.append(enums.PossibleMeasures.RIR_INSULATION)
 
-    if answers.flat_roof is True and answers.flat_roof_modern is False:
+    if answers.flat_roof is True and answers.flat_roof_insulated in [
+        enums.InsulationConfidence.PROBABLY_NOT.value,
+        enums.InsulationConfidence.DEFINITELY_NOT.value,
+    ]:
         measures.append(enums.PossibleMeasures.FLAT_ROOF_INSULATION)
 
     if answers.unheated_loft is True and answers.roof_space_insulated is False:

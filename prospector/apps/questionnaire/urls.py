@@ -51,7 +51,11 @@ urlpatterns = [
         name="roof-space-insulated",
     ),
     path("flat-roof", views.FlatRoof.as_view(), name="flat-roof"),
-    path("flat-roof-age", views.FlatRoofModern.as_view(), name="flat-roof-modern"),
+    path(
+        "flat-roof-insulated",
+        views.FlatRoofInsulated.as_view(),
+        name="flat-roof-insulated",
+    ),
     path("gas-boiler", views.GasBoilerPresent.as_view(), name="gas-boiler-present"),
     path("hot-water-tank", views.HwtPresent.as_view(), name="hwt-present"),
     path("mains-gas", views.OnMainsGas.as_view(), name="on-mains-gas"),
