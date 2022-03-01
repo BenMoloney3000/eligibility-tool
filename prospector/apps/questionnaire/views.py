@@ -1112,13 +1112,38 @@ class ToleratedDisruption(SingleQuestion):
     choices = enums.ToleratedDisruption.choices
     next = "Motivations"
 
+    def get_choices(self):
+        # Only non-householders get to answer "I don't know"
+        if self.answers.is_householder:
+            return enums.ToleratedDisruption.choices[:-1]
+        else:
+            return enums.ToleratedDisruption.choices
+
+    def get_note(self):
+        if not self.answers.is_householder:
+            return (
+                "Please answer on behalf of the householder if you can, or select "
+                "\"I don't know\" if you don't know the householder's motivations."
+            )
+
 
 class Motivations(Question):
     title = "Motivations"
     template_name = "questionnaire/motivations.html"
-    question = "What are the motivations to carry out works to the property?"
     form_class = questionnaire_forms.Motivations
     next = "PropertyEligibility"
+
+    def get_context_data(self):
+        data = super().get_context_data()
+        data["is_householder"] = self.answers.is_householder
+
+        return data
+
+    def pre_save(self):
+        if self.answers.motivation_unknown:
+            self.answers.motivation_better_comfort = None
+            self.answers.motivation_lower_bills = None
+            self.answers.motivation_environment = None
 
 
 class PropertyEligibility(Question, mixin.TrailMixin):

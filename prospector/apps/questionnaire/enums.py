@@ -233,6 +233,7 @@ class ToleratedDisruption(models.TextChoices):
         "TWO_WEEKS_TO_A_MONTH",
         "Up to two weeks of work inside home, up to one month outside the home",
     )
+    UNKNOWN = "UNKNOWN", "I don't know."
 
 
 class PossibleMeasures(models.TextChoices):

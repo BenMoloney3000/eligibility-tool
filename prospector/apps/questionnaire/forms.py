@@ -378,11 +378,13 @@ class Motivations(AnswerFormMixin, forms.ModelForm):
         fields = [
             "motivation_better_comfort",
             "motivation_lower_bills",
+            "motivation_unknown",
             "motivation_environment",
         ]
         optional_fields = fields
         widgets = {
             "motivation_better_comfort": forms.CheckboxInput(),
             "motivation_lower_bills": forms.CheckboxInput(),
+            "motivation_unknown": forms.CheckboxInput(),
             "motivation_environment": forms.CheckboxInput(),
         }

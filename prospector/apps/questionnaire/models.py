@@ -392,6 +392,11 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Motivated to make the home more environmentally friendly",
     )
+    motivation_unknown = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent cannot give motivations of the homeowner",
+    )
     consented_callback = models.BooleanField(
         null=True,
         blank=True,

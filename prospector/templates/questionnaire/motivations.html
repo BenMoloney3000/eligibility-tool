@@ -9,7 +9,13 @@
     <form method="POST">
         {% csrf_token %}
 
-        <p>What are the aims for upgrading this property? Please select any that apply.</p>
+        <p>
+            {% if is_householder %}
+                What are the aims for upgrading this property? Please select any that apply.
+            {% else %}
+                What are the householder's aims for upgrading this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
+            {% endif %}
+        </p>
 
         <p>
             <label for="id_motivation_better_comfort">Better comfort</label>
@@ -26,6 +32,13 @@
             {{ form.motivation_environment }}
             {{ form.motivation_environment.errors }}
         </p>
+        {% if not is_householder %}
+            <p>
+                <label for="id_motivation_unknown">I don't know</label>
+                {{ form.motivation_unknown }}
+                {{ form.motivation_unknown.errors }}
+            </p>
+        {% endif %}
 
         <button class="button">
             Next&nbsp;&rarr;
