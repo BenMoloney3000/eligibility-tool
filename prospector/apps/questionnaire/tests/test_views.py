@@ -618,6 +618,7 @@ class TestInferredData(TrailTest):
             unheated_loft_orig=True,
             roof_space_insulated_orig=True,
             gas_boiler_present_orig=False,
+            on_mains_gas_orig=True,
         )
         response = self._post_trail_data("InferredData", self._no_correction_postdata)
         self.answers.refresh_from_db()
@@ -638,6 +639,7 @@ class TestInferredData(TrailTest):
             unheated_loft_orig=True,
             roof_space_insulated_orig=True,
             gas_boiler_present_orig=False,
+            on_mains_gas_orig=True,
             other_heating_present_orig=False,
             room_thermostat_orig=True,
         )
@@ -662,8 +664,10 @@ class TestInferredData(TrailTest):
             unheated_loft_orig=True,
             roof_space_insulated_orig=True,
             gas_boiler_present_orig=False,
+            on_mains_gas_orig=True,
             other_heating_present_orig=False,
             storage_heaters_present_orig=False,
+            electric_radiators_present_orig=True,
         )
         response = self._post_trail_data("InferredData", self._no_correction_postdata)
         self.answers.refresh_from_db()
@@ -835,8 +839,10 @@ class TestSkipForwards(TrailTest):
             flat_roof_orig=False,
             roof_space_insulated_orig=True,
             gas_boiler_present_orig=False,
+            on_mains_gas_orig=True,
             other_heating_present_orig=False,
             storage_heaters_present_orig=False,
+            electric_radiators_present_orig=True,
         )
 
     def test_skip_walls_from_age_band(self):
@@ -956,12 +962,17 @@ class TestSkipForwards(TrailTest):
         self.answers.will_correct_heating = False
         self.answers.save()
 
-        response = self._post_trail_data("FlatRoofInsulated", {"field": "PROBABLY"})
+        response = self._post_trail_data(
+            "FlatRoofInsulated", {"field": enums.InsulationConfidence.PROBABLY.value}
+        )
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
         assert response.url == reverse("questionnaire:in-conservation-area")
-        assert self.answers.flat_roof_insulated is True
+        assert (
+            self.answers.flat_roof_insulated
+            == enums.InsulationConfidence.PROBABLY.value
+        )
 
     def test_skip_heating_from_roof_space_insulated(self):
         # Skip from RoofSpaceInsulated to ConservationArea

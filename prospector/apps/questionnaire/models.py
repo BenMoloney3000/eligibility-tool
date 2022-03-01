@@ -609,10 +609,12 @@ class Answers(models.Model):
             return False
         else:
             # No gas boiler then.
-            if self.other_heating_present_orig is False:
+            if self.on_mains_gas_orig is None:
+                return False
+            elif self.other_heating_present_orig is False:
                 if self.storage_heaters_present_orig is False:
                     # A very narrow window of possibility!
-                    return True
+                    return self.electric_radiators_present_orig is not None
                 else:
                     # Either couldn't tell if there are storage heaters, or we
                     # think there are, in which case we can't tell if they're HHRSHs

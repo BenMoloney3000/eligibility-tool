@@ -5,9 +5,17 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h3>About your property</h3>
-    <p>We have tried to build a picture of the property from available data. Please check over the description below and indicate if there are any sections that you would like to correct.</p>
-    <!-- NB will have to alter the sentence based on whether there is any inferred data to correct! -->
+    <h2>About your property</h2>
+    <p>
+        We have tried to build a picture of the property from available data.
+        {% if any_inferences_complete %}
+            Please check over the description below and indicate if there are any sections that you want to correct.
+        {% else %}
+            You will have the chance to correct each statement as we proceed.
+        {% endif %}
+    </p>
+
+    {# In the logic below, note that some but not all of the _orig fields can be undetermined #}
 
     <form method="POST">
         {% csrf_token %}
@@ -76,7 +84,7 @@
                 <li>We could not identify the type of roof. You will have to enter this data</li>
             {% elif answers.unheated_loft_orig %}
                 <li>The property has <strong>an unheated loft space</strong> directly over all or most of its area.</li>
-                {% if roof_space_insulated_orig == None %}
+                {% if answers.roof_space_insulated_orig == None %}
                     <li>We could not tell if this roof space is well insulated. You will have to enter this data.</li>
                 {% else %}
                     <li>This roof space <strong>is {% if answers.roof_space_insulated_orig == False %}not {% endif %}</strong> well insulated.</li>
@@ -116,23 +124,33 @@
                 {% if answers.gas_boiler_present_orig %}
                     <li>We could not tell how old the gas boiler is. You will have to supply this data.</li>
                 {% else  %}
+                    {% if answers.on_mains_gas_orig == None %}
+                        <li>We could not tell if the property is connected to the mains gas network. You will have to supply this data.</li>
+                    {% else %}
+                        <li>The property <strong>is{% if not answers.on_mains_gas_orig %} not{% endif %} connected to the mains gas network</strong>.</li>
+                    {% endif %}
                     {% if answers.other_heating_present_orig == None %}
                         <li>We could not tell if the property has another type of central heating system. You will have to supply this data.</li>
                     {% else %}
                         <li>The property <strong>{% if answers.other_heating_present_orig %}has{% else %}does not have{% endif %} another type of central heating system</strong>.</li>
                         {% if answers.other_heating_present_orig %}
-                            {% if answers.other_heating_fuel_orig == None %}
-                                <li>We could not identify a fuel for this heating system. You will have to supply this data.</li>
-                            {% else %}
-                                <li>This heating system is powered by <strong>{{ answers.get_other_heating_fuel_orig_display|lower }}</strong>.</li>
+                            <li>There <strong>is{% if not answers.heat_pump_present_orig %} not{% endif %} a heat pump in the property</strong>.</li>
+                            {% if not answers.heat_pump_present_orig %}
+                                {% if answers.other_heating_fuel_orig == None %}
+                                    <li>We could not identify a fuel for the central heating system. You will have to supply this data.</li>
+                                {% else %}
+                                    <li>The central heating system is powered by <strong>{{ answers.get_other_heating_fuel_orig_display|lower }}</strong>.</li>
+                                {% endif %}
                             {% endif %}
                         {% else %}
                             {% if answers.storage_heaters_present_orig == None %}
                                 <li>We could not tell if electric storage heaters are present in the property. You will have to supply this data.</li>
                             {% else %}
                                 <li>The property <strong>{% if answers.storage_heaters_present_orig %}has{% else %}does not have{% endif %} electric storage heaters</strong>.</li>
-                                {% if answers.storage_heaters_present %}
+                                {% if answers.storage_heaters_present_orig %}
                                     <li>We could not tell if these storage heaters are modern, high-heat-retention storage heaters. You will have to supply this data.</li>
+                                {% else %}
+                                    <li>The property {% if answers.electric_radiators_present_orig %}has <strong>{% else %}<strong>does not have {%endif %} electric radiators</strong>.</li>
                                 {% endif %}
                             {% endif %}
                         {% endif %}

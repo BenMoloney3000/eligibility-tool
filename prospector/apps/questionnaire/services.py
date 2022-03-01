@@ -601,6 +601,10 @@ def set_heating_from_orig(answers: models.Answers) -> models.Answers:
 
         if answers.other_heating_present is False:
             answers.storage_heaters_present = answers.storage_heaters_present_orig
+            if answers.storage_heaters_present is False:
+                answers.electric_radiators_present = (
+                    answers.electric_radiators_present_orig
+                )
             # Likewise can't populate whether HHRSHs are present
 
     return answers

@@ -673,7 +673,6 @@ class SelectEPC(Question):
     title = "Energy Performance Certificate (EPC)"
     template_name = "questionnaire/select_epc.html"
     form_class = questionnaire_forms.SelectEPC
-    next = "InferredData"  # "PropertyType"
     candidate_epcs = {}
 
     def get_form_kwargs(self):
@@ -715,10 +714,13 @@ class SelectEPC(Question):
             self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
             self.answers.save()
 
-
-"""
-Experimental shiz
-"""
+    def get_next(self):
+        # If we selected an EPC we show the data we've inferred, otherwise we
+        # crack on and get the data.
+        if self.answers.selected_epc:
+            return "InferredData"
+        else:
+            return "PropertyType"
 
 
 class InferredData(Question):
@@ -747,6 +749,15 @@ class InferredData(Question):
         context[
             "heating_inferences_complete"
         ] = self.answers.heating_inferences_complete()
+
+        context["any_inferences_complete"] = (
+            context["type_inferences_complete"]
+            or context["wall_inferences_complete"]
+            or context["floor_inferences_complete"]
+            or context["roof_inferences_complete"]
+            or context["heating_inferences_complete"]
+        )
+
         return context
 
     def pre_save(self):
@@ -1007,7 +1018,7 @@ class UnheatedLoft(SinglePrePoppedQuestion):
             self.answers.room_in_roof = None
             self.answers.rir_insulated = None
             self.answers.flat_roof = None
-            self.answers.flat_roof_insulated = None
+            self.answers.flat_roof_insulated = ""
         else:
             self.answers.roof_space_insulated = None
 
@@ -1027,7 +1038,7 @@ class RoomInRoof(SinglePrePoppedQuestion):
         # Obliterate values from the path never taken (in case of reversing)
         if self.answers.room_in_roof:
             self.answers.flat_roof = None
-            self.answers.flat_roof_insulated = None
+            self.answers.flat_roof_insulated = ""
         else:
             self.answers.rir_insulated = None
 
@@ -1085,7 +1096,7 @@ class FlatRoof(SinglePrePoppedQuestion):
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
         if not self.answers.flat_roof:
-            self.answers.flat_roof_insulated = None
+            self.answers.flat_roof_insulated = ""
 
     def get_next(self):
         if self.answers.flat_roof:
@@ -1108,6 +1119,17 @@ class FlatRoofInsulated(SingleQuestion):
     type_ = QuestionType.Choices
     next = "GasBoilerPresent"
     choices = enums.InsulationConfidence.choices
+
+    def get_next(self):
+        # We may have decided to skip ahead
+        if (
+            not self.answers.heating_inferences_complete()
+            or self.answers.will_correct_heating
+        ):
+            # the most common situation - don't skip anything
+            return "GasBoilerPresent"
+        else:
+            return "InConservationArea"
 
 
 class GasBoilerPresent(SinglePrePoppedQuestion):
