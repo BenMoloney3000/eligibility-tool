@@ -100,7 +100,13 @@ urlpatterns = [
     path(
         "disruption", views.ToleratedDisruption.as_view(), name="tolerated-disruption"
     ),
+    path("state-of-repair", views.StateOfRepair.as_view(), name="state-of-repair"),
     path("motivations", views.Motivations.as_view(), name="motivations"),
+    path(
+        "householder-contributions",
+        views.ContributionCapacity.as_view(),
+        name="contribution-capacity",
+    ),
     path(
         "eligibility", views.PropertyEligibility.as_view(), name="property-eligibility"
     ),

@@ -236,6 +236,39 @@ class ToleratedDisruption(models.TextChoices):
     UNKNOWN = "UNKNOWN", "I don't know."
 
 
+class ContributionCapacity(models.TextChoices):
+    NONE = "NONE", "No"
+    UP_TO_500 = "UP_TO_500", "Yes - up to £500"
+    UP_TO_5K = "UP_TO_5K", "Yes - up to £5,000"
+    UP_TO_10K = "UP_TO_10K", "Yes - up to £10,000"
+    OVER_10K = "OVER_10K", "Yes - more than £10,000"
+    UNKNOWN = "UNKNOWN", "I don't know"
+
+
+class StateOfRepair(models.TextChoices):
+    EXCELLENT = (
+        "EXCELLENT",
+        "Excellent – recently renovated and all walls, roofs, windows, doors and ventilation in good condition.",
+    )
+    GOOD = (
+        "GOOD",
+        "Good – there are no known issues with the house and I have ventilation in the kitchen and bathrooms.",
+    )
+    AVERAGE = (
+        "AVERAGE",
+        (
+            "Average  - there are no known issues with the house but I don’t know if I have "
+            "enough ventilation and I don’t know what condition the external elements (such as "
+            "roofs, walls and windows) are in."
+        ),
+    )
+    POOR = (
+        "POOR",
+        "Poor – There are known issues with the property such as damp or leaks and/or there is no formal ventilation.",
+    )
+    UNKNOWN = "UNKNOWN", "I don't know the state of repair of the property."
+
+
 class PossibleMeasures(models.TextChoices):
     CAVITY_WALL_INSULATION = "CAVITY_WALL_INSULATION", "Cavity wall insulation"
     SOLID_WALL_INSULATION = "SOLID_WALL_INSULATION", "Solid wall insulation"

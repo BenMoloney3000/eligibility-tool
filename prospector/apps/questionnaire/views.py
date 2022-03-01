@@ -1109,8 +1109,7 @@ class ToleratedDisruption(SingleQuestion):
     title = "Disruption preference"
     question = "What level of disruption would be acceptable during home upgrade works?"
     type_ = QuestionType.Choices
-    choices = enums.ToleratedDisruption.choices
-    next = "Motivations"
+    next = "StateOfRepair"
 
     def get_choices(self):
         # Only non-householders get to answer "I don't know"
@@ -1127,11 +1126,25 @@ class ToleratedDisruption(SingleQuestion):
             )
 
 
+class StateOfRepair(SingleQuestion):
+    title = "Your ability to contribute"
+    question = "What condition is the property currently in?"
+    type_ = QuestionType.Choices
+    next = "Motivations"
+
+    def get_choices(self):
+        # Only non-householders get to answer "I don't know"
+        if self.answers.is_householder:
+            return enums.StateOfRepair.choices[:-1]
+        else:
+            return enums.StateOfRepair.choices
+
+
 class Motivations(Question):
     title = "Motivations"
     template_name = "questionnaire/motivations.html"
     form_class = questionnaire_forms.Motivations
-    next = "PropertyEligibility"
+    next = "ContributionCapacity"
 
     def get_context_data(self):
         data = super().get_context_data()
@@ -1144,6 +1157,39 @@ class Motivations(Question):
             self.answers.motivation_better_comfort = None
             self.answers.motivation_lower_bills = None
             self.answers.motivation_environment = None
+
+
+class ContributionCapacity(SingleQuestion):
+    title = "Your ability to contribute"
+    type_ = QuestionType.Choices
+    next = "PropertyEligibility"
+
+    def get_question(self):
+        if self.answers.is_householder:
+            return (
+                "Would you be willing to contribute towards a package of improvements "
+                "to your home in order to get the best outcome for your home?"
+            )
+        else:
+            return (
+                "Would the householder be willing to contribute towards a package of "
+                "improvments in order to get the best outcome for their home?"
+            )
+
+    def get_choices(self):
+        # Only non-householders get to answer "I don't know"
+        if self.answers.is_householder:
+            return enums.ContributionCapacity.choices[:-1]
+        else:
+            return enums.ContributionCapacity.choices
+
+    def get_note(self):
+        if not self.answers.is_householder:
+            return (
+                "Please answer on behalf of the householder if you can, or select "
+                "\"I don't know\" if you don't know the householder's ability and "
+                "willingness to contribute."
+            )
 
 
 class PropertyEligibility(Question, mixin.TrailMixin):

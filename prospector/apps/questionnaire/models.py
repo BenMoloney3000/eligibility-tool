@@ -377,6 +377,9 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Maximum length of disruption tolerated",
     )
+    state_of_repair = models.CharField(
+        choices=enums.StateOfRepair.choices, blank=True, max_length=9
+    )
     motivation_better_comfort = models.BooleanField(
         null=True,
         blank=True,
@@ -396,6 +399,11 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="Respondent cannot give motivations of the homeowner",
+    )
+    contribution_capacity = models.CharField(
+        choices=enums.ContributionCapacity.choices,
+        max_length=9,
+        blank=True,
     )
     consented_callback = models.BooleanField(
         null=True,

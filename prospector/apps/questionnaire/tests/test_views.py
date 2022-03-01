@@ -219,8 +219,14 @@ class TestQuestionsRender(TrailTest):
     def test_tolerated_disruption_renders(self):
         assert self._get_trail_view("ToleratedDisruption").status_code == 200
 
-    def test_moitivations_renders(self):
+    def test_state_of_repat_renders(self):
+        assert self._get_trail_view("StateOfRepair").status_code == 200
+
+    def test_motivations_renders(self):
         assert self._get_trail_view("Motivations").status_code == 200
+
+    def test_contribution_capacity_renders(self):
+        assert self._get_trail_view("ContributionCapacity").status_code == 200
 
     def test_property_eligibility_renders(self):
         assert self._get_trail_view("PropertyEligibility").status_code == 200
