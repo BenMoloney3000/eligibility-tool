@@ -10,11 +10,23 @@ class PropertyOwnership(models.TextChoices):
     )
 
 
-class RespondentRelationship(models.TextChoices):
-    FRIEND = "FRIEND", "I am a friend of the occupant"
-    PARENT = "PARENT", "I am a parent of the occupant"
-    CHILD = "CHILD", "I am a child of the occupant"
-    OTHER_FAMILY = "FAMILY", "I am another relative of the occupant"
+class RespondentRole(models.TextChoices):
+    RESIDENT_HOUSEHOLDER = (
+        "RESIDENT_HOUSEHOLDER",
+        "I am the householder and live in the property",
+    )
+    NON_RESIDENT_HOUSEHOLDER = (
+        "NON_RESIDENT_HOUSEHOLDER",
+        "I am the householder but not resident in the property",
+    )
+    OCCUPANT = (
+        "OCCUPANT",
+        "I live in the property but am not the householder",
+    )
+    FRIEND = "FRIEND", "I am a non-resident friend of the householder"
+    PARENT = "PARENT", "I am a non-resident parent of the householder"
+    CHILD = "CHILD", "I am a non-resident child of the householder"
+    OTHER_FAMILY = "FAMILY", "I am another relative of the householder"
     OTHER = "OTHER", "Other"
 
 

@@ -86,8 +86,8 @@ class TestQuestionsRender(TrailTest):
     def test_respondent_role_renders(self):
         assert self._get_trail_view("RespondentRole").status_code == 200
 
-    def test_respondent_relationship_renders(self):
-        assert self._get_trail_view("RespondentRelationship").status_code == 200
+    def test_respondent_has_permission_renders(self):
+        assert self._get_trail_view("RespondentHasPermission").status_code == 200
 
     def test_need_permission_renders(self):
         assert self._get_trail_view("NeedPermission").status_code == 200
@@ -96,7 +96,7 @@ class TestQuestionsRender(TrailTest):
         self.answers = factories.AnswersFactory()
 
     def test_respondent_postcode_renders(self):
-        assert self._get_trail_view("Postcode").status_code == 200
+        assert self._get_trail_view("RespondentPostcode").status_code == 200
 
     @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
     def test_respondent_address_renders(self, get_for_postcode):

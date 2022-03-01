@@ -97,29 +97,24 @@ class RespondentName(AnswerFormMixin, forms.ModelForm):
         ]
 
 
-class RespondentRelationship(AnswerFormMixin, forms.ModelForm):
-    respondent_has_permission = forms.ChoiceField(
-        choices=BOOLEAN_FIELD_CHOICES, required=True
-    )
-
+class RespondentRole(AnswerFormMixin, forms.ModelForm):
     class Meta:
         model = models.Answers
-        optional_fields = ["respondent_relationship_other"]
+        optional_fields = ["respondent_role_other"]
         fields = [
-            "respondent_relationship",
-            "respondent_relationship_other",
-            "respondent_has_permission",
+            "respondent_role",
+            "respondent_role_other",
         ]
 
     def clean(self):
         data = super().clean()
         if (
-            data.get("respondent_relationship") == enums.RespondentRelationship.OTHER
-            and data.get("respondent_relationship_other", "") == ""
+            data.get("respondent_role") == enums.RespondentRole.OTHER
+            and data.get("respondent_role_other", "") == ""
         ):
             self.add_error(
-                "respondent_relationship_other",
-                "Please describe your relationship to the occupant",
+                "respondent_role_other",
+                "Please describe your relationship to the householder",
             )
 
         return data
@@ -138,25 +133,32 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
             for udprn, house in prefilled_addresses.items()
         ]
         udprn_choices.append((None, "Address not in list"))
-        self.fields["udprn"] = forms.ChoiceField(required=False, choices=udprn_choices)
+        self.fields["respondent_udprn"] = forms.ChoiceField(
+            required=False, choices=udprn_choices
+        )
 
     class Meta:
         model = models.Answers
-        optional_fields = ["address_1", "address_2", "address_3", "udprn"]
+        optional_fields = [
+            "respondent_address_1",
+            "respondent_address_2",
+            "respondent_address_3",
+            "respondent_udprn",
+        ]
         fields = [
-            "address_1",
-            "address_2",
-            "address_3",
-            "udprn",
+            "respondent_address_1",
+            "respondent_address_2",
+            "respondent_address_3",
+            "respondent_udprn",
         ]
 
     def clean(self):
         """Check we got enough data, since no field is actually required."""
         data = super().clean()
 
-        if not data.get("udprn") and not data.get("address_1"):
+        if not data.get("respondent_udprn") and not data.get("respondent_address_1"):
             self.add_error(
-                "address_1",
+                "respondent_address_1",
                 "Please enter the first line of an address or select an address from the list",
             )
 
@@ -313,12 +315,8 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
 
     class Meta:
         model = models.Answers
-        optional_fields = ["address_1", "address_2", "address_3", "udprn"]
         fields = [
-            "address_1",
-            "address_2",
-            "address_3",
-            "udprn",
+            "selected_epc",
         ]
 
 

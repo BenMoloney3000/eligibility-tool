@@ -8,7 +8,7 @@ class QuestionnaireAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "full_name",
-        "postcode",
+        "property_postcode",
         "updated_at",
         "completed_at",
     )

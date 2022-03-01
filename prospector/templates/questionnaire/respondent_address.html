@@ -5,52 +5,49 @@
 
 {% block content %}
     <h2>Your address</h2>
-    <p>Note this is <em>your</em> correspondence address, which may be different to the address of the property about which you are enquiring.</p>
+    <p>Note this is <em>your</em> correspondence address, not the address of the property about which you are enquiring.</p>
 
     <form method="POST">
         {% csrf_token %}
-        {% if form.udprn.field.widget.choices %}
+        {% if form.respondent_udprn.field.widget.choices %}
             <p>
                 <label for="id_selected_address">
                     Choose your address from the list:
                 </label>
-                {{ form.udprn }}
-                {{ form.udprn.errors }}
+                {{ form.respondent_udprn }}
+                {{ form.respondent_udprn.errors }}
             </p>
             <p>
                 If your address is not in the list, please check that you entered the correct postcode ({{ postcode }}) and if necessary
-                <a href="{% url "questionnaire:postcode" %}">go back to change it</a>.
+                <a href="{% url "questionnaire:respondent-postcode" %}">go back to change it</a>.
             </p>
             <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
         {% else %}
             <p>
-                We could not find any addresses for the property you entered. If're sure that you entered the correct postcode ({{ postcode }}) then please enter your address below. Otherwise you can
-                <a href="{% url "questionnaire:postcode" %}">go back to change it</a>.
+                We could not find any addresses for the postcode you entered. If you're sure that you entered the correct postcode ({{ postcode }}) then please enter your address below. Otherwise you can
+                <a href="{% url "questionnaire:respondent-postcode" %}">go back to change it</a>.
             </p>
         {% endif %}
 
         <p>
-            <label for="id_address_1">
+            <label for="id_respondent_address_1">
                 Address
             </label><br>
-            {{ form.address_1 }}
-            {{ form.address_1.errors }}
+            {{ form.respondent_address_1 }}
+            {{ form.respondent_address_1.errors }}
         </p>
 
         <p>
-            {{ form.address_2 }}
-            {{ form.address_2.errors }}
+            {{ form.respondent_address_2 }}
+            {{ form.respondent_address_2.errors }}
         </p>
 
-        <p>
-            {{ form.address_3 }}
-            {{ form.address_3.errors }}
-        </p>
         <p>
             <label for="id_town_city_dummy">
                 Town/city/locality
             </label><br>
-            <input type="text" name="town_city_dummy" readonly value="Plymouth">
+            {{ form.respondent_address_3 }}
+            {{ form.respondent_address_3.errors }}
         </p>
 
         <button class="button">

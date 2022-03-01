@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h3>What is your relationship to the property about which you're enquiring?</h3>
+
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for value, label in form.respondent_role.field.widget.choices %}
+            {% if value %}{# filter out the empty value #}
+                <p>
+                    <input
+                        type="radio"
+                        id="{{ form.respondent_role.auto_id }}_{{ value }}"
+                        name="{{ form.respondent_role.html_name }}"
+                        value="{{ value }}"
+                        {% if value == form.respondent_role.data or value == form.respondent_role.initial %}checked{% endif %}>
+                    <label
+                        for="{{ form.respondent_role.auto_id }}_{{ value }}">{{ label }}</label>
+                </p>
+            {% endif %}
+        {% endfor %}
+        {{ form.respondent_role.errors }}
+
+        <p><em>A "householder" means that you are the owner of the property, or one of the owners, or a tenant named on a rental contract</em></p>
+        <div id="other-detail"{% if form.initial.respondent_role != "OTHER" %} style="display: none"{% endif %}>
+            <p>
+                <label for="id_respondent_role_other">
+                    If you entered 'other' above, please describe your relationship to the occupant:
+                </label>
+                {{ form.respondent_role_other }}
+                {{ form.respondent_role_other.errors }}
+            </p>
+        </div>
+
+        <button class="button">
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

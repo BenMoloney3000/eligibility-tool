@@ -9,12 +9,14 @@ urlpatterns = [
     path("name", views.RespondentName.as_view(), name="respondent-name"),
     path("role", views.RespondentRole.as_view(), name="respondent-role"),
     path(
-        "relationship",
-        views.RespondentRelationship.as_view(),
-        name="respondent-relationship",
+        "permission",
+        views.RespondentHasPermission.as_view(),
+        name="respondent-has-permission",
     ),
     path("need-permission", views.NeedPermission.as_view(), name="need-permission"),
-    path("your-postcode", views.Postcode.as_view(), name="postcode"),
+    path(
+        "your-postcode", views.RespondentPostcode.as_view(), name="respondent-postcode"
+    ),
     path("your-address", views.RespondentAddress.as_view(), name="respondent-address"),
     path("your-email", views.Email.as_view(), name="email"),
     path("phone-numbers", views.ContactPhone.as_view(), name="contact-phone"),

@@ -1,4 +1,5 @@
 import uuid as uuid_lib
+from typing import Optional
 
 from django.db import models
 
@@ -28,20 +29,29 @@ class Answers(models.Model):
     first_name = models.CharField(verbose_name="First name", max_length=64, blank=True)
     last_name = models.CharField(verbose_name="Last name", max_length=64, blank=True)
 
-    address_1 = models.CharField(max_length=128, blank=True)
-    address_2 = models.CharField(max_length=128, blank=True)
-    address_3 = models.CharField(max_length=128, blank=True)
+    # The relationship of the respondent to the property
+    # Determines if the following address fields are the property's
+    respondent_role = models.CharField(
+        max_length=24,
+        choices=enums.RespondentRole.choices,
+        blank=True,
+        verbose_name="Relationship of respondent to property",
+    )
+    respondent_role_other = models.CharField(
+        max_length=128, blank=True, verbose_name="'Other' relationship detail"
+    )
 
-    udprn = models.CharField(
+    respondent_address_1 = models.CharField(max_length=128, blank=True)
+    respondent_address_2 = models.CharField(max_length=128, blank=True)
+    respondent_address_3 = models.CharField(max_length=128, blank=True)
+
+    respondent_udprn = models.CharField(
         max_length=10, blank=True, verbose_name="Respondent UDPRN from API"
     )
 
-    postcode = models.CharField(max_length=16, blank=True)
+    respondent_postcode = models.CharField(max_length=16, blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)
     contact_mobile = models.CharField(max_length=20, blank=True)
-
-    # Whether all the above details are those of the occupant/property
-    is_occupant = models.BooleanField(null=True, blank=True)
 
     """
     # PROPERTY DETAILS
@@ -67,17 +77,6 @@ class Answers(models.Model):
     )
     # UPRN is 12 digits, too big for a PositiveIntegerField
     uprn = models.PositiveBigIntegerField(null=True, blank=True)
-
-    respondent_relationship = models.CharField(
-        max_length=6,
-        choices=enums.RespondentRelationship.choices,
-        blank=True,
-        verbose_name="Relationship of responder to occupant",
-    )
-
-    respondent_relationship_other = models.CharField(
-        max_length=128, blank=True, verbose_name="'Other' relationship detail"
-    )
 
     respondent_has_permission = models.BooleanField(null=True, blank=True)
 
@@ -409,3 +408,23 @@ class Answers(models.Model):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
+
+    @property
+    def is_occupant(self) -> Optional[bool]:
+        if self.respondent_role is None:
+            return None
+
+        return self.respondent_role in [
+            enums.RespondentRole.RESIDENT_HOUSEHOLDER.value,
+            enums.RespondentRole.OCCUPANT.value,
+        ]
+
+    @property
+    def is_householder(self) -> Optional[bool]:
+        if self.respondent_role is None:
+            return None
+
+        return self.respondent_role in [
+            enums.RespondentRole.RESIDENT_HOUSEHOLDER.value,
+            enums.RespondentRole.NON_RESIDENT_HOUSEHOLDER.value,
+        ]

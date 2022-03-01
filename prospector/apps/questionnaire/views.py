@@ -408,42 +408,39 @@ class RespondentName(Question):
     form_class = questionnaire_forms.RespondentName
 
 
-class RespondentRole(SingleQuestion):
+class RespondentRole(Question):
     title = "Your role"
-    type_ = QuestionType.Choices
-    question = "Are you the occupant of the property for which you're enquiring?"
-    answer_field = "is_occupant"
-    choices = (
-        (True, "Yes, I am the homeowner or tenant of this property."),
-        (False, "No, I am acting on behalf of the tenant or homeowner."),
-    )
+    form_class = questionnaire_forms.RespondentRole
+    template_name = "questionnaire/respondent_role.html"
 
     def pre_save(self):
-        self.answers.is_occupant = self.answers.is_occupant == "True"
-
         if self.answers.is_occupant:
             # For safety, erase all the details describing a non-occupant respondent
-            self.answers.address_1 = ""
-            self.answers.address_2 = ""
-            self.answers.address_3 = ""
-            self.answers.udprn = ""
-            self.answers.postcode = ""
+            self.answers.respondent_address_1 = ""
+            self.answers.respondent_address_2 = ""
+            self.answers.respondent_address_3 = ""
+            self.answers.respondent_udprn = ""
+            self.answers.respondent_postcode = ""
+
+        if self.answers.respondent_role != enums.RespondentRole.OTHER.value:
+            self.answers.respondent_role_other = ""
+
+        if self.answers.is_householder:
             self.answers.respondent_has_permission = None
-            self.answers.respondent_relationship = ""
-            self.answers.respondent_relationship_other = ""
 
     def get_next(self):
-        if self.answers.is_occupant:
+        if not self.answers.is_householder:
+            return "RespondentHasPermission"
+        elif self.answers.is_occupant:
             return "Email"
         else:
-            return "RespondentRelationship"
+            return "RespondentPostcode"
 
 
-class RespondentRelationship(Question):
-    title = "Your relationship to the occupant"
-    question = "What is your relationship to the occupant of the property for which you're enquiring?"
-    form_class = questionnaire_forms.RespondentRelationship
-    template_name = "questionnaire/respondent_relationship.html"
+class RespondentHasPermission(SingleQuestion):
+    title = "Householder permission"
+    question = "Do you have the householder's permission to contact us on their behalf?"
+    type_ = QuestionType.YesNo
 
     def get_initial(self):
         data = super().get_initial()
@@ -455,18 +452,13 @@ class RespondentRelationship(Question):
 
         return data
 
-    def pre_save(self):
-        if self.answers.respondent_relationship != enums.RespondentRelationship.OTHER:
-            self.answers.respondent_relationship_other = ""
-        self.answers.respondent_has_permission = (
-            self.answers.respondent_has_permission == "True"
-        )
-
     def get_next(self):
         if not self.answers.respondent_has_permission:
             return "NeedPermission"
+        elif self.answers.is_occupant:
+            return "Email"
         else:
-            return "Postcode"
+            return "RespondentPostcode"
 
 
 class NeedPermission(Question):
@@ -478,12 +470,12 @@ class NeedPermission(Question):
         self.answers.delete()
 
 
-class Postcode(SingleQuestion):
+class RespondentPostcode(SingleQuestion):
     title = "Your postcode"
     type_ = QuestionType.Text
     question = "Enter your postcode"
     supplementary = (
-        "This is the postcode for your own address, which may be different from the property "
+        "This is the postcode for your own address, not that of the property "
         "about which you're enquiring."
     )
     next = "RespondentAddress"
@@ -514,7 +506,7 @@ class RespondentAddress(Question, PostcodeCacherMixin):
         try:
             self.prefilled_addresses = {
                 address.udprn: address
-                for address in self.get_postcode(self.answers.postcode)
+                for address in self.get_postcode(self.answers.respondent_postcode)
             }
         except ValueError:
             pass
@@ -524,18 +516,23 @@ class RespondentAddress(Question, PostcodeCacherMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["postcode"] = self.answers.postcode
+        context["postcode"] = self.answers.respondent_postcode
         context["all_postcode_addresses"] = self.prefilled_addresses
         return context
 
     def pre_save(self):
-        if self.answers.udprn and int(self.answers.udprn) in self.prefilled_addresses:
-            selected_address = self.prefilled_addresses[int(self.answers.udprn)]
-            if not self.answers.address_1:
+        if (
+            self.answers.respondent_udprn
+            and int(self.answers.respondent_udprn) in self.prefilled_addresses
+        ):
+            selected_address = self.prefilled_addresses[
+                int(self.answers.respondent_udprn)
+            ]
+            if not self.answers.respondent_address_1:
                 # Populate fields if it wasn't already done by JS
-                self.answers.address_1 = selected_address.line_1
-                self.answers.address_2 = selected_address.line_2
-                self.answers.address_3 = selected_address.line_3
+                self.answers.respondent_address_1 = selected_address.line_1
+                self.answers.respondent_address_2 = selected_address.line_2
+                self.answers.respondent_address_3 = selected_address.post_town
         """ # TODO (maybe)
         There is an edge case where a user with JS disabled selects an
         address from the API-supplied list (which populates the address fields
