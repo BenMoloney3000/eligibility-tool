@@ -78,6 +78,9 @@ form select {
     background: #fff;
     font-size: 1rem;
 }
+form select {
+    display: block;
+}
 .input-error {
     color: #d45352;
     display: block;

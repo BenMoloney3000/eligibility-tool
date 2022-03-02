@@ -213,13 +213,39 @@ class TestQuestionsRender(TrailTest):
     def test_accuracy_warning_renders(self):
         assert self._get_trail_view("AccuracyWarning").status_code == 200
 
+    def test_occupants_renders(self):
+        assert self._get_trail_view("Occupants").status_code == 200
+
+    def test_household_income_renders(self):
+        assert self._get_trail_view("HouseholdIncome").status_code == 200
+
+    def test_household_take_home_income_renders(self):
+        assert self._get_trail_view("HouseholdTakeHomeIncome").status_code == 200
+
+    def test_disability_benefits_renders(self):
+        assert self._get_trail_view("DisabilityBenefits").status_code == 200
+
+    def test_child_benefit_renders(self):
+        assert self._get_trail_view("ChildBenefit").status_code == 200
+
+    def test_income_lt_child_benefit_threshold_renders(self):
+        # Need to set the threshold!
+        self.answers.adults = 2
+        self.answers.children = 2
+        self.answers.child_benefit = True
+        self.answers.save()
+        assert self._get_trail_view("IncomeLtChildBenefitThreshold").status_code == 200
+
+    def test_vulnerabilities_renders(self):
+        assert self._get_trail_view("Vulnerabilities").status_code == 200
+
     def test_recommended_measures_renders(self):
         assert self._get_trail_view("RecommendedMeasures").status_code == 200
 
     def test_tolerated_disruption_renders(self):
         assert self._get_trail_view("ToleratedDisruption").status_code == 200
 
-    def test_state_of_repat_renders(self):
+    def test_state_of_repair_renders(self):
         assert self._get_trail_view("StateOfRepair").status_code == 200
 
     def test_motivations_renders(self):

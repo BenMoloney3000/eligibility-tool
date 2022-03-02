@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Household composition</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="id_adults">
+                How many adults live in the property?
+            </label>
+            {{ form.adults }}
+            {{ form.adults.errors }}
+        </p>
+
+        <p>
+            <label for="id_children">
+                How many children live in the property?
+            </label>
+            {{ form.children }}
+            {{ form.children.errors }}
+        </p>
+
+        <p>
+            <em>This means children under the age of 16, or under the age of 20 in
+                approved education or training. If child benefit is being claimed then
+                an adult living in the home must receive at least half of the child
+                benefit for the child to be classed as living in the home.
+            </em>
+        </p>
+
+        <button class="button">
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

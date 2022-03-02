@@ -143,7 +143,7 @@ class Question(mixin.TrailMixin, FormView):
         return self.__class__.__name__
 
 
-class SingleQuestion(Question, mixin.TrailMixin):
+class SingleQuestion(Question):
     """
     Produces a 'standard' single question view.
 
@@ -286,7 +286,7 @@ class SingleQuestion(Question, mixin.TrailMixin):
 
 class SinglePrePoppedQuestion(SingleQuestion):
     """
-    Produce a 'standard' single question view with prepopulated property data.
+    A 'standard' single question view with a value presented from third party property data.
 
     Mirrors the PrePoppedMixin for forms. Adds in a 'data_correct' boolean field
     and uses the data field value as the initial field value (if no value for the
@@ -1083,13 +1083,121 @@ class InConservationArea(SingleQuestion):
             return "RecommendedMeasures"
 
 
-class AccuracyWarning(Question, mixin.TrailMixin):
+class AccuracyWarning(Question):
     template_name = "questionnaire/accuracy_warning.html"
     title = "Data has been changed"
+    next = "Occupants"
+
+
+class Occupants(Question):
+    template_name = "questionnaire/occupants.html"
+    title = "Household composition"
+    next = "HouseholdIncome"
+    form_class = questionnaire_forms.Occupants
+
+
+class HouseholdIncome(SingleQuestion):
+    answer_field = "total_income_lt_30k"
+    question = "Is the accumulated income of all the people living in the property less than £30,000 (before tax)?"
+    title = "Gross household income"
+    type_ = QuestionType.Choices
+    choices = enums.IncomeIsUnderThreshold.choices
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES.value:
+            self.answers.take_home_lt_30k = enums.IncomeIsUnderThreshold.YES.value
+            self.answers.disability_benefits = None
+            self.answers.child_benefit = None
+            self.answers.child_benefit_threshold = None
+            self.answers.income_lt_child_benefit_threshold = None
+
+    def get_next(self):
+        if self.answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES.value:
+            return "Vulnerabilities"
+        else:
+            return "HouseholdTakeHomeIncome"
+
+
+class HouseholdTakeHomeIncome(SingleQuestion):
+    answer_field = "take_home_lt_30k"
+    question = (
+        "Is the accumulated take home pay (after tax and deductions) of all people living "
+        "in the property less than £30,000?"
+    )
+    note = "This is the household income after housing costs (mortgage or rent) and energy bills have been deducted."
+    title = "Total household take-home pay"
+    next = "DisabilityBenefits"
+    type_ = QuestionType.Choices
+    choices = enums.IncomeIsUnderThreshold.choices
+
+
+class DisabilityBenefits(SingleQuestion):
+    title = "Diability benefits"
+    type_ = QuestionType.YesNo
+    question = (
+        "Does anybody living in the home receive any disability related benefits?"
+    )
+    note = (
+        "This would include: Attendance Allowance, Carers Allowance, Disability Living Allowance, "
+        "Income Related ESA, Personal Independence Payment, Armed Forces Independence Payment, "
+        "Industrial Injuries Disablement Benefit, Mobility Supplement or Severe Disablement Allowance."
+    )
+
+    def pre_save(self):
+        # Obliterate values from the path never taken (in case of reversing)
+        if self.answers.disability_benefits:
+            self.answers.child_benefit = None
+            self.answers.child_benefit_threshold = None
+            self.answers.income_lt_child_benefit_threshold = None
+
+    def get_next(self):
+        if self.answers.disability_benefits:
+            return "Vulnerabilities"
+        else:
+            return "ChildBenefit"
+
+
+class ChildBenefit(SingleQuestion):
+    title = "Child benefit"
+    next = "IncomeLtChildBenefitThreshold"
+    type_ = QuestionType.YesNo
+    question = "Does anybody living in the home receive Child Benefit?"
+
+    def pre_save(self):
+        # Set the benefit threshold dependent on the household composition
+        if not self.answers.child_benefit:
+            # Obliterate values from the etc.
+            self.answers.child_benefit_threshold = None
+            self.answers.income_lt_child_benefit_threshold = None
+
+
+class IncomeLtChildBenefitThreshold(SingleQuestion):
+    title = "Income in relation to child benefit threshold"
+    next = "Vulnerabilities"
+    type_ = QuestionType.YesNo
+
+    def get_question(self):
+        return f"Is the household income less than £{self.answers.child_benefit_threshold:,}?"
+
+    def prereq(self):
+        if self.answers.child_benefit:
+            self.answers.child_benefit_threshold = services.get_child_benefit_threshold(
+                self.answers
+            )
+        else:
+            # Shouldn't be in this branch. This should not ever happen.
+            return self.redirect()
+
+
+class Vulnerabilities(Question):
+    template_name = "questionnaire/vulnerabilities.html"
+    title = "Specific vulnerabilities of householder members"
     next = "RecommendedMeasures"
+    form_class = questionnaire_forms.Vulnerabilities
 
 
-class RecommendedMeasures(Question, mixin.TrailMixin):
+class RecommendedMeasures(Question):
     template_name = "questionnaire/recommended_measures.html"
     title = "Recommendations for this property"
     next = "ToleratedDisruption"
@@ -1102,6 +1210,26 @@ class RecommendedMeasures(Question, mixin.TrailMixin):
             and self.answers.in_conservation_area is True
         )
 
+        return context
+
+
+class PropertyEligibility(Question):
+    title = "Eligibility for current schemes"
+    template_name = "questionnaire/property_eligibility.html"
+    next = "ToleratedDisruption"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["epc_score"] = self.answers.sap_rating
+        context["house_or_bungalow"] = self.answers.property_type in [
+            enums.PropertyType.HOUSE,
+            enums.PropertyType.BUNGALOW,
+        ]
+        context["gas_heating"] = self.answers.gas_boiler_present
+        context["walls_insulated"] = self.answers.walls_insulated
+        context["uninsulated_loft_or_wall"] = self.answers.walls_insulated is False or (
+            self.answers.unheated_loft and not self.answers.roof_space_insulated
+        )
         return context
 
 
@@ -1162,7 +1290,7 @@ class Motivations(Question):
 class ContributionCapacity(SingleQuestion):
     title = "Your ability to contribute"
     type_ = QuestionType.Choices
-    next = "PropertyEligibility"
+    next = ""
 
     def get_question(self):
         if self.answers.is_householder:
@@ -1190,23 +1318,3 @@ class ContributionCapacity(SingleQuestion):
                 "\"I don't know\" if you don't know the householder's ability and "
                 "willingness to contribute."
             )
-
-
-class PropertyEligibility(Question, mixin.TrailMixin):
-    title = "Eligibility for current schemes"
-    template_name = "questionnaire/property_eligibility.html"
-    next = ""
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["epc_score"] = self.answers.sap_rating
-        context["house_or_bungalow"] = self.answers.property_type in [
-            enums.PropertyType.HOUSE,
-            enums.PropertyType.BUNGALOW,
-        ]
-        context["gas_heating"] = self.answers.gas_boiler_present
-        context["walls_insulated"] = self.answers.walls_insulated
-        context["uninsulated_loft_or_wall"] = self.answers.walls_insulated is False or (
-            self.answers.unheated_loft and not self.answers.roof_space_insulated
-        )
-        return context

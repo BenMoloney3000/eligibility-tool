@@ -32,6 +32,9 @@ class RespondentRole(models.TextChoices):
 
 class PropertyDataSource(models.TextChoices):
     # If we found data for this property from a third party, what was it?
+    # Not currently used - Home Analytics was planned at project start but will
+    # not be used, but this field will still be needed if we use Parity data
+    # in future.
     EPC = "EPC", "EPC"
     HA = "HA", "Home Analytics"
 
@@ -267,6 +270,28 @@ class StateOfRepair(models.TextChoices):
         "Poor – There are known issues with the property such as damp or leaks and/or there is no formal ventilation.",
     )
     UNKNOWN = "UNKNOWN", "I don't know the state of repair of the property."
+
+
+class OneToFourOrMore(models.IntegerChoices):
+    ONE = 1, "1"
+    TWO = 2, "2"
+    THREE = 3, "3"
+    FOUR = 4, "4 or more"
+
+
+class UpToFourOrMore(models.IntegerChoices):
+    NONE = 0, "None"
+    ONE = 1, "1"
+    TWO = 2, "2"
+    THREE = 3, "3"
+    FOUR = 4, "4 or more"
+
+
+class IncomeIsUnderThreshold(models.TextChoices):
+    YES = "YES", "Yes, it's under that figure"
+    NO = "NO", "No, it's over that figure"
+    MAYBE = "MAYBE", "It's close to that figure, could be just over or under"
+    UNKNOWN = "UNKNOWN", "I don't know"
 
 
 class PossibleMeasures(models.TextChoices):

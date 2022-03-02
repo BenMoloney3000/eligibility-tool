@@ -512,3 +512,24 @@ def determine_recommended_measures(
         measures.append(enums.PossibleMeasures.PARTY_WALL_INSULATION)
 
     return measures
+
+
+def get_child_benefit_threshold(answers: models.Answers) -> int:
+    if answers.adults == 1:
+        if answers.children < 2:
+            return 18500
+        elif answers.children == 2:
+            return 23000
+        elif answers.children == 3:
+            return 27500
+        else:
+            return 32000
+    else:
+        if answers.children < 2:
+            return 25500
+        elif answers.children == 2:
+            return 30000
+        elif answers.children == 3:
+            return 34500
+        else:
+            return 39000

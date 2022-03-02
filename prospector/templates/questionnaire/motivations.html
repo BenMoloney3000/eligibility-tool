@@ -18,24 +18,24 @@
         </p>
 
         <p>
-            <label for="id_motivation_better_comfort">Better comfort</label>
             {{ form.motivation_better_comfort }}
+            <label for="id_motivation_better_comfort">Better comfort</label>
             {{ form.motivation_better_comfort.errors }}
         </p>
         <p>
-            <label for="id_motivation_lower_bills">Lower bills</label>
             {{ form.motivation_lower_bills }}
+            <label for="id_motivation_lower_bills">Lower bills</label>
             {{ form.motivation_lower_bills.errors }}
         </p>
         <p>
-            <label for="id_motivation_environment">A more environmentally friendly home</label>
             {{ form.motivation_environment }}
+            <label for="id_motivation_environment">A more environmentally friendly home</label>
             {{ form.motivation_environment.errors }}
         </p>
         {% if not is_householder %}
             <p>
-                <label for="id_motivation_unknown">I don't know</label>
                 {{ form.motivation_unknown }}
+                <label for="id_motivation_unknown">I don't know</label>
                 {{ form.motivation_unknown.errors }}
             </p>
         {% endif %}

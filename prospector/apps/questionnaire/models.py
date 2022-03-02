@@ -416,7 +416,90 @@ class Answers(models.Model):
         verbose_name="Respondent consented to being contacted regarding relevant schemes in future.",
     )
 
-    # TODO: income assessment
+    """
+    # Top level household income assessment
+    """
+
+    adults = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Number of adults living in the property",
+        choices=enums.OneToFourOrMore.choices,
+    )
+    children = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Number of children living in the property",
+        choices=enums.UpToFourOrMore.choices,
+    )
+
+    total_income_lt_30k = models.CharField(
+        choices=enums.IncomeIsUnderThreshold.choices,
+        max_length=7,
+        blank=True,
+        verbose_name="Total gross household income is under £30,000 pa",
+    )
+    take_home_lt_30k = models.CharField(
+        choices=enums.IncomeIsUnderThreshold.choices,
+        blank=True,
+        max_length=7,
+        verbose_name="Total household take home pay is under £30,000 pa",
+    )
+    disability_benefits = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is receiving any disability related benefit",
+    )
+    child_benefit = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is receiving child benefit",
+    )
+    child_benefit_threshold = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Relevant income threshold for child benefit recipient(s)",
+    )
+    income_lt_child_benefit_threshold = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Total household income is under the relevant child benefit threshold",
+    )
+    vulnerable_cariovascular = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to a cardiovascual condition",
+    )
+    vulnerable_respiratory = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to a respiratory condition",
+    )
+    vulnerable_mental_health = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to a mental health condition",
+    )
+    vulnerable_cns = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to central nervous system condition",
+    )
+    vulnerable_disability = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to disability",
+    )
+    vulnerable_age = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to being aged over 65",
+    )
+    vulnerable_child_pregnancy = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is under five years old or pregnant",
+    )
 
     @property
     def full_name(self):

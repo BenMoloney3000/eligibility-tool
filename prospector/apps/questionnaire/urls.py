@@ -92,6 +92,25 @@ urlpatterns = [
         name="in-conservation-area",
     ),
     path("accuracy-warning", views.AccuracyWarning.as_view(), name="accuracy-warning"),
+    path("occupants", views.Occupants.as_view(), name="occupants"),
+    path("income", views.HouseholdIncome.as_view(), name="household-income"),
+    path(
+        "take-home-pay",
+        views.HouseholdTakeHomeIncome.as_view(),
+        name="household-take-home-income",
+    ),
+    path(
+        "disability-benefits",
+        views.DisabilityBenefits.as_view(),
+        name="disability-benefits",
+    ),
+    path("child-benefit", views.ChildBenefit.as_view(), name="child-benefit"),
+    path(
+        "qualifying-income",
+        views.IncomeLtChildBenefitThreshold.as_view(),
+        name="income-lt-child-benefit-threshold",
+    ),
+    path("vulnerabilities", views.Vulnerabilities.as_view(), name="vulnerabilities"),
     path(
         "recommendations",
         views.RecommendedMeasures.as_view(),

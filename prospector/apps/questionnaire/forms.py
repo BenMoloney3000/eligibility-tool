@@ -372,6 +372,42 @@ class HeatingControls(AnswerFormMixin, forms.ModelForm):
         ]
 
 
+class Occupants(AnswerFormMixin, forms.ModelForm):
+    adults = forms.ChoiceField(required=True, choices=enums.OneToFourOrMore.choices)
+    children = forms.ChoiceField(required=True, choices=enums.UpToFourOrMore.choices)
+
+    class Meta:
+        model = models.Answers
+        fields = [
+            "adults",
+            "children",
+        ]
+
+
+class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
+    class Meta:
+        model = models.Answers
+        fields = [
+            "vulnerable_cariovascular",
+            "vulnerable_respiratory",
+            "vulnerable_mental_health",
+            "vulnerable_cns",
+            "vulnerable_disability",
+            "vulnerable_age",
+            "vulnerable_child_pregnancy",
+        ]
+        optional_fields = fields
+        widgets = {
+            "vulnerable_cariovascular": forms.CheckboxInput(),
+            "vulnerable_respiratory": forms.CheckboxInput(),
+            "vulnerable_mental_health": forms.CheckboxInput(),
+            "vulnerable_cns": forms.CheckboxInput(),
+            "vulnerable_disability": forms.CheckboxInput(),
+            "vulnerable_age": forms.CheckboxInput(),
+            "vulnerable_child_pregnancy": forms.CheckboxInput(),
+        }
+
+
 class Motivations(AnswerFormMixin, forms.ModelForm):
     class Meta:
         model = models.Answers
