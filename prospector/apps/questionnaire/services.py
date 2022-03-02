@@ -539,7 +539,7 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
         else:
             return 39000
 
-            
+
 """
 # The below functions populate data from external data if the user declines to
 # correct them.
@@ -584,8 +584,6 @@ def set_roof_from_orig(answers: models.Answers) -> models.Answers:
             answers.flat_roof = answers.flat_roof_orig
             # Can't populate flat_roof_insulated
 
-    # TODO this will change with #6
-
     return answers
 
 
@@ -595,8 +593,8 @@ def set_heating_from_orig(answers: models.Answers) -> models.Answers:
     # (and therefore no point in populating the heating controls data
     # or 'other CH fuel' data)
 
-    # TODO this will change with #9
     if answers.gas_boiler_present is False:
+        answers.on_mains_gas = answers.on_mains_gas_orig
         answers.other_heating_present = answers.other_heating_present_orig
 
         if answers.other_heating_present is False:
