@@ -396,6 +396,7 @@ class Answers(models.Model):
     """
     # CONSTRAINTS: planning area and householder preferences
     """
+
     in_conservation_area = models.BooleanField(
         null=True,
         blank=True,
@@ -554,7 +555,7 @@ class Answers(models.Model):
             enums.RespondentRole.RESIDENT_HOUSEHOLDER.value,
             enums.RespondentRole.NON_RESIDENT_HOUSEHOLDER.value,
         ]
-        
+
     """
     # The following logic is used to determine if the user can skip sections
     # of the questionnaire.
