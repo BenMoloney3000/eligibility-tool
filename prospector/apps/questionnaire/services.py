@@ -34,6 +34,7 @@ def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
     answers.heat_pump_present_orig = _detect_heat_pump(selected_epc)
     answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc) or ""
     answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
+    answers.hhrshs_present_orig = _detect_hhrshs(selected_epc)
     answers.electric_radiators_present_orig = _detect_electric_radiators(selected_epc)
     answers.trvs_present_orig = _detect_trvs(selected_epc)
     answers.room_thermostat_orig = _detect_room_thermostat(selected_epc)
@@ -389,6 +390,12 @@ def _detect_storage_heaters(epc: EPCData) -> bool:
     return "STORAGE HEATER" in mainheat_desc
 
 
+def _detect_hhrshs(epc: EPCData) -> bool:
+    if epc.main_heating_controls == 2404:
+        return True
+    # Otherwise, wouldn't like to speculate!
+
+
 def _detect_electric_radiators(epc: EPCData) -> bool:
     mainheat_desc = epc.mainheat_description.upper()
 
@@ -542,7 +549,8 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
 
 """
 # The below functions populate data from external data if the user declines to
-# correct them.
+# correct them. They should only be called if we have a complete set of answers
+# for a section from external data.
 """
 
 
@@ -566,6 +574,9 @@ def set_floor_from_orig(answers: models.Answers) -> models.Answers:
 
     if answers.suspended_floor:
         answers.suspended_floor_insulated = answers.suspended_floor_insulated_orig
+    else:
+        # We need to wipe any answers that may have been previously entered
+        answers.suspended_floor_insulated = None
 
     return answers
 
@@ -573,16 +584,27 @@ def set_floor_from_orig(answers: models.Answers) -> models.Answers:
 def set_roof_from_orig(answers: models.Answers) -> models.Answers:
     answers.unheated_loft = answers.unheated_loft_orig
 
+    # Uninferable fields can be wiped because they can't be relevant -
+    # this function can only be called if we have a complete set
+    # of answers.
+    answers.flat_roof_insulated = ""
+
     if answers.unheated_loft:
         answers.roof_space_insulated = answers.roof_space_insulated_orig
+        answers.flat_roof = None
+        answers.room_in_roof = None
+        answers.rir_insulated = None
+
     else:
         answers.room_in_roof = answers.room_in_roof_orig
+        answers.roof_space_insulated = None
 
         if answers.room_in_roof:
             answers.rir_insulated = answers.rir_insulated_orig
-        elif answers.room_in_roof is False:
+            answers.flat_roof = None
+        else:
             answers.flat_roof = answers.flat_roof_orig
-            # Can't populate flat_roof_insulated
+            answers.rir_insulated = None
 
     return answers
 
@@ -593,16 +615,31 @@ def set_heating_from_orig(answers: models.Answers) -> models.Answers:
     # (and therefore no point in populating the heating controls data
     # or 'other CH fuel' data)
 
-    if answers.gas_boiler_present is False:
-        answers.on_mains_gas = answers.on_mains_gas_orig
-        answers.other_heating_present = answers.other_heating_present_orig
+    # Uninferable fields
+    answers.hwt_present = None
+    answers.smart_thermostat = None
+    answers.gas_boiler_age = ""
+    answers.gas_boiler_broken = None
 
-        if answers.other_heating_present is False:
-            answers.storage_heaters_present = answers.storage_heaters_present_orig
-            if answers.storage_heaters_present is False:
-                answers.electric_radiators_present = (
-                    answers.electric_radiators_present_orig
-                )
-            # Likewise can't populate whether HHRSHs are present
+    # Because we can't infer the presence of the HWT, we the only possible
+    # scenario to complete from inferences is that there is no CH system at all.
+    answers.on_mains_gas = answers.on_mains_gas_orig
+    answers.other_heating_present = answers.other_heating_present_orig
+    answers.trvs_present = None
+    answers.room_thermostat = None
+    answers.ch_timer = None
+    answers.programmable_thermostat = None
+
+    answers.heat_pump_present = None
+    answers.other_heating_fuel = ""
+
+    answers.storage_heaters_present = answers.storage_heaters_present_orig
+
+    if answers.storage_heaters_present is False:
+        answers.hhrshs_present = None
+        answers.electric_radiators_present = answers.electric_radiators_present_orig
+    else:
+        answers.electric_radiators_present = None
+        answers.hhrshs_present = answers.hhrshs_present_orig
 
     return answers

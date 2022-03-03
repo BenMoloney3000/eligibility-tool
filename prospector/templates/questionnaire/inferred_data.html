@@ -148,7 +148,11 @@
                             {% else %}
                                 <li>The property <strong>{% if answers.storage_heaters_present_orig %}has{% else %}does not have{% endif %} electric storage heaters</strong>.</li>
                                 {% if answers.storage_heaters_present_orig %}
-                                    <li>We could not tell if these storage heaters are modern, high-heat-retention storage heaters. You will have to supply this data.</li>
+                                    {% if answers.hhrshs_present_orig == None %}
+                                        <li>We could not tell if these storage heaters are modern, high-heat-retention storage heaters. You will have to supply this data.</li>
+                                    {% else %}
+                                        <li>The storage heaters {% if answers.hhrshs_present_orig %}are<strong>{% else %}<strong>are not{% endif %} modern, high-heat-retention storage heaters</strong></li>
+                                    {% endif %}
                                 {% else %}
                                     <li>The property {% if answers.electric_radiators_present_orig %}has <strong>{% else %}<strong>does not have {%endif %} electric radiators</strong>.</li>
                                 {% endif %}

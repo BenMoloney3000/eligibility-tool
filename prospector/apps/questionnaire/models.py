@@ -302,6 +302,11 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property has high heat retention storage heaters",
     )
+    hhrshs_present_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has high heat retention storage heaters according to property data before correction",
+    )
     electric_radiators_present = models.BooleanField(
         null=True,
         blank=True,
@@ -617,9 +622,7 @@ class Answers(models.Model):
                     # A very narrow window of possibility!
                     return self.electric_radiators_present_orig is not None
                 else:
-                    # Either couldn't tell if there are storage heaters, or we
-                    # think there are, in which case we can't tell if they're HHRSHs
-                    return False
+                    return self.hhrshs_present_orig is not None
             else:
                 # Either couldn't tell if there is another CH system, or we think
                 # there is, in which case we can't infer presence of HWT.
