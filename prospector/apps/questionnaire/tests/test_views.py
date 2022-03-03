@@ -5,6 +5,7 @@ from django.test import override_settings
 from django.test import RequestFactory
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from . import factories
 from prospector.apps.questionnaire import enums
@@ -261,6 +262,9 @@ class TestQuestionsRender(TrailTest):
     def test_property_eligibility_renders(self):
         assert self._get_trail_view("PropertyEligibility").status_code == 200
 
+    def test_complete_renders(self):
+        assert self._get_trail_view("Completed").status_code == 200
+
 
 class TestDataPosts(TrailTest):
     """Test page submission logic in views.py."""
@@ -337,6 +341,14 @@ class SpecialCases(TrailTest):
         assert response.status_code == 200
         with self.assertRaises(models.Answers.DoesNotExist):
             self.answers.refresh_from_db()
+
+    def test_cant_edit_completed_questionnaire(self):
+        self.answers.completed_at = timezone.now()
+        self.answers.save()
+        response = self._get_trail_view("ContactPhone")
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:start")
 
     # TODO test postcode caching
 

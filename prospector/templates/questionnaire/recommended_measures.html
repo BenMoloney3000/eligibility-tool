@@ -20,11 +20,16 @@
                 <p>As your home is in a conservation area solid wall insulation may not be possible</p>
             {% endif %}
         {% endfor %}
+        <p>Next we will ask you about your preferences for home renovation. We will also need to ask you detailed questions about the incomes of the adults in the household to assess eligibility for funding support.</p>
 
-        <p>Next we'll ask you about what your preferences for renovation would be.</p>
+        <p>If you would rather not do this you can stop here, and a PEC staff member can take these details from you over the phone at some point. Note that this will delay any application for funding that we can submit for you.</p>
 
-        <button class="button">
-            Next&nbsp;&rarr;
+        <button class="button" name="finish_now" value="True">
+            Finish now
+        </button>
+
+        <button class="button" name="continue" value="continue">
+            Continue&nbsp;&rarr;
         </button>
 
         {% if prev_url %}

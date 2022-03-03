@@ -9,7 +9,9 @@ from django import forms
 from django.core.cache import caches
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.shortcuts import redirect
 from django.utils import timezone
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
 from . import enums
@@ -50,9 +52,10 @@ class PostcodeCacherMixin:
             return ideal_postcodes._process_results(POSTCODE_CACHE.get(postcode))
         else:
             addresses = ideal_postcodes.get_for_postcode(postcode)
-            POSTCODE_CACHE.set(
-                postcode, [dataclasses.asdict(address) for address in addresses]
-            )
+            if addresses:
+                POSTCODE_CACHE.set(
+                    postcode, [dataclasses.asdict(address) for address in addresses]
+                )
             return addresses
 
 
@@ -74,7 +77,8 @@ class Question(mixin.TrailMixin, FormView):
         if SESSION_ANSWERS_ID in self.request.session:
             with contextlib.suppress(models.Answers.DoesNotExist):
                 self.answers = models.Answers.objects.filter(
-                    id=self.request.session[SESSION_ANSWERS_ID]
+                    id=self.request.session[SESSION_ANSWERS_ID],
+                    completed_at__isnull=True,
                 ).first()
 
         if not self.answers:
@@ -84,6 +88,7 @@ class Question(mixin.TrailMixin, FormView):
             # if we had a trail, wipe it, forcing us back to the start.
             if SESSION_TRAIL_ID in self.request.session:
                 del self.request.session[SESSION_TRAIL_ID]
+                return redirect("questionnaire:start")
 
     def dispatch(self, request, *args, **kwargs):
         self._init_answers()
@@ -1437,7 +1442,6 @@ class Vulnerabilities(Question):
 class RecommendedMeasures(Question):
     template_name = "questionnaire/recommended_measures.html"
     title = "Recommendations for this property"
-    next = "ToleratedDisruption"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -1449,25 +1453,12 @@ class RecommendedMeasures(Question):
 
         return context
 
-
-class PropertyEligibility(Question):
-    title = "Eligibility for current schemes"
-    template_name = "questionnaire/property_eligibility.html"
-    next = "ToleratedDisruption"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["epc_score"] = self.answers.sap_rating
-        context["house_or_bungalow"] = self.answers.property_type in [
-            enums.PropertyType.HOUSE,
-            enums.PropertyType.BUNGALOW,
-        ]
-        context["gas_heating"] = self.answers.gas_boiler_present
-        context["walls_insulated"] = self.answers.walls_insulated
-        context["uninsulated_loft_or_wall"] = self.answers.walls_insulated is False or (
-            self.answers.unheated_loft and not self.answers.roof_space_insulated
-        )
-        return context
+    def get_next(self):
+        if self.request.POST.get("finish_now", "") == "True":
+            services.close_questionnaire(self.answers)
+            return "Completed"
+        else:
+            return "ToleratedDisruption"
 
 
 class ToleratedDisruption(SingleQuestion):
@@ -1555,3 +1546,30 @@ class ContributionCapacity(SingleQuestion):
                 "\"I don't know\" if you don't know the householder's ability and "
                 "willingness to contribute."
             )
+
+
+class PropertyEligibility(Question):
+    title = "Eligibility for current schemes"
+    template_name = "questionnaire/property_eligibility.html"
+    next = "Completed"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["epc_score"] = self.answers.sap_rating
+        context["house_or_bungalow"] = self.answers.property_type in [
+            enums.PropertyType.HOUSE,
+            enums.PropertyType.BUNGALOW,
+        ]
+        context["gas_heating"] = self.answers.gas_boiler_present
+        context["walls_insulated"] = self.answers.walls_insulated
+        context["uninsulated_loft_or_wall"] = self.answers.walls_insulated is False or (
+            self.answers.unheated_loft and not self.answers.roof_space_insulated
+        )
+        return context
+
+    def pre_save(self):
+        services.close_questionnaire(self.answers)
+
+
+class Completed(TemplateView):
+    template_name = "questionnaire/completed.html"

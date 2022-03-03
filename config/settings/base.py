@@ -276,3 +276,4 @@ else:
 
 EPC_API_KEY = env.str("EPC_API_KEY", default="")
 IDEAL_POSTCODES_API_KEY = env.str("IDEAL_POSTCODES_API_KEY", default="")
+MAIL_FROM = env.str("EMAIL_FROM", default="support@plymouthenergycommunity.com")

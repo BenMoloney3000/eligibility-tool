@@ -93,6 +93,11 @@ urlpatterns = [
         name="in-conservation-area",
     ),
     path("accuracy-warning", views.AccuracyWarning.as_view(), name="accuracy-warning"),
+    path(
+        "recommendations",
+        views.RecommendedMeasures.as_view(),
+        name="recommended-measures",
+    ),
     path("occupants", views.Occupants.as_view(), name="occupants"),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
     path(
@@ -113,11 +118,6 @@ urlpatterns = [
     ),
     path("vulnerabilities", views.Vulnerabilities.as_view(), name="vulnerabilities"),
     path(
-        "recommendations",
-        views.RecommendedMeasures.as_view(),
-        name="recommended-measures",
-    ),
-    path(
         "disruption", views.ToleratedDisruption.as_view(), name="tolerated-disruption"
     ),
     path("state-of-repair", views.StateOfRepair.as_view(), name="state-of-repair"),
@@ -130,4 +130,5 @@ urlpatterns = [
     path(
         "eligibility", views.PropertyEligibility.as_view(), name="property-eligibility"
     ),
+    path("complete", views.Completed.as_view(), name="completed"),
 ]

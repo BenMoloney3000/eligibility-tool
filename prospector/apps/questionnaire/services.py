@@ -3,6 +3,11 @@ import re
 from typing import List
 from typing import Optional
 
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils import timezone
+
 from . import enums
 from . import models
 from prospector.apis.epc import EPCData
@@ -643,3 +648,33 @@ def set_heating_from_orig(answers: models.Answers) -> models.Answers:
         answers.hhrshs_present = answers.hhrshs_present_orig
 
     return answers
+
+
+def close_questionnaire(answers: models.Answers):
+    """Set the questionnaire as completed.
+
+    Prevents any part of it being edited through the questionnaire views. Also
+    sends an acknowledment email.
+    """
+
+    answers.completed_at = timezone.now()
+    answers.save()
+
+    context = {
+        "full_name": f"{answers.first_name} {answers.last_name}",
+        "postcode": answers.property_postcode,
+        "consented_callback": answers.consented_callback,
+        "consented_future_schemes": answers.consented_future_schemes,
+        "uuid": answers.uuid,
+    }
+    message_body_txt = render_to_string("emails/acknowledgement.txt", context)
+    message_body_html = render_to_string("emails/acknowledgement.html", context)
+
+    message = EmailMultiAlternatives(
+        subject="Thanks for completing the PEC Funding Eligibility Checker",
+        body=message_body_txt,
+        from_email=settings.MAIL_FROM,
+        to=[answers.email],
+    )
+    message.attach_alternative(message_body_html, "text/html")
+    message.send()

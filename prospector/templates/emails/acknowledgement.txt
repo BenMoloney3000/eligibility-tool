@@ -1,0 +1,10 @@
+Dear {{ full_name }},
+
+Many thanks for using Plymouth Energy Community's Funding Eligibility Checker for your property at {{ postcode }}.
+
+Your answers have been logged {% if consented_callback or consented_future_schemes %} and we will be in touch with you {% if consented_callback %}in the near future.{% else %}if and when relevant funding becomes available in future.{% endif %}{% endif %} Your submission reference is {{ uuid }}.
+
+In the meantime if there is anything we can help with please contact us on support@plymouthenergycommunity.com or 01752 477117.
+
+Best wishes,
+Plymouth Energy Community
