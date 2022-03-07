@@ -1,28 +1,18 @@
-import contextlib
-import dataclasses
 import logging
-from enum import auto
-from enum import Enum
-from typing import Optional
 
-from django import forms
 from django.core.cache import caches
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
 
-from . import enums
-from . import forms as questionnaire_forms
-from . import models
-from . import selectors
-from . import services
+from . import abstract as abstract_views
 from prospector.apis import epc
-from prospector.apis import ideal_postcodes
+from prospector.apps.questionnaire import enums
+from prospector.apps.questionnaire import forms as questionnaire_forms
+from prospector.apps.questionnaire import selectors
+from prospector.apps.questionnaire import services
 from prospector.dataformats import postcodes
-from prospector.trail import mixin
 
 
 logger = logging.getLogger(__name__)
@@ -33,369 +23,9 @@ SESSION_TRAIL_ID = "questionnaire:trail_id"
 POSTCODE_CACHE = caches["postcodes"]
 
 
-class QuestionType(Enum):
-    Int = auto()
-    Text = auto()
-    YesNo = auto()
-    Decimal = auto()
-    Choices = auto()
-    MultipleChoices = auto()
-
-
-class PostcodeCacherMixin:
-    def get_postcode(self, postcode):
-        """Check cached postcodes before hitting the API.
-
-        Uses normalised postcodes.
-        """
-        if POSTCODE_CACHE.get(postcode, None):
-            return ideal_postcodes._process_results(POSTCODE_CACHE.get(postcode))
-        else:
-            addresses = ideal_postcodes.get_for_postcode(postcode)
-            if addresses:
-                POSTCODE_CACHE.set(
-                    postcode, [dataclasses.asdict(address) for address in addresses]
-                )
-            return addresses
-
-
-class Question(mixin.TrailMixin, FormView):
-    """The custom trail class for the whole survey."""
-
-    trail_initial = ["Start"]
-
-    trail_session_id = SESSION_TRAIL_ID
-    trail_url_prefix = "questionnaire:"
-    form_class = questionnaire_forms.DummyForm
-
-    def _init_answers(self):
-        # Don't let us get called more than once.
-        if hasattr(self, "answers"):
-            return
-
-        self.answers = None
-        if SESSION_ANSWERS_ID in self.request.session:
-            with contextlib.suppress(models.Answers.DoesNotExist):
-                self.answers = models.Answers.objects.filter(
-                    id=self.request.session[SESSION_ANSWERS_ID],
-                    completed_at__isnull=True,
-                ).first()
-
-        if not self.answers:
-            self.answers = models.Answers.objects.create()
-            self.request.session[SESSION_ANSWERS_ID] = self.answers.id
-
-            # if we had a trail, wipe it, forcing us back to the start.
-            if SESSION_TRAIL_ID in self.request.session:
-                del self.request.session[SESSION_TRAIL_ID]
-                return redirect("questionnaire:start")
-
-    def dispatch(self, request, *args, **kwargs):
-        self._init_answers()
-        return super().dispatch(request, *args, **kwargs)
-
-    # Make the answers accessible to the form logic
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["answers"] = self.answers
-        return kwargs
-
-    def get_initial(self):
-        # Populate form fields from model first.
-        # This will need to be overridden if non-model form fields are present
-        data = {}
-
-        # Do we have any model form fields in the form?
-        form_class = self.get_form_class()
-        if hasattr(form_class, "_meta"):
-            for field in self.get_form_class()._meta.fields:
-                if hasattr(self.answers, field):
-                    data[field] = getattr(self.answers, field)
-        return data
-
-    def form_valid(self, form):
-        """
-        Save form fields to the answers.
-
-        Fields that match Answers fields will be saved, anything else discarded.
-        """
-        for k, v in form.cleaned_data.items():
-            setattr(self.answers, k, v)
-
-        # This gives questions an opportunity to do extra processing, lookups etc.
-        # before we save, saving unnecessary round trips to the database.
-        if hasattr(self, "pre_save"):
-            self.pre_save()
-
-        self.answers.save()
-
-        return self.redirect(self.get_next())
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["prev_url"] = self.get_prev_url()
-        context["title"] = self.get_title()
-
-        return context
-
-    def get_title(self):
-        """Get a page title for the HTML <title> tag."""
-
-        if hasattr(self, "title"):
-            return self.title
-
-        return self.__class__.__name__
-
-
-class SingleQuestion(Question):
-    """
-    Produces a 'standard' single question view.
-
-    This uses a load of metaprogramming to make the question definitions as simple
-    and concise as possible, meaning that a separate form class definition is
-    not required this view. It inherits from the Question class above.
-    """
-
-    type_: QuestionType
-    question: str
-    supplementary: Optional[str]
-    note: Optional[str]
-    unit: Optional[str]
-    next: Optional[str]
-
-    template_name = "questionnaire/single_question.html"
-
-    def _type_to_field(self):
-        if self.type_ is QuestionType.Int:
-            return forms.IntegerField(required=True)
-        elif self.type_ is QuestionType.Text:
-            return forms.CharField(required=True)
-        elif self.type_ is QuestionType.YesNo:
-            # https://code.djangoproject.com/ticket/2723#comment:18
-            return forms.TypedChoiceField(
-                coerce=lambda x: x == "True",
-                choices=self.get_choices(),
-                widget=forms.RadioSelect,
-                required=True,
-            )
-        elif self.type_ is QuestionType.Decimal:
-            return forms.DecimalField(required=True)
-        elif self.type_ is QuestionType.Choices:
-            return forms.ChoiceField(
-                widget=forms.RadioSelect, required=True, choices=self.get_choices()
-            )
-        elif self.type_ is QuestionType.MultipleChoices:
-            return forms.MultipleChoiceField(
-                widget=forms.CheckboxSelectMultiple,
-                required=False,
-                choices=self.get_choices(),
-            )
-        else:
-            raise NotImplementedError(f"{self.type_} not implemented")
-
-    def get_form_class(self):
-        this = self
-
-        def clean_field(self):
-            data = self.cleaned_data["field"]
-            if hasattr(this, "validate_answer"):
-                this.validate_answer(data)
-            return data
-
-        # Instead of defining a separate form for each page, which is repetitious,
-        # difficult to maintain, and splits forms and views that are intimately related
-        # across files, we instead specify a limited number of question types.
-        #
-        # Each question view has one type, and we generate the form dynamically here.
-        QuestionForm = type(
-            "QuestionForm",
-            (questionnaire_forms.AnswerFormMixin, forms.Form),
-            {"field": self._type_to_field(), "clean_field": clean_field},
-        )
-
-        return QuestionForm
-
-    def get_choices(self):
-        # This is overridable for when we want to provide dynamic choices.
-        if self.type_ is QuestionType.YesNo and not hasattr(self, "choices"):
-            # Default for Yes/No field
-            return ((True, "Yes"), (False, "No"))
-        return self.choices
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["question_text"] = self.get_question()
-
-        context["question_supplement"] = self.get_supplementary()
-        if hasattr(self, "unit"):
-            context["unit"] = self.unit
-        context["question_note"] = self.get_note()
-        return context
-
-    def get_answer_field(self):
-        """
-        Return the name of the field that contains the answer to this question.
-
-        Normally we generate this automatically from the class name - so a class
-        LivesInGermany will look for the answer in lives_in_germany.  However, there
-        are times when you want to override this - you can do this by specifying
-        answer_field on the class, or by overriding this function if you need more
-        dynamic behaviour.
-        """
-        if hasattr(self, "answer_field"):
-            return self.answer_field
-        else:
-            return mixin.snake_case(self.__class__.__name__, separator="_")
-
-    def get_initial(self, *args, **kwargs):
-        return {"field": getattr(self.answers, self.get_answer_field())}
-
-    def sanitise_answer(self, data):
-        """
-        Sanitise the data received in some way.
-
-        Override this when you need to normalise incoming data in some way.
-        """
-        return data
-
-    def get_question(self):
-        """Override this to set the question text dynamically."""
-        if hasattr(self, "question"):
-            return self.question
-
-    def get_supplementary(self):
-        """Override this to set the supplementary text dynamically."""
-        if hasattr(self, "supplementary"):
-            return self.supplementary
-
-    def get_note(self):
-        """Override this to set notes dynamically."""
-        if hasattr(self, "note"):
-            return self.note
-
-    def form_valid(self, form):
-        sanitised = self.sanitise_answer(form.cleaned_data["field"])
-        field_name = self.get_answer_field()
-        setattr(self.answers, field_name, sanitised)
-
-        # This gives questions an opportunity to do extra processing, lookups etc.
-        # before we save, saving unnecessary round trips to the database.
-        if hasattr(self, "pre_save"):
-            self.pre_save()
-
-        self.answers.save()
-
-        return self.redirect(self.get_next())
-
-
-class SinglePrePoppedQuestion(SingleQuestion):
-    """
-    A 'standard' single question view with a value presented from third party property data.
-
-    Mirrors the PrePoppedMixin for forms. Adds in a 'data_correct' boolean field
-    and uses the data field value as the initial field value (if no value for the
-    field already) as well as putting it into context.
-    """
-
-    template_name = "questionnaire/single_prepopped_question.html"
-
-    def get_form_class(self):
-        this = self
-
-        def clean_field(self):
-            data = self.cleaned_data["field"]
-            if hasattr(this, "validate_answer"):
-                this.validate_answer(data)
-            return data
-
-        form_fields = {
-            "field": self._type_to_field(),
-            "clean_field": clean_field,
-        }
-
-        # Add 'Data is correct' field if this isn't a boolean field
-        # and we have a data-derived answer.
-        prepopped_data_is_present = (
-            self.get_prepop_data() is not None and self.get_prepop_data() != ""
-        )
-        if prepopped_data_is_present and self.type_ != QuestionType.YesNo:
-            form_fields["data_correct"] = forms.TypedChoiceField(
-                coerce=lambda x: x == "True",
-                choices=(
-                    (True, "This is correct"),
-                    (False, "I want to correct this"),
-                ),
-                widget=forms.RadioSelect,
-                required=True,
-            )
-
-        QuestionForm = type(
-            "QuestionForm",
-            (questionnaire_forms.AnswerFormMixin, forms.Form),
-            form_fields,
-        )
-
-        return QuestionForm
-
-    def get_prepop_field(self):
-        return self.get_answer_field() + "_orig"
-
-    def get_prepop_data(self):
-        # Return any data-derived prediction for this field.
-        return getattr(self.answers, self.get_prepop_field())
-
-    def get_initial(self):
-        # Populate form fields from model, using the _orig field as an initial initial
-        data = {}
-
-        if getattr(self.answers, self.get_answer_field()) not in ["", None]:
-            data["field"] = getattr(self.answers, self.get_answer_field())
-            data["data_correct"] = data["field"] == self.get_prepop_data()
-        else:
-            data["field"] = self.get_prepop_data()
-
-        return data
-
-    def get_context_data(self, *args, **kwargs):
-        # Get the default value and un-Enum if it necessary.
-        context = super().get_context_data(*args, **kwargs)
-        context["data_orig"] = self.get_prepop_data()
-
-        # Check for enum (or other model property formatter)
-        data_orig_display = "get_" + self.get_prepop_field() + "_display"
-        if context["data_orig"] and hasattr(self.answers, data_orig_display):
-            context["data_orig"] = getattr(self.answers, data_orig_display)()
-
-        # Humanise booleans
-        if self.type_ == QuestionType.YesNo and context["data_orig"] not in ["", None]:
-            context["data_orig"] = "Yes" if context["data_orig"] else "No"
-
-        context["question_type"] = self.type_
-
-        return context
-
-    def form_valid(self, form):
-        # If they answer "Yes it's correct" ignore anything set underneath
-        if form.cleaned_data.get("data_correct") and self.get_prepop_data():
-            setattr(self.answers, self.get_answer_field(), self.get_prepop_data())
-        else:
-            sanitised = self.sanitise_answer(form.cleaned_data["field"])
-            field_name = self.get_answer_field()
-            setattr(self.answers, field_name, sanitised)
-
-        # This gives questions an opportunity to do extra processing, lookups etc.
-        # before we save, saving unnecessary round trips to the database.
-        if hasattr(self, "pre_save"):
-            self.pre_save()
-
-        self.answers.save()
-
-        return self.redirect(self.get_next())
-
-
-class Start(SingleQuestion):
+class Start(abstract_views.SingleQuestion):
     template_name = "questionnaire/start.html"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     title = "About this tool"
     answer_field = "terms_accepted_at"
     question = "Please confirm that you have read and accept our data privacy policy."
@@ -405,14 +35,14 @@ class Start(SingleQuestion):
         self.answers.terms_accepted_at = timezone.now()
 
 
-class RespondentName(Question):
+class RespondentName(abstract_views.Question):
     title = "Your name"
     template_name = "questionnaire/respondent_name.html"
     next = "RespondentRole"
     form_class = questionnaire_forms.RespondentName
 
 
-class RespondentRole(Question):
+class RespondentRole(abstract_views.Question):
     title = "Your role"
     form_class = questionnaire_forms.RespondentRole
     template_name = "questionnaire/respondent_role.html"
@@ -441,10 +71,10 @@ class RespondentRole(Question):
             return "RespondentPostcode"
 
 
-class RespondentHasPermission(SingleQuestion):
+class RespondentHasPermission(abstract_views.SingleQuestion):
     title = "Householder permission"
     question = "Do you have the householder's permission to contact us on their behalf?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def get_initial(self):
         data = super().get_initial()
@@ -465,7 +95,7 @@ class RespondentHasPermission(SingleQuestion):
             return "RespondentPostcode"
 
 
-class NeedPermission(Question):
+class NeedPermission(abstract_views.Question):
     title = "Sorry, we can't help you."
     template_name = "questionnaire/need_permission.html"
 
@@ -474,9 +104,9 @@ class NeedPermission(Question):
         self.answers.delete()
 
 
-class RespondentPostcode(SingleQuestion):
+class RespondentPostcode(abstract_views.SingleQuestion):
     title = "Your postcode"
-    type_ = QuestionType.Text
+    type_ = abstract_views.QuestionType.Text
     question = "Enter your postcode"
     supplementary = (
         "This is the postcode for your own address, not that of the property "
@@ -496,7 +126,7 @@ class RespondentPostcode(SingleQuestion):
             )
 
 
-class RespondentAddress(Question, PostcodeCacherMixin):
+class RespondentAddress(abstract_views.Question, abstract_views.PostcodeCacherMixin):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
@@ -556,9 +186,9 @@ class RespondentAddress(Question, PostcodeCacherMixin):
         """
 
 
-class Email(SingleQuestion):
+class Email(abstract_views.SingleQuestion):
     title = "Your email address"
-    type_ = QuestionType.Text
+    type_ = abstract_views.QuestionType.Text
     question = "Enter your email address"
     next = "ContactPhone"
 
@@ -567,7 +197,7 @@ class Email(SingleQuestion):
         validate_email(field)
 
 
-class ContactPhone(Question):
+class ContactPhone(abstract_views.Question):
     title = "Your phone number"
     form_class = questionnaire_forms.RespondentPhone
     template_name = "questionnaire/respondent_phone.html"
@@ -579,16 +209,16 @@ class ContactPhone(Question):
             return "OccupantName"
 
 
-class OccupantName(Question):
+class OccupantName(abstract_views.Question):
     title = "Occupant name"
     template_name = "questionnaire/occupant_name.html"
     form_class = questionnaire_forms.OccupantName
     next = "PropertyPostcode"
 
 
-class PropertyPostcode(SingleQuestion):
+class PropertyPostcode(abstract_views.SingleQuestion):
     title = "Property postcode"
-    type_ = QuestionType.Text
+    type_ = abstract_views.QuestionType.Text
     question = "Enter the property postcode"
     supplementary = (
         "This is the postcode for the property about which you're enquiring."
@@ -611,7 +241,7 @@ class PropertyPostcode(SingleQuestion):
             )
 
 
-class PropertyAddress(Question, PostcodeCacherMixin):
+class PropertyAddress(abstract_views.Question, abstract_views.PostcodeCacherMixin):
     title = "Property address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
@@ -658,15 +288,15 @@ class PropertyAddress(Question, PostcodeCacherMixin):
         # TODO (maybe) same edge case as with RespondentAddress above.
 
 
-class PropertyOwnership(SingleQuestion):
+class PropertyOwnership(abstract_views.SingleQuestion):
     title = "Property ownership"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     question = "What is the tenure of the property - how is it occupied?"
     choices = enums.PropertyOwnership.choices
     next = "Consents"
 
 
-class Consents(Question):
+class Consents(abstract_views.Question):
     title = "Your consent to our use of your data"
     question = "Please confirm how we can use your data"
     template_name = "questionnaire/consents.html"
@@ -674,7 +304,7 @@ class Consents(Question):
     next = "SelectEPC"
 
 
-class SelectEPC(Question):
+class SelectEPC(abstract_views.Question):
     title = "Energy Performance Certificate (EPC)"
     template_name = "questionnaire/select_epc.html"
     form_class = questionnaire_forms.SelectEPC
@@ -728,7 +358,7 @@ class SelectEPC(Question):
             return "PropertyType"
 
 
-class InferredData(Question):
+class InferredData(abstract_views.Question):
     title = "What we think about your property"
     template_name = "questionnaire/inferred_data.html"
     form_class = questionnaire_forms.InferredData
@@ -825,7 +455,7 @@ class InferredData(Question):
             return "InConservationArea"
 
 
-class PropertyType(Question):
+class PropertyType(abstract_views.Question):
     title = "Property type"
     question = "What type of property is this?"
     template_name = "questionnaire/property_type.html"
@@ -858,10 +488,10 @@ class PropertyType(Question):
         return context
 
 
-class PropertyAgeBand(SinglePrePoppedQuestion):
+class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     title = "Property age"
     question = "When was the property built?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     choices = enums.PropertyAgeBand.choices
 
     def pre_save(self):
@@ -896,10 +526,10 @@ class PropertyAgeBand(SinglePrePoppedQuestion):
             return "InConservationArea"
 
 
-class WallType(SinglePrePoppedQuestion):
+class WallType(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
     question = "What type of outside walls does the property have?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     choices = enums.WallType.choices
     note = (
         "If the property has more than one type of outside wall, choose the one "
@@ -908,10 +538,10 @@ class WallType(SinglePrePoppedQuestion):
     next = "WallsInsulated"
 
 
-class WallsInsulated(SinglePrePoppedQuestion):
+class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
     question = "Are the outside walls in this property insulated?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     note = (
         "If only some of the outside walls are insulated, choose the option that "
         "applies to the largest external area."
@@ -939,10 +569,10 @@ class WallsInsulated(SinglePrePoppedQuestion):
             return "InConservationArea"
 
 
-class SuspendedFloor(SinglePrePoppedQuestion):
+class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
     title = "Floor type"
     question = "Does the property have a suspended timber floor with a void underneath?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     note = (
         "If the property has different types of floor, choose the option that applies "
         "to the largest floor area. If the property is a non-ground-floor flat, select 'No'."
@@ -981,10 +611,10 @@ class SuspendedFloor(SinglePrePoppedQuestion):
                 return "InConservationArea"
 
 
-class SuspendedFloorInsulated(SinglePrePoppedQuestion):
+class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Floor insulation"
     question = "Is the suspended timber floor insulated?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def get_next(self):
         # We may have decided to skip ahead
@@ -1003,10 +633,10 @@ class SuspendedFloorInsulated(SinglePrePoppedQuestion):
             return "InConservationArea"
 
 
-class UnheatedLoft(SinglePrePoppedQuestion):
+class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
     title = "Property roof"
     question = "Does the property have an unheated loft space directly above it?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     note = "If the property is a non-top-floor flat, select 'No'."
 
     def prereq(self):
@@ -1034,10 +664,10 @@ class UnheatedLoft(SinglePrePoppedQuestion):
             return "RoomInRoof"
 
 
-class RoomInRoof(SinglePrePoppedQuestion):
+class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof"
     question = "Is there a room in the roof space of the property, as a loft conversion or otherwise?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -1054,10 +684,10 @@ class RoomInRoof(SinglePrePoppedQuestion):
             return "FlatRoof"
 
 
-class RirInsulated(SinglePrePoppedQuestion):
+class RirInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof insulation"
     question = "Has the room in the roof space been well insulated?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def get_next(self):
         # We may have decided to skip ahead
@@ -1071,10 +701,10 @@ class RirInsulated(SinglePrePoppedQuestion):
             return "InConservationArea"
 
 
-class RoofSpaceInsulated(SinglePrePoppedQuestion):
+class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Loft insulation"
     question = "Has the unheated loft space been well insulated?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     note = "By 'well insulated' we mean with at least 250mm of mineral wool, or equivalent."
 
     def get_next(self):
@@ -1089,10 +719,10 @@ class RoofSpaceInsulated(SinglePrePoppedQuestion):
             return "InConservationArea"
 
 
-class FlatRoof(SinglePrePoppedQuestion):
+class FlatRoof(abstract_views.SinglePrePoppedQuestion):
     title = "Flat roof"
     question = "Does the property have a flat roof?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     note = (
         "If the property has different roof types, choose the answer that applies "
         "to the largest roof area."
@@ -1118,10 +748,10 @@ class FlatRoof(SinglePrePoppedQuestion):
                 return "InConservationArea"
 
 
-class FlatRoofInsulated(SingleQuestion):
+class FlatRoofInsulated(abstract_views.SingleQuestion):
     title = "Flat roof type"
     question = "Is your flat roof well insulated?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     next = "GasBoilerPresent"
     choices = enums.InsulationConfidence.choices
 
@@ -1137,10 +767,10 @@ class FlatRoofInsulated(SingleQuestion):
             return "InConservationArea"
 
 
-class GasBoilerPresent(SinglePrePoppedQuestion):
+class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Gas boiler"
     question = "Does the property have a central heating system with a boiler running off mains gas?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def prereq(self):
         # We may have decided to skip this part (unlikely that we had the option!)
@@ -1170,17 +800,17 @@ class GasBoilerPresent(SinglePrePoppedQuestion):
             return "OnMainsGas"
 
 
-class OnMainsGas(SinglePrePoppedQuestion):
+class OnMainsGas(abstract_views.SinglePrePoppedQuestion):
     title = "Mains gas"
     question = "Is the property connected to the mains gas network?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     next = "OtherHeatingPresent"
 
 
-class OtherHeatingPresent(SinglePrePoppedQuestion):
+class OtherHeatingPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Other central heating system"
     question = "Does the property have a non-gas central heating system?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -1198,10 +828,10 @@ class OtherHeatingPresent(SinglePrePoppedQuestion):
             return "StorageHeatersPresent"
 
 
-class HwtPresent(SingleQuestion):
+class HwtPresent(abstract_views.SingleQuestion):
     title = "Hot water tank"
     question = "Does the property have a hot water tank?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def get_next(self):
         if self.answers.gas_boiler_present:
@@ -1210,10 +840,10 @@ class HwtPresent(SingleQuestion):
             return "HeatPumpPresent"
 
 
-class HeatPumpPresent(SinglePrePoppedQuestion):
+class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Heat pump"
     question = "Is the heating system powered by a heat pump?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -1227,30 +857,30 @@ class HeatPumpPresent(SinglePrePoppedQuestion):
             return "OtherHeatingFuel"
 
 
-class OtherHeatingFuel(SinglePrePoppedQuestion):
+class OtherHeatingFuel(abstract_views.SinglePrePoppedQuestion):
     title = "Heating fuel source"
     question = "What fuel does the central heating system run on?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     choices = enums.NonGasFuel.choices
     next = "InConservationArea"
 
 
-class GasBoilerAge(SingleQuestion):
+class GasBoilerAge(abstract_views.SingleQuestion):
     title = "Boiler age"
     question = "When was the current boiler installed?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     choices = enums.BoilerAgeBand.choices
     next = "GasBoilerBroken"
 
 
-class GasBoilerBroken(SingleQuestion):
+class GasBoilerBroken(abstract_views.SingleQuestion):
     title = "Boiler condition"
     question = "Is the gas boiler currently broken?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     next = "HeatingControls"
 
 
-class HeatingControls(Question):
+class HeatingControls(abstract_views.Question):
     title = "Heating controls"
     template_name = "questionnaire/heating_controls.html"
     form_class = questionnaire_forms.HeatingControls
@@ -1278,10 +908,10 @@ class HeatingControls(Question):
         return context
 
 
-class StorageHeatersPresent(SinglePrePoppedQuestion):
+class StorageHeatersPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Storage heaters"
     question = "Are there storage heaters in the property?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     next = "HhrshsPresent"
 
     def pre_save(self):
@@ -1298,25 +928,25 @@ class StorageHeatersPresent(SinglePrePoppedQuestion):
             return "ElectricRadiatorsPresent"
 
 
-class ElectricRadiatorsPresent(SinglePrePoppedQuestion):
+class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Electric radiators"
     question = "Are there other electric radiators in the property?"
     note = "These may be fixed panel radiators or freestanding heaters."
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     next = "InConservationArea"
 
 
-class HhrshsPresent(SingleQuestion):
+class HhrshsPresent(abstract_views.SingleQuestion):
     title = "Storage heater performance"
     question = "Are the storage heaters in the property Diplex Quantum or other high heat retention storage heaters?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     next = "InConservationArea"
 
 
-class InConservationArea(SingleQuestion):
+class InConservationArea(abstract_views.SingleQuestion):
     title = "Conservation area"
     question = "Is this property in a conservation area?"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def get_next(self):
         if selectors.data_was_changed(self.answers):
@@ -1325,24 +955,24 @@ class InConservationArea(SingleQuestion):
             return "RecommendedMeasures"
 
 
-class AccuracyWarning(Question):
+class AccuracyWarning(abstract_views.Question):
     template_name = "questionnaire/accuracy_warning.html"
     title = "Data has been changed"
     next = "Occupants"
 
 
-class Occupants(Question):
+class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
     title = "Household composition"
     next = "HouseholdIncome"
     form_class = questionnaire_forms.Occupants
 
 
-class HouseholdIncome(SingleQuestion):
+class HouseholdIncome(abstract_views.SingleQuestion):
     answer_field = "total_income_lt_30k"
     question = "Is the accumulated income of all the people living in the property less than £30,000 (before tax)?"
     title = "Gross household income"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
 
     def pre_save(self):
@@ -1361,7 +991,7 @@ class HouseholdIncome(SingleQuestion):
             return "HouseholdTakeHomeIncome"
 
 
-class HouseholdTakeHomeIncome(SingleQuestion):
+class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
     answer_field = "take_home_lt_30k"
     question = (
         "Is the accumulated take home pay (after tax and deductions) of all people living "
@@ -1370,13 +1000,13 @@ class HouseholdTakeHomeIncome(SingleQuestion):
     note = "This is the household income after housing costs (mortgage or rent) and energy bills have been deducted."
     title = "Total household take-home pay"
     next = "DisabilityBenefits"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
 
 
-class DisabilityBenefits(SingleQuestion):
+class DisabilityBenefits(abstract_views.SingleQuestion):
     title = "Diability benefits"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     question = (
         "Does anybody living in the home receive any disability related benefits?"
     )
@@ -1400,10 +1030,10 @@ class DisabilityBenefits(SingleQuestion):
             return "ChildBenefit"
 
 
-class ChildBenefit(SingleQuestion):
+class ChildBenefit(abstract_views.SingleQuestion):
     title = "Child benefit"
     next = "IncomeLtChildBenefitThreshold"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
     question = "Does anybody living in the home receive Child Benefit?"
 
     def pre_save(self):
@@ -1414,10 +1044,10 @@ class ChildBenefit(SingleQuestion):
             self.answers.income_lt_child_benefit_threshold = None
 
 
-class IncomeLtChildBenefitThreshold(SingleQuestion):
+class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
     title = "Income in relation to child benefit threshold"
     next = "Vulnerabilities"
-    type_ = QuestionType.YesNo
+    type_ = abstract_views.QuestionType.YesNo
 
     def get_question(self):
         return f"Is the household income less than £{self.answers.child_benefit_threshold:,}?"
@@ -1432,14 +1062,14 @@ class IncomeLtChildBenefitThreshold(SingleQuestion):
             return self.redirect()
 
 
-class Vulnerabilities(Question):
+class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
     title = "Specific vulnerabilities of householder members"
     next = "RecommendedMeasures"
     form_class = questionnaire_forms.Vulnerabilities
 
 
-class RecommendedMeasures(Question):
+class RecommendedMeasures(abstract_views.Question):
     template_name = "questionnaire/recommended_measures.html"
     title = "Recommendations for this property"
 
@@ -1461,10 +1091,10 @@ class RecommendedMeasures(Question):
             return "ToleratedDisruption"
 
 
-class ToleratedDisruption(SingleQuestion):
+class ToleratedDisruption(abstract_views.SingleQuestion):
     title = "Disruption preference"
     question = "What level of disruption would be acceptable during home upgrade works?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     next = "StateOfRepair"
 
     def get_choices(self):
@@ -1482,10 +1112,10 @@ class ToleratedDisruption(SingleQuestion):
             )
 
 
-class StateOfRepair(SingleQuestion):
+class StateOfRepair(abstract_views.SingleQuestion):
     title = "Your ability to contribute"
     question = "What condition is the property currently in?"
-    type_ = QuestionType.Choices
+    type_ = abstract_views.QuestionType.Choices
     next = "Motivations"
 
     def get_choices(self):
@@ -1496,7 +1126,7 @@ class StateOfRepair(SingleQuestion):
             return enums.StateOfRepair.choices
 
 
-class Motivations(Question):
+class Motivations(abstract_views.Question):
     title = "Motivations"
     template_name = "questionnaire/motivations.html"
     form_class = questionnaire_forms.Motivations
@@ -1515,10 +1145,10 @@ class Motivations(Question):
             self.answers.motivation_environment = None
 
 
-class ContributionCapacity(SingleQuestion):
+class ContributionCapacity(abstract_views.SingleQuestion):
     title = "Your ability to contribute"
-    type_ = QuestionType.Choices
-    next = ""
+    type_ = abstract_views.QuestionType.Choices
+    next = "Adult1Name"
 
     def get_question(self):
         if self.answers.is_householder:
@@ -1547,8 +1177,140 @@ class ContributionCapacity(SingleQuestion):
                 "willingness to contribute."
             )
 
+    def pre_save(self):
+        # Set up the number of adults we want for the next step
+        services.sync_household_adults(self.answers)
 
-class PropertyEligibility(Question):
+
+class Adult1Name(abstract_views.HouseholdAdultName):
+    adult_number = 1
+
+
+class Adult1Employment(abstract_views.HouseholdAdultEmployment):
+    adult_number = 1
+
+
+class Adult1EmploymentIncome(abstract_views.HouseholdAdultEmploymentIncome):
+    adult_number = 1
+
+
+class Adult1SelfEmploymentIncome(abstract_views.HouseholdAdultSelfEmploymentIncome):
+    adult_number = 1
+
+
+class Adult1WelfareBenefits(abstract_views.HouseholdAdultWelfareBenefits):
+    adult_number = 1
+
+
+class Adult1WelfareBenefitAmounts(abstract_views.HouseholdAdultWelfareBenefitAmounts):
+    adult_number = 1
+
+
+class Adult1PensionIncome(abstract_views.HouseholdAdultPensionIncome):
+    adult_number = 1
+
+
+class Adult1SavingsIncome(abstract_views.HouseholdAdultSavingsIncome):
+    adult_number = 1
+
+
+class Adult2Name(abstract_views.HouseholdAdultName):
+    adult_number = 2
+
+
+class Adult2Employment(abstract_views.HouseholdAdultEmployment):
+    adult_number = 2
+
+
+class Adult2EmploymentIncome(abstract_views.HouseholdAdultEmploymentIncome):
+    adult_number = 2
+
+
+class Adult2SelfEmploymentIncome(abstract_views.HouseholdAdultSelfEmploymentIncome):
+    adult_number = 2
+
+
+class Adult2WelfareBenefits(abstract_views.HouseholdAdultWelfareBenefits):
+    adult_number = 2
+
+
+class Adult2WelfareBenefitAmounts(abstract_views.HouseholdAdultWelfareBenefitAmounts):
+    adult_number = 2
+
+
+class Adult2PensionIncome(abstract_views.HouseholdAdultPensionIncome):
+    adult_number = 2
+
+
+class Adult2SavingsIncome(abstract_views.HouseholdAdultSavingsIncome):
+    adult_number = 2
+
+
+class Adult3Name(abstract_views.HouseholdAdultName):
+    adult_number = 3
+
+
+class Adult3Employment(abstract_views.HouseholdAdultEmployment):
+    adult_number = 3
+
+
+class Adult3EmploymentIncome(abstract_views.HouseholdAdultEmploymentIncome):
+    adult_number = 3
+
+
+class Adult3SelfEmploymentIncome(abstract_views.HouseholdAdultSelfEmploymentIncome):
+    adult_number = 3
+
+
+class Adult3WelfareBenefits(abstract_views.HouseholdAdultWelfareBenefits):
+    adult_number = 3
+
+
+class Adult3WelfareBenefitAmounts(abstract_views.HouseholdAdultWelfareBenefitAmounts):
+    adult_number = 3
+
+
+class Adult3PensionIncome(abstract_views.HouseholdAdultPensionIncome):
+    adult_number = 3
+
+
+class Adult3SavingsIncome(abstract_views.HouseholdAdultSavingsIncome):
+    adult_number = 3
+
+
+class Adult4Name(abstract_views.HouseholdAdultName):
+    adult_number = 4
+
+
+class Adult4Employment(abstract_views.HouseholdAdultEmployment):
+    adult_number = 4
+
+
+class Adult4EmploymentIncome(abstract_views.HouseholdAdultEmploymentIncome):
+    adult_number = 4
+
+
+class Adult4SelfEmploymentIncome(abstract_views.HouseholdAdultSelfEmploymentIncome):
+    adult_number = 4
+
+
+class Adult4WelfareBenefits(abstract_views.HouseholdAdultWelfareBenefits):
+    adult_number = 4
+
+
+class Adult4WelfareBenefitAmounts(abstract_views.HouseholdAdultWelfareBenefitAmounts):
+    adult_number = 4
+
+
+class Adult4PensionIncome(abstract_views.HouseholdAdultPensionIncome):
+    adult_number = 4
+
+
+class Adult4SavingsIncome(abstract_views.HouseholdAdultSavingsIncome):
+    adult_number = 4
+
+
+class PropertyEligibility(abstract_views.Question):
     title = "Eligibility for current schemes"
     template_name = "questionnaire/property_eligibility.html"
     next = "Completed"

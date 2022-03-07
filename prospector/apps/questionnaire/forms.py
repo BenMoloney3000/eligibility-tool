@@ -497,3 +497,147 @@ class Motivations(AnswerFormMixin, forms.ModelForm):
             "motivation_unknown": forms.CheckboxInput(),
             "motivation_environment": forms.CheckboxInput(),
         }
+
+
+"""
+# Forms for each adult in the household, for respondents that need to answer this.
+"""
+
+
+class HouseholdAdultName(AnswerFormMixin, forms.ModelForm):
+    class Meta:
+        model = models.HouseholdAdult
+        fields = ["first_name", "last_name"]
+
+
+class HouseholdAdultEmployment(AnswerFormMixin, forms.ModelForm):
+    class Meta:
+        model = models.HouseholdAdult
+        fields = ["employment_status"]
+
+
+class HouseholdAdultEmploymentIncome(AnswerFormMixin, forms.ModelForm):
+    employed_income_frequency = forms.ChoiceField(
+        choices=enums.PaymentFrequency.choices, required=True
+    )
+
+    class Meta:
+        model = models.HouseholdAdult
+        fields = ["employed_income", "employed_income_frequency"]
+
+
+class HouseholdAdultSelfEmploymentIncome(AnswerFormMixin, forms.ModelForm):
+    self_employed_income_frequency = forms.ChoiceField(
+        choices=enums.PaymentFrequency.choices, required=True
+    )
+    business_income_frequency = forms.ChoiceField(
+        choices=enums.PaymentFrequency.choices, required=True
+    )
+
+    class Meta:
+        model = models.HouseholdAdult
+        optional_fields = ["business_income", "business_income_frequency"]
+        fields = [
+            "self_employed_income",
+            "self_employed_income_frequency",
+            "business_income",
+            "business_income_frequency",
+        ]
+
+
+class HouseholdAdultWelfareBenefits(AnswerFormMixin, forms.Form):
+
+    uc = forms.BooleanField(required=False)
+    jsa = forms.BooleanField(required=False)
+    esa = forms.BooleanField(required=False)
+    income_support = forms.BooleanField(required=False)
+    child_tax_credit = forms.BooleanField(required=False)
+    working_tax_credit = forms.BooleanField(required=False)
+    child_benefit = forms.BooleanField(required=False)
+    housing_benefit = forms.BooleanField(required=False)
+    attendance_allowance = forms.BooleanField(required=False)
+    carers_allowance = forms.BooleanField(required=False)
+    dla = forms.BooleanField(required=False)
+    pip = forms.BooleanField(required=False)
+    pension_credit = forms.BooleanField(required=False)
+    other = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.household_adult = kwargs.pop("household_adult")
+        super().__init__(*args, **kwargs)
+
+        # Set initial values from related models the fields dynamically
+        self.benefits = models.WelfareBenefit.objects.filter(
+            recipient=self.household_adult
+        )
+
+        for benefit in self.benefits:
+            self.initial[benefit.benefit_type.lower()] = True
+
+
+class HouseholdAdultWelfareBenefitAmounts(AnswerFormMixin, forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.household_adult = kwargs.pop("household_adult")
+        super().__init__(*args, **kwargs)
+
+        # Instantiate the fields dynamically
+        self.benefits = models.WelfareBenefit.objects.filter(
+            recipient=self.household_adult
+        )
+
+        for benefit in self.benefits:
+            field_prefix = benefit.benefit_type.lower()
+            self.fields[f"{field_prefix}_amount"] = forms.IntegerField(
+                required=True, min_value=1, max_value=32767
+            )
+            self.initial[f"{field_prefix}_amount"] = benefit.amount
+            self.fields[f"{field_prefix}_frequency"] = forms.ChoiceField(
+                required=True, choices=enums.BenefitPaymentFrequency.choices
+            )
+            self.initial[f"{field_prefix}_frequency"] = benefit.frequency
+
+
+class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):
+    private_pension_income_frequency = forms.ChoiceField(
+        choices=enums.PaymentFrequency.choices, required=True
+    )
+    state_pension_income_frequency = forms.ChoiceField(
+        choices=enums.PaymentFrequency.choices, required=True
+    )
+
+    class Meta:
+        model = models.HouseholdAdult
+        fields = [
+            "private_pension_income",
+            "private_pension_income_frequency",
+            "state_pension_income",
+            "state_pension_income_frequency",
+        ]
+
+
+class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
+    saving_investment_income_frequency = forms.ChoiceField(
+        choices=enums.PaymentFrequency.choices, required=True
+    )
+
+    class Meta:
+        model = models.HouseholdAdult
+        fields = ["saving_investment_income", "saving_investment_income_frequency"]
+
+    def clean_saving_investment_income(self):
+        saving_investment_income = self.cleaned_data["saving_investment_income"]
+        try:
+            if (
+                int(saving_investment_income) < 200
+                and int(saving_investment_income) != 0
+            ):
+                self.add_error(
+                    "saving_investment_income",
+                    "If the amount is under £200 please enter a zero amount.",
+                )
+        except ValueError:
+            self.add_error(
+                "saving_investment_income", "Please enter a whole number of pounds."
+            )
+
+        return saving_investment_income

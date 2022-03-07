@@ -17,6 +17,15 @@ class AnswersFactory(DjangoModelFactory):
     property_postcode = Faker("postcode", locale="en-GB")
 
 
+class HouseholdAdultFactory(DjangoModelFactory):
+    class Meta:
+        model = models.HouseholdAdult
+
+    first_name = Faker("first_name")
+    last_name = Faker("last_name")
+    adult_number = 1
+
+
 FAKE_EPC = epc.EPCData(
     "19747490192737",  # id
     datetime.date(2020, 10, 10),  # date

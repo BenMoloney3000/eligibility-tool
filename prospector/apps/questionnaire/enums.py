@@ -290,7 +290,6 @@ class UpToFourOrMore(models.IntegerChoices):
 class IncomeIsUnderThreshold(models.TextChoices):
     YES = "YES", "Yes, it's under that figure"
     NO = "NO", "No, it's over that figure"
-    MAYBE = "MAYBE", "It's close to that figure, could be just over or under"
     UNKNOWN = "UNKNOWN", "I don't know"
 
 
@@ -314,3 +313,39 @@ class PossibleMeasures(models.TextChoices):
     )
     PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"
     LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"
+
+
+class EmploymentStatus(models.TextChoices):
+    EMPLOYED = "EMPLOYED", "Employed"
+    SELF_EMPLOYED = "SELF_EMPLOYED", "Self Employed"
+    UNEMPLOYED = "UNEMPLOYED", "Unemployed"
+    RETIRED = "RETIRED", "Retired"
+    OTHER = "OTHER", "Other"
+
+
+class PaymentFrequency(models.TextChoices):
+    ANNUALLY = "ANNUALLY", "annually"
+    MONTHLY = "MONTHLY", "monthly"
+
+
+class BenefitPaymentFrequency(models.TextChoices):
+    WEEKLY = "WEEKLY", "weekly"
+    ANNUALLY = "ANNUALLY", "annually"
+    MONTHLY = "MONTHLY", "monthly"
+
+
+class BenefitType(models.TextChoices):
+    UC = "UC", "Universal Credit"
+    JSA = "JSA", "Job Seekers Allowance (JSA)"
+    ESA = "ESA", "Employment and Support Allowance (ESA)"
+    INCOME_SUPPORT = "INCOME_SUPPORT", "Income Support"
+    CHILD_TAX_CREDIT = "CHILD_TAX_CREDIT", "Child Tax Credit"
+    WORKING_TAX_CREDIT = "WORKING_TAX_CREDIT", "Working Tax Credit"
+    CHILD_BENEFIT = "CHILD_BENEFIT", "Child Benefit"
+    HOUSING_BENEFIT = "HOUSING_BENEFIT", "Housing Benefit"
+    ATTENDANCE_ALLOWANCE = "ATTENDANCE_ALLOWANCE", "Attendance Allowance"
+    CARERS_ALLOWANCE = "CARERS_ALLOWANCE", "Carers Allowance"
+    DLA = "DLA", "Disability Living Allowance (DLA)"
+    PIP = "PIP", "Personal Independence Payment (PIP)"
+    PENSION_CREDIT = "PENSION_CREDIT", "Pension Credit"
+    OTHER = "OTHER", "Other"

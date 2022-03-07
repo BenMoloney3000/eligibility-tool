@@ -81,6 +81,20 @@ form select {
 form select {
     display: block;
 }
+form .currency {
+    position: relative;
+}
+form .currency input {
+    padding-left: 1.5rem;
+}
+form .currency span.symbol {
+    font-size: 1.1rem;
+    position: absolute;
+    padding: 0.65rem 0.2rem;
+    left: 0.5rem;
+    top: 0;
+}
+
 .input-error {
     color: #d45352;
     display: block;

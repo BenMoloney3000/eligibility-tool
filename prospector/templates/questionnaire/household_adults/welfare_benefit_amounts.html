@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ full_name }}'s employment income | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>How much does {{ full_name }} receive from each benefit?</h2>
+
+    <p><em>Enter a value to the nearest pound.</em></p>
+
+    <form method="POST">
+        {% csrf_token %}
+        {% if form.uc_amount %}
+            <label for="id_uc_amount">Universal Credit</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.uc_amount }}
+                {{ form.uc_frequency }}
+                {{ form.uc_amount.errors }}
+                {{ form.uc_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.jsa_amount %}
+            <label for="id_jsa">Job Seekers Allowance (JSA)</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.jsa_amount }}
+                {{ form.jsa_frequency }}
+                {{ form.jsa_amount.errors }}
+                {{ form.jsa_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.esa_amount %}
+            <label for="id_esa">Employment and Support Allowance (ESA)</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.esa_amount }}
+                {{ form.esa_frequency }}
+                {{ form.esa_amount.errors }}
+                {{ form.esa_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.income_support_amount %}
+            <label for="id_income_support">Income Support</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.income_support_amount }}
+                {{ form.income_support_frequency }}
+                {{ form.income_support_amount.errors }}
+                {{ form.income_support_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.child_tax_credit_amount %}
+            <label for="id_child_tax_credit">Child Tax Credit</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.child_tax_credit_amount }}
+                {{ form.child_tax_credit_frequency }}
+                {{ form.child_tax_credit_amount.errors }}
+                {{ form.child_tax_credit_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.working_tax_credit_amount %}
+            <label for="id_working_tax_credit">Working Tax Credit</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.working_tax_credit_amount }}
+                {{ form.working_tax_credit_frequency }}
+                {{ form.working_tax_credit_amount.errors }}
+                {{ form.working_tax_credit_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.child_benefit_amount %}
+            <label for="id_child_benefit">Child Benefit</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.child_benefit_amount }}
+                {{ form.child_benefit_frequency }}
+                {{ form.child_benefit_amount.errors }}
+                {{ form.child_benefit_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.housing_benefit_amount %}
+            <label for="id_housing_benefit">Housing Benefit</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.housing_benefit_amount }}
+                {{ form.housing_benefit_frequency }}
+                {{ form.housing_benefit_amount.errors }}
+                {{ form.housing_benefit_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.attendance_allowance_amount %}
+            <label for="id_attendance_allowance">Attendance Allowance</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.attendance_allowance_amount }}
+                {{ form.attendance_allowance_frequency }}
+                {{ form.attendance_allowance_amount.errors }}
+                {{ form.attendance_allowance_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.carers_allowance_amount %}
+            <label for="id_carers_allowance">Carers Allowance</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.carers_allowance_amount }}
+                {{ form.carers_allowance_frequency }}
+                {{ form.carers_allowance_amount.errors }}
+                {{ form.carers_allowance_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.dla_amount %}
+            <label for="id_dla">Disability Living Allowance (DLA)</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.dla_amount }}
+                {{ form.dla_frequency }}
+                {{ form.dla_amount.errors }}
+                {{ form.dla_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.pip_amount %}
+            <label for="id_pip">Personal Independence Payment (PIP)</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.pip_amount }}
+                {{ form.pip_frequency }}
+                {{ form.pip_amount.errors }}
+                {{ form.pip_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.pension_credit_amount %}
+            <label for="id_pension_credit">Pension Credit</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.pension_credit_amount }}
+                {{ form.pension_credit_frequency }}
+                {{ form.pension_credit_amount.errors }}
+                {{ form.pension_credit_frequency.errors }}
+            </p>
+        {% endif %}
+        {% if form.other_amount %}
+            <label for="id_other">Other</label>
+            <p class="currency">
+                <span class="symbol">£</span>
+                {{ form.other_amount }}
+                {{ form.other_frequency }}
+                {{ form.other_amount.errors }}
+                {{ form.other_frequency.errors }}
+            </p>
+        {% endif %}
+        <button class="button">
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

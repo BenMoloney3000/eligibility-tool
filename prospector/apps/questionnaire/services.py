@@ -678,3 +678,77 @@ def close_questionnaire(answers: models.Answers):
     )
     message.attach_alternative(message_body_html, "text/html")
     message.send()
+
+
+def sync_household_adults(answers: models.Answers):
+    """Ensure we have the correct number of HouseholdAdults.
+
+    Normally will just have to create them, but we may need to delete them in
+    the situation where the user has gone back and reduced the number in the
+    household!
+    """
+
+    # Sanity check.
+    if answers.adults < 1:
+        # A fatal error but let's pretend it didn't happen (which it won't)
+        answers.adults = 1
+        answers.save()
+        logging.error("Household of zero adults somehow created")
+
+    # Delete any excess first
+    models.HouseholdAdult.objects.filter(adult_number__gt=answers.adults).delete()
+    # nb will cascade to related WelfareBenefits
+
+    # Now make sure we have the ones we need
+    for adult_number in range(1, answers.adults + 1):
+        models.HouseholdAdult.objects.get_or_create(
+            answers=answers, adult_number=adult_number
+        )
+
+
+def sync_benefits(adult: models.HouseholdAdult) -> bool:
+    """Ensure we have the correct benefit models associated with this adult.
+
+    Normally will just have to create them, but we may need to delete them in
+    the situation where the user has gone back and changed their options.
+
+    The view logic will have temporarily stored the form cleaned_data onto the
+    HouseholdAdult object, but it won't persist there.
+
+    (Note that this means that we need to be alert to any naming collision
+    between benefits and fields on HouseholdAdult!)
+
+    Returns whether any benefits were saved to the HouseholdAdult (and therefore
+    whether we need to show the amounts inputs.
+    """
+
+    for_deletion = []
+    any_benefits = False
+
+    for benefit in enums.BenefitType:
+        if getattr(adult, benefit.value.lower(), False):
+            any_benefits = True
+            models.WelfareBenefit.objects.get_or_create(
+                recipient=adult, benefit_type=benefit.value
+            )
+        else:
+            for_deletion.append(benefit.value)
+
+    models.WelfareBenefit.objects.filter(
+        recipient=adult, benefit_type__in=for_deletion
+    ).delete()
+
+    return any_benefits
+
+
+def save_benefit_amounts(adult: models.HouseholdAdult):
+    """Save the relevant benefit amounts & frequencies.
+
+    The view logic will have temporarily stored the form cleaned_data onto the
+    WelfareBenefit object, but it won't persist there.
+    """
+    for benefit in adult.welfarebenefit_set.all():
+        # All fields are required so there will be data for each (pinky promise?)
+        benefit.amount = getattr(adult, benefit.benefit_type.lower() + "_amount")
+        benefit.frequency = getattr(adult, benefit.benefit_type.lower() + "_frequency")
+        benefit.save()

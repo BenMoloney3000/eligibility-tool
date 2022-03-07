@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ full_name }}'s employment income | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>What is {{ full_name }}'s income from pensions?</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="id_private_pension_income">Private pension(s)</label>
+        <p class="currency">
+            <span class="symbol">£</span>
+            {{ form.private_pension_income }}
+            {{ form.private_pension_income.errors }}
+        </p>
+        <p>
+            {{ form.private_pension_income_frequency }}
+            {{ form.private_pension_income_frequency.errors }}
+        </p>
+
+        <label for="id_state_pension_income">State pension</label>
+        <p class="currency">
+            <span class="symbol">£</span>
+            {{ form.state_pension_income }}
+            {{ form.state_pension_income.errors }}
+        </p>
+        <p>
+            {{ form.state_pension_income_frequency }}
+            {{ form.state_pension_income_frequency.errors }}
+        </p>
+
+        <button class="button">
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}

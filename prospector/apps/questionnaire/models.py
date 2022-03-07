@@ -627,3 +627,67 @@ class Answers(models.Model):
                 # Either couldn't tell if there is another CH system, or we think
                 # there is, in which case we can't infer presence of HWT.
                 return False
+
+
+# enough with that model! about time we had a different one.
+
+
+class HouseholdAdult(models.Model):
+    answers = models.ForeignKey(
+        Answers, on_delete=models.CASCADE, blank=False, null=False
+    )
+    adult_number = models.PositiveSmallIntegerField(blank=False, null=False)
+    first_name = models.CharField(verbose_name="First name", max_length=64, blank=True)
+    last_name = models.CharField(verbose_name="Last name", max_length=64, blank=True)
+    employment_status = models.CharField(
+        choices=enums.EmploymentStatus.choices, max_length=13, blank=True
+    )
+    employed_income = models.PositiveIntegerField(blank=True, null=True)
+    employed_income_frequency = models.CharField(
+        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
+    )
+    self_employed_income = models.PositiveIntegerField(blank=True, null=True)
+    self_employed_income_frequency = models.CharField(
+        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
+    )
+    business_income = models.PositiveIntegerField(blank=True, null=True)
+    business_income_frequency = models.CharField(
+        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
+    )
+    private_pension_income = models.PositiveIntegerField(blank=True, null=True)
+    private_pension_income_frequency = models.CharField(
+        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
+    )
+    state_pension_income = models.PositiveIntegerField(blank=True, null=True)
+    state_pension_income_frequency = models.CharField(
+        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
+    )
+    saving_investment_income = models.PositiveIntegerField(blank=True, null=True)
+    saving_investment_income_frequency = models.CharField(
+        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
+    )
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class WelfareBenefit(models.Model):
+    recipient = models.ForeignKey(
+        HouseholdAdult, on_delete=models.CASCADE, blank=False, null=False
+    )
+    benefit_type = models.CharField(
+        choices=enums.BenefitType.choices, max_length=20, blank=False
+    )
+    frequency = models.CharField(
+        choices=enums.BenefitPaymentFrequency.choices, max_length=8, blank=True
+    )
+    amount = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["recipient", "benefit_type"],
+                name="no_duplicated_benefits_per_recipient",
+            )
+        ]
