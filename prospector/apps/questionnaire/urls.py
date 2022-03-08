@@ -127,6 +127,7 @@ urlpatterns = [
         views.ContributionCapacity.as_view(),
         name="contribution-capacity",
     ),
+    path("no-funding", views.NothingAtThisTime.as_view(), name="nothing-at-this-time"),
     path("adult-1-name", views.Adult1Name.as_view(), name="adult1-name"),
     path(
         "adult-1-employment", views.Adult1Employment.as_view(), name="adult1-employment"

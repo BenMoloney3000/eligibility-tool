@@ -25,9 +25,44 @@
                 <p>As your home is in a conservation area solid wall insulation may not be possible</p>
             {% endif %}
         {% endfor %}
-        <p>Next we will ask you about your preferences for home renovation. We will also need to ask you detailed questions about the incomes of the adults in the household to assess eligibility for funding support.</p>
 
-        <p>If you would rather not do this you can stop here, and a PEC staff member can take these details from you over the phone at some point. Note that this will delay any application for funding that we can submit for you.</p>
+        {% if rating == "RED" %}
+            <p>
+                <strong>You are unlikely to be eligible for funding for these measures</strong>.
+                Please <a href="https://plymouthenergycommunity.com/contact-us">get in contact</a>
+                to see if we can help in different ways.
+            </p>
+            <p>
+                We would like to ask you a few more questions about your preferences and house
+                so that we can build better schemes in the future. If you would rather not do
+                this you can stop here.
+            </p>
+
+        {% elif rating == "AMBER" or rating == "YELLOW" %}
+            <p>
+                <strong>You may be eligible for some funding</strong> however both your property's
+                energy performance and your household income are higher than the thresholds
+                for some funding. We will need to ask some further questions to be sure.
+            </p>
+            <p>
+                If you would rather not do this you can stop here, and a PEC staff member
+                can take these details from you over the phone at some point. Note
+                that this will delay any application for funding that we can submit for you.
+            </p>
+        {% else %}
+            <p>
+                <strong>It looks like you are eligible for funding</strong> based on the information
+                you've supplied.  We now need to ask some further questions to clarify the best
+                source of funding for you.
+            </p>
+            <p>
+                If you would rather not do this you can stop here, and a PEC staff member
+                can take these details from you over the phone at some point. Note
+                that this will delay any application for funding that we can submit for you.
+            </p>
+
+        {% endif %}
+
 
         <button class="button" name="finish_now" value="True">
             Finish now

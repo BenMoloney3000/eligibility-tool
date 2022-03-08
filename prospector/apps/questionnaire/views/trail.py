@@ -1100,6 +1100,8 @@ class RecommendedMeasures(abstract_views.Question):
             and self.answers.in_conservation_area is True
         )
 
+        context["rating"] = utils.get_overall_rating(self.answers)
+
         return context
 
     def get_next(self):
@@ -1167,7 +1169,6 @@ class Motivations(abstract_views.Question):
 class ContributionCapacity(abstract_views.SingleQuestion):
     title = "Your ability to contribute"
     type_ = abstract_views.QuestionType.Choices
-    next = "Adult1Name"
 
     def get_question(self):
         if self.answers.is_owner:
@@ -1178,7 +1179,7 @@ class ContributionCapacity(abstract_views.SingleQuestion):
         else:
             return (
                 "Would the owner be willing to contribute towards a package of "
-                "improvments in order to get the best outcome for their home?"
+                "improvements in order to get the best outcome for their home?"
             )
 
     def get_choices(self):
@@ -1199,6 +1200,13 @@ class ContributionCapacity(abstract_views.SingleQuestion):
     def pre_save(self):
         # Set up the number of adults we want for the next step
         services.sync_household_adults(self.answers)
+
+    def get_next(self):
+        rating = utils.get_overall_rating(self.answers)
+        if rating in [enums.RAYG.GREEN, enums.RAYG.YELLOW]:
+            return "Adult1Name"
+        else:
+            return "NothingAtThisTime"
 
 
 class Adult1Name(abstract_views.HouseholdAdultName):
@@ -1350,6 +1358,21 @@ class PropertyEligibility(abstract_views.Question):
 
     def pre_save(self):
         services.close_questionnaire(self.answers)
+
+
+class NothingAtThisTime(abstract_views.Question):
+    template_name = "questionnaire/nothing_at_this_time.html"
+    form_class = questionnaire_forms.NothingAtThisTime
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["future_schemes_consent_given"] = self.answers.consented_future_schemes
+        context["rating"] = utils.get_overall_rating(self.answers)
+        return context
+
+    def get_next(self):
+        services.close_questionnaire(self.answers)
+        return "Completed"
 
 
 class Completed(TemplateView):

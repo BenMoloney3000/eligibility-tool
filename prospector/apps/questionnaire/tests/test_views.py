@@ -271,6 +271,9 @@ class TestQuestionsRender(TrailTest):
     def test_property_eligibility_renders(self):
         assert self._get_trail_view("PropertyEligibility").status_code == 200
 
+    def test_nothing_at_this_time_renders(self):
+        assert self._get_trail_view("NothingAtThisTime").status_code == 200
+
     def test_complete_renders(self):
         assert self._get_trail_view("Completed").status_code == 200
 
@@ -1117,12 +1120,20 @@ class TestHouseholdAdultsLogic(TrailTest):
     def setUpTestData(cls):
         cls.answers = factories.AnswersFactory(adults=3)
 
-        factories.HouseholdAdultFactory(answers=cls.answers)
+        adult_one = factories.HouseholdAdultFactory(answers=cls.answers)
         factories.HouseholdAdultFactory(answers=cls.answers, adult_number=2)
-        factories.HouseholdAdultFactory(answers=cls.answers, adult_number=3)
+        adult_three = factories.HouseholdAdultFactory(
+            answers=cls.answers, adult_number=3
+        )
+
+        models.WelfareBenefit.objects.create(
+            recipient=adult_one, benefit_type=enums.BenefitType.CHILD_BENEFIT
+        )
+        models.WelfareBenefit.objects.create(
+            recipient=adult_three, benefit_type=enums.BenefitType.INCOME_SUPPORT
+        )
 
     def test_adult_one_goes_to_two(self):
-
         response = self._post_trail_data(
             "Adult1SavingsIncome",
             {
@@ -1134,18 +1145,20 @@ class TestHouseholdAdultsLogic(TrailTest):
         assert response.status_code == 302
         assert response.url == reverse("questionnaire:adult2-name")
 
-    def test_adult_two_goes_to_three(self):
+    @mock.patch("prospector.apps.questionnaire.utils.get_overall_rating")
+    def test_adult_one_goes_to_two_for_yellows(self, get_overall_rating):
+        get_overall_rating.return_value = enums.RAYG.YELLOW
 
         response = self._post_trail_data(
-            "Adult2SavingsIncome",
+            "Adult1WelfareBenefitAmounts",
             {
-                "saving_investment_income": "321",
-                "saving_investment_income_frequency": enums.PaymentFrequency.MONTHLY.value,
+                "child_benefit_amount": "321",
+                "child_benefit_frequency": enums.PaymentFrequency.MONTHLY.value,
             },
         )
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:adult3-name")
+        assert response.url == reverse("questionnaire:adult2-name")
 
     def test_adult_three_goes_to_next_step(self):
 
@@ -1159,6 +1172,21 @@ class TestHouseholdAdultsLogic(TrailTest):
 
         assert response.status_code == 302
         assert response.url == reverse("questionnaire:property-eligibility")
+
+    @mock.patch("prospector.apps.questionnaire.utils.get_overall_rating")
+    def test_adult_three_goes_to_next_step_for_yellows(self, get_overall_rating):
+        get_overall_rating.return_value = enums.RAYG.YELLOW
+
+        response = self._post_trail_data(
+            "Adult3WelfareBenefitAmounts",
+            {
+                "income_support_amount": "321",
+                "income_support_frequency": enums.PaymentFrequency.MONTHLY.value,
+            },
+        )
+
+        assert response.status_code == 302
+        assert response.url == reverse("questionnaire:nothing-at-this-time")
 
     def test_benefits_amount_skipped_if_no_benefits(self):
         response = self._post_trail_data("Adult3WelfareBenefits", {})

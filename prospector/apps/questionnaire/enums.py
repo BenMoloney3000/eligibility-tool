@@ -1,3 +1,5 @@
+from enum import auto
+
 from django.db import models
 
 
@@ -341,3 +343,10 @@ class BenefitType(models.TextChoices):
     PIP = "PIP", "Personal Independence Payment (PIP)"
     PENSION_CREDIT = "PENSION_CREDIT", "Pension Credit"
     OTHER = "OTHER", "Other"
+
+
+class RAYG(models.TextChoices):
+    RED = auto()
+    AMBER = auto()
+    YELLOW = auto()
+    GREEN = auto()

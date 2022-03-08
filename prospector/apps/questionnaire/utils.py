@@ -157,3 +157,52 @@ def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
         return "Medium"
     else:
         return "Low"
+
+
+def get_overall_rating(answers: models.Answers) -> enums.RAYG:
+    """Determine the application rating.
+
+    Used to decide the path taken for the final section of questions and the
+    text shown to the user.
+    """
+
+    # Property rating - can only be RED / AMBER / GREEN
+
+    if answers.sap_rating:
+        if answers.sap_rating >= 63:
+            property_rating = enums.RAYG.RED
+        elif answers.sap_rating >= 45:
+            property_rating = enums.RAYG.AMBER
+        else:
+            property_rating = enums.RAYG.GREEN
+    else:
+        if answers.gas_boiler_present is False and answers.walls_insulated is False:
+            property_rating = enums.RAYG.GREEN
+        elif answers.gas_boiler_present and answers.walls_insulated:
+            property_rating = enums.RAYG.RED
+        else:
+            property_rating = enums.RAYG.AMBER
+
+    # Household income rating
+    if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
+        income_rating = enums.RAYG.GREEN
+    else:
+        benefit_qualifies = answers.disability_benefits or (
+            answers.child_benefit and answers.income_lt_child_benefit_threshold
+        )
+        if benefit_qualifies:
+            income_rating = enums.RAYG.YELLOW
+        else:
+            if answers.take_home_lt_30k == enums.IncomeIsUnderThreshold.NO:
+                income_rating = enums.RAYG.RED
+            else:
+                income_rating = enums.RAYG.AMBER
+
+    # Overall RAYG:
+    if property_rating == enums.RAYG.RED:
+        return enums.RAYG.RED
+    else:
+        if income_rating == enums.RAYG.GREEN:
+            return property_rating
+        else:
+            return income_rating

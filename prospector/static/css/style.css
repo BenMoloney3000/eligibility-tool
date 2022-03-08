@@ -94,6 +94,9 @@ form .currency span.symbol {
     left: 0.5rem;
     top: 0;
 }
+details {
+    margin-bottom: 1rem;
+}
 .input-error {
     color: #d45352;
     display: block;

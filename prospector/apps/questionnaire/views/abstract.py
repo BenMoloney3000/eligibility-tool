@@ -15,6 +15,7 @@ from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
 from prospector.apps.questionnaire import models
 from prospector.apps.questionnaire import services
+from prospector.apps.questionnaire import utils
 from prospector.trail import mixin
 
 
@@ -426,9 +427,7 @@ class HouseholdAdultQuestion(Question):
 
         Fields that match Answers fields will be saved, anything else discarded.
         """
-        logger.debug(form.cleaned_data)
         for k, v in form.cleaned_data.items():
-            logger.debug(f"setting {k} on adult")
             setattr(self.household_adult, k, v)
 
         # This gives questions an opportunity to do extra processing, lookups etc.
@@ -446,7 +445,11 @@ class HouseholdAdultName(HouseholdAdultQuestion):
     template_name = "questionnaire/household_adults/name.html"
 
     def get_next(self):
-        return f"Adult{self.adult_number}Employment"
+        rating = utils.get_overall_rating(self.answers)
+        if rating == enums.RAYG.YELLOW:
+            return f"Adult{self.adult_number}WelfareBenefits"
+        else:
+            return f"Adult{self.adult_number}Employment"
 
 
 class HouseholdAdultEmployment(HouseholdAdultQuestion):
@@ -528,9 +531,26 @@ class HouseholdAdultWelfareBenefitAmounts(HouseholdAdultQuestion):
 
     def pre_save(self):
         services.save_benefit_amounts(self.household_adult)
+        rating = utils.get_overall_rating(self.answers)
+
+        # Delete data on path not taken
+        if rating == enums.RAYG.YELLOW:
+            self.household_adult.private_pension_income = 0
+            self.household_adult.private_pension_income_frequency = ""
+            self.household_adult.state_pension_income = 0
+            self.household_adult.state_pension_income_frequency = ""
 
     def get_next(self):
-        return f"Adult{self.adult_number}PensionIncome"
+        rating = utils.get_overall_rating(self.answers)
+        if rating == enums.RAYG.YELLOW:
+            total_adults = self.household_adult.answers.householdadult_set.count()
+            if self.adult_number == total_adults:
+                return "NothingAtThisTime"
+            else:
+                next_adult = self.adult_number + 1
+                return f"Adult{next_adult}Name"
+        else:
+            return f"Adult{self.adult_number}PensionIncome"
 
 
 class HouseholdAdultPensionIncome(HouseholdAdultQuestion):

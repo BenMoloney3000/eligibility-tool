@@ -646,3 +646,13 @@ class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
             )
 
         return data
+
+
+class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):
+    class Meta:
+        model = models.Answers
+        fields = ["consented_future_schemes"]
+        optional_fields = fields
+        widgets = {
+            "consented_future_schemes": forms.CheckboxInput(),
+        }
