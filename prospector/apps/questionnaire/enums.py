@@ -301,8 +301,10 @@ class PossibleMeasures(models.TextChoices):
         "CENTRAL_HEATING_INSTALL",
         "Installation of a central heating system",
     )
+    BROKEN_BOILER_UPGRADE = "BROKEN_BOILER_UPGRADE", "Broken boiler upgrade"
     PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"
     LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"
+    HEAT_PUMP_INSTALL = "HEAT_PUMP_INSTALL", "Installation of a heat pump"
 
 
 class EmploymentStatus(models.TextChoices):

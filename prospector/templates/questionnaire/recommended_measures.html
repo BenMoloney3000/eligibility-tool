@@ -14,7 +14,12 @@
         {% for measure in measures %}
             <details>
                 <summary>{{ measure.label }}</summary>
-                Content to be supplied.
+                <ul>
+                    <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
+                    <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
+                    <li><strong>Impact on energy bills:</strong> {{ measure.bill_impact }}</li>
+                    <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
+                </dl>
             </details>
             {% if measure.name == "SOLID_WALL_INSULATION" and sw_insulation_warning %}
                 <p>As your home is in a conservation area solid wall insulation may not be possible</p>

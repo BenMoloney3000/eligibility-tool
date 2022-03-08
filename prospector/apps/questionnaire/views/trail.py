@@ -12,6 +12,7 @@ from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
 from prospector.apps.questionnaire import selectors
 from prospector.apps.questionnaire import services
+from prospector.apps.questionnaire import utils
 from prospector.dataformats import postcodes
 
 
@@ -1065,7 +1066,7 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
 
     def prereq(self):
         if self.answers.child_benefit:
-            self.answers.child_benefit_threshold = services.get_child_benefit_threshold(
+            self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(
                 self.answers
             )
         else:
@@ -1086,7 +1087,14 @@ class RecommendedMeasures(abstract_views.Question):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["measures"] = services.determine_recommended_measures(self.answers)
+        measures = utils.determine_recommended_measures(self.answers)
+        for measure in measures:
+            measure.disruption = utils.get_disruption(measure)
+            measure.comfort_benefit = utils.get_comfort_benefit(measure)
+            measure.bill_impact = utils.get_bill_impact(measure)
+            measure.funding_likelihood = utils.get_funding_likelihood(measure)
+
+        context["measures"] = measures
         context["sw_insulation_warning"] = (
             enums.PossibleMeasures.SOLID_WALL_INSULATION in context["measures"]
             and self.answers.in_conservation_area is True

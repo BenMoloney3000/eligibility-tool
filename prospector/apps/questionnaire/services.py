@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import List
 from typing import Optional
 
 from django.conf import settings
@@ -16,7 +15,9 @@ from prospector.apis.epc import EPCData
 logger = logging.getLogger(__name__)
 
 
-def prepopulate_from_epc(answers: models.Answers, selected_epc: EPCData):
+def prepopulate_from_epc(
+    answers: models.Answers, selected_epc: EPCData
+) -> models.Answers:
     """Parse EPC contents to populate initial values for property energy data."""
 
     answers.property_type_orig = _detect_property_type(selected_epc) or ""
@@ -476,80 +477,6 @@ def _detect_programmable_thermostat(epc: EPCData) -> Optional[bool]:
             [indic in controls.name for indic in things_that_definitely_arent_timed]
         ):
             return False
-
-
-def determine_recommended_measures(
-    answers: models.Answers,
-) -> List[enums.PossibleMeasures]:
-    # Based on logic by JB in "Copy of SWEH Eligibility Tool  Data Fields v1.xlsx"
-    measures = []
-
-    if answers.wall_type == enums.WallType.CAVITY and answers.walls_insulated is False:
-        measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
-
-    if answers.wall_type == enums.WallType.SOLID and answers.walls_insulated is False:
-        measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
-
-    if answers.suspended_floor is True and answers.suspended_floor_insulated is False:
-        measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
-
-    if answers.room_in_roof is True and answers.rir_insulated is False:
-        measures.append(enums.PossibleMeasures.RIR_INSULATION)
-
-    if answers.flat_roof is True and answers.flat_roof_insulated in [
-        enums.InsulationConfidence.PROBABLY_NOT.value,
-        enums.InsulationConfidence.DEFINITELY_NOT.value,
-    ]:
-        measures.append(enums.PossibleMeasures.FLAT_ROOF_INSULATION)
-
-    if answers.unheated_loft is True and answers.roof_space_insulated is False:
-        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
-
-    if (
-        answers.gas_boiler_present is True
-        and answers.gas_boiler_age == enums.BoilerAgeBand.BEFORE_2004
-    ):
-        measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
-
-    if answers.storage_heaters_present is True and answers.hhrshs_present is False:
-        measures.append(enums.PossibleMeasures.STORAGE_HEATER_UPGRADE)
-
-    if answers.gas_boiler_present is False and answers.other_heating_present is False:
-        measures.append(enums.PossibleMeasures.CENTRAL_HEATING_INSTALL)
-
-    party_walled_forms = [
-        enums.PropertyForm.SEMI_DETACHED,
-        enums.PropertyForm.MID_TERRACE,
-        enums.PropertyForm.END_TERRACE,
-    ]
-    if (
-        answers.wall_type == enums.WallType.CAVITY
-        and answers.property_form in party_walled_forms
-    ):
-        measures.append(enums.PossibleMeasures.PARTY_WALL_INSULATION)
-
-    return measures
-
-
-def get_child_benefit_threshold(answers: models.Answers) -> int:
-    if answers.adults == 1:
-        if answers.children < 2:
-            return 18500
-        elif answers.children == 2:
-            return 23000
-        elif answers.children == 3:
-            return 27500
-        else:
-            return 32000
-    else:
-        if answers.children < 2:
-            return 25500
-        elif answers.children == 2:
-            return 30000
-        elif answers.children == 3:
-            return 34500
-        else:
-            return 39000
 
 
 """
