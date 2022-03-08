@@ -10,10 +10,10 @@
         {% csrf_token %}
 
         <p>
-            {% if is_householder %}
+            {% if is_owner %}
                 What are the aims for upgrading this property? Please select any that apply.
             {% else %}
-                What are the householder's aims for upgrading this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
+                What are the owner's aims for upgrading this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
             {% endif %}
         </p>
 
@@ -32,7 +32,7 @@
             <label for="id_motivation_environment">A more environmentally friendly home</label>
             {{ form.motivation_environment.errors }}
         </p>
-        {% if not is_householder %}
+        {% if not is_owner %}
             <p>
                 {{ form.motivation_unknown }}
                 <label for="id_motivation_unknown">I don't know</label>

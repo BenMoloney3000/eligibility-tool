@@ -26,11 +26,11 @@
         {% endfor %}
         {{ form.respondent_role.errors }}
 
-        <p><em>A "householder" means that you are the owner of the property, or one of the owners, or a tenant named on a rental contract</em></p>
+        <p>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) if you haven’t so far.</p>
         <div id="other-detail"{% if form.initial.respondent_role != "OTHER" %} style="display: none"{% endif %}>
             <p>
                 <label for="id_respondent_role_other">
-                    If you entered 'other' above, please describe your relationship to the occupant:
+                    Please describe your relationship to the occupant:
                 </label>
                 {{ form.respondent_role_other }}
                 {{ form.respondent_role_other.errors }}

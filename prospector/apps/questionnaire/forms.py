@@ -118,7 +118,7 @@ class RespondentRole(AnswerFormMixin, forms.ModelForm):
         ):
             self.add_error(
                 "respondent_role_other",
-                "Please describe your relationship to the householder",
+                "Please describe your relationship to the owner or occupant",
             )
 
         return data

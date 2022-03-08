@@ -30,7 +30,6 @@ class Answers(models.Model):
     last_name = models.CharField(verbose_name="Last name", max_length=64, blank=True)
 
     # The relationship of the respondent to the property
-    # Determines if the following address fields are the property's
     respondent_role = models.CharField(
         max_length=24,
         choices=enums.RespondentRole.choices,
@@ -38,9 +37,12 @@ class Answers(models.Model):
         verbose_name="Relationship of respondent to property",
     )
     respondent_role_other = models.CharField(
-        max_length=128, blank=True, verbose_name="'Other' relationship detail"
+        max_length=128,
+        blank=True,
+        verbose_name="Relationship of respondent to occupant",
     )
 
+    # Repondent address details are not used if respondent lives in the property
     respondent_address_1 = models.CharField(max_length=128, blank=True)
     respondent_address_2 = models.CharField(max_length=128, blank=True)
     respondent_address_3 = models.CharField(max_length=128, blank=True)
@@ -57,7 +59,6 @@ class Answers(models.Model):
     # PROPERTY DETAILS
     """
 
-    # Occupant/property details are only used if respondent != occupant
     occupant_first_name = models.CharField(
         verbose_name="Occupant first name", max_length=64, blank=True
     )
@@ -399,7 +400,7 @@ class Answers(models.Model):
     )
 
     """
-    # CONSTRAINTS: planning area and householder preferences
+    # CONSTRAINTS: planning area and owner preferences
     """
 
     in_conservation_area = models.BooleanField(
@@ -547,18 +548,18 @@ class Answers(models.Model):
             return None
 
         return self.respondent_role in [
-            enums.RespondentRole.RESIDENT_HOUSEHOLDER.value,
-            enums.RespondentRole.OCCUPANT.value,
+            enums.RespondentRole.OWNER_OCCUPIER.value,
+            enums.RespondentRole.TENANT.value,
         ]
 
     @property
-    def is_householder(self) -> Optional[bool]:
+    def is_owner(self) -> Optional[bool]:
         if self.respondent_role is None:
             return None
 
         return self.respondent_role in [
-            enums.RespondentRole.RESIDENT_HOUSEHOLDER.value,
-            enums.RespondentRole.NON_RESIDENT_HOUSEHOLDER.value,
+            enums.RespondentRole.LANDLORD.value,
+            enums.RespondentRole.OWNER_OCCUPIER.value,
         ]
 
     """

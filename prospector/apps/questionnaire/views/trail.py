@@ -59,22 +59,33 @@ class RespondentRole(abstract_views.Question):
         if self.answers.respondent_role != enums.RespondentRole.OTHER.value:
             self.answers.respondent_role_other = ""
 
-        if self.answers.is_householder:
+        if self.answers.respondent_role == enums.RespondentRole.OWNER_OCCUPIER.value:
             self.answers.respondent_has_permission = None
 
     def get_next(self):
-        if not self.answers.is_householder:
+        if self.answers.respondent_role != enums.RespondentRole.OWNER_OCCUPIER.value:
             return "RespondentHasPermission"
-        elif self.answers.is_occupant:
-            return "Email"
         else:
-            return "RespondentPostcode"
+            return "Email"
 
 
 class RespondentHasPermission(abstract_views.SingleQuestion):
     title = "Householder permission"
-    question = "Do you have the householder's permission to contact us on their behalf?"
     type_ = abstract_views.QuestionType.YesNo
+
+    def get_question(self):
+        # Wording of question depends on role:
+        if self.answers.respondent_role == enums.RespondentRole.TENANT:
+            return (
+                "Do you have permission from the owner to contact us on their behalf?"
+            )
+        elif self.answers.respondent_role == enums.RespondentRole.LANDLORD:
+            return (
+                "Do you have permission from the tenants to contact us on their behalf?"
+            )
+        else:
+            # Other
+            return "Do you have permission from the owner and occupants to contact us on their behalf?"
 
     def get_initial(self):
         data = super().get_initial()
@@ -1064,7 +1075,7 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
 
 class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
-    title = "Specific vulnerabilities of householder members"
+    title = "Specific vulnerabilities of household members"
     next = "RecommendedMeasures"
     form_class = questionnaire_forms.Vulnerabilities
 
@@ -1098,17 +1109,17 @@ class ToleratedDisruption(abstract_views.SingleQuestion):
     next = "StateOfRepair"
 
     def get_choices(self):
-        # Only non-householders get to answer "I don't know"
-        if self.answers.is_householder:
+        # Only non-owners get to answer "I don't know"
+        if self.answers.is_owner:
             return enums.ToleratedDisruption.choices[:-1]
         else:
             return enums.ToleratedDisruption.choices
 
     def get_note(self):
-        if not self.answers.is_householder:
+        if not self.answers.is_owner:
             return (
-                "Please answer on behalf of the householder if you can, or select "
-                "\"I don't know\" if you don't know the householder's motivations."
+                "Please answer on behalf of the owner if you can, or select "
+                "\"I don't know\" if you don't know the owner's motivations."
             )
 
 
@@ -1119,8 +1130,8 @@ class StateOfRepair(abstract_views.SingleQuestion):
     next = "Motivations"
 
     def get_choices(self):
-        # Only non-householders get to answer "I don't know"
-        if self.answers.is_householder:
+        # Only non-owners get to answer "I don't know"
+        if self.answers.is_owner:
             return enums.StateOfRepair.choices[:-1]
         else:
             return enums.StateOfRepair.choices
@@ -1134,7 +1145,7 @@ class Motivations(abstract_views.Question):
 
     def get_context_data(self):
         data = super().get_context_data()
-        data["is_householder"] = self.answers.is_householder
+        data["is_owner"] = self.answers.is_owner
 
         return data
 
@@ -1151,29 +1162,29 @@ class ContributionCapacity(abstract_views.SingleQuestion):
     next = "Adult1Name"
 
     def get_question(self):
-        if self.answers.is_householder:
+        if self.answers.is_owner:
             return (
                 "Would you be willing to contribute towards a package of improvements "
                 "to your home in order to get the best outcome for your home?"
             )
         else:
             return (
-                "Would the householder be willing to contribute towards a package of "
+                "Would the owner be willing to contribute towards a package of "
                 "improvments in order to get the best outcome for their home?"
             )
 
     def get_choices(self):
-        # Only non-householders get to answer "I don't know"
-        if self.answers.is_householder:
+        # Only non-owners get to answer "I don't know"
+        if self.answers.is_owner:
             return enums.ContributionCapacity.choices[:-1]
         else:
             return enums.ContributionCapacity.choices
 
     def get_note(self):
-        if not self.answers.is_householder:
+        if not self.answers.is_owner:
             return (
-                "Please answer on behalf of the householder if you can, or select "
-                "\"I don't know\" if you don't know the householder's ability and "
+                "Please answer on behalf of the owner if you can, or select "
+                "\"I don't know\" if you don't know the owner's ability and "
                 "willingness to contribute."
             )
 

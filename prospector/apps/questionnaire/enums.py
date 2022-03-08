@@ -11,23 +11,13 @@ class PropertyOwnership(models.TextChoices):
 
 
 class RespondentRole(models.TextChoices):
-    RESIDENT_HOUSEHOLDER = (
-        "RESIDENT_HOUSEHOLDER",
-        "I am the householder and live in the property",
+    OWNER_OCCUPIER = (
+        "OWNER",
+        "I am the owner-occupier of the property",
     )
-    NON_RESIDENT_HOUSEHOLDER = (
-        "NON_RESIDENT_HOUSEHOLDER",
-        "I am the householder but not resident in the property",
-    )
-    OCCUPANT = (
-        "OCCUPANT",
-        "I live in the property but am not the householder",
-    )
-    FRIEND = "FRIEND", "I am a non-resident friend of the householder"
-    PARENT = "PARENT", "I am a non-resident parent of the householder"
-    CHILD = "CHILD", "I am a non-resident child of the householder"
-    OTHER_FAMILY = "FAMILY", "I am another relative of the householder"
-    OTHER = "OTHER", "Other"
+    TENANT = "TENANT", "I am the tenant"
+    LANDLORD = "LANDLORD", "I am the landlord of the property"
+    OTHER = "OTHER", "I am filling this out on behalf of the tenant/owner occupier"
 
 
 class PropertyDataSource(models.TextChoices):
