@@ -553,10 +553,6 @@ class HouseholdAdultSavingsIncome(HouseholdAdultQuestion):
     template_name = "questionnaire/household_adults/savings_income.html"
 
     def pre_save(self):
-        # If under 200 make it zero
-        if int(self.household_adult.saving_investment_income) < 200:
-            self.household_adult.saving_investment_income = 0
-
         # If zero, lose the frequency
         if int(self.household_adult.saving_investment_income) == 0:
             self.household_adult.saving_investment_income_frequency = ""

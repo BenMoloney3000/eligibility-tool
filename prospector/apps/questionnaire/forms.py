@@ -624,20 +624,25 @@ class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
         model = models.HouseholdAdult
         fields = ["saving_investment_income", "saving_investment_income_frequency"]
 
-    def clean_saving_investment_income(self):
-        saving_investment_income = self.cleaned_data["saving_investment_income"]
+    def clean(self):
+        data = super().clean()
+
+        income = data.get("saving_investment_income")
+        freq = data.get("saving_investment_income_frequency")
         try:
-            if (
-                int(saving_investment_income) < 200
-                and int(saving_investment_income) != 0
+            amt = int(income)
+
+            if amt != 0 and (
+                (amt < 200 and freq == enums.PaymentFrequency.ANNUALLY)
+                or (amt < 17 and freq == enums.PaymentFrequency.MONTHLY)
             ):
                 self.add_error(
                     "saving_investment_income",
-                    "If the amount is under £200 please enter a zero amount.",
+                    "If the amount is under £200pa please enter a zero amount.",
                 )
         except ValueError:
             self.add_error(
                 "saving_investment_income", "Please enter a whole number of pounds."
             )
 
-        return saving_investment_income
+        return data
