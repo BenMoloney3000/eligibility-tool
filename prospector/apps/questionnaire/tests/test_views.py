@@ -85,8 +85,12 @@ class TestQuestionsRender(TrailTest):
         cls.household_adult = cls.answers.householdadult_set.first()
 
         # Allocate ths individual some benefits...
-        cls.household_adult.child_tax_credit = "True"
-        services.sync_benefits(cls.household_adult)
+        models.WelfareBenefit.objects.create(
+            recipient=cls.household_adult,
+            benefit_type=enums.BenefitType.CHILD_BENEFIT,
+            amount=45,
+            frequency=enums.BenefitPaymentFrequency.WEEKLY,
+        )
 
     def test_start_renders(self):
         response = self._get_trail_view("Start")
@@ -268,14 +272,8 @@ class TestQuestionsRender(TrailTest):
     def test_contribution_capacity_renders(self):
         assert self._get_trail_view("ContributionCapacity").status_code == 200
 
-    def test_property_eligibility_renders(self):
-        assert self._get_trail_view("PropertyEligibility").status_code == 200
-
     def test_nothing_at_this_time_renders(self):
         assert self._get_trail_view("NothingAtThisTime").status_code == 200
-
-    def test_complete_renders(self):
-        assert self._get_trail_view("Completed").status_code == 200
 
     def test_adult1_name_renders(self):
         assert self._get_trail_view("Adult1Name").status_code == 200
@@ -372,6 +370,15 @@ class TestQuestionsRender(TrailTest):
 
     def test_adult4_savings_income_renders(self):
         assert self._get_trail_view("Adult4SavingsIncome").status_code == 200
+
+    def test_household_summary_renders(self):
+        assert self._get_trail_view("HouseholdSummary").status_code == 200
+
+    def test_eligibility_summary_renders(self):
+        assert self._get_trail_view("EligibilitySummary").status_code == 200
+
+    def test_complete_renders(self):
+        assert self._get_trail_view("Completed").status_code == 200
 
 
 class TestDataPosts(TrailTest):
@@ -1171,7 +1178,7 @@ class TestHouseholdAdultsLogic(TrailTest):
         )
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:property-eligibility")
+        assert response.url == reverse("questionnaire:household-summary")
 
     @mock.patch("prospector.apps.questionnaire.utils.get_overall_rating")
     def test_adult_three_goes_to_next_step_for_yellows(self, get_overall_rating):

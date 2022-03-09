@@ -537,6 +537,17 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is under five years old or pregnant",
     )
+    incomes_complete = models.BooleanField(
+        blank=True, null=True, verbose_name="This is a full account of household income"
+    )
+    take_home_lt_30k_confirmation = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name=(
+            "Household take home pay after tax, national insurance, energy bills "
+            "and housing costs is less than £30k"
+        ),
+    )
 
     @property
     def full_name(self):

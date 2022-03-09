@@ -264,8 +264,7 @@ urlpatterns = [
         views.Adult4SavingsIncome.as_view(),
         name="adult4-savings-income",
     ),
-    path(
-        "eligibility", views.PropertyEligibility.as_view(), name="property-eligibility"
-    ),
+    path("summary", views.HouseholdSummary.as_view(), name="household-summary"),
+    path("eligibility", views.EligibilitySummary.as_view(), name="eligibility-summary"),
     path("complete", views.Completed.as_view(), name="completed"),
 ]

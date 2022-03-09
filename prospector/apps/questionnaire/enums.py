@@ -350,3 +350,9 @@ class RAYG(models.TextChoices):
     AMBER = auto()
     YELLOW = auto()
     GREEN = auto()
+
+
+class FinancialEligibility(models.TextChoices):
+    ALL = "ALL", "Financial circumstances eligible for all schemes"
+    SOME = "SOME", "Financial circumstances eligible for some schemes"
+    NONE = "NONE", "Financial circumstances eligible for no schemes"

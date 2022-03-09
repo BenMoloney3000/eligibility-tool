@@ -7,7 +7,6 @@ from typing import Optional
 
 from django import forms
 from django.core.cache import caches
-from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 
 from prospector.apis import ideal_postcodes
@@ -84,7 +83,6 @@ class Question(mixin.TrailMixin, FormView):
             # if we had a trail, wipe it, forcing us back to the start.
             if SESSION_TRAIL_ID in self.request.session:
                 del self.request.session[SESSION_TRAIL_ID]
-                return redirect("questionnaire:start")
 
     def dispatch(self, request, *args, **kwargs):
         self._init_answers()
@@ -580,7 +578,7 @@ class HouseholdAdultSavingsIncome(HouseholdAdultQuestion):
     def get_next(self):
         total_adults = self.household_adult.answers.householdadult_set.count()
         if self.adult_number == total_adults:
-            return "PropertyEligibility"
+            return "HouseholdSummary"
         else:
             next_adult = self.adult_number + 1
             return f"Adult{next_adult}Name"

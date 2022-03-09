@@ -24,8 +24,10 @@ function initHandler() {
         e.addEventListener('click', setCorrectionVisibility)
     })
     /* Special case: 'other' role field */
-    setRoleVisibility()
-    roleInputs.forEach((e) => e.addEventListener('click', setRoleVisibility))
+    if (document.querySelector('#id_respondent_role_OTHER')) {
+        setRoleVisibility()
+        roleInputs.forEach((e) => e.addEventListener('click', setRoleVisibility))
+    }
 }
 
 if (document.readyState === 'loading') {

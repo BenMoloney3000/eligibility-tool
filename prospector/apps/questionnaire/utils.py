@@ -159,6 +159,25 @@ def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
         return "Low"
 
 
+def get_property_rating(answers: models.Answers) -> enums.RAYG:
+    # Property rating - can only be RED / AMBER / GREEN
+
+    if answers.sap_rating:
+        if answers.sap_rating >= 63:
+            return enums.RAYG.RED
+        elif answers.sap_rating >= 45:
+            return enums.RAYG.AMBER
+        else:
+            return enums.RAYG.GREEN
+    else:
+        if answers.gas_boiler_present is False and answers.walls_insulated is False:
+            return enums.RAYG.GREEN
+        elif answers.gas_boiler_present and answers.walls_insulated:
+            return enums.RAYG.RED
+        else:
+            return enums.RAYG.AMBER
+
+
 def get_overall_rating(answers: models.Answers) -> enums.RAYG:
     """Determine the application rating.
 
@@ -166,22 +185,7 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
     text shown to the user.
     """
 
-    # Property rating - can only be RED / AMBER / GREEN
-
-    if answers.sap_rating:
-        if answers.sap_rating >= 63:
-            property_rating = enums.RAYG.RED
-        elif answers.sap_rating >= 45:
-            property_rating = enums.RAYG.AMBER
-        else:
-            property_rating = enums.RAYG.GREEN
-    else:
-        if answers.gas_boiler_present is False and answers.walls_insulated is False:
-            property_rating = enums.RAYG.GREEN
-        elif answers.gas_boiler_present and answers.walls_insulated:
-            property_rating = enums.RAYG.RED
-        else:
-            property_rating = enums.RAYG.AMBER
+    property_rating = get_property_rating(answers)
 
     # Household income rating
     if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
@@ -206,3 +210,76 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
             return property_rating
         else:
             return income_rating
+
+
+def calculate_household_income(answers: models.Answers) -> int:
+    """Calculate the annual income for all adults in the household."""
+
+    total_income = 0
+
+    for adult in answers.householdadult_set.all():
+        total_income += calculate_adult_income(adult)
+
+    return total_income
+
+
+def calculate_adult_income(adult: models.HouseholdAdult) -> int:
+    income = (
+        _annualise_income(adult, "employed_income")
+        + _annualise_income(adult, "self_employed_income")
+        + _annualise_income(adult, "business_income")
+        + _annualise_income(adult, "private_pension_income")
+        + _annualise_income(adult, "state_pension_income")
+        + _annualise_income(adult, "saving_investment_income")
+    )
+
+    # Add in any benefits
+    benefit_income = sum(
+        [
+            _annualise_benefit_income(benefit)
+            for benefit in adult.welfarebenefit_set.all()
+        ]
+    )
+
+    return income + benefit_income
+
+
+def _annualise_income(adult: models.HouseholdAdult, income_name: str) -> int:
+    freq_name = f"{income_name}_frequency"
+    income = getattr(adult, income_name, 0)
+    if not income:
+        # (zero or null, in either case don't case about frequency
+        return 0
+    elif getattr(adult, freq_name) == enums.PaymentFrequency.ANNUALLY:
+        return income
+    else:
+        return income * 12
+
+
+def _annualise_benefit_income(benefit: models.WelfareBenefit):
+    income = benefit.amount
+    if not income:
+        # (zero or null, in either case don't case about frequency
+        return 0
+    elif benefit.frequency == enums.BenefitPaymentFrequency.WEEKLY:
+        return round(income * 52.2)
+    elif benefit.frequency == enums.BenefitPaymentFrequency.MONTHLY:
+        return income * 12
+    else:
+        return income
+
+
+def get_financial_eligibility(answers: models.Answers) -> enums.FinancialEligibility:
+
+    total_household_income = calculate_household_income(answers)
+
+    if total_household_income < 30000:
+        return enums.FinancialEligibility.ALL
+    else:
+        benefit_present = models.WelfareBenefit.objects.filter(
+            recipient__answers=answers
+        ).exists()
+        if answers.take_home_lt_30k_confirmation or benefit_present:
+            return enums.FinancialEligibility.SOME
+        else:
+            return enums.FinancialEligibility.NONE

@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 from . import enums
 from . import models
+from . import utils
 from prospector.dataformats import phone_numbers
 
 
@@ -646,6 +647,44 @@ class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
             )
 
         return data
+
+
+class HouseholdSummary(AnswerFormMixin, forms.ModelForm):
+    # Allow the user to select 'AMEND', which will not get stored in the DB
+    confirm_or_amend_income = forms.ChoiceField(
+        choices=[
+            ("YES", "Yes"),
+            ("AMEND", "No - I need to amend the information I have given"),
+            (
+                "NO",
+                "No -  I didn't have all the information to hand so I have only filled this in for some income sources",
+            ),
+        ],
+        widget=forms.RadioSelect,
+        required=True,
+    )
+    take_home_lt_30k_confirmation = forms.TypedChoiceField(
+        coerce=lambda x: x == "True",
+        choices=((True, "Yes"), (False, "No")),
+        widget=forms.RadioSelect,
+        required=False,
+    )
+
+    class Meta:
+        model = models.Answers
+        fields = ["take_home_lt_30k_confirmation"]
+        optional_fields = ["take_home_lt_30k_confirmation"]
+
+    def __init__(self, *args, **kwargs):
+        """Dynamically whether take_home_lt_30k_confirmation is required.
+
+        (only required if total income > £30k)
+        """
+
+        # get self.answers populated:
+        super().__init__(*args, **kwargs)
+        if utils.calculate_household_income(self.answers) > 30000:
+            self.fields["take_home_lt_30k_confirmation"].required = True
 
 
 class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):

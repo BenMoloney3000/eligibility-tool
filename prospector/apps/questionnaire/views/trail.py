@@ -1337,23 +1337,51 @@ class Adult4SavingsIncome(abstract_views.HouseholdAdultSavingsIncome):
     adult_number = 4
 
 
-class PropertyEligibility(abstract_views.Question):
-    title = "Eligibility for current schemes"
-    template_name = "questionnaire/property_eligibility.html"
+class HouseholdSummary(abstract_views.Question):
+    template_name = "questionnaire/household_summary.html"
+    next = "EligibilitySummary"
+    form_class = questionnaire_forms.HouseholdSummary
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["calculated_income"] = utils.calculate_household_income(self.answers)
+        context["adult_incomes"] = [
+            {"name": adult.full_name, "income": utils.calculate_adult_income(adult)}
+            for adult in self.answers.householdadult_set.all()
+        ]
+        return context
+
+    def get_initial(self):
+        data = super().get_initial()
+        if self.answers.incomes_complete is not None:
+            data["confirm_or_amend_income"] = (
+                "YES" if self.answers.incomes_complete else "NO"
+            )
+
+        return data
+
+    def pre_save(self):
+        # Catch a request to go back & edit
+        if self.answers.confirm_or_amend_income == "AMEND":
+            self.answers.incomes_complete = None
+            self.next = "Adult1Name"
+        else:
+            self.answers.incomes_complete = (
+                self.answers.confirm_or_amend_income == "YES"
+            )
+            if utils.calculate_household_income(self.answers) < 30000:
+                self.answers.take_home_lt_30k_confirmation = True
+
+
+class EligibilitySummary(abstract_views.Question):
+    template_name = "questionnaire/eligibility_summary.html"
     next = "Completed"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["epc_score"] = self.answers.sap_rating
-        context["house_or_bungalow"] = self.answers.property_type in [
-            enums.PropertyType.HOUSE,
-            enums.PropertyType.BUNGALOW,
-        ]
-        context["gas_heating"] = self.answers.gas_boiler_present
-        context["walls_insulated"] = self.answers.walls_insulated
-        context["uninsulated_loft_or_wall"] = self.answers.walls_insulated is False or (
-            self.answers.unheated_loft and not self.answers.roof_space_insulated
-        )
+        context["property_rating"] = utils.get_property_rating(self.answers)
+        context["financial_eligibility"] = utils.get_financial_eligibility(self.answers)
+        context["incomes_complete"] = self.answers.incomes_complete
         return context
 
     def pre_save(self):
