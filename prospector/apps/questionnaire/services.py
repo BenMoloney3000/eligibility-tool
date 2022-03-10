@@ -51,6 +51,38 @@ def prepopulate_from_epc(
     return answers
 
 
+def depopulate_orig_fields(answers: models.Answers) -> models.Answers:
+    """Clear all the inferred data fields."""
+
+    answers.property_type_orig = ""
+    answers.property_form_orig = ""
+    answers.property_age_band_orig = None
+    answers.wall_type_orig = ""
+    answers.walls_insulated_orig = None
+    answers.suspended_floor_orig = None
+    answers.suspended_floor_insulated_orig = None
+    answers.unheated_loft_orig = None
+    answers.room_in_roof_orig = None
+    answers.rir_insulated_orig = None
+    answers.roof_space_insulated_orig = None
+    answers.flat_roof_orig = None
+    answers.gas_boiler_present_orig = None
+    answers.other_heating_present_orig = None
+    answers.on_mains_gas_orig = None
+    answers.heat_pump_present_orig = None
+    answers.other_heating_fuel_orig = ""
+    answers.storage_heaters_present_orig = None
+    answers.hhrshs_present_orig = None
+    answers.electric_radiators_present_orig = None
+    answers.trvs_present_orig = None
+    answers.room_thermostat_orig = None
+    answers.ch_timer_orig = None
+    answers.programmable_thermostat_orig = None
+    answers.sap_rating = None
+
+    return answers
+
+
 """
 The following functions all attempt to interrogate the contents of the EPC to
 provide "best guess" answers to the various questions that the user is

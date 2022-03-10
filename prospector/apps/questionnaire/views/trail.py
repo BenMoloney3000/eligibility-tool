@@ -299,8 +299,6 @@ class PropertyAddress(abstract_views.Question):
         return context
 
     def pre_save(self):
-        logger.debug(self.prefilled_addresses)
-        logger.debug(f"UDPRN {self.answers.property_udprn}")
         if (
             self.answers.property_udprn
             and int(self.answers.property_udprn) in self.prefilled_addresses
@@ -379,6 +377,9 @@ class SelectEPC(abstract_views.Question):
             selected_epc = self.candidate_epcs[self.answers.selected_epc]
             self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
             self.answers.save()
+        else:
+            # Make sure it's been deselected
+            self.answers = services.depopulate_orig_fields(self.answers)
 
     def get_next(self):
         # If we selected an EPC we show the data we've inferred, otherwise we
@@ -528,7 +529,11 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     def pre_save(self):
         # If we didn't get the likely wall type, infer from the age now.
         if not self.answers.wall_type_orig:
-            self.answers.wall_type_orig = int(self.answers.property_age_band) < 1930
+            self.answers.wall_type_orig = (
+                enums.WallType.SOLID
+                if int(self.answers.property_age_band) < 1930
+                else enums.WallType.CAVITY
+            )
 
     def get_next(self):
         # We may have decided to skip ahead
