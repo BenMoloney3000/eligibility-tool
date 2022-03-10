@@ -161,7 +161,18 @@ class RespondentAddress(abstract_views.Question):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["postcode"] = self.answers.respondent_postcode
-        context["all_postcode_addresses"] = self.prefilled_addresses
+        context["all_postcode_addresses"] = {
+            key: {
+                "address1": address.line_1,
+                "address2": address.line_2,
+                "address3": address.post_town,
+            }
+            for key, address in self.prefilled_addresses.items()
+        }
+        # TODO: fix inconsistency here: property gets three lines of address
+        # (because post town of Plymouth is assumed)
+        # but respondent can be elsewhere, so effectively gets two lines of
+        # address and the third is the post town. Maybe this is fine?
         return context
 
     def pre_save(self):
@@ -277,7 +288,14 @@ class PropertyAddress(abstract_views.Question):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["property_postcode"] = self.answers.property_postcode
-        context["all_postcode_addresses"] = self.prefilled_addresses
+        context["all_postcode_addresses"] = {
+            key: {
+                "address1": address.line_1,
+                "address2": address.line_2,
+                "address3": address.line_3,
+            }
+            for key, address in self.prefilled_addresses.items()
+        }
         return context
 
     def pre_save(self):

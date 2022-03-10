@@ -9,8 +9,9 @@
 
     <form method="POST">
         {% csrf_token %}
+        {{ all_postcode_addresses|json_script:"allPostcodes" }}
         {% if form.property_udprn.field.widget.choices %}
-            <p>
+            <p class="postcode-populator">
                 <label for="id_udprn">
                     Choose the address from the list:
                 </label>
@@ -30,7 +31,7 @@
 
         {% endif %}
 
-        <p>
+        <p class="target-address_1">
             <label for="id_property_address_1">
                 Address
             </label><br>
@@ -38,12 +39,12 @@
             {{ form.property_address_1.errors }}
         </p>
 
-        <p>
+        <p class="target-address_2">
             {{ form.property_address_2 }}
             {{ form.property_address_2.errors }}
         </p>
 
-        <p>
+        <p class="target-address_3">
             {{ form.property_address_3 }}
             {{ form.property_address_3.errors }}
         </p>
