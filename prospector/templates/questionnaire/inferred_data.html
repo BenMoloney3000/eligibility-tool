@@ -89,16 +89,19 @@
                 {% else %}
                     <li>This roof space <strong>is {% if answers.roof_space_insulated_orig == False %}not {% endif %}</strong> well insulated.</li>
                 {% endif %}
-            {% elif answers.flat_roof_orig %}
-                <li>The property has <strong>a flat roof</strong> directly over all or most of its area.</li>
-                <li>We cannot tell if the roof is well insulated. You will have to enter this data.</li>
+            {% else %}
+                <li>The property does not have an unheated roof space.</li>
+                {% if answers.flat_roof_orig %}
+                    <li>The property has <strong>a flat roof</strong> directly over all or most of its area.</li>
+                    <li>We cannot tell if the roof is well insulated. You will have to enter this data.</li>
+                {% endif %}
             {% endif %}
 
             {% if not answers.flat_roof_orig %}
                 {% if answers.room_in_roof_orig == None %}
                     <li>We could not tell if there is a room (or rooms) in the roof space. You will have to supply this data</li>
                 {% else %}
-                    <li>There <strong>is {% if answers.room_in_roof_orig == False %}not {% endif %}</strong> a room (or rooms) in this roof space.</li>
+                    <li>There <strong>is {% if answers.room_in_roof_orig == False %}not {% endif %}</strong> a room (or rooms) in the roof space.</li>
                     {% if answers.room_in_roof_orig %}
                         {% if answers.rir_insulated_orig == None %}
                             <li>We could not tell if this room-in-roof is well insulated. You will have to supply this data</li>

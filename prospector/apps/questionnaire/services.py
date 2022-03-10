@@ -22,7 +22,7 @@ def prepopulate_from_epc(
 
     answers.property_type_orig = _detect_property_type(selected_epc) or ""
     answers.property_form_orig = _detect_property_form(selected_epc) or ""
-    answers.property_age_band_orig = _detect_property_age(selected_epc) or ""
+    answers.property_age_band_orig = _detect_property_age(selected_epc) or None
     answers.wall_type_orig = _detect_wall_type(selected_epc) or ""
     answers.walls_insulated_orig = _detect_walls_insulated(selected_epc)
     answers.suspended_floor_orig = _detect_suspended_floor(selected_epc)
