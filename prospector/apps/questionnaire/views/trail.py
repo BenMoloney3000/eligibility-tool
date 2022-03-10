@@ -1,6 +1,5 @@
 import logging
 
-from django.core.cache import caches
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
@@ -21,7 +20,6 @@ logger = logging.getLogger(__name__)
 
 SESSION_ANSWERS_ID = "questionnaire:answer_id"
 SESSION_TRAIL_ID = "questionnaire:trail_id"
-POSTCODE_CACHE = caches["postcodes"]
 
 
 class Start(abstract_views.SingleQuestion):
@@ -138,7 +136,7 @@ class RespondentPostcode(abstract_views.SingleQuestion):
             )
 
 
-class RespondentAddress(abstract_views.Question, abstract_views.PostcodeCacherMixin):
+class RespondentAddress(abstract_views.Question):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
@@ -152,7 +150,7 @@ class RespondentAddress(abstract_views.Question, abstract_views.PostcodeCacherMi
         try:
             self.prefilled_addresses = {
                 address.udprn: address
-                for address in self.get_postcode(self.answers.respondent_postcode)
+                for address in selectors.get_postcode(self.answers.respondent_postcode)
             }
         except ValueError:
             pass
@@ -253,7 +251,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
             )
 
 
-class PropertyAddress(abstract_views.Question, abstract_views.PostcodeCacherMixin):
+class PropertyAddress(abstract_views.Question):
     title = "Property address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
@@ -268,7 +266,7 @@ class PropertyAddress(abstract_views.Question, abstract_views.PostcodeCacherMixi
             # Cache these in the session to avoid another call on POST
             self.prefilled_addresses = {
                 address.udprn: address
-                for address in self.get_postcode(self.answers.property_postcode)
+                for address in selectors.get_postcode(self.answers.property_postcode)
             }
         except ValueError:
             pass
@@ -283,6 +281,8 @@ class PropertyAddress(abstract_views.Question, abstract_views.PostcodeCacherMixi
         return context
 
     def pre_save(self):
+        logger.debug(self.prefilled_addresses)
+        logger.debug(f"UDPRN {self.answers.property_udprn}")
         if (
             self.answers.property_udprn
             and int(self.answers.property_udprn) in self.prefilled_addresses
@@ -290,7 +290,7 @@ class PropertyAddress(abstract_views.Question, abstract_views.PostcodeCacherMixi
             selected_address = self.prefilled_addresses[
                 int(self.answers.property_udprn)
             ]
-            self.answers.uprn = selected_address.uprn
+            self.answers.uprn = selected_address.uprn or None
             if not self.answers.property_address_1:
                 # Populate fields if it wasn't already done by JS
                 self.answers.property_address_1 = selected_address.line_1
@@ -333,9 +333,10 @@ class SelectEPC(abstract_views.Question):
             postcode_epcs = epc.get_for_postcode(self.answers.property_postcode)
 
             # Try to reduce the possible EPCs by UPRN
-            # (can only filter out anything with a different EPC)
+            # (can only filter out anything with a different UPRN)
             # TODO could be some attempt to match the (full) address itself but it will
             # require a lot of experimentation for possibly not much benefit.
+            # NB this does nothing with Data8 which cannot supply both UPRN & UDPRN
             if self.answers.uprn:
                 postcode_epcs = [
                     epc

@@ -1,7 +1,18 @@
+import dataclasses
+
+from django.conf import settings
+from django.core.cache import caches
+
 from . import models
+from prospector.apis import data8
+from prospector.apis import ideal_postcodes
+
+
+POSTCODE_CACHE = caches["postcodes"]
 
 
 def data_was_changed(answers: models.Answers) -> bool:
+    """Determine if any third-party sourced property data was overruled."""
 
     # No EPC -> nothing to change
     if answers.selected_epc is None:
@@ -23,3 +34,38 @@ def data_was_changed(answers: models.Answers) -> bool:
                 return True
 
     return False
+
+
+def get_postcode(postcode):
+    """Check cached postcodes before hitting the API.
+
+    Uses normalised postcodes.
+    """
+    if POSTCODE_CACHE.get(postcode, None):
+        return _process_cached_results(POSTCODE_CACHE.get(postcode))
+    else:
+        postcoder = data8 if settings.POSTCODER == "DATA8" else ideal_postcodes
+
+        addresses = postcoder.get_for_postcode(postcode)
+
+        if addresses:
+            POSTCODE_CACHE.set(
+                postcode, [dataclasses.asdict(address) for address in addresses]
+            )
+        return addresses
+
+
+def _process_cached_results(results):
+    return [
+        data8.AddressData(
+            row["line_1"],
+            row["line_2"],
+            row["line_3"],
+            row["post_town"],
+            row["district"],
+            row["postcode"],
+            int(row["udprn"]),
+            row["uprn"],
+        )
+        for row in results
+    ]

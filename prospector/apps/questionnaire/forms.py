@@ -256,7 +256,12 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         if udprn not in self.prefilled_addresses:
             self.add_error("property_udprn", "Invalid value selected")
         else:
-            if self.prefilled_addresses[udprn].district != "Plymouth":
+            # Ideal Postcodes and Data8 report the administrative district differently
+            # and we want it to work with either, including old cached values
+            if self.prefilled_addresses[udprn].district not in [
+                "City of Plymouth",
+                "Plymouth",
+            ]:
                 self.add_error(
                     "property_udprn",
                     "This property is not within the Plymouth Council area.",

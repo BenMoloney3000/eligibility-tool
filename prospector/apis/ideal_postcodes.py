@@ -23,7 +23,7 @@ class AddressData:
     post_town: str
     district: str
     postcode: str
-    udprn: str
+    udprn: int
     uprn: str
 
 
@@ -36,7 +36,7 @@ def _process_results(rows):
             row["post_town"],
             row["district"],
             row["postcode"],
-            row["udprn"],
+            int(row["udprn"] or 0),  # should never be 0
             row["uprn"],
         )
         for row in rows

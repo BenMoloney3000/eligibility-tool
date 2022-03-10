@@ -1,15 +1,12 @@
 import contextlib
-import dataclasses
 import logging
 from enum import auto
 from enum import Enum
 from typing import Optional
 
 from django import forms
-from django.core.cache import caches
 from django.views.generic.edit import FormView
 
-from prospector.apis import ideal_postcodes
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
 from prospector.apps.questionnaire import models
@@ -23,7 +20,6 @@ logger = logging.getLogger(__name__)
 
 SESSION_ANSWERS_ID = "questionnaire:answer_id"
 SESSION_TRAIL_ID = "questionnaire:trail_id"
-POSTCODE_CACHE = caches["postcodes"]
 
 
 class QuestionType(Enum):
@@ -33,25 +29,6 @@ class QuestionType(Enum):
     Decimal = auto()
     Choices = auto()
     MultipleChoices = auto()
-
-
-class PostcodeCacherMixin:
-    def get_postcode(self, postcode):
-        """Check cached postcodes before hitting the API.
-
-        Uses normalised postcodes.
-
-        TODO move this into services! (or the API itself?)
-        """
-        if POSTCODE_CACHE.get(postcode, None):
-            return ideal_postcodes._process_results(POSTCODE_CACHE.get(postcode))
-        else:
-            addresses = ideal_postcodes.get_for_postcode(postcode)
-            if addresses:
-                POSTCODE_CACHE.set(
-                    postcode, [dataclasses.asdict(address) for address in addresses]
-                )
-            return addresses
 
 
 class Question(mixin.TrailMixin, FormView):

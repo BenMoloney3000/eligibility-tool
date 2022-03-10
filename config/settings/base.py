@@ -275,5 +275,8 @@ else:
     RQ_SHOW_ADMIN_LINK = True
 
 EPC_API_KEY = env.str("EPC_API_KEY", default="")
+POSTCODER = env.str("POSTCODER", default="IDEAL_POSTCODES")
 IDEAL_POSTCODES_API_KEY = env.str("IDEAL_POSTCODES_API_KEY", default="")
+DATA8_API_KEY = env.str("DATA8_API_KEY", default="")
+DATA8_LICENSE = env.str("DATA8_LICENSE", default="FreeTrial")
 MAIL_FROM = env.str("EMAIL_FROM", default="support@plymouthenergycommunity.com")

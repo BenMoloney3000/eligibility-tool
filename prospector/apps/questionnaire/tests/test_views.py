@@ -114,9 +114,9 @@ class TestQuestionsRender(TrailTest):
     def test_respondent_postcode_renders(self):
         assert self._get_trail_view("RespondentPostcode").status_code == 200
 
-    @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
-    def test_respondent_address_renders(self, get_for_postcode):
-        get_for_postcode.return_value = []
+    @mock.patch("prospector.apps.questionnaire.selectors.get_postcode")
+    def test_respondent_address_renders(self, get_postcode):
+        get_postcode.return_value = []
 
         assert self._get_trail_view("RespondentAddress").status_code == 200
 
@@ -132,7 +132,7 @@ class TestQuestionsRender(TrailTest):
     def test_property_postcode_renders(self):
         assert self._get_trail_view("PropertyPostcode").status_code == 200
 
-    @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
+    @mock.patch("prospector.apis.data8.get_for_postcode")
     def test_property_address_renders(self, get_for_postcode):
         get_for_postcode.return_value = []
 
