@@ -988,7 +988,7 @@ class InConservationArea(abstract_views.SingleQuestion):
         if selectors.data_was_changed(self.answers):
             return "AccuracyWarning"
         else:
-            return "RecommendedMeasures"
+            return "Occupants"
 
 
 class AccuracyWarning(abstract_views.Question):
