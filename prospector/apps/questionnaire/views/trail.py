@@ -1006,7 +1006,8 @@ class Occupants(abstract_views.Question):
 
 class HouseholdIncome(abstract_views.SingleQuestion):
     answer_field = "total_income_lt_30k"
-    question = "Is the accumulated income of all the people living in the property less than £30,000 (before tax)?"
+    question = "Is the household income less than £30,000 before tax?"
+    note = "Household income means the combined income of everyone living in the property."
     title = "Gross household income"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
@@ -1030,11 +1031,11 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
     answer_field = "take_home_lt_30k"
     question = (
-        "Is the accumulated take home pay (after tax and deductions) of all people living "
-        "in the property less than £30,000?"
+        "Is the household income less than £30,000 after tax, mortgage/rent, "
+        " and energy bills?"
     )
-    note = "This is the household income after housing costs (mortgage or rent) and energy bills have been deducted."
-    title = "Total household take-home pay"
+    note = "Household income means the combined income of everyone living in the property."
+    title = "Total household pay after costs"
     next = "DisabilityBenefits"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
