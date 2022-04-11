@@ -607,10 +607,10 @@ class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
 
 class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
     title = "Floor type"
-    question = "Does the property have a suspended timber floor with a void underneath?"
+    question = "Does the property have a suspended timber ground floor with a void underneath?"
     type_ = abstract_views.QuestionType.YesNo
     note = (
-        "If the property has different types of floor, choose the option that applies "
+        "If the property has different types of ground floor, choose the option that applies "
         "to the largest floor area. If the property is a non-ground-floor flat, select 'No'."
     )
 
@@ -974,7 +974,7 @@ class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
 
 class HhrshsPresent(abstract_views.SingleQuestion):
     title = "Storage heater performance"
-    question = "Are the storage heaters in the property Diplex Quantum or other high heat retention storage heaters?"
+    question = "Are the storage heaters in the property Dimplex Quantum or other high heat retention storage heaters?"
     type_ = abstract_views.QuestionType.YesNo
     next = "InConservationArea"
 
