@@ -1097,16 +1097,10 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.YesNo
 
     def get_question(self):
-        return f"Is the household income less than £{self.answers.child_benefit_threshold:,}?"
+        return f"Is the household income less than £{self.answers.child_benefit_threshold:,} before tax?"
 
     def prereq(self):
-        if self.answers.child_benefit:
-            self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(
-                self.answers
-            )
-        else:
-            # Shouldn't be in this branch. This should not ever happen.
-            return self.redirect()
+        self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(self.answers)
 
 
 class Vulnerabilities(abstract_views.Question):
