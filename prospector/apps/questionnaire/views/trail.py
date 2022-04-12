@@ -1074,7 +1074,6 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
 
 class ChildBenefit(abstract_views.SingleQuestion):
     title = "Child benefit"
-    next = "IncomeLtChildBenefitThreshold"
     type_ = abstract_views.QuestionType.YesNo
     question = "Does anybody living in the home receive Child Benefit?"
 
@@ -1084,6 +1083,12 @@ class ChildBenefit(abstract_views.SingleQuestion):
             # Obliterate values from the etc.
             self.answers.child_benefit_threshold = None
             self.answers.income_lt_child_benefit_threshold = None
+
+    def get_next(self):
+        if self.answers.child_benefit:
+            return "IncomeLtChildBenefitThreshold"
+        else:
+            return "Vulnerabilities"
 
 
 class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
