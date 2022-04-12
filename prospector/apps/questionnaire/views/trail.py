@@ -1159,7 +1159,7 @@ class ToleratedDisruption(abstract_views.SingleQuestion):
 
 
 class StateOfRepair(abstract_views.SingleQuestion):
-    title = "Your ability to contribute"
+    title = "State of repair"
     question = "What condition is the property currently in?"
     type_ = abstract_views.QuestionType.Choices
     next = "Motivations"
