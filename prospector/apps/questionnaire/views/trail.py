@@ -673,7 +673,12 @@ class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
     title = "Property roof"
     question = "Does the property have an unheated loft space directly above it?"
     type_ = abstract_views.QuestionType.YesNo
-    note = "If the property is a non-top-floor flat, select 'No'."
+
+    def get_note(self):
+        if self.answers.property_type == enums.PropertyType.FLAT:
+            return "If the flat isn't on the top floor, please answer 'no'."
+
+        return None
 
     def prereq(self):
         # We may have decided to skip this part
