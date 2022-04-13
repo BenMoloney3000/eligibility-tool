@@ -607,7 +607,9 @@ class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
 
 class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
     title = "Floor type"
-    question = "Does the property have a suspended timber ground floor with a void underneath?"
+    question = (
+        "Does the property have a suspended timber ground floor with a void underneath?"
+    )
     type_ = abstract_views.QuestionType.YesNo
     note = (
         "If the property has different types of ground floor, choose the option that applies "
@@ -1012,7 +1014,9 @@ class Occupants(abstract_views.Question):
 class HouseholdIncome(abstract_views.SingleQuestion):
     answer_field = "total_income_lt_30k"
     question = "Is the household income less than £30,000 before tax?"
-    note = "Household income means the combined income of everyone living in the property."
+    note = (
+        "Household income means the combined income of everyone living in the property."
+    )
     title = "Gross household income"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
@@ -1039,7 +1043,9 @@ class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
         "Is the household income less than £30,000 after tax, mortgage/rent, "
         " and energy bills?"
     )
-    note = "Household income means the combined income of everyone living in the property."
+    note = (
+        "Household income means the combined income of everyone living in the property."
+    )
     title = "Total household pay after costs"
     next = "DisabilityBenefits"
     type_ = abstract_views.QuestionType.Choices
@@ -1100,7 +1106,9 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
         return f"Is the household income less than £{self.answers.child_benefit_threshold:,} before tax?"
 
     def prereq(self):
-        self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(self.answers)
+        self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(
+            self.answers
+        )
 
 
 class Vulnerabilities(abstract_views.Question):
