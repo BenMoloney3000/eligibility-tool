@@ -337,6 +337,7 @@ class SelectEPC(abstract_views.Question):
     template_name = "questionnaire/select_epc.html"
     form_class = questionnaire_forms.SelectEPC
     candidate_epcs = {}
+    next = "PropertyType"
 
     def get_form_kwargs(self):
         """Pass the possible EPCs into the form."""
@@ -346,7 +347,7 @@ class SelectEPC(abstract_views.Question):
 
     def prereq(self):
         try:
-            postcode_epcs = epc.get_for_postcode(self.answers.property_postcode)
+            postcode_epcs = epc.get_for_postcode(self.answers.property_postcode) or []
 
             # Try to reduce the possible EPCs by UPRN
             # (can only filter out anything with a different UPRN)
@@ -380,111 +381,6 @@ class SelectEPC(abstract_views.Question):
         else:
             # Make sure it's been deselected
             self.answers = services.depopulate_orig_fields(self.answers)
-
-    def get_next(self):
-        # If we selected an EPC we show the data we've inferred, otherwise we
-        # crack on and get the data.
-        if self.answers.selected_epc:
-            return "InferredData"
-        else:
-            return "PropertyType"
-
-
-class InferredData(abstract_views.Question):
-    title = "What we think about your property"
-    template_name = "questionnaire/inferred_data.html"
-    form_class = questionnaire_forms.InferredData
-    next = "PropertyType"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["answers"] = self.answers
-
-        # Send in the enums
-        if self.answers.property_type_orig:
-            context["initial_type"] = enums.PropertyType(
-                self.answers.property_type_orig
-            ).label
-            context["initial_form"] = enums.PropertyForm(
-                self.answers.property_form_orig
-            ).label
-
-        context["type_inferences_complete"] = self.answers.type_inferences_complete()
-        context["wall_inferences_complete"] = self.answers.wall_inferences_complete()
-        context["floor_inferences_complete"] = self.answers.floor_inferences_complete()
-        context["roof_inferences_complete"] = self.answers.roof_inferences_complete()
-        context[
-            "heating_inferences_complete"
-        ] = self.answers.heating_inferences_complete()
-
-        context["any_inferences_complete"] = (
-            context["type_inferences_complete"]
-            or context["wall_inferences_complete"]
-            or context["floor_inferences_complete"]
-            or context["roof_inferences_complete"]
-            or context["heating_inferences_complete"]
-        )
-
-        return context
-
-    def pre_save(self):
-        # Anything the user doesn't want to correct should be populated from the
-        # origin data. If it's not complete then they shouldn't be able to skip.
-        if (
-            self.answers.type_inferences_complete()
-            and self.answers.will_correct_type is False
-        ):
-            self.answers = services.set_type_from_orig(self.answers)
-        if (
-            self.answers.wall_inferences_complete()
-            and self.answers.will_correct_walls is False
-        ):
-            self.answers = services.set_walls_from_orig(self.answers)
-        if (
-            self.answers.roof_inferences_complete()
-            and self.answers.will_correct_roof is False
-        ):
-            self.answers = services.set_roof_from_orig(self.answers)
-        if (
-            self.answers.floor_inferences_complete()
-            and self.answers.will_correct_floor is False
-        ):
-            self.answers = services.set_floor_from_orig(self.answers)
-        if (
-            self.answers.heating_inferences_complete()
-            and self.answers.will_correct_heating is False
-        ):
-            self.answers = services.set_heating_from_orig(self.answers)
-
-    def get_next(self):
-        if (
-            not self.answers.type_inferences_complete()
-            or self.answers.will_correct_type
-        ):
-            return "PropertyType"
-        elif (
-            not self.answers.wall_inferences_complete()
-            or self.answers.will_correct_walls
-        ):
-            return "WallType"
-        elif (
-            not self.answers.floor_inferences_complete()
-            or self.answers.will_correct_floor
-        ):
-            return "SuspendedFloor"
-        elif (
-            not self.answers.roof_inferences_complete()
-            or self.answers.will_correct_roof
-        ):
-            return "UnheatedLoft"
-        elif (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            return "GasBoilerPresent"
-        else:
-            # Really unlikely!
-            return "InConservationArea"
 
 
 class PropertyType(abstract_views.Question):
