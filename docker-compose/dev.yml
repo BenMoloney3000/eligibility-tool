@@ -1,0 +1,77 @@
+version: '3'
+
+volumes:
+  app:
+    driver: lebokus/bindfs:latest
+    driver_opts:
+      sourcePath: "${PWD}"
+      map: "${UID}/101:@${UID}/@101"
+  local_postgres_data:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  local_postgres_data_backups: {}
+
+
+networks:
+  prospector:
+      external: true
+
+services:
+  postgres:
+    image: postgis/postgis:12-2.5-alpine
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+      - local_postgres_data_backups:/backups
+    environment:
+        POSTGRES_USER: prospector
+        POSTGRES_PASSWORD: prospector
+        POSTGRES_DB: prospector
+    expose:
+      - "5432"
+    networks:
+      - prospector
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    expose:
+      - "8025"
+      - "1025"
+    networks:
+      - prospector
+
+  redis:
+    image: redis:5
+    expose:
+      - "6379"
+    networks:
+      - prospector
+
+  web:
+    env_file:
+      - ../dev.env
+    build:
+      context: ../
+      dockerfile: ./Dockerfile-dev
+    stdin_open: true # docker run -i
+    tty: true   
+    command: >
+        bash -c 'env ENV=offline \
+          DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
+          python manage.py collectstatic --noinput && \
+          python manage.py createcachetable && \
+          python manage.py migrate && \
+          exec /bin/bash'
+    environment:
+        DEBUG: 1
+        REDIS_HOST: redis
+        REDIS_PORT: 6379
+        DATABASE_URL: "postgresql://prospector:prospector@postgres:5432/prospector"
+        USE_AUTH_SERVICE: 'False'
+          # PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
+    expose:
+      - "8000"
+    volumes:
+      - app:/app
+    networks:
+      - prospector
