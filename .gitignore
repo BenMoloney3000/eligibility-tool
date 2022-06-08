@@ -292,3 +292,6 @@ pip-selfcheck.json
 ### Project template
 
 .pytest_cache/
+
+# Silver searcher
+.ignore
