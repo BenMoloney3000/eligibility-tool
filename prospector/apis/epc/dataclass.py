@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class EPCData:
-    """EPCData:
+    """EPCData.
 
     https://epc.opendatacommunities.org/docs/guidance
 

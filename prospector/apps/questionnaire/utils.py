@@ -160,8 +160,9 @@ def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
 
 
 def get_property_rating(answers: models.Answers) -> enums.RAYG:
-    """
-    Property rating - can only be RED / AMBER / GREEN
+    """Property rating.
+
+    Can only be RED / AMBER / GREEN.
     """
 
     if answers.sap_rating:
