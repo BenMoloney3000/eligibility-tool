@@ -37,6 +37,7 @@ def test_fake_epc_gets_processed():
     assert answers.heat_pump_present_orig is False
     assert answers.other_heating_fuel_orig is enums.NonGasFuel.ELECTRICITY
     assert answers.storage_heaters_present_orig is False
+    assert answers.has_solar_pv_orig is True
 
 
 class TestSyncingAdults(TestCase):

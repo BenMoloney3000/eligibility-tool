@@ -58,6 +58,7 @@ def _process_results(rows):
                 else None
             ),
             row["current-energy-efficiency"],
+            int(row["photo-supply"]),
         )
         for row in rows
     ]

@@ -47,6 +47,7 @@ def prepopulate_from_epc(
     answers.ch_timer_orig = _detect_timer(selected_epc)
     answers.programmable_thermostat_orig = _detect_programmable_thermostat(selected_epc)
     answers.sap_rating = int(selected_epc.current_energy_rating)
+    answers.has_solar_pv_orig = bool(int(selected_epc.photo_supply))
 
     return answers
 

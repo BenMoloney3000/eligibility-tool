@@ -46,4 +46,5 @@ FAKE_EPC = epc.EPCData(
     "From main system",  # hotwater_description
     2302,  # main_heating_controls  (DHS_FLAT_RATE_PROGRAMMER)
     66,  # current_energy_rating
+    30,  # photo_supply
 )
