@@ -161,7 +161,7 @@ def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
 
 def get_property_rating(answers: models.Answers) -> enums.RAYG:
     """
-        Property rating - can only be RED / AMBER / GREEN
+    Property rating - can only be RED / AMBER / GREEN
     """
 
     if answers.sap_rating:
@@ -203,12 +203,13 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
             (True, True, True): enums.RAYG.RED,
         }
 
-
-        return RAG_LOOKUP.get((
-            answers.gas_boiler_present,
-            answers.walls_insulated,
-            answers.has_solar_pv,
-        ))
+        return RAG_LOOKUP.get(
+            (
+                answers.gas_boiler_present,
+                answers.walls_insulated,
+                answers.has_solar_pv,
+            )
+        )
 
 
 def get_overall_rating(answers: models.Answers) -> enums.RAYG:

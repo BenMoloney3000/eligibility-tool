@@ -4,15 +4,16 @@ from dataclasses import dataclass
 
 @dataclass
 class EPCData:
-    """ EPCData:
+    """EPCData:
 
-        https://epc.opendatacommunities.org/docs/guidance
+    https://epc.opendatacommunities.org/docs/guidance
 
-        photo_supply:
-            Percentage of photovoltaic area as a percentage of total roof area.
-            0% indicates that a Photovoltaic Supply is not present in the
-            property.
+    photo_supply:
+        Percentage of photovoltaic area as a percentage of total roof area.
+        0% indicates that a Photovoltaic Supply is not present in the
+        property.
     """
+
     id: str
     date: datetime.date
     address_1: str
