@@ -992,13 +992,6 @@ class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.YesNo
     next = "InConservationArea"
 
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.storage_heaters_present:
-            self.answers.electric_radiators_present = None
-        else:
-            self.answers.hhrshs_present = None
-
 
 class InConservationArea(abstract_views.SingleQuestion):
     title = "Conservation area"
