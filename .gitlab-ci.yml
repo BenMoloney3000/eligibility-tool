@@ -43,7 +43,7 @@ test:
             - ${PIP_CACHE_DIR}
             - venv
 
-    script:
+    before_script:
         - python -V
         - pip --version
         - virtualenv venv
@@ -53,6 +53,8 @@ test:
         - ./venv/bin/pip install --upgrade pip-tools~=6.6.2
         - ./venv/bin/pip-sync --version
         - ./venv/bin/pip-sync requirements/local.txt
+
+    script:
         - ./venv/bin/pytest --cov=prospector
         - ./venv/bin/flake8 prospector
 
