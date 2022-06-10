@@ -46,12 +46,10 @@ test:
     script:
         - python -V
         - virtualenv venv
-        - source venv/bin/activate
-        - pip --version
-        - pip install --upgrade pip~=22.1 pip-tools~=6.6.2
-        - pip-sync requirements/local.txt
-        - pytest --cov=prospector
-        - flake8 prospector
+        - venv/bin/pip install --upgrade pip~=22.1 pip-tools~=6.6.2
+        - venv/bin/pip-sync requirements/local.txt
+        - venv/bin/pytest --cov=prospector
+        - venv/bin/flake8 prospector
 
 pre-commit:
     stage: test
