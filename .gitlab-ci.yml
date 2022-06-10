@@ -46,7 +46,7 @@ test:
     before_script:
         - python -V
         - pip --version
-        - virtualenv venv
+        - python -m venv --upgrade-deps venv
         - ./venv/bin/pip --version
         - ./venv/bin/python -m pip install --upgrade pip~=22.1
         - ./venv/bin/pip --version
