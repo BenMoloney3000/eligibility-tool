@@ -29,10 +29,10 @@ test:
         - mdillon/postgis:10-alpine
         - redis:latest
     variables:
-        DEBUG: 1
+        DEBUG: '1'
         POSTGRES_DB: prospector
         REDIS_HOST: redis
-        REDIS_PORT: 6379
+        REDIS_PORT: '6379'
         DATABASE_URL: 'postgresql://postgres:postgres@mdillon__postgis:5432/$POSTGRES_DB'
         USE_AUTH_SERVICE: 'False'
         PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
