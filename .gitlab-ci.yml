@@ -37,7 +37,7 @@ test:
         USE_AUTH_SERVICE: 'False'
         PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
     cache:
-        key: test
+        key: test_key
         when: 'always'
         paths:
             - ${PIP_CACHE_DIR}
