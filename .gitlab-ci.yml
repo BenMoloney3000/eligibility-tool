@@ -47,7 +47,7 @@ test:
         - python -V
         - virtualenv venv
         - source venv/bin/activate
-        - pip install pip-tools==6.3.0
+        - pip install pip-tools==6.6.2
         - pip-sync requirements/local.txt
         - pytest --cov=prospector
         - flake8 prospector
