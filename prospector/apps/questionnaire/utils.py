@@ -160,9 +160,13 @@ def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
 
 
 def get_property_rating(answers: models.Answers) -> enums.RAYG:
-    # Property rating - can only be RED / AMBER / GREEN
+    """Property rating.
+
+    Can only be RED / AMBER / GREEN.
+    """
 
     if answers.sap_rating:
+        # With EPC
         if answers.sap_rating >= 63:
             return enums.RAYG.RED
         elif answers.sap_rating >= 45:
@@ -170,12 +174,43 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
         else:
             return enums.RAYG.GREEN
     else:
-        if answers.gas_boiler_present is False and answers.walls_insulated is False:
-            return enums.RAYG.GREEN
-        elif answers.gas_boiler_present and answers.walls_insulated:
-            return enums.RAYG.RED
-        else:
-            return enums.RAYG.AMBER
+        """
+        With EPC construct RAG rating as follows:
+
+        G: Heating is Gas (gas_boiler_present)
+        I: Walls are insulated (walls_insulated)
+        S: Has Solar PV (has_solar_pv)
+
+            G I S
+        G   N N N
+        Y   Y N N
+        Y   N Y N
+        Y   N N Y
+        R   Y Y N
+        R   Y N Y
+        R   N Y Y
+        R   Y Y Y
+        """
+
+        RAG_LOOKUP = {
+            #  (G, I, S) -> RAG value
+            (False, False, False): enums.RAYG.GREEN,
+            (True, False, False): enums.RAYG.AMBER,
+            (False, True, False): enums.RAYG.AMBER,
+            (False, False, True): enums.RAYG.AMBER,
+            (True, True, False): enums.RAYG.RED,
+            (True, False, True): enums.RAYG.RED,
+            (False, True, True): enums.RAYG.RED,
+            (True, True, True): enums.RAYG.RED,
+        }
+
+        return RAG_LOOKUP.get(
+            (
+                answers.gas_boiler_present,
+                answers.walls_insulated,
+                answers.has_solar_pv,
+            )
+        )
 
 
 def get_overall_rating(answers: models.Answers) -> enums.RAYG:

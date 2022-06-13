@@ -368,6 +368,16 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property has a smart thermostat control",
     )
+    has_solar_pv = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has solar PV",
+    )
+    has_solar_pv_orig = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has solar PV before correction",
+    )
 
     """
     # Store whether the user wishes to correct the inferred data.

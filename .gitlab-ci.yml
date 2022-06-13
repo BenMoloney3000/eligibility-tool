@@ -37,20 +37,26 @@ test:
         USE_AUTH_SERVICE: 'False'
         PIP_CACHE_DIR: '$CI_PROJECT_DIR/.cache/pip'
     cache:
-        key: test
+        key: test_key
         when: 'always'
         paths:
             - ${PIP_CACHE_DIR}
             - venv
 
-    script:
+    before_script:
         - python -V
-        - virtualenv venv
-        - source venv/bin/activate
-        - pip install pip-tools==6.3.0
-        - pip-sync requirements/local.txt
-        - pytest --cov=prospector
-        - flake8 prospector
+        - pip --version
+        - python -m venv --upgrade-deps venv
+        - ./venv/bin/pip --version
+        - ./venv/bin/python -m pip install --upgrade pip~=22.1
+        - ./venv/bin/pip --version
+        - ./venv/bin/pip install --upgrade pip-tools~=6.6.2
+        - ./venv/bin/pip-sync --version
+        - ./venv/bin/pip-sync requirements/local.txt
+
+    script:
+        - ./venv/bin/pytest --cov=prospector
+        - ./venv/bin/flake8 prospector
 
 pre-commit:
     stage: test

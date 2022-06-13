@@ -1,5 +1,7 @@
 # Self-documenting makefile
 # https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+#
+DOCKER_LOCAL_CONF := docker-compose/local.yml
 
 .PHONY: help
 help:
@@ -42,16 +44,20 @@ sync:  ## Install dependencies
 
 .PHONY: docker-local-up
 docker-local-up:  ## Bring up our local docker containers
-	docker-compose -p prospector -f docker-compose/local.yml up --detach
+	docker-compose -p prospector -f $(DOCKER_LOCAL_CONF) up  # --detach
 
 .PHONY: docker-local-down
 docker-local-down:  ## Shut down our local docker containers
-	docker-compose -p prospector -f docker-compose/local.yml stop
+	docker-compose -p prospector -f $(DOCKER_LOCAL_CONF) stop
 
 .PHONY: docker-local-clean
 docker-local-clean:  ## Clean system volumes (helpful for resetting broken databases)
-	docker-compose -p prospector -f docker-compose/local.yml rm
+	docker-compose -p prospector -f $(DOCKER_LOCAL_CONF) rm
 	docker system prune --volumes -f
+
+# docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose -p prospector -f docker-compose/dev.yml ps -q web)
+# docker-compose -p prospector -f docker-compose/dev.yml exec web /bin/bash
+# python ./manage.py runserver 0.0.0.0:8000
 
 .PHONY: coverage
 coverage:  ## Run tests & generate line-by-line coverage
