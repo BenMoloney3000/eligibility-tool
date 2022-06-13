@@ -455,7 +455,7 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
         ):
             return "GasBoilerPresent"
         else:
-            return "InConservationArea"
+            return "HasSolarPv"
 
 
 class WallType(abstract_views.SinglePrePoppedQuestion):
@@ -498,7 +498,7 @@ class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
         ):
             return "GasBoilerPresent"
         else:
-            return "InConservationArea"
+            return "HasSolarPv"
 
 
 class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
@@ -542,7 +542,7 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
             ):
                 return "GasBoilerPresent"
             else:
-                return "InConservationArea"
+                return "HasSolarPv"
 
 
 class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
@@ -564,7 +564,7 @@ class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
         ):
             return "GasBoilerPresent"
         else:
-            return "InConservationArea"
+            return "HasSolarPv"
 
 
 class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
@@ -637,7 +637,7 @@ class RirInsulated(abstract_views.SinglePrePoppedQuestion):
             # the most common situation - don't skip anything
             return "GasBoilerPresent"
         else:
-            return "InConservationArea"
+            return "HasSolarPv"
 
 
 class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
@@ -655,7 +655,7 @@ class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
             # the most common situation - don't skip anything
             return "GasBoilerPresent"
         else:
-            return "InConservationArea"
+            return "HasSolarPv"
 
 
 class FlatRoof(abstract_views.SinglePrePoppedQuestion):
@@ -684,7 +684,7 @@ class FlatRoof(abstract_views.SinglePrePoppedQuestion):
                 # the most common situation - don't skip anything
                 return "GasBoilerPresent"
             else:
-                return "InConservationArea"
+                return "HasSolarPv"
 
 
 class FlatRoofInsulated(abstract_views.SingleQuestion):
@@ -703,7 +703,7 @@ class FlatRoofInsulated(abstract_views.SingleQuestion):
             # the most common situation - don't skip anything
             return "GasBoilerPresent"
         else:
-            return "InConservationArea"
+            return "HasSolarPv"
 
 
 class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
@@ -717,7 +717,7 @@ class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
             self.answers.heating_inferences_complete()
             and self.answers.will_correct_heating is False
         ):
-            return self.redirect("InConservationArea")
+            return self.redirect("HasSolarPv")
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -791,7 +791,7 @@ class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
 
     def get_next(self):
         if self.answers.heat_pump_present:
-            return "InConservationArea"
+            return "HasSolarPv"
         else:
             return "OtherHeatingFuel"
 
@@ -801,7 +801,7 @@ class OtherHeatingFuel(abstract_views.SinglePrePoppedQuestion):
     question = "What fuel does the central heating system run on?"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.NonGasFuel.choices
-    next = "InConservationArea"
+    next = "HasSolarPv"
 
 
 class GasBoilerAge(abstract_views.SingleQuestion):
@@ -823,7 +823,7 @@ class HeatingControls(abstract_views.Question):
     title = "Heating controls"
     template_name = "questionnaire/heating_controls.html"
     form_class = questionnaire_forms.HeatingControls
-    next = "InConservationArea"
+    next = "HasSolarPv"
 
     def get_initial(self):
         data = super().get_initial()
@@ -872,12 +872,19 @@ class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
     question = "Are there other electric radiators in the property?"
     note = "These may be fixed panel radiators or freestanding heaters."
     type_ = abstract_views.QuestionType.YesNo
-    next = "InConservationArea"
+    next = "HasSolarPv"
 
 
 class HhrshsPresent(abstract_views.SingleQuestion):
     title = "Storage heater performance"
     question = "Are the storage heaters in the property Dimplex Quantum or other high heat retention storage heaters?"
+    type_ = abstract_views.QuestionType.YesNo
+    next = "HasSolarPv"
+
+
+class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
+    title = "Solar PV"
+    question = "Does this property have a Solar PV (Photovoltaic) installation?"
     type_ = abstract_views.QuestionType.YesNo
     next = "InConservationArea"
 
