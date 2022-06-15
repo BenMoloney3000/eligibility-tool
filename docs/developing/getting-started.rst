@@ -10,3 +10,11 @@ Copy example.env to .env and modify as necessary. You might need to modify the D
     ./manage.py migrate
     ./manage.py createcachetable
     ./manage.py runserver
+
+To clear the postcode cache:
+
+.. code-block:: bash
+
+   ./manage.py shell
+   from django.core.cache import caches
+   caches["postcodes"].clear()
