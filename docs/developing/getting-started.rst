@@ -1,6 +1,7 @@
 Copy example.env to .env and modify as necessary. You might need to modify the DATABASE_URL host to match the IP address of the postgres server in the container.
 
-.. code:: bash
+.. code-block:: bash
+
     source .env
     python3 -m venv ~/.virtualenvs/prospector
     source ~/.virtualenvs/prospector/bin/activate
