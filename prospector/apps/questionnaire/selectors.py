@@ -5,6 +5,7 @@ from django.core.cache import caches
 
 from . import models
 from prospector.apis import data8
+from prospector.apis import fake_postcodes
 from prospector.apis import ideal_postcodes
 
 
@@ -43,16 +44,21 @@ def get_postcode(postcode):
     """
     if POSTCODE_CACHE.get(postcode, None):
         return _process_cached_results(POSTCODE_CACHE.get(postcode))
-    else:
-        postcoder = data8 if settings.POSTCODER == "DATA8" else ideal_postcodes
 
-        addresses = postcoder.get_for_postcode(postcode)
+    postcoders = {
+        "DATA8": data8,
+        "IDEAL_POSTCODES": ideal_postcodes,
+        "FAKE": fake_postcodes,
+    }
+    postcoder = postcoders.get(settings.POSTCODER, ideal_postcodes)
 
-        if addresses:
-            POSTCODE_CACHE.set(
-                postcode, [dataclasses.asdict(address) for address in addresses]
-            )
-        return addresses
+    addresses = postcoder.get_for_postcode(postcode)
+
+    if addresses:
+        POSTCODE_CACHE.set(
+            postcode, [dataclasses.asdict(address) for address in addresses]
+        )
+    return addresses
 
 
 def _process_cached_results(results):
