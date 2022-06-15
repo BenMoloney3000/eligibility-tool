@@ -1,5 +1,4 @@
-"""Fake postcode API for testing"""
-
+"""Fake postcode API for testing."""
 from dataclasses import dataclass
 from typing import Optional
 
