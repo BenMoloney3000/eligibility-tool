@@ -4,6 +4,16 @@ from dataclasses import dataclass
 
 @dataclass
 class EPCData:
+    """EPCData.
+
+    https://epc.opendatacommunities.org/docs/guidance
+
+    photo_supply:
+        Percentage of photovoltaic area as a percentage of total roof area.
+        0% indicates that a Photovoltaic Supply is not present in the
+        property.
+    """
+
     id: str
     date: datetime.date
     address_1: str
@@ -23,6 +33,7 @@ class EPCData:
     hotwater_description: str
     main_heating_controls: int
     current_energy_rating: int
+    photo_supply: int
 
     def __repr__(self):
         return (f"{self.address_1}, {self.address_2}".strip(", ")) + (

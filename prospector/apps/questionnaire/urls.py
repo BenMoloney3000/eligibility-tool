@@ -88,6 +88,11 @@ urlpatterns = [
         name="hhrshs-present",
     ),
     path(
+        "has-solar-pv",
+        views.HasSolarPv.as_view(),
+        name="has-solar-pv",
+    ),
+    path(
         "conservation-area",
         views.InConservationArea.as_view(),
         name="in-conservation-area",

@@ -226,6 +226,9 @@ class TestQuestionsRender(TrailTest):
     def test_electric_radiators_present_renders(self):
         assert self._get_trail_view("ElectricRadiatorsPresent").status_code == 200
 
+    def test_has_solr_pv_renders(self):
+        assert self._get_trail_view("HasSolarPv").status_code == 200
+
     def test_in_conservation_area_renders(self):
         assert self._get_trail_view("InConservationArea").status_code == 200
 
@@ -800,7 +803,7 @@ class TestInferredData(TrailTest):
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert response.url == reverse("questionnaire:has-solar-pv")
         assert self.answers.gas_boiler_present is False
         assert self.answers.other_heating_present is False
         assert self.answers.storage_heaters_present is False
@@ -1063,7 +1066,7 @@ class TestSkipForwards(TrailTest):
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert response.url == reverse("questionnaire:has-solar-pv")
         assert self.answers.rir_insulated is False
 
     def test_skip_heating_from_flat_roof(self):
@@ -1081,7 +1084,7 @@ class TestSkipForwards(TrailTest):
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert response.url == reverse("questionnaire:has-solar-pv")
         assert self.answers.flat_roof is False
 
     def test_skip_heating_from_flat_roof_insulated(self):
@@ -1095,7 +1098,7 @@ class TestSkipForwards(TrailTest):
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert response.url == reverse("questionnaire:has-solar-pv")
         assert (
             self.answers.flat_roof_insulated
             == enums.InsulationConfidence.PROBABLY.value
@@ -1116,7 +1119,7 @@ class TestSkipForwards(TrailTest):
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:in-conservation-area")
+        assert response.url == reverse("questionnaire:has-solar-pv")
         assert self.answers.roof_space_insulated is True
 
 
