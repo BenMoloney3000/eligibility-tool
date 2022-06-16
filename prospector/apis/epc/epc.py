@@ -58,7 +58,7 @@ def _process_results(rows):
                 else None
             ),
             row["current-energy-efficiency"],
-            int(row["photo-supply"]),
+            (int(row["photo-supply"]) if row["photo-supply"].isdecimal() else None),
         )
         for row in rows
     ]
