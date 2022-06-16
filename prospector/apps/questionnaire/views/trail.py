@@ -971,6 +971,9 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
         # Obliterate values from the path never taken (in case of reversing)
         if self.answers.disability_benefits:
             self.answers.child_benefit = None
+            self.answers.child_benefit_number_elsewhere = None
+            self.answers.child_benefit_claimant_type = None
+            self.answers.child_benefit_summary = None
             self.answers.child_benefit_threshold = None
             self.answers.income_lt_child_benefit_threshold = None
 
@@ -995,18 +998,118 @@ class ChildBenefit(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.child_benefit:
-            return "IncomeLtChildBenefitThreshold"
+            return "ChildBenefitNumberElsewhere"
         else:
             return "Vulnerabilities"
 
 
+class ChildBenefitNumberElsewhere(abstract_views.SingleQuestion):
+    title = "Child benefit living elsewhere"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.UpToFourOrMore.choices
+    question = (
+        "Thinking of the adult that receives child benefit and lives "
+        "within the house. <br>"
+        "How many children do they have that live somewhere else most of the "
+        "time (more than 50%) and for who they: "
+        "<ul>"
+        " <li>receive child benefit; or,</li>"
+        " <li>pay at least £21.80 per week towards looking after the child?</li>"
+        "</ul>"
+    )
+
+    def get_next(self):
+        if self.answers.adults > 1:
+            return "ChildBenefitClaimantType"
+        else:
+            return "Vulnerabilities"
+
+
+class ChildBenefitClaimantType(abstract_views.SingleQuestion):
+    title = "Type of Child benefit claimant"
+    next = "ChildBenefitSummary"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.ChildBenefitClaimantType.choices
+    question = (
+        "Thinking of the adult that receives child benefit and lives within "
+        "the house.<br>"
+        "Is that adult living with a partner (someone they are married to, "
+        "civil partnered with or cohabitating as a couple) or single and "
+        "living with other adults?"
+    )
+
+
+class ChildBenefitSummary(abstract_views.Question):
+    template_name = "questionnaire/child_benefit_summary.html"
+    next = "IncomeLtChildBenefitThreshold"
+    form_class = questionnaire_forms.ChildBenefitSummary
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(
+            {
+                "answers": self.answers,
+            }
+        )
+        return context
+
+    def get_initial(self):
+        data = super().get_initial()
+        if self.answers.child_benefit_eligibility_complete is not None:
+            data["confirm_or_amend"] = (
+                "YES" if self.answers.child_benefit_eligibility_complete else "NO"
+            )
+        return data
+
+    def pre_save(self):
+        # Catch a request to go back & edit
+        if self.answers.confirm_or_amend == "AMEND":
+            self.answers.child_benefit_eligibility_complete = None
+            self.next = "ChildBenefit"
+        else:
+            self.answers.child_benefit_eligibility_complete = (
+                self.answers.confirm_or_amend == "YES"
+            )
+
+
 class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
+    """IncomeLtChildBenefitThreshold.
+
+    The income threshold depends on the type of claimant and number of
+    children/qualifying young persons:
+
+        see: utils.get_child_benefit_threshold
+
+    https://www.legislation.gov.uk/uksi/2018/1183/schedule/2/made
+
+    """
+
     title = "Income in relation to child benefit threshold"
     next = "Vulnerabilities"
     type_ = abstract_views.QuestionType.YesNo
 
     def get_question(self):
-        return f"Is the household income less than £{self.answers.child_benefit_threshold:,} before tax?"
+        assert self.answers.child_benefit_threshold is not None
+
+        if (
+            self.answers.child_benefit_claimant_type
+            == enums.ChildBenefitClaimantType.SINGLE
+        ):
+            return (
+                "Is the income of the person receiving child benefit less than "
+                f"£{self.answers.child_benefit_threshold:,} "
+                "before tax?"
+            )
+        elif (
+            self.answers.child_benefit_claimant_type
+            == enums.ChildBenefitClaimantType.JOINT
+        ):
+            return (
+                "Is the income of the couple (the person receiving child "
+                "benefit and their partner) less than "
+                f"£{self.answers.child_benefit_threshold:,} "
+                "before tax?"
+            )
 
     def prereq(self):
         self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(

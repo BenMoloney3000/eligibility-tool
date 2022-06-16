@@ -116,6 +116,21 @@ urlpatterns = [
     ),
     path("child-benefit", views.ChildBenefit.as_view(), name="child-benefit"),
     path(
+        "child-benefit-number-elsewhere",
+        views.ChildBenefitNumberElsewhere.as_view(),
+        name="child-benefit-number-elsewhere",
+    ),
+    path(
+        "child-benefit-claimant-type",
+        views.ChildBenefitClaimantType.as_view(),
+        name="child-benefit-claimant-type",
+    ),
+    path(
+        "child-benefit-summary",
+        views.ChildBenefitSummary.as_view(),
+        name="child-benefit-summary",
+    ),
+    path(
         "qualifying-income",
         views.IncomeLtChildBenefitThreshold.as_view(),
         name="income-lt-child-benefit-threshold",

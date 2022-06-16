@@ -250,7 +250,9 @@ class TestQuestionsRender(TrailTest):
     def test_income_lt_child_benefit_threshold_renders(self):
         # Need to set the threshold!
         self.answers.children = 2
+        self.answers.child_benefit_number_elsewhere = 1
         self.answers.child_benefit = True
+        self.answers.child_benefit_claimant_type = enums.ChildBenefitClaimantType.JOINT
         self.answers.save()
         assert self._get_trail_view("IncomeLtChildBenefitThreshold").status_code == 200
 

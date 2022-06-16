@@ -631,3 +631,18 @@ class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):
         widgets = {
             "consented_future_schemes": forms.CheckboxInput(),
         }
+
+
+class ChildBenefitSummary(AnswerFormMixin, forms.ModelForm):
+    confirm_or_amend = forms.ChoiceField(
+        choices=[
+            ("YES", "Yes"),
+            ("AMEND", "No - I need to amend the information I have given"),
+        ],
+        widget=forms.RadioSelect,
+        required=True,
+    )
+
+    class Meta:
+        model = models.Answers
+        fields = ["child_benefit_eligibility_complete"]

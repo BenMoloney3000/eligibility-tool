@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Child benefit: Eligibility summary | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+    <h2>Child benefit eligibility summary:</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <ul>
+            <li>The person receiving child benefit is a 
+                {% if answers.child_benefit_single_claimant %}
+                <b>single claimant</b>
+                {% else %}
+                <b>member of a couple</b>
+                {% endif %}
+            </li>
+            <li>The person receiving child benefit lives with 
+                <b>{{ answers.children }}</b>
+                child{{ answers.children|pluralize:"ren" }} who normally live in this house.
+            </li>
+            <li>The person receiving child benefit has 
+                <b>{{ answers.child_benefit_number_elsewhere }}</b>
+                child{{ answers.child_benefit_number_elsewhere|pluralize:"ren" }} 
+                that normally live elsewhere but for who they receive child
+                benefit or contribute an equivalent amount to looking after
+                them.
+            </li>
+        </ul>
+
+        <p>
+            <label>I confirm this is an accurate description of my household members</label>
+            {{ form.confirm_or_amend}}
+            {{ form.confirm_or_amend.errors }}
+        </p>
+
+        <button class="button">
+            Next&nbsp;&rarr;
+        </button>
+
+        {% if prev_url %}
+            <p><a href="{% url prev_url %}">Back to previous question</a></p>
+        {% endif %}
+    </form>
+{% endblock %}
