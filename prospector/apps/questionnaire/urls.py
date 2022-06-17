@@ -32,7 +32,6 @@ urlpatterns = [
     ),
     path("consents", views.Consents.as_view(), name="consents"),
     path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
-    path("data", views.InferredData.as_view(), name="inferred-data"),
     path("type", views.PropertyType.as_view(), name="property-type"),
     path("age", views.PropertyAgeBand.as_view(), name="property-age-band"),
     path("wall-type", views.WallType.as_view(), name="wall-type"),
@@ -116,6 +115,21 @@ urlpatterns = [
         name="disability-benefits",
     ),
     path("child-benefit", views.ChildBenefit.as_view(), name="child-benefit"),
+    path(
+        "child-benefit-number-elsewhere",
+        views.ChildBenefitNumberElsewhere.as_view(),
+        name="child-benefit-number-elsewhere",
+    ),
+    path(
+        "child-benefit-claimant-type",
+        views.ChildBenefitClaimantType.as_view(),
+        name="child-benefit-claimant-type",
+    ),
+    path(
+        "child-benefit-summary",
+        views.ChildBenefitSummary.as_view(),
+        name="child-benefit-summary",
+    ),
     path(
         "qualifying-income",
         views.IncomeLtChildBenefitThreshold.as_view(),

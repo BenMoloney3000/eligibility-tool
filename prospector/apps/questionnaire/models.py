@@ -502,6 +502,30 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is receiving child benefit",
     )
+    child_benefit_number_elsewhere = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        verbose_name=(
+            "The number of children that live elsewhere (more than 50%% of "
+            "the time) and benefits are receivived or paid for."
+        ),
+        choices=enums.UpToFourOrMore.choices,
+    )
+    child_benefit_claimant_type = models.CharField(
+        max_length=10,
+        null=True,
+        blank=True,
+        verbose_name=(
+            "The person receiving child benefit is a single claimant (not "
+            "member of a couple), or joint claimant."
+        ),
+        choices=enums.ChildBenefitClaimantType.choices,
+    )
+    child_benefit_eligibility_complete = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="This is a full account of child benefit eligibility",
+    )
     child_benefit_threshold = models.PositiveIntegerField(
         null=True,
         blank=True,

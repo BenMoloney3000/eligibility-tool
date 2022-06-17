@@ -330,75 +330,6 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
         ]
 
 
-class InferredData(AnswerFormMixin, forms.ModelForm):
-    will_correct_type = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=CORRECTION_FIELD_CHOICES,
-        widget=forms.RadioSelect,
-        required=True,
-    )
-    will_correct_walls = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=CORRECTION_FIELD_CHOICES,
-        widget=forms.RadioSelect,
-        required=False,
-    )
-    will_correct_roof = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=CORRECTION_FIELD_CHOICES,
-        widget=forms.RadioSelect,
-        required=False,
-    )
-    will_correct_floor = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=CORRECTION_FIELD_CHOICES,
-        widget=forms.RadioSelect,
-        required=False,
-    )
-    will_correct_heating = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=CORRECTION_FIELD_CHOICES,
-        widget=forms.RadioSelect,
-        required=False,
-    )
-
-    def __init__(self, *args, **kwargs):
-        """Dynamically set which fields are required.
-
-        Depends on which inferences have been drawn from the EPC.
-        """
-
-        # get self.answers populated:
-        super().__init__(*args, **kwargs)
-
-        # The user only gets an option to skip bits if we can infer all the data we need.
-        self.fields[
-            "will_correct_type"
-        ].required = self.answers.type_inferences_complete()
-        self.fields[
-            "will_correct_walls"
-        ].required = self.answers.wall_inferences_complete()
-        self.fields[
-            "will_correct_roof"
-        ].required = self.answers.roof_inferences_complete()
-        self.fields[
-            "will_correct_floor"
-        ].required = self.answers.floor_inferences_complete()
-        self.fields[
-            "will_correct_heating"
-        ].required = self.answers.heating_inferences_complete()
-
-    class Meta:
-        model = models.Answers
-        fields = [
-            "will_correct_type",
-            "will_correct_walls",
-            "will_correct_roof",
-            "will_correct_floor",
-            "will_correct_heating",
-        ]
-
-
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
     class Meta:
         model = models.Answers
@@ -700,3 +631,18 @@ class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):
         widgets = {
             "consented_future_schemes": forms.CheckboxInput(),
         }
+
+
+class ChildBenefitSummary(AnswerFormMixin, forms.ModelForm):
+    confirm_or_amend = forms.ChoiceField(
+        choices=[
+            ("YES", "Yes"),
+            ("AMEND", "No - I need to amend the information I have given"),
+        ],
+        widget=forms.RadioSelect,
+        required=True,
+    )
+
+    class Meta:
+        model = models.Answers
+        fields = ["child_benefit_eligibility_complete"]

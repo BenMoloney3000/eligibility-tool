@@ -345,6 +345,11 @@ class BenefitType(models.TextChoices):
     OTHER = "OTHER", "Other"
 
 
+class ChildBenefitClaimantType(models.TextChoices):
+    SINGLE = "SINGLE", "Single Claimant"
+    JOINT = "JOINT", "Joint Claimant"
+
+
 class RAYG(models.TextChoices):
     RED = auto()
     AMBER = auto()
