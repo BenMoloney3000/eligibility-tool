@@ -325,6 +325,7 @@ class PaymentFrequency(models.TextChoices):
 class BenefitPaymentFrequency(models.TextChoices):
     WEEKLY = "WEEKLY", "weekly"
     TWO_WEEKLY = "TWO_WEEKLY", "two weekly"
+    FOUR_WEEKLY = "FOUR_WEEKLY", "four weekly"
     ANNUALLY = "ANNUALLY", "annually"
     MONTHLY = "MONTHLY", "monthly"
 
