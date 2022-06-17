@@ -300,6 +300,8 @@ def _annualise_benefit_income(benefit: models.WelfareBenefit):
         return 0
     elif benefit.frequency == enums.BenefitPaymentFrequency.WEEKLY:
         return round(income * 52.2)
+    elif benefit.frequency == enums.BenefitPaymentFrequency.TWO_WEEKLY:
+        return round(income * (52.2/2))
     elif benefit.frequency == enums.BenefitPaymentFrequency.MONTHLY:
         return income * 12
     else:
