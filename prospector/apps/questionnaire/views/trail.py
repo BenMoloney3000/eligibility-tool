@@ -1389,7 +1389,10 @@ class HouseholdSummary(abstract_views.Question):
         context = super().get_context_data(*args, **kwargs)
         context["calculated_income"] = utils.calculate_household_income(self.answers)
         context["adult_incomes"] = [
-            {"name": adult.full_name, "income": utils.calculate_adult_income(adult)}
+            {
+                "name": adult.full_name,
+                "income": utils.calculate_adult_income(adult),
+            }
             for adult in self.answers.householdadult_set.all()
         ]
         return context
@@ -1448,3 +1451,6 @@ class NothingAtThisTime(abstract_views.Question):
 
 class Completed(TemplateView):
     template_name = "questionnaire/completed.html"
+
+    def get_percent_complete(self) -> int:
+        return 100
