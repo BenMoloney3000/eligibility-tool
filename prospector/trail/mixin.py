@@ -18,9 +18,9 @@ def snake_case(name: str, separator: str):
     separator gives the character to put between words, e.g. snake-case, or snake_case.
     """
     # https://stackoverflow.com/a/44969381/10956063
-    return "".join([separator + c.lower() if c.isupper() else c for c in name]).lstrip(
-        separator
-    )
+    return "".join(
+        [separator + c.lower() if c.isupper() else c for c in name]
+    ).lstrip(separator)
 
 
 class TrailMixin:
@@ -218,6 +218,9 @@ class TrailMixin:
         Override this to get dynamic redirection behaviour.
         """
         return self.next
+
+    def get_percent_complete(self) -> int:
+        return 0
 
     def get_prev_url(self) -> Optional[str]:
         trail = self.get_trail()

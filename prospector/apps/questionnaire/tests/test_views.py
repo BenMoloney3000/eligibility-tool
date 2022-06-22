@@ -103,7 +103,9 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("RespondentRole").status_code == 200
 
     def test_respondent_has_permission_renders(self):
-        assert self._get_trail_view("RespondentHasPermission").status_code == 200
+        assert (
+            self._get_trail_view("RespondentHasPermission").status_code == 200
+        )
 
     def test_need_permission_renders(self):
         assert self._get_trail_view("NeedPermission").status_code == 200
@@ -167,7 +169,9 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("SuspendedFloor").status_code == 200
 
     def test_floor_insulated_renders(self):
-        assert self._get_trail_view("SuspendedFloorInsulated").status_code == 200
+        assert (
+            self._get_trail_view("SuspendedFloorInsulated").status_code == 200
+        )
 
     def test_unheated_loft_renders(self):
         assert self._get_trail_view("UnheatedLoft").status_code == 200
@@ -221,7 +225,9 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("HhrshsPresent").status_code == 200
 
     def test_electric_radiators_present_renders(self):
-        assert self._get_trail_view("ElectricRadiatorsPresent").status_code == 200
+        assert (
+            self._get_trail_view("ElectricRadiatorsPresent").status_code == 200
+        )
 
     def test_has_solr_pv_renders(self):
         assert self._get_trail_view("HasSolarPv").status_code == 200
@@ -239,7 +245,9 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("HouseholdIncome").status_code == 200
 
     def test_household_take_home_income_renders(self):
-        assert self._get_trail_view("HouseholdTakeHomeIncome").status_code == 200
+        assert (
+            self._get_trail_view("HouseholdTakeHomeIncome").status_code == 200
+        )
 
     def test_disability_benefits_renders(self):
         assert self._get_trail_view("DisabilityBenefits").status_code == 200
@@ -252,9 +260,14 @@ class TestQuestionsRender(TrailTest):
         self.answers.children = 2
         self.answers.child_benefit_number_elsewhere = 1
         self.answers.child_benefit = True
-        self.answers.child_benefit_claimant_type = enums.ChildBenefitClaimantType.JOINT
+        self.answers.child_benefit_claimant_type = (
+            enums.ChildBenefitClaimantType.JOINT
+        )
         self.answers.save()
-        assert self._get_trail_view("IncomeLtChildBenefitThreshold").status_code == 200
+        assert (
+            self._get_trail_view("IncomeLtChildBenefitThreshold").status_code
+            == 200
+        )
 
     def test_vulnerabilities_renders(self):
         assert self._get_trail_view("Vulnerabilities").status_code == 200
@@ -287,13 +300,19 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("Adult1EmploymentIncome").status_code == 200
 
     def test_adult1_self_employment_income_renders(self):
-        assert self._get_trail_view("Adult1SelfEmploymentIncome").status_code == 200
+        assert (
+            self._get_trail_view("Adult1SelfEmploymentIncome").status_code
+            == 200
+        )
 
     def test_adult1_welfare_benefits_renders(self):
         assert self._get_trail_view("Adult1WelfareBenefits").status_code == 200
 
     def test_adult1_welfare_benefit_amounts_renders(self):
-        assert self._get_trail_view("Adult1WelfareBenefitAmounts").status_code == 200
+        assert (
+            self._get_trail_view("Adult1WelfareBenefitAmounts").status_code
+            == 200
+        )
 
     def test_adult1_pension_income_renders(self):
         assert self._get_trail_view("Adult1PensionIncome").status_code == 200
@@ -311,13 +330,19 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("Adult2EmploymentIncome").status_code == 200
 
     def test_adult2_self_employment_income_renders(self):
-        assert self._get_trail_view("Adult2SelfEmploymentIncome").status_code == 200
+        assert (
+            self._get_trail_view("Adult2SelfEmploymentIncome").status_code
+            == 200
+        )
 
     def test_adult2_welfare_benefits_renders(self):
         assert self._get_trail_view("Adult2WelfareBenefits").status_code == 200
 
     def test_adult2_welfare_benefit_amounts_renders(self):
-        assert self._get_trail_view("Adult2WelfareBenefitAmounts").status_code == 200
+        assert (
+            self._get_trail_view("Adult2WelfareBenefitAmounts").status_code
+            == 200
+        )
 
     def test_adult2_pension_income_renders(self):
         assert self._get_trail_view("Adult2PensionIncome").status_code == 200
@@ -335,13 +360,19 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("Adult3EmploymentIncome").status_code == 200
 
     def test_adult3_self_employment_income_renders(self):
-        assert self._get_trail_view("Adult3SelfEmploymentIncome").status_code == 200
+        assert (
+            self._get_trail_view("Adult3SelfEmploymentIncome").status_code
+            == 200
+        )
 
     def test_adult3_welfare_benefits_renders(self):
         assert self._get_trail_view("Adult3WelfareBenefits").status_code == 200
 
     def test_adult3_welfare_benefit_amounts_renders(self):
-        assert self._get_trail_view("Adult3WelfareBenefitAmounts").status_code == 200
+        assert (
+            self._get_trail_view("Adult3WelfareBenefitAmounts").status_code
+            == 200
+        )
 
     def test_adult3_pension_income_renders(self):
         assert self._get_trail_view("Adult3PensionIncome").status_code == 200
@@ -359,13 +390,19 @@ class TestQuestionsRender(TrailTest):
         assert self._get_trail_view("Adult4EmploymentIncome").status_code == 200
 
     def test_adult4_self_employment_income_renders(self):
-        assert self._get_trail_view("Adult4SelfEmploymentIncome").status_code == 200
+        assert (
+            self._get_trail_view("Adult4SelfEmploymentIncome").status_code
+            == 200
+        )
 
     def test_adult4_welfare_benefits_renders(self):
         assert self._get_trail_view("Adult4WelfareBenefits").status_code == 200
 
     def test_adult4_welfare_benefit_amounts_renders(self):
-        assert self._get_trail_view("Adult4WelfareBenefitAmounts").status_code == 200
+        assert (
+            self._get_trail_view("Adult4WelfareBenefitAmounts").status_code
+            == 200
+        )
 
     def test_adult4_pension_income_renders(self):
         assert self._get_trail_view("Adult4PensionIncome").status_code == 200
@@ -423,7 +460,10 @@ class TestDataPosts(TrailTest):
         self.answers.refresh_from_db()
 
         assert response.status_code == 302
-        assert self.answers.property_age_band == self.answers.property_age_band_orig
+        assert (
+            self.answers.property_age_band
+            == self.answers.property_age_band_orig
+        )
 
     def test_generic_prepopped_question_saves_overwrite(self):
         # Test an example of a generic SinglePrepoppedQuestion overwriting data
@@ -510,7 +550,10 @@ class TestSkipForwards(TrailTest):
 
         assert response.status_code == 302
         assert response.url == reverse("questionnaire:suspended-floor")
-        assert self.answers.property_age_band == enums.PropertyAgeBand.FROM_1950.value
+        assert (
+            self.answers.property_age_band
+            == enums.PropertyAgeBand.FROM_1950.value
+        )
 
     def test_skip_floors_from_walls_insulated(self):
         # Skip from WallsInsulated to UnheatedLoft
@@ -611,7 +654,8 @@ class TestSkipForwards(TrailTest):
         self.answers.save()
 
         response = self._post_trail_data(
-            "FlatRoofInsulated", {"field": enums.InsulationConfidence.PROBABLY.value}
+            "FlatRoofInsulated",
+            {"field": enums.InsulationConfidence.PROBABLY.value},
         )
         self.answers.refresh_from_db()
 
@@ -702,7 +746,9 @@ class TestHouseholdAdultsLogic(TrailTest):
         assert response.url == reverse("questionnaire:household-summary")
 
     @mock.patch("prospector.apps.questionnaire.utils.get_overall_rating")
-    def test_adult_three_goes_to_next_step_for_yellows(self, get_overall_rating):
+    def test_adult_three_goes_to_next_step_for_yellows(
+        self, get_overall_rating
+    ):
         get_overall_rating.return_value = enums.RAYG.YELLOW
 
         response = self._post_trail_data(
@@ -723,7 +769,16 @@ class TestHouseholdAdultsLogic(TrailTest):
         assert response.url == reverse("questionnaire:adult3-pension-income")
 
     def test_benefits_amount_not_skipped_if_benefits(self):
-        response = self._post_trail_data("Adult3WelfareBenefits", {"uc": "True"})
+        response = self._post_trail_data(
+            "Adult3WelfareBenefits", {"uc": "True"}
+        )
 
         assert response.status_code == 302
-        assert response.url == reverse("questionnaire:adult3-welfare-benefit-amounts")
+        assert response.url == reverse(
+            "questionnaire:adult3-welfare-benefit-amounts"
+        )
+
+
+class TestPercentComplete(TestCase):
+    def test_percent_complete_at_start_is_zero(self) -> None:
+        assert views.Start().get_percent_complete() == 0
