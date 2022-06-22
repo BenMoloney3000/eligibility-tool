@@ -18,9 +18,9 @@ def snake_case(name: str, separator: str):
     separator gives the character to put between words, e.g. snake-case, or snake_case.
     """
     # https://stackoverflow.com/a/44969381/10956063
-    return "".join(
-        [separator + c.lower() if c.isupper() else c for c in name]
-    ).lstrip(separator)
+    return "".join([separator + c.lower() if c.isupper() else c for c in name]).lstrip(
+        separator
+    )
 
 
 class TrailMixin:
