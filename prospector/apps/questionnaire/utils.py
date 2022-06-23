@@ -177,21 +177,21 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
             return enums.RAYG.GREEN
     else:
         """
-        With EPC construct RAG rating as follows:
+        Without an EPC construct the property RAG rating as follows:
 
         G: Heating is Gas (gas_boiler_present)
         I: Walls are insulated (walls_insulated)
         S: Has Solar PV (has_solar_pv)
 
-            G I S
-        G   N N N
+            G I S  Interpretation:
+        G   N N N  - Large potential for improvement.
         Y   Y N N
         Y   N Y N
         Y   N N Y
         R   Y Y N
         R   Y N Y
         R   N Y Y
-        R   Y Y Y
+        R   Y Y Y  - Little potential for improvement.
         """
 
         RAG_LOOKUP = {
@@ -241,9 +241,16 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
 
     # Overall RAYG:
     if property_rating == enums.RAYG.RED:
+        # Interpretation:
+        # - There's little potential for improvement (the property rating is
+        # already is already good).
         return enums.RAYG.RED
     else:
+        # Interpretation:
+        # - There's some potential for improvement (the property rating could
+        # be improved on).
         if income_rating == enums.RAYG.GREEN:
+            # - Likely an eligible recipient for funding
             return property_rating
         else:
             return income_rating
