@@ -1,61 +1,34 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
-    <h2>{{ question_text|safe }}</h2>
-    {% if messages %}
-        <p>
-            {% for message in messages %}
-                {% if message.tags %}
-                    <span class="{{ message.tags }}">{{ message }}</span>
-                {% else %}
-                    {{ message }}
-                {% endif %}
-            {% endfor %}
+{% block form_content %}
+    {% if data_orig %}
+        <p>Based on the data we have on your property we think that the answer is
+            <strong>{{ data_orig }}</strong>
         </p>
-    {% endif %}
-    {% if question_supplement %}
-        <p>{{ question_supplement|safe }}</p>
-    {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        {% if data_orig %}
 
-            <p>Based on the data we have on your property we think that the answer is
-                <strong>{{ data_orig }}</strong>
+        {% if question_type.name != 'YesNo' %}
+            <p>
+                <label for="id_data_correct">Is this correct?</label>
+                {{ form.data_correct }}
             </p>
+            <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
+                <p> If not please select the correct option below:</p>
 
-            {% if question_type.name != 'YesNo' %}
-                <p>
-                    <label for="id_data_correct">Is this correct?</label>
-                    {{ form.data_correct }}
-                </p>
-                <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
-                    <p> If not please select the correct option below:</p>
-
-                    {% include 'questionnaire/dynamic_question_subview.html' %}
-                </div>
-            {% else %}
-                <p>You can correct this below if necessary:</p>
                 {% include 'questionnaire/dynamic_question_subview.html' %}
-            {% endif %}
-
+            </div>
         {% else %}
+            <p>You can correct this below if necessary:</p>
             {% include 'questionnaire/dynamic_question_subview.html' %}
         {% endif %}
 
-        {% if question_note %}
-            <p>{{ question_note|safe }}</p>
-        {% endif %}
+    {% else %}
+        {% include 'questionnaire/dynamic_question_subview.html' %}
+    {% endif %}
 
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    {% if question_note %}
+        <p>{{ question_note|safe }}</p>
+    {% endif %}
+{% endblock form_content %}

@@ -1,38 +1,26 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Contacting you by phone</h2>
-
     <p>Please give us at least one telephone number:</p>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-
-        <p>
-            <label for="id_contact_phone">
-                Home phone number
-            </label><br>
-            {{ form.contact_phone }}
-            {{ form.contact_phone.errors }}
-        </p>
-        <p>
-            <label for="id_contact_mobile">
-                Mobile phone number
-            </label><br>
-            {{ form.contact_mobile }}
-            {{ form.contact_mobile.errors }}
-        </p>
-
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+{% block form_content %}
+    <p>
+        <label for="id_contact_phone">
+            Home phone number
+        </label><br>
+        {{ form.contact_phone }}
+        {{ form.contact_phone.errors }}
+    </p>
+    <p>
+        <label for="id_contact_mobile">
+            Mobile phone number
+        </label><br>
+        {{ form.contact_mobile }}
+        {{ form.contact_mobile.errors }}
+    </p>
+{% endblock form_content %}
