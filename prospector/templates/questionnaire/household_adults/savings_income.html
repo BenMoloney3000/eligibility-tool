@@ -1,31 +1,21 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ full_name }}'s savings and investment income | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>What is {{ full_name }}'s income from investments or savings interest?</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-
-        <p class="currency">
-            <span class="symbol">£</span>
-            {{ form.saving_investment_income }}
-            {{ form.saving_investment_income.errors }}
-        </p>
-        <p>
-            {{ form.saving_investment_income_frequency }}
-            {{ form.saving_investment_income_frequency.errors }}
-        </p>
-        <p><em>Where the income is negligible (less than £200pa) use a figure of £0</em></p>
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+{% block form_content %}
+    <p class="currency">
+        <span class="symbol">£</span>
+        {{ form.saving_investment_income }}
+        {{ form.saving_investment_income.errors }}
+    </p>
+    <p>
+        {{ form.saving_investment_income_frequency }}
+        {{ form.saving_investment_income_frequency.errors }}
+    </p>
+    <p><em>Where the income is negligible (less than £200pa) use a figure of £0</em></p>
+{% endblock form_content %}

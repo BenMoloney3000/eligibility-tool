@@ -1,12 +1,16 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
+
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>
         Find out if you are eligible for funding to make energy efficiency and low carbon improvements to your home
     </h2>
+{% endblock question_text %}
+
+{% block form_content %}
     <p>
         Welcome to the retrofit funding eligibility tool. You can use this tool to find out if you and your property may be eligible for funding towards the cost of energy and carbon saving improvements for your home.
     </p>
@@ -23,30 +27,18 @@
     <p>
         You can correct or amend details PEC hold about you, ask to see details PEC hold about you or ask for PEC to stop storing and using your details at any time, including any data used by third parties appointed by PEC, by emailing &#101;nergyte&#97;m&#64;p&#108;ym&#111;&#117;thenergycommunit&#121;&#46;co&#109; or calling us on <a href="tel:01752477117">01752 477117</a>. PEC’s full privacy statement is available at <a href="https://plymouthenergycommunity.com/legal/privacy-policy">www.plymouthenergycommunity.com/legal/privacy-policy</a>.
     </a>
-    <form method="POST">
-        {% csrf_token %}
-        <p>
-            <input
-                type="checkbox"
-                id="{{ form.field.auto_id }}_{{ value }}"
-                name="{{ form.field.html_name }}"
-                value="True"
-            >
-            <label for="{{ form.field.auto_id }}_{{ value }}">
-                {{ question_text }}
-            </label>
-            {% for error in form.field.errors %}
-                <span class="input-error">Please accept our privacy terms to continue.</span>
-            {% endfor %}
-        </p>
-
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p>
+        <input
+            type="checkbox"
+            id="{{ form.field.auto_id }}_{{ value }}"
+            name="{{ form.field.html_name }}"
+            value="True"
+        >
+        <label for="{{ form.field.auto_id }}_{{ value }}">
+            {{ question_text }}
+        </label>
+        {% for error in form.field.errors %}
+            <span class="input-error">Please accept our privacy terms to continue.</span>
+        {% endfor %}
+    </p>
+{% endblock form_content %}
