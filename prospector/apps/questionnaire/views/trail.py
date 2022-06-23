@@ -29,6 +29,7 @@ class Start(abstract_views.SingleQuestion):
     answer_field = "terms_accepted_at"
     question = "Please confirm that you have read and accept our data privacy policy."
     next = "RespondentName"
+    percent_complete = 0
 
     def pre_save(self):
         self.answers.terms_accepted_at = timezone.now()
@@ -45,6 +46,7 @@ class RespondentRole(abstract_views.Question):
     title = "Your role"
     form_class = questionnaire_forms.RespondentRole
     template_name = "questionnaire/respondent_role.html"
+    percent_complete = 25
 
     def pre_save(self):
         if self.answers.is_occupant:
@@ -389,6 +391,7 @@ class PropertyType(abstract_views.Question):
     template_name = "questionnaire/property_type.html"
     form_class = questionnaire_forms.PropertyType
     next = "PropertyAgeBand"
+    percent_complete = 33
 
     def get_initial(self):
         data = super().get_initial()
@@ -911,6 +914,7 @@ class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
     title = "Household composition"
     next = "HouseholdIncome"
+    percent_complete = 67
     form_class = questionnaire_forms.Occupants
 
 
@@ -1389,10 +1393,7 @@ class HouseholdSummary(abstract_views.Question):
         context = super().get_context_data(*args, **kwargs)
         context["calculated_income"] = utils.calculate_household_income(self.answers)
         context["adult_incomes"] = [
-            {
-                "name": adult.full_name,
-                "income": utils.calculate_adult_income(adult),
-            }
+            {"name": adult.full_name, "income": utils.calculate_adult_income(adult)}
             for adult in self.answers.householdadult_set.all()
         ]
         return context

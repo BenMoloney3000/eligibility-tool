@@ -220,7 +220,7 @@ class TrailMixin:
         return self.next
 
     def get_percent_complete(self) -> int:
-        return 0
+        return self.percent_complete
 
     def get_prev_url(self) -> Optional[str]:
         trail = self.get_trail()

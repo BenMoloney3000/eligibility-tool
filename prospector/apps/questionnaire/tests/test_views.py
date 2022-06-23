@@ -728,11 +728,3 @@ class TestHouseholdAdultsLogic(TrailTest):
 
         assert response.status_code == 302
         assert response.url == reverse("questionnaire:adult3-welfare-benefit-amounts")
-
-
-class TestPercentComplete(TestCase):
-    def test_percent_complete_at_start_is_zero(self) -> None:
-        assert views.Start().get_percent_complete() == 0
-
-    def test_percent_complete_at_end_is_100(self) -> None:
-        assert views.Completed().get_percent_complete() == 100

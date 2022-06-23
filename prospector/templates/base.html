@@ -20,6 +20,8 @@
             </div>
         </header>
         <div class="wrapper">
+            <label for="progress">progress</label>
+            <meter id="progress" min="0" max="100" value="{{ percent_complete }}"></meter>
             {% block content %}
             {% endblock content %}
         </div>

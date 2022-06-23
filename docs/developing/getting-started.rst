@@ -24,3 +24,9 @@ To run the tests:
 .. code-block:: bash
 
    pytest
+
+To run the pre-commit hooks:
+
+.. code-block:: bash
+
+   pre-commit install
