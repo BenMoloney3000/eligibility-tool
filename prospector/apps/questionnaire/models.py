@@ -726,7 +726,7 @@ class WelfareBenefit(models.Model):
         choices=enums.BenefitType.choices, max_length=20, blank=False
     )
     frequency = models.CharField(
-        choices=enums.BenefitPaymentFrequency.choices, max_length=8, blank=True
+        choices=enums.BenefitPaymentFrequency.choices, max_length=12, blank=True
     )
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
 
