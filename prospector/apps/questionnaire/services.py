@@ -84,6 +84,7 @@ def depopulate_orig_fields(answers: models.Answers) -> models.Answers:
     answers.ch_timer_orig = None
     answers.programmable_thermostat_orig = None
     answers.sap_rating = None
+    answers.has_solar_pv_orig = None
 
     return answers
 
