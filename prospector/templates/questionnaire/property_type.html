@@ -1,40 +1,24 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Property Type</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block form_content %}
+    {% if form.data_correct %}
+        <p>From the publicly available data on your property we think that this property is a
+            <strong>{{ initial_form }} {{ initial_type|lower }}</strong>
+        </p>
 
-        {% if form.data_correct %}
-            <p>From the publicly available data on your property we think that this property is a
-                <strong>{{ initial_form }} {{ initial_type|lower }}</strong>
-            </p>
-
-            <p>
-                <label for="id_data_correct">Is this correct?</label>
-                {{ form.data_correct }}
-            </p>
-            <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
-                <p> If not please select the correct option below:</p>
-                <p>
-                    {{ form.property_form }}
-                    {{ form.property_form.errors }}
-                </p>
-                <p>
-                    {{ form.property_type }}
-                    {{ form.property_type.errors }}
-                </p>
-            </div>
-
-        {% else %}
-            <p>
-                Please select the options that best describe your property
-            </p>
-
+        <p>
+            <label for="id_data_correct">Is this correct?</label>
+            {{ form.data_correct }}
+        </p>
+        <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
+            <p> If not please select the correct option below:</p>
             <p>
                 {{ form.property_form }}
                 {{ form.property_form.errors }}
@@ -43,15 +27,21 @@
                 {{ form.property_type }}
                 {{ form.property_type.errors }}
             </p>
+        </div>
 
-        {% endif %}
+    {% else %}
+        <p>
+            Please select the options that best describe your property
+        </p>
 
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
+        <p>
+            {{ form.property_form }}
+            {{ form.property_form.errors }}
+        </p>
+        <p>
+            {{ form.property_type }}
+            {{ form.property_type.errors }}
+        </p>
 
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    {% endif %}
+{% endblock form_content %}

@@ -1,77 +1,68 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ full_name }}'s employment income | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>What welfare benefits are received by {{ full_name }}, if any?</h2>
+{% endblock question_text %}
 
+{% block form_content %}
     <p><em>Check all that apply</em></p>
-
-    <form method="POST">
-        {% csrf_token %}
-        <p>
-            {{ form.uc }}
-            <label for="id_uc">Universal Credit</label>
-        </p>
-        <p>
-            {{ form.jsa }}
-            <label for="id_jsa">Job Seekers Allowance (JSA)</label>
-        </p>
-        <p>
-            {{ form.esa }}
-            <label for="id_esa">Employment and Support Allowance (ESA)</label>
-        </p>
-        <p>
-            {{ form.income_support }}
-            <label for="id_income_support">Income Support</label>
-        </p>
-        <p>
-            {{ form.child_tax_credit }}
-            <label for="id_child_tax_credit">Child Tax Credit</label>
-        </p>
-        <p>
-            {{ form.working_tax_credit }}
-            <label for="id_working_tax_credit">Working Tax Credit</label>
-        </p>
-        <p>
-            {{ form.child_benefit }}
-            <label for="id_child_benefit">Child Benefit</label>
-        </p>
-        <p>
-            {{ form.housing_benefit }}
-            <label for="id_housing_benefit">Housing Benefit</label>
-        </p>
-        <p>
-            {{ form.attendance_allowance }}
-            <label for="id_attendance_allowance">Attendance Allowance</label>
-        </p>
-        <p>
-            {{ form.carers_allowance }}
-            <label for="id_carers_allowance">Carers Allowance</label>
-        </p>
-        <p>
-            {{ form.dla }}
-            <label for="id_dla">Disability Living Allowance (DLA)</label>
-        </p>
-        <p>
-            {{ form.pip }}
-            <label for="id_pip">Personal Independence Payment (PIP)</label>
-        </p>
-        <p>
-            {{ form.pension_credit }}
-            <label for="id_pension_credit">Pension Credit</label>
-        </p>
-        <p>
-            {{ form.other }}
-            <label for="id_other">Other</label>
-        </p>
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p>
+        {{ form.uc }}
+        <label for="id_uc">Universal Credit</label>
+    </p>
+    <p>
+        {{ form.jsa }}
+        <label for="id_jsa">Job Seekers Allowance (JSA)</label>
+    </p>
+    <p>
+        {{ form.esa }}
+        <label for="id_esa">Employment and Support Allowance (ESA)</label>
+    </p>
+    <p>
+        {{ form.income_support }}
+        <label for="id_income_support">Income Support</label>
+    </p>
+    <p>
+        {{ form.child_tax_credit }}
+        <label for="id_child_tax_credit">Child Tax Credit</label>
+    </p>
+    <p>
+        {{ form.working_tax_credit }}
+        <label for="id_working_tax_credit">Working Tax Credit</label>
+    </p>
+    <p>
+        {{ form.child_benefit }}
+        <label for="id_child_benefit">Child Benefit</label>
+    </p>
+    <p>
+        {{ form.housing_benefit }}
+        <label for="id_housing_benefit">Housing Benefit</label>
+    </p>
+    <p>
+        {{ form.attendance_allowance }}
+        <label for="id_attendance_allowance">Attendance Allowance</label>
+    </p>
+    <p>
+        {{ form.carers_allowance }}
+        <label for="id_carers_allowance">Carers Allowance</label>
+    </p>
+    <p>
+        {{ form.dla }}
+        <label for="id_dla">Disability Living Allowance (DLA)</label>
+    </p>
+    <p>
+        {{ form.pip }}
+        <label for="id_pip">Personal Independence Payment (PIP)</label>
+    </p>
+    <p>
+        {{ form.pension_credit }}
+        <label for="id_pension_credit">Pension Credit</label>
+    </p>
+    <p>
+        {{ form.other }}
+        <label for="id_other">Other</label>
+    </p>
+{% endblock form_content %}

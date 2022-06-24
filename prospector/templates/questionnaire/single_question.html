@@ -1,39 +1,4 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
-
-{% block content %}
-    <h2>{{ question_text|safe }}</h2>
-
-    {% if messages %}
-        <p>
-            {% for message in messages %}
-                {% if message.tags %}
-                    <span class="{{ message.tags }}">{{ message }}</span>
-                {% else %}
-                    {{ message }}
-                {% endif %}
-            {% endfor %}
-        </p>
-    {% endif %}
-    {% if question_supplement %}
-        <p>{{ question_supplement|safe }}</p>
-    {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        {% include 'questionnaire/dynamic_question_subview.html' %}
-
-        {% if question_note %}
-            <p>{{ question_note|safe }}</p>
-        {% endif %}
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}

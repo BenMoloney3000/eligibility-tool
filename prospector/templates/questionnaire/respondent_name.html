@@ -1,36 +1,26 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Your name</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block form_content %}
+    <p>
+        <label for="id_first_name">
+            First name
+        </label>
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+    </p>
 
-        <p>
-            <label for="id_first_name">
-                First name
-            </label>
-            {{ form.first_name }}
-            {{ form.first_name.errors }}
-        </p>
-
-        <p>
-            <label for="id_first_name">
-                Last name
-            </label>
-            {{ form.last_name }}
-            {{ form.last_name.errors }}
-        </p>
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p>
+        <label for="id_first_name">
+            Last name
+        </label>
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+    </p>
+{% endblock form_content %}

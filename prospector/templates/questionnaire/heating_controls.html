@@ -1,68 +1,58 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>How is the heating in this property controlled?</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block form_content %}
+    {% if any_orig %}
+        <p>From the publicly available data on your property we think that there are:</p>
+        <ul>
+            {% if trvs_present_orig %}
+                <li>Thermostatically controlled radiator valves (TRVs)</li>
+            {% endif %}
+            {% if room_thermostat_orig %}
+                <li>One or more room thermostats</li>
+            {% endif %}
+            {% if ch_timer_orig %}
+                <li>A central heating timer</li>
+            {% endif %}
+            {% if programmable_thermostat_orig %}
+                <li>A programmable central heating thermostat</li>
+            {% endif %}
+        </ul>
+        </p>
+        <p>If any of these are wrong, or if you have additional controls, please correct this below:</p>
+    {% else %}
+        <p>Which of the following control systems are present in this property?</p>
+    {% endif %}
 
-        {% if any_orig %}
-            <p>From the publicly available data on your property we think that there are:</p>
-            <ul>
-                {% if trvs_present_orig %}
-                    <li>Thermostatically controlled radiator valves (TRVs)</li>
-                {% endif %}
-                {% if room_thermostat_orig %}
-                    <li>One or more room thermostats</li>
-                {% endif %}
-                {% if ch_timer_orig %}
-                    <li>A central heating timer</li>
-                {% endif %}
-                {% if programmable_thermostat_orig %}
-                    <li>A programmable central heating thermostat</li>
-                {% endif %}
-            </ul>
-            </p>
-            <p>If any of these are wrong, or if you have additional controls, please correct this below:</p>
-        {% else %}
-            <p>Which of the following control systems are present in this property?</p>
-        {% endif %}
-
-        <p>
-            <label for="id_trvs_present">Thermostatically controlled radiator valves (TRVs)</label>
-            {{ form.trvs_present }}
-            {{ form.trvs_present.errors }}
-        </p>
-        <p>
-            <label for="id_room_thermostat">One or more room thermostats</label>
-            {{ form.room_thermostat }}
-            {{ form.room_thermostat.errors }}
-        </p>
-        <p>
-            <label for="id_ch_timer">A central heating timer</label>
-            {{ form.ch_timer }}
-            {{ form.ch_timer.errors }}
-        </p>
-        <p>
-            <label for="id_programmable_thermostat">A programmable central heating thermostat</label>
-            {{ form.programmable_thermostat }}
-            {{ form.programmable_thermostat.errors }}
-        </p>
-        <p>
-            <label for="id_smart_thermostat">A smart thermostat system</label>
-            {{ form.smart_thermostat }}
-            {{ form.smart_thermostat.errors }}
-        </p>
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p>
+        <label for="id_trvs_present">Thermostatically controlled radiator valves (TRVs)</label>
+        {{ form.trvs_present }}
+        {{ form.trvs_present.errors }}
+    </p>
+    <p>
+        <label for="id_room_thermostat">One or more room thermostats</label>
+        {{ form.room_thermostat }}
+        {{ form.room_thermostat.errors }}
+    </p>
+    <p>
+        <label for="id_ch_timer">A central heating timer</label>
+        {{ form.ch_timer }}
+        {{ form.ch_timer.errors }}
+    </p>
+    <p>
+        <label for="id_programmable_thermostat">A programmable central heating thermostat</label>
+        {{ form.programmable_thermostat }}
+        {{ form.programmable_thermostat.errors }}
+    </p>
+    <p>
+        <label for="id_smart_thermostat">A smart thermostat system</label>
+        {{ form.smart_thermostat }}
+        {{ form.smart_thermostat.errors }}
+    </p>
+{% endblock form_content %}

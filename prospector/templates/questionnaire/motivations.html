@@ -1,51 +1,41 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Motivations</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-
-        <p>
-            {% if is_owner %}
-                What are the aims for upgrading this property? Please select any that apply.
-            {% else %}
-                What are the owner's aims for upgrading this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
-            {% endif %}
-        </p>
-
-        <p>
-            {{ form.motivation_better_comfort }}
-            <label for="id_motivation_better_comfort">Better comfort</label>
-            {{ form.motivation_better_comfort.errors }}
-        </p>
-        <p>
-            {{ form.motivation_lower_bills }}
-            <label for="id_motivation_lower_bills">Lower bills</label>
-            {{ form.motivation_lower_bills.errors }}
-        </p>
-        <p>
-            {{ form.motivation_environment }}
-            <label for="id_motivation_environment">A more environmentally friendly home</label>
-            {{ form.motivation_environment.errors }}
-        </p>
-        {% if not is_owner %}
-            <p>
-                {{ form.motivation_unknown }}
-                <label for="id_motivation_unknown">I don't know</label>
-                {{ form.motivation_unknown.errors }}
-            </p>
+{% block form_content %}
+    <p>
+        {% if is_owner %}
+            What are the aims for upgrading this property? Please select any that apply.
+        {% else %}
+            What are the owner's aims for upgrading this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
         {% endif %}
+    </p>
 
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p>
+        {{ form.motivation_better_comfort }}
+        <label for="id_motivation_better_comfort">Better comfort</label>
+        {{ form.motivation_better_comfort.errors }}
+    </p>
+    <p>
+        {{ form.motivation_lower_bills }}
+        <label for="id_motivation_lower_bills">Lower bills</label>
+        {{ form.motivation_lower_bills.errors }}
+    </p>
+    <p>
+        {{ form.motivation_environment }}
+        <label for="id_motivation_environment">A more environmentally friendly home</label>
+        {{ form.motivation_environment.errors }}
+    </p>
+    {% if not is_owner %}
+        <p>
+            {{ form.motivation_unknown }}
+            <label for="id_motivation_unknown">I don't know</label>
+            {{ form.motivation_unknown.errors }}
+        </p>
+    {% endif %}
+{% endblock form_content %}

@@ -1,62 +1,53 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Your address</h2>
     <p>Note this is <em>your</em> correspondence address, not the address of the property about which you are enquiring.</p>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ all_postcode_addresses|json_script:"allPostcodes" }}
-        {% if form.respondent_udprn.field.widget.choices %}
-            <p class="postcode-populator">
-                <label for="id_selected_address">
-                    Choose your address from the list:
-                </label>
-                {{ form.respondent_udprn }}
-                {{ form.respondent_udprn.errors }}
-            </p>
-            <p>
-                If your address is not in the list, please check that you entered the correct postcode ({{ postcode }}) and if necessary
-                <a href="{% url "questionnaire:respondent-postcode" %}">go back to change it</a>.
-            </p>
-            <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
-        {% else %}
-            <p>
-                We could not find any addresses for the postcode you entered. If you're sure that you entered the correct postcode ({{ postcode }}) then please enter your address below. Otherwise you can
-                <a href="{% url "questionnaire:respondent-postcode" %}">go back to change it</a>.
-            </p>
-        {% endif %}
-
-        <p class="target-address_1">
-            <label for="id_respondent_address_1">
-                Address
-            </label><br>
-            {{ form.respondent_address_1 }}
-            {{ form.respondent_address_1.errors }}
+{% block form_content %}
+    {{ all_postcode_addresses|json_script:"allPostcodes" }}
+    {% if form.respondent_udprn.field.widget.choices %}
+        <p class="postcode-populator">
+            <label for="id_selected_address">
+                Choose your address from the list:
+            </label>
+            {{ form.respondent_udprn }}
+            {{ form.respondent_udprn.errors }}
         </p>
-
-        <p class="target-address_2">
-            {{ form.respondent_address_2 }}
-            {{ form.respondent_address_2.errors }}
+        <p>
+            If your address is not in the list, please check that you entered the correct postcode ({{ postcode }}) and if necessary
+            <a href="{% url "questionnaire:respondent-postcode" %}">go back to change it</a>.
         </p>
-
-        <p class="target-address_3">
-            <label for="id_town_city_dummy">
-                Town/city/locality
-            </label><br>
-            {{ form.respondent_address_3 }}
-            {{ form.respondent_address_3.errors }}
+        <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
+    {% else %}
+        <p>
+            We could not find any addresses for the postcode you entered. If you're sure that you entered the correct postcode ({{ postcode }}) then please enter your address below. Otherwise you can
+            <a href="{% url "questionnaire:respondent-postcode" %}">go back to change it</a>.
         </p>
+    {% endif %}
 
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
+    <p class="target-address_1">
+        <label for="id_respondent_address_1">
+            Address
+        </label><br>
+        {{ form.respondent_address_1 }}
+        {{ form.respondent_address_1.errors }}
+    </p>
 
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p class="target-address_2">
+        {{ form.respondent_address_2 }}
+        {{ form.respondent_address_2.errors }}
+    </p>
+
+    <p class="target-address_3">
+        <label for="id_town_city_dummy">
+            Town/city/locality
+        </label><br>
+        {{ form.respondent_address_3 }}
+        {{ form.respondent_address_3.errors }}
+    </p>
+{% endblock form_content %}
