@@ -5,7 +5,7 @@
 
 {% block content %}
     {% block question_text %}
-    <h2>{{ question_text|safe }}</h2>
+        <h2>{{ question_text|safe }}</h2>
     {% endblock question_text %}
     {% if messages %}
         <p>
@@ -24,24 +24,24 @@
     <form method="POST">
         {% csrf_token %}
         {% block form_content %}
-        {% include 'questionnaire/dynamic_question_subview.html' %}
+            {% include 'questionnaire/dynamic_question_subview.html' %}
 
-        {% if question_note %}
-            <p>{{ question_note|safe }}</p>
-        {% endif %}
+            {% if question_note %}
+                <p>{{ question_note|safe }}</p>
+            {% endif %}
         {% endblock form_content %}
         {% block nav_form %}
             <div class="nav_form">
-            {% if prev_url %}
-                <a href="{% url prev_url %}">
-                    <button type="button" class="button">
-                        &larr;&nbsp;Prev
-                    </button>
-                </a>
-            {% endif %}
-            <button class="button">
-                Next&nbsp;&rarr;
-            </button>
+                {% if prev_url %}
+                    <a href="{% url prev_url %}">
+                        <button type="button" class="button">
+                            &larr;&nbsp;Prev
+                        </button>
+                    </a>
+                {% endif %}
+                <button class="button">
+                    Next&nbsp;&rarr;
+                </button>
             </div>
         {% endblock nav_form %}
     </form>
