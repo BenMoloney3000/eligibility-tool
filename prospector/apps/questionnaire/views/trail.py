@@ -886,13 +886,6 @@ class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     title = "Solar PV"
     question = "Does this property have a Solar PV (Photovoltaic) installation?"
     type_ = abstract_views.QuestionType.YesNo
-    next = "InConservationArea"
-
-
-class InConservationArea(abstract_views.SingleQuestion):
-    title = "Conservation area"
-    question = "Is this property in a conservation area?"
-    type_ = abstract_views.QuestionType.YesNo
 
     def get_next(self):
         if selectors.data_was_changed(self.answers):

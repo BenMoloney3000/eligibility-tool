@@ -413,11 +413,6 @@ class Answers(models.Model):
     # CONSTRAINTS: planning area and owner preferences
     """
 
-    in_conservation_area = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property is in a conservation area",
-    )
     tolerated_disruption = models.CharField(
         max_length=20,
         choices=enums.ToleratedDisruption.choices,
