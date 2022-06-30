@@ -391,7 +391,7 @@ class PropertyType(abstract_views.Question):
     template_name = "questionnaire/property_type.html"
     form_class = questionnaire_forms.PropertyType
     next = "PropertyAgeBand"
-    percent_complete = 33
+    percent_complete = 25
 
     def get_initial(self):
         data = super().get_initial()
@@ -890,6 +890,7 @@ class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     question = "Does this property have a Solar PV (Photovoltaic) installation?"
     type_ = abstract_views.QuestionType.YesNo
     next = "InConservationArea"
+    percent_complete = 50
 
 
 class InConservationArea(abstract_views.SingleQuestion):
@@ -1164,6 +1165,7 @@ class ToleratedDisruption(abstract_views.SingleQuestion):
     question = "What level of disruption would be acceptable during home upgrade works?"
     type_ = abstract_views.QuestionType.Choices
     next = "StateOfRepair"
+    percent_complete = 75
 
     def get_choices(self):
         # Only non-owners get to answer "I don't know"
