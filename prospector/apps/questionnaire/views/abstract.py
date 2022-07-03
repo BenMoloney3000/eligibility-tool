@@ -118,6 +118,9 @@ class Question(mixin.TrailMixin, FormView):
 
         return self.__class__.__name__
 
+    def get_percent_complete(self) -> int:
+        return getattr(self, "percent_complete", 0)
+
 
 class SingleQuestion(Question):
     """
