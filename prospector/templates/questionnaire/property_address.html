@@ -1,66 +1,58 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Property address</h2>
     <p>Please tell us the address of the property about which you're enquiring.</p>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ all_postcode_addresses|json_script:"allPostcodes" }}
-        {% if form.property_udprn.field.widget.choices %}
-            <p class="postcode-populator">
-                <label for="id_udprn">
-                    Choose the address from the list:
-                </label>
-                {{ form.property_udprn }}
-                {{ form.property_udprn.errors }}
-            </p>
-            <p>
-                If your address is not in the list, please check that you entered the correct postcode ({{ property_postcode }}) and if necessary
-                <a href="{% url "questionnaire:property-postcode" %}">go back to change it</a>.
-            </p>
-            <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
-        {% else %}
-            <p>
-                We could not find any addresses for the property you entered. If're sure that you entered the correct postcode ({{ property_postcode }}) then please enter your address below. Otherwise you can
-                <a href="{% url "questionnaire:property-postcode" %}">go back to change it</a>.
-            </p>
-
-        {% endif %}
-
-        <p class="target-address_1">
-            <label for="id_property_address_1">
-                Address
-            </label><br>
-            {{ form.property_address_1 }}
-            {{ form.property_address_1.errors }}
+{% block form_content %}
+    {{ all_postcode_addresses|json_script:"allPostcodes" }}
+    {% if form.property_udprn.field.widget.choices %}
+        <p class="postcode-populator">
+            <label for="id_udprn">
+                Choose the address from the list:
+            </label>
+            {{ form.property_udprn }}
+            {{ form.property_udprn.errors }}
         </p>
-
-        <p class="target-address_2">
-            {{ form.property_address_2 }}
-            {{ form.property_address_2.errors }}
-        </p>
-
-        <p class="target-address_3">
-            {{ form.property_address_3 }}
-            {{ form.property_address_3.errors }}
-        </p>
-
         <p>
-            <label for="id_town_city_dummy">
-                Town/city/locality
-            </label><br>
-            <input type="text" name="town_city_dummy" readonly value="Plymouth">
+            If your address is not in the list, please check that you entered the correct postcode ({{ property_postcode }}) and if necessary
+            <a href="{% url "questionnaire:property-postcode" %}">go back to change it</a>.
         </p>
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
+        <p>If you are sure you have entered the correct postcode, please enter your address below:</p>
+    {% else %}
+        <p>
+            We could not find any addresses for the property you entered. If're sure that you entered the correct postcode ({{ property_postcode }}) then please enter your address below. Otherwise you can
+            <a href="{% url "questionnaire:property-postcode" %}">go back to change it</a>.
+        </p>
 
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    {% endif %}
+
+    <p class="target-address_1">
+        <label for="id_property_address_1">
+            Address
+        </label><br>
+        {{ form.property_address_1 }}
+        {{ form.property_address_1.errors }}
+    </p>
+
+    <p class="target-address_2">
+        {{ form.property_address_2 }}
+        {{ form.property_address_2.errors }}
+    </p>
+
+    <p class="target-address_3">
+        {{ form.property_address_3 }}
+        {{ form.property_address_3.errors }}
+    </p>
+
+    <p>
+        <label for="id_town_city_dummy">
+            Town/city/locality
+        </label><br>
+        <input type="text" name="town_city_dummy" readonly value="Plymouth">
+    </p>
+{% endblock form_content %}

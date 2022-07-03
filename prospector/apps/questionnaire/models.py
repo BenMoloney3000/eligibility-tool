@@ -413,11 +413,6 @@ class Answers(models.Model):
     # CONSTRAINTS: planning area and owner preferences
     """
 
-    in_conservation_area = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property is in a conservation area",
-    )
     tolerated_disruption = models.CharField(
         max_length=20,
         choices=enums.ToleratedDisruption.choices,
@@ -726,7 +721,7 @@ class WelfareBenefit(models.Model):
         choices=enums.BenefitType.choices, max_length=20, blank=False
     )
     frequency = models.CharField(
-        choices=enums.BenefitPaymentFrequency.choices, max_length=8, blank=True
+        choices=enums.BenefitPaymentFrequency.choices, max_length=12, blank=True
     )
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
 

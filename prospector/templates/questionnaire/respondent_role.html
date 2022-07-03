@@ -1,48 +1,35 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
-{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
-
-{% block content %}
+{% block question_text %}
     <h2>What is your relationship to the property about which you're enquiring?</h2>
+{% endblock question_text %}
 
-
-    <form method="POST">
-        {% csrf_token %}
-
-        {% for value, label in form.respondent_role.field.widget.choices %}
-            {% if value %}{# filter out the empty value #}
-                <p>
-                    <input
-                        type="radio"
-                        id="{{ form.respondent_role.auto_id }}_{{ value }}"
-                        name="{{ form.respondent_role.html_name }}"
-                        value="{{ value }}"
-                        {% if value == form.respondent_role.data or value == form.respondent_role.initial %}checked{% endif %}>
-                    <label
-                        for="{{ form.respondent_role.auto_id }}_{{ value }}">{{ label }}</label>
-                </p>
-            {% endif %}
-        {% endfor %}
-        {{ form.respondent_role.errors }}
-
-        <p>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) if you haven’t so far.</p>
-        <div id="other-detail"{% if form.initial.respondent_role != "OTHER" %} style="display: none"{% endif %}>
+{% block form_content %}
+    {% for value, label in form.respondent_role.field.widget.choices %}
+        {% if value %}{# filter out the empty value #}
             <p>
-                <label for="id_respondent_role_other">
-                    Please describe your relationship to the occupant:
-                </label>
-                {{ form.respondent_role_other }}
-                {{ form.respondent_role_other.errors }}
+                <input
+                    type="radio"
+                    id="{{ form.respondent_role.auto_id }}_{{ value }}"
+                    name="{{ form.respondent_role.html_name }}"
+                    value="{{ value }}"
+                    {% if value == form.respondent_role.data or value == form.respondent_role.initial %}checked{% endif %}>
+                <label
+                    for="{{ form.respondent_role.auto_id }}_{{ value }}">{{ label }}</label>
             </p>
-        </div>
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a></p>
         {% endif %}
-    </form>
-{% endblock %}
+    {% endfor %}
+    {{ form.respondent_role.errors }}
+
+    <p>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) if you haven’t so far.</p>
+    <div id="other-detail"{% if form.initial.respondent_role != "OTHER" %} style="display: none"{% endif %}>
+        <p>
+            <label for="id_respondent_role_other">
+                Please describe your relationship to the occupant:
+            </label>
+            {{ form.respondent_role_other }}
+            {{ form.respondent_role_other.errors }}
+        </p>
+    </div>
+{% endblock form_content %}

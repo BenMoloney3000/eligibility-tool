@@ -1,36 +1,27 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Your consent in how your data is used</h2>
     <p>Please tell us for which of the following purposes you are happy for us to store and use your data:</p>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-        <p>
-            <label>
-                {{ form.consented_callback }}
-                To call/email you back to provide advice
-            </label>
-            {{ form.consented_callback.errors }}
-        </p>
+{% block form_content %}
+    <p>
+        <label>
+            {{ form.consented_callback }}
+            To call/email you back to provide advice
+        </label>
+        {{ form.consented_callback.errors }}
+    </p>
 
-        <p>
-            <label>
-                {{ form.consented_future_schemes }}
-                To contact you if and when we think there are schemes that are relevant for you in future
-            </label>
-            {{ form.consented_future_schemes.errors }}
-        </p>
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+    <p>
+        <label>
+            {{ form.consented_future_schemes }}
+            To contact you if and when we think there are schemes that are relevant for you in future
+        </label>
+        {{ form.consented_future_schemes.errors }}
+    </p>
+{% endblock form_content %}

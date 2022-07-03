@@ -1,23 +1,13 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>You have changed data</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
-
-        <p>Some of your eligibility schemes may be based on your EPC rating, but you have indicated that the information in your EPC is incorrect or outdated.</p>
-        <p>This means that the rating may no longer be accurate and it may be necessary to carry out a new EPC before applying for funding.</p>
-
-        <button class="button">
-            Next&nbsp;&rarr;
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+{% block form_content %}
+<p>Some of your eligibility schemes may be based on your EPC rating, but you have indicated that the information in your EPC is incorrect or outdated.</p>
+<p>This means that the rating may no longer be accurate and it may be necessary to carry out a new EPC before applying for funding.</p>
+{% block form_content %}

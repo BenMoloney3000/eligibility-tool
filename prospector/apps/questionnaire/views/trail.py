@@ -955,15 +955,7 @@ class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     title = "Solar PV"
     question = "Does this property have a Solar PV (Photovoltaic) installation?"
     type_ = abstract_views.QuestionType.YesNo
-    next = "InConservationArea"
     percent_complete = COMPLETE_GROUP_4 + 0
-
-
-class InConservationArea(abstract_views.SingleQuestion):
-    title = "Conservation area"
-    question = "Is this property in a conservation area?"
-    type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_4 + 1
 
     def get_next(self):
         if selectors.data_was_changed(self.answers):

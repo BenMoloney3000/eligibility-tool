@@ -67,7 +67,11 @@ docker-dev-up: export UID := $(shell id -u)
 docker-dev-up: docker-dev-network docker-local-up
 
 # docker-compose -p prospector -f docker-compose/dev.yml exec web /bin/bash
-# python ./manage.py runserver 0.0.0.0:8000
+
+.PHONY: docker-dev-runserver
+docker-dev-runserver: docker-dev-web-ip
+docker-dev-runserver: 
+	docker-compose -p prospector -f docker-compose/dev.yml exec web python ./manage.py runserver 0.0.0.0:8000
 
 .PHONY: docker-dev-precommit
 docker-dev-precommit: DOCKER_LOCAL_CONF=docker-compose/dev.yml 

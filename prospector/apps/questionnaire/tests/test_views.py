@@ -226,9 +226,6 @@ class TestQuestionsRender(TrailTest):
     def test_has_solr_pv_renders(self):
         assert self._get_trail_view("HasSolarPv").status_code == 200
 
-    def test_in_conservation_area_renders(self):
-        assert self._get_trail_view("InConservationArea").status_code == 200
-
     def test_accuracy_warning_renders(self):
         assert self._get_trail_view("AccuracyWarning").status_code == 200
 

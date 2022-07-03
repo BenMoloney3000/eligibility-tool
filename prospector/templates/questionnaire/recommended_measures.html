@@ -21,9 +21,6 @@
                     <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
                 </dl>
             </details>
-            {% if measure.name == "SOLID_WALL_INSULATION" and sw_insulation_warning %}
-                <p>As your home is in a conservation area solid wall insulation may not be possible</p>
-            {% endif %}
         {% endfor %}
 
         {% if rating == "RED" %}
