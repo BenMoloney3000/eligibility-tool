@@ -106,6 +106,7 @@ class Question(mixin.TrailMixin, FormView):
         context = super().get_context_data(*args, **kwargs)
         context["prev_url"] = self.get_prev_url()
         context["title"] = self.get_title()
+        context["percent_complete"] = self.get_percent_complete()
 
         return context
 
@@ -116,6 +117,9 @@ class Question(mixin.TrailMixin, FormView):
             return self.title
 
         return self.__class__.__name__
+
+    def get_percent_complete(self) -> int:
+        return getattr(self, "percent_complete", 0)
 
 
 class SingleQuestion(Question):

@@ -219,6 +219,9 @@ class TrailMixin:
         """
         return self.next
 
+    def get_percent_complete(self) -> int:
+        return self.percent_complete
+
     def get_prev_url(self) -> Optional[str]:
         trail = self.get_trail()
         this_view = trail.index(self.get_view_name())

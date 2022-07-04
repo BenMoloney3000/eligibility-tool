@@ -18,3 +18,15 @@ To clear the postcode cache:
    ./manage.py shell
    from django.core.cache import caches
    caches["postcodes"].clear()
+
+To run the tests:
+
+.. code-block:: bash
+
+   pytest
+
+To run the pre-commit hooks:
+
+.. code-block:: bash
+
+   pre-commit install
