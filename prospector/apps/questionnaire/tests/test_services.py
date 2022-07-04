@@ -29,7 +29,7 @@ def test_fake_epc_gets_processed():
     assert answers.roof_space_insulated_orig is False
     assert answers.flat_roof_orig is True
     assert answers.gas_boiler_present_orig is False
-    assert answers.trvs_present_orig is False
+    assert answers.trvs_present_orig == enums.TRVsPresent.NONE
     assert answers.room_thermostat_orig is False
     assert answers.ch_timer_orig is True
     assert answers.programmable_thermostat_orig is None

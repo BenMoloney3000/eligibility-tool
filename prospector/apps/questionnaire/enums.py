@@ -363,3 +363,9 @@ class FinancialEligibility(models.TextChoices):
     ALL = "ALL", "Financial circumstances eligible for all schemes"
     SOME = "SOME", "Financial circumstances eligible for some schemes"
     NONE = "NONE", "Financial circumstances eligible for no schemes"
+
+
+class TRVsPresent(models.TextChoices):
+    ALL = "ALL", "All radiators have TRVs"
+    SOME = "SOME", "Some radiators have TRVs"
+    NONE = "NONE", "No TRVs present"

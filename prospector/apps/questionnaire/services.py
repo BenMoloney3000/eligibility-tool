@@ -458,11 +458,12 @@ def _detect_trvs(epc: EPCData) -> Optional[bool]:
     if epc.main_heating_controls:
         try:
             controls = enums.HeatingSystemControls(epc.main_heating_controls)
-            return "TRVS" in controls.name
+            if "TRVS" in controls.name:
+                return enums.TRVsPresent("ALL")
         except ValueError:
             return None
 
-        return False
+        return enums.TRVsPresent("NONE")
 
 
 def _detect_room_thermostat(epc: EPCData) -> Optional[bool]:
