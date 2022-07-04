@@ -58,6 +58,9 @@ docker-local-clean:  ## Clean system volumes (helpful for resetting broken datab
 .PHONY: docker-dev-network
 docker-dev-network:
 	docker network inspect prospector || docker network create prospector
+
+.PHONY: docker-dev-web-ip
+docker-dev-web-ip:
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
 		$(shell docker-compose -p prospector -f docker-compose/dev.yml ps -q web)
 
