@@ -1,0 +1,7 @@
+{% extends 'base_error.html' %}
+
+{% block content %}
+    {% with error=exception %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock content %}
