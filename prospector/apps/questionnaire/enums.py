@@ -15,11 +15,11 @@ class PropertyOwnership(models.TextChoices):
 class RespondentRole(models.TextChoices):
     OWNER_OCCUPIER = (
         "OWNER",
-        "I am the owner-occupier of the property",
+        "I am the owner and live in the property",
     )
-    TENANT = "TENANT", "I am the tenant"
-    LANDLORD = "LANDLORD", "I am the landlord of the property"
-    OTHER = "OTHER", "I am filling this out on behalf of the tenant/owner occupier"
+    TENANT = "TENANT", "I am a tenant"
+    LANDLORD = "LANDLORD", "I am the landlord of the property and rent it out"
+    OTHER = "OTHER", "I am filling this out on behalf of the tenant or owner"
 
 
 class PropertyDataSource(models.TextChoices):
