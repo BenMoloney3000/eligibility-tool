@@ -58,6 +58,9 @@ docker-local-clean:  ## Clean system volumes (helpful for resetting broken datab
 .PHONY: docker-dev-network
 docker-dev-network:
 	docker network inspect prospector || docker network create prospector
+
+.PHONY: docker-dev-web-ip
+docker-dev-web-ip:
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
 		$(shell docker-compose -p prospector -f docker-compose/dev.yml ps -q web)
 
@@ -67,7 +70,11 @@ docker-dev-up: export UID := $(shell id -u)
 docker-dev-up: docker-dev-network docker-local-up
 
 # docker-compose -p prospector -f docker-compose/dev.yml exec web /bin/bash
-# python ./manage.py runserver 0.0.0.0:8000
+
+.PHONY: docker-dev-runserver
+docker-dev-runserver: docker-dev-web-ip
+docker-dev-runserver: 
+	docker-compose -p prospector -f docker-compose/dev.yml exec web python ./manage.py runserver 0.0.0.0:8000
 
 .PHONY: docker-dev-precommit
 docker-dev-precommit: DOCKER_LOCAL_CONF=docker-compose/dev.yml 

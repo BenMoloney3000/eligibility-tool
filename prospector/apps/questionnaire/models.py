@@ -323,12 +323,24 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property has a hot water tank",
     )
-    trvs_present = models.BooleanField(
+    trvs_present_old = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="Property has themostatic radiator valves",
     )
-    trvs_present_orig = models.BooleanField(
+    trvs_present_orig_old = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Property has thermostatic radiator valves according to property data before correction",
+    )
+    trvs_present = models.CharField(
+        max_length=8,
+        null=True,
+        blank=True,
+        verbose_name="Property has themostatic radiator valves",
+    )
+    trvs_present_orig = models.CharField(
+        max_length=8,
         null=True,
         blank=True,
         verbose_name="Property has thermostatic radiator valves according to property data before correction",
@@ -413,11 +425,6 @@ class Answers(models.Model):
     # CONSTRAINTS: planning area and owner preferences
     """
 
-    in_conservation_area = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property is in a conservation area",
-    )
     tolerated_disruption = models.CharField(
         max_length=20,
         choices=enums.ToleratedDisruption.choices,

@@ -340,9 +340,8 @@ class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
 
 
 class HeatingControls(AnswerFormMixin, forms.ModelForm):
-    trvs_present = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=((True, "Yes"), (False, "No")),
+    trvs_present = forms.ChoiceField(
+        choices=enums.TRVsPresent.choices,
         widget=forms.RadioSelect,
         required=True,
     )

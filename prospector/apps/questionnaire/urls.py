@@ -91,11 +91,6 @@ urlpatterns = [
         views.HasSolarPv.as_view(),
         name="has-solar-pv",
     ),
-    path(
-        "conservation-area",
-        views.InConservationArea.as_view(),
-        name="in-conservation-area",
-    ),
     path("accuracy-warning", views.AccuracyWarning.as_view(), name="accuracy-warning"),
     path(
         "recommendations",
