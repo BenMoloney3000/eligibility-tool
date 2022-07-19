@@ -36,12 +36,19 @@ django==4.0.1
     # via
     #   -r requirements/base.in
     #   django-anymail
+    #   django-appconf
     #   django-rq
 django-anymail[mailgun]==8.5
+    # via -r requirements/base.in
+django-appconf==1.0.5
+    # via django-compressor
+django-compressor==4.0
     # via -r requirements/base.in
 django-environ==0.8.1
     # via -r requirements/base.in
 django-rq==2.5.1
+    # via -r requirements/base.in
+django-sass-processor==1.2.1
     # via -r requirements/base.in
 django-waffle==2.3.0
     # via -r requirements/base.in
@@ -53,6 +60,8 @@ jmespath==0.10.0
     # via
     #   boto3
     #   botocore
+libsass==0.21.0
+    # via -r requirements/base.in
 packaging==21.3
     # via redis
 psycopg2-binary==2.9.3
@@ -67,6 +76,8 @@ python-dateutil==2.8.2
     #   botocore
     #   croniter
     #   rq-scheduler
+rcssmin==1.1.0
+    # via django-compressor
 redis==4.1.1
     # via
     #   django-rq
@@ -75,6 +86,8 @@ requests==2.27.1
     # via
     #   -r requirements/base.in
     #   django-anymail
+rjsmin==1.2.0
+    # via django-compressor
 rq==1.10.1
     # via
     #   -r requirements/base.in
@@ -87,7 +100,9 @@ s3transfer==0.5.0
 sentry-sdk==1.5.3
     # via -r requirements/base.in
 six==1.16.0
-    # via python-dateutil
+    # via
+    #   libsass
+    #   python-dateutil
 sqlparse==0.4.2
     # via django
 ssm-parameter-store==19.11.0

@@ -4,8 +4,10 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <label for="progress">progress</label>
-    <progress id="progress" min="0" max="100" value="{{ percent_complete }}">(( percent_complete }}%</progress>
+    <div class="progress"> 
+        <label for="progress">progress</label>
+        <progress id="progress" min="0" max="100" value="{{ percent_complete }}">(( percent_complete }}%</progress>
+    </div> 
     {% block question_text %}
         <h2>{{ question_text|safe }}</h2>
     {% endblock question_text %}

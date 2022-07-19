@@ -19,3 +19,8 @@ ssm-parameter-store      # Extract env vars from AWS parameter store
 gunicorn                 # Web server
 django-anymail[mailgun]  # Sending mail
 whitenoise[brotli]       # Better static file serving
+
+# SASS
+libsass 
+django-compressor 
+django-sass-processor

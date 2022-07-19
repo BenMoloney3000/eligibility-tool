@@ -64,10 +64,26 @@ docker-dev-web-ip:
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
 		$(shell docker-compose -p prospector -f docker-compose/dev.yml ps -q web)
 
+.PHONY: docker-dev-build
+docker-dev-build: DOCKER_LOCAL_CONF=docker-compose/dev.yml 
+docker-dev-build: export UID := $(shell id -u)
+docker-dev-build: 
+	docker-compose -p prospector -f $(DOCKER_LOCAL_CONF) build
+
 .PHONY: docker-dev-up
 docker-dev-up: DOCKER_LOCAL_CONF=docker-compose/dev.yml 
 docker-dev-up: export UID := $(shell id -u)
 docker-dev-up: docker-dev-network docker-local-up
+
+.PHONY: docker-dev-down
+docker-dev-down: DOCKER_LOCAL_CONF=docker-compose/dev.yml 
+docker-dev-down: export UID := $(shell id -u)
+docker-dev-down: docker-local-down
+
+.PHONY: docker-dev-clean
+docker-dev-clean: DOCKER_LOCAL_CONF=docker-compose/dev.yml 
+docker-dev-clean: export UID := $(shell id -u)
+docker-dev-clean: docker-local-clean
 
 # docker-compose -p prospector -f docker-compose/dev.yml exec web /bin/bash
 

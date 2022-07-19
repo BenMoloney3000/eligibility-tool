@@ -130,6 +130,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_rq",
     "waffle",
+    "sass_processor",
 ]
 LOCAL_APPS = [
     "prospector",
@@ -198,6 +199,12 @@ STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [str(SRC_DIR.path("static"))]
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "sass_processor.finders.CssFinder",
+]
 
 # MEDIA
 # ------------------------------------------------------------------------------
