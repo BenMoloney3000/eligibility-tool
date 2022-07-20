@@ -468,6 +468,7 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.Choices
     choices = enums.PropertyAgeBand.choices
     percent_complete = COMPLETE_GROUP_2 + 1
+    next = "WallType"
 
     def pre_save(self):
         # If we didn't get the likely wall type, infer from the age now.
@@ -477,32 +478,6 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
                 if int(self.answers.property_age_band) < 1930
                 else enums.WallType.CAVITY
             )
-
-    def get_next(self):
-        # We may have decided to skip ahead
-        if (
-            not self.answers.wall_inferences_complete()
-            or self.answers.will_correct_walls
-        ):
-            # the most common situation - don't skip anything
-            return "WallType"
-        elif (
-            not self.answers.floor_inferences_complete()
-            or self.answers.will_correct_floor
-        ):
-            return "SuspendedFloor"
-        elif (
-            not self.answers.roof_inferences_complete()
-            or self.answers.will_correct_roof
-        ):
-            return "UnheatedLoft"
-        elif (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            return "GasBoilerPresent"
-        else:
-            return "HasSolarPv"
 
 
 class WallType(abstract_views.SinglePrePoppedQuestion):
@@ -562,14 +537,6 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
     )
     percent_complete = COMPLETE_GROUP_2 + 4
 
-    def prereq(self):
-        # We may have decided to skip this part
-        if (
-            self.answers.floor_inferences_complete()
-            and self.answers.will_correct_floor is False
-        ):
-            return self.redirect("UnheatedLoft")
-
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
         if not self.answers.suspended_floor:
@@ -579,20 +546,7 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
         if self.answers.suspended_floor:
             return "SuspendedFloorInsulated"
         else:
-            # We may have decided to skip ahead
-            if (
-                not self.answers.roof_inferences_complete()
-                or self.answers.will_correct_roof
-            ):
-                # the most common situation - don't skip anything
-                return "UnheatedLoft"
-            elif (
-                not self.answers.heating_inferences_complete()
-                or self.answers.will_correct_heating
-            ):
-                return "GasBoilerPresent"
-            else:
-                return "HasSolarPv"
+            return "UnheatedLoft"
 
 
 class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
@@ -600,22 +554,7 @@ class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
     question = "Is the suspended timber floor insulated?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_2 + 5
-
-    def get_next(self):
-        # We may have decided to skip ahead
-        if (
-            not self.answers.roof_inferences_complete()
-            or self.answers.will_correct_roof
-        ):
-            # the most common situation - don't skip anything
-            return "UnheatedLoft"
-        elif (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            return "GasBoilerPresent"
-        else:
-            return "HasSolarPv"
+    next = "UnheatedLoft"
 
 
 class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
@@ -629,14 +568,6 @@ class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
             return "If the flat isn't on the top floor, please answer 'no'."
 
         return None
-
-    def prereq(self):
-        # We may have decided to skip this part
-        if (
-            self.answers.roof_inferences_complete()
-            and self.answers.will_correct_roof is False
-        ):
-            return self.redirect("GasBoilerPresent")
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -681,17 +612,7 @@ class RirInsulated(abstract_views.SinglePrePoppedQuestion):
     question = "Has the room in the roof space been well insulated?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_2 + 8
-
-    def get_next(self):
-        # We may have decided to skip ahead
-        if (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            # the most common situation - don't skip anything
-            return "GasBoilerPresent"
-        else:
-            return "HasSolarPv"
+    next = "GasBoilerPresent"
 
 
 class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
@@ -700,17 +621,7 @@ class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.YesNo
     note = "By 'well insulated' we mean with at least 250mm of mineral wool, or equivalent."
     percent_complete = COMPLETE_GROUP_2 + 9
-
-    def get_next(self):
-        # We may have decided to skip ahead
-        if (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            # the most common situation - don't skip anything
-            return "GasBoilerPresent"
-        else:
-            return "HasSolarPv"
+    next = "GasBoilerPresent"
 
 
 class FlatRoof(abstract_views.SinglePrePoppedQuestion):
@@ -732,15 +643,7 @@ class FlatRoof(abstract_views.SinglePrePoppedQuestion):
         if self.answers.flat_roof:
             return "FlatRoofInsulated"
         else:
-            # We may have decided to skip ahead
-            if (
-                not self.answers.heating_inferences_complete()
-                or self.answers.will_correct_heating
-            ):
-                # the most common situation - don't skip anything
-                return "GasBoilerPresent"
-            else:
-                return "HasSolarPv"
+            return "GasBoilerPresent"
 
 
 class FlatRoofInsulated(abstract_views.SingleQuestion):
@@ -751,31 +654,12 @@ class FlatRoofInsulated(abstract_views.SingleQuestion):
     choices = enums.InsulationConfidence.choices
     percent_complete = COMPLETE_GROUP_2 + 11
 
-    def get_next(self):
-        # We may have decided to skip ahead
-        if (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            # the most common situation - don't skip anything
-            return "GasBoilerPresent"
-        else:
-            return "HasSolarPv"
-
 
 class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Gas boiler"
     question = "Does the property have a central heating system with a boiler running off mains gas?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_3 + 0
-
-    def prereq(self):
-        # We may have decided to skip this part (unlikely that we had the option!)
-        if (
-            self.answers.heating_inferences_complete()
-            and self.answers.will_correct_heating is False
-        ):
-            return self.redirect("HasSolarPv")
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
