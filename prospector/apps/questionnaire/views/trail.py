@@ -281,9 +281,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
     title = "Property postcode"
     type_ = abstract_views.QuestionType.Text
     question = "Enter the property postcode"
-    supplementary = (
-        "This is the postcode for the property about which you're enquiring."
-    )
+    supplementary = "This is the postcode for the property you're enquiring about."
     next = "PropertyAddress"
     percent_complete = COMPLETE_GROUP_1 + 3
 
@@ -304,7 +302,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
 
 
 class PropertyAddress(abstract_views.Question):
-    title = "Property address"
+    title = "Address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
     next = "PropertyOwnership"
@@ -369,7 +367,6 @@ class PropertyOwnership(abstract_views.SingleQuestion):
 
 class Consents(abstract_views.Question):
     title = "Your consent to our use of your data"
-    question = "Please confirm how we can use your data"
     template_name = "questionnaire/consents.html"
     form_class = questionnaire_forms.Consents
     next = "SelectEPC"
@@ -465,6 +462,7 @@ class PropertyType(abstract_views.Question):
 class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     title = "Property age"
     question = "When was the property built?"
+    supplementary = "If you don't know the exact year it's fine to give us an estimate."
     type_ = abstract_views.QuestionType.Choices
     choices = enums.PropertyAgeBand.choices
     percent_complete = COMPLETE_GROUP_2 + 1
@@ -483,6 +481,13 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
 class WallType(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
     question = "What type of outside walls does the property have?"
+    supplementary = (
+        "If you are unsure about how your property’s walls are constructed, "
+        "have a look at this guide from the Energy Savings Trust: "
+        "<br>"
+        '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation">'
+        "https://energysavingtrust.org.uk/advice/cavity-wall-insulation</a>"
+    )
     type_ = abstract_views.QuestionType.Choices
     choices = enums.WallType.choices
     note = (
@@ -501,34 +506,36 @@ class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
         "If only some of the outside walls are insulated, choose the option that "
         "applies to the largest external area."
     )
+    next = "SuspendedFloor"
     percent_complete = COMPLETE_GROUP_2 + 3
-
-    def get_next(self):
-        # We may have decided to skip ahead
-        if (
-            not self.answers.floor_inferences_complete()
-            or self.answers.will_correct_floor
-        ):
-            # the most common situation - don't skip anything
-            return "SuspendedFloor"
-        elif (
-            not self.answers.roof_inferences_complete()
-            or self.answers.will_correct_roof
-        ):
-            return "UnheatedLoft"
-        elif (
-            not self.answers.heating_inferences_complete()
-            or self.answers.will_correct_heating
-        ):
-            return "GasBoilerPresent"
-        else:
-            return "HasSolarPv"
 
 
 class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
     title = "Floor type"
     question = (
-        "Does the property have a suspended timber ground floor with a void underneath?"
+        "Does the property have a suspended timber ground floor with a void "
+        "underneath?"
+    )
+    supplementary = (
+        "<p>"
+        "If you have air bricks or ventilation bricks on the outside wall(s) "
+        "of your house that are below floor level, you probably have a "
+        "suspended timber floor."
+        "</p>"
+        "<p>"
+        "If you have a basement or cellar beneath your house that you can get "
+        "into safely, take a look down there to see what type of floor you "
+        "have. "
+        "</p>"
+        "<p>"
+        "If the floor is a suspended wooden floor, you will probably be able to "
+        "see wooden joists and the undersides of the floorboards. "
+        "</p>"
+        "<br> "
+        "More information: "
+        '<a href="https://energysavingtrust.org.uk/advice/floor-insulation/">'
+        "https://energysavingtrust.org.uk/advice/floor-insulation/"
+        "</a>"
     )
     type_ = abstract_views.QuestionType.YesNo
     note = (
@@ -588,7 +595,10 @@ class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
 
 class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof"
-    question = "Is there a room in the roof space of the property, as a loft conversion or otherwise?"
+    question = (
+        "Is there a 'room-in-the-roof' space, for example a loft conversion or "
+        "similar?"
+    )
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_2 + 7
 
@@ -609,7 +619,7 @@ class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
 
 class RirInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof insulation"
-    question = "Has the room in the roof space been well insulated?"
+    question = "Has the 'room-in-the-roof' space been well insulated?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_2 + 8
     next = "GasBoilerPresent"
@@ -619,7 +629,10 @@ class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Loft insulation"
     question = "Has the unheated loft space been well insulated?"
     type_ = abstract_views.QuestionType.YesNo
-    note = "By 'well insulated' we mean with at least 250mm of mineral wool, or equivalent."
+    note = (
+        "By 'well insulated' we mean with at least 25cm of mineral wool type "
+        "insulation, or similar."
+    )
     percent_complete = COMPLETE_GROUP_2 + 9
     next = "GasBoilerPresent"
 
@@ -713,7 +726,7 @@ class OtherHeatingPresent(abstract_views.SinglePrePoppedQuestion):
 
 class HwtPresent(abstract_views.SingleQuestion):
     title = "Hot water tank"
-    question = "Does the property have a hot water tank?"
+    question = "Does the property have a hot water storage tank?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_3 + 3
 
@@ -726,7 +739,7 @@ class HwtPresent(abstract_views.SingleQuestion):
 
 class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Heat pump"
-    question = "Is the heating system powered by a heat pump?"
+    question = "Is the heating system powered by an air our ground source heat pump?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_3 + 4
 
@@ -837,7 +850,7 @@ class HhrshsPresent(abstract_views.SingleQuestion):
 
 class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     title = "Solar PV"
-    question = "Does this property have a Solar PV (Photovoltaic) installation?"
+    question = "Does this property have Solar PV (photovoltaic) panels installed?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_4 + 0
 
@@ -857,7 +870,7 @@ class AccuracyWarning(abstract_views.Question):
 
 class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
-    title = "Household composition"
+    title = "The Household"
     next = "HouseholdIncome"
     percent_complete = COMPLETE_GROUP_5 + 0
     form_class = questionnaire_forms.Occupants
@@ -1116,7 +1129,9 @@ class RecommendedMeasures(abstract_views.Question):
 
 class ToleratedDisruption(abstract_views.SingleQuestion):
     title = "Disruption preference"
-    question = "What level of disruption would be acceptable during home upgrade works?"
+    question = (
+        "What level of disruption would be acceptable during home upgrade " "works?"
+    )
     type_ = abstract_views.QuestionType.Choices
     next = "StateOfRepair"
     percent_complete = COMPLETE_GROUP_6 + 1
@@ -1180,12 +1195,12 @@ class ContributionCapacity(abstract_views.SingleQuestion):
         if self.answers.is_owner:
             return (
                 "Would you be willing to contribute towards a package of improvements "
-                "to your home in order to get the best outcome for your home?"
+                "to your property in order to get the best outcome for your home?"
             )
         else:
             return (
                 "Would the owner be willing to contribute towards a package of "
-                "improvements in order to get the best outcome for their home?"
+                "improvements in order to get the best outcome for their property?"
             )
 
     def get_choices(self):

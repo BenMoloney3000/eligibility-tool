@@ -4,8 +4,13 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block question_text %}
-    <h2>Do you have a recent EPC?</h2>
+    <h2>Does your property have a recent Energy Performance Certificate (<abbr>EPC</abbr>)?</h2>
 {% endblock question_text %}
+
+{% block question_supplement %}
+    Energy Performance Certificates (EPCs) tell you how energy efficient a building is and give it a rating from A (very efficient) to G (inefficient).
+    More information: <a href="https://energysavingtrust.org.uk/advice/guide-to-energy-performance-certificates-epcs/">https://energysavingtrust.org.uk/advice/guide-to-energy-performance-certificates-epcs/</a>
+{% endblock question_supplement %}
 
 {% block form_content %}
     <p>

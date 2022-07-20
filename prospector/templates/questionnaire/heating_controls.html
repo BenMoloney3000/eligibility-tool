@@ -7,6 +7,14 @@
     <h2>How is the heating in this property controlled?</h2>
 {% endblock question_text %}
 
+{% block question_supplement %}
+    Take a look at this Energy Savings Trust page to review the different types of heating controls
+    available:
+    <a href="https://energysavingtrust.org.uk/advice/thermostats-and-heating-controls/">
+        https://energysavingtrust.org.uk/advice/thermostats-and-heating-controls/
+    </a>
+{% endblock question_supplement %}
+
 {% block form_content %}
     {% if any_orig %}
         <p>From the publicly available data on your property we think that there are:</p>
@@ -30,28 +38,46 @@
         <p>Which of the following control systems are present in this property?</p>
     {% endif %}
 
-    <p>w
-        <label for="id_trvs_present">Thermostatically controlled radiator valves (TRVs)</label>
+    <p>
+        <label for="id_trvs_present">
+            Adjustable TRV controls on your radiators (Thermostatically
+            Radiator Valves - turn values that are positioned at one end of a
+            radiator)
+        </label>
         {{ form.trvs_present }}
         {{ form.trvs_present.errors }}
     </p>
     <p>
-        <label for="id_room_thermostat">One or more room thermostats</label>
+        <label for="id_room_thermostat">
+            One or more room thermostats (simply set the desired temperature in
+            the room they are positioned in).
+        </label>
         {{ form.room_thermostat }}
         {{ form.room_thermostat.errors }}
     </p>
     <p>
-        <label for="id_ch_timer">A central heating timer</label>
+        <label for="id_ch_timer">
+            A central heating timer (a timer or programmer allows you to
+            control when your heating and hot water comes on and when it goes
+            off).
+        </label>
         {{ form.ch_timer }}
         {{ form.ch_timer.errors }}
     </p>
     <p>
-        <label for="id_programmable_thermostat">A programmable central heating thermostat</label>
+        <label for="id_programmable_thermostat">
+            A programmable central heating thermostat (combines time and
+            temperature controls in a single unit).
+        </label>
         {{ form.programmable_thermostat }}
         {{ form.programmable_thermostat.errors }}
     </p>
     <p>
-        <label for="id_smart_thermostat">A smart thermostat system</label>
+        <label for="id_smart_thermostat">
+            A smart thermostat system (more advanced control systems for
+            central heating that set temperature and timing and are connected
+            to the internet).
+        </label>
         {{ form.smart_thermostat }}
         {{ form.smart_thermostat.errors }}
     </p>

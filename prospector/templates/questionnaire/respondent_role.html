@@ -22,7 +22,7 @@
     {% endfor %}
     {{ form.respondent_role.errors }}
 
-    <p>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) if you haven’t so far.</p>
+    <p>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) to complete this form if you haven’t so far!</p>
     <div id="other-detail"{% if form.initial.respondent_role != "OTHER" %} style="display: none"{% endif %}>
         <p>
             <label for="id_respondent_role_other">

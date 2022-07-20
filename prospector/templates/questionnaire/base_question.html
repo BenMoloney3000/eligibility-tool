@@ -4,10 +4,10 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <div class="progress"> 
+    <div class="progress">
         <label for="progress">progress</label>
         <progress id="progress" min="0" max="100" value="{{ percent_complete }}">(( percent_complete }}%</progress>
-    </div> 
+    </div>
     {% block question_text %}
         <h2>{{ question_text|safe }}</h2>
     {% endblock question_text %}
@@ -22,20 +22,28 @@
             {% endfor %}
         </p>
     {% endif %}
-    {% if question_supplement %}
-        <p>{{ question_supplement|safe }}</p>
-    {% endif %}
+
+    <div class="question-supplement">
+        {% block question_supplement %}
+            {% if question_supplement %}
+                {{ question_supplement|safe }}
+            {% endif %}
+        {% endblock question_supplement %}
+    </div>
+
     <form method="POST">
         {% csrf_token %}
         {% block form_content %}
             {% include 'questionnaire/dynamic_question_subview.html' %}
-
             {% if question_note %}
                 <p>{{ question_note|safe }}</p>
             {% endif %}
         {% endblock form_content %}
         {% block nav_form %}
-            <div class="nav_form">
+            <div class="nav-form">
+                <button class="button">
+                    Next&nbsp;&rarr;
+                </button>
                 {% if prev_url %}
                     <a href="{% url prev_url %}">
                         <button type="button" class="button">
@@ -43,9 +51,6 @@
                         </button>
                     </a>
                 {% endif %}
-                <button class="button">
-                    Next&nbsp;&rarr;
-                </button>
             </div>
         {% endblock nav_form %}
     </form>

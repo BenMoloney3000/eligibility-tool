@@ -4,11 +4,14 @@ from django.db import models
 
 
 class PropertyOwnership(models.TextChoices):
-    OWNED = "OWNED", "Property is in private ownership"
-    PRIVATE_TENANCY = "RENTAL", "Property is rented from a private landlord"
+    OWNED = "OWNED", "The property is in private ownership"
+    PRIVATE_TENANCY = "RENTAL", "The property is rented from a private landlord"
     SOCIAL_TENANCY = (
         "SOCIAL",
-        "Property is rented from a social landlord or local authority",
+        (
+            "The property is rented from a social landlord (eg. a housing "
+            "association) or local authority"
+        ),
     )
 
 
@@ -78,11 +81,11 @@ class InsulationConfidence(models.TextChoices):
 
 class NonGasFuel(models.TextChoices):
     OIL = "OIL", "Oil"
-    LPG = "LPG", "LPG"
+    LPG = "LPG", "LPG (Liquified Petroleum Gas)"
     COAL = "COAL", "Coal"
     WOOD = "WOOD", "Wood"
     ELECTRICITY = "ELECTRIC", "Electricity"
-    DISTRICT = "DISTRICT", "Shared/district heating network"
+    DISTRICT = "DISTRICT", "Via a shared or district heating network"
 
 
 class BoilerAgeBand(models.TextChoices):
@@ -211,22 +214,31 @@ class HeatingSystemControls(models.IntegerChoices):
 class ToleratedDisruption(models.TextChoices):
     UP_TO_ONE_DAY = (
         "UP_TO_ONE_DAY",
-        "Jobs that take up to three hours inside home, up to one day outside home",
+        (
+            "Jobs that take up to three hours inside the property and/or up to "
+            "one day outside the property"
+        ),
     )
     ONE_TO_FOUR_DAYS = (
         "ONE_TO_FOUR_DAYS",
         (
-            "One or two days of work inside home, or three to four days taking place "
-            "on exterior to property (involving scaffolding etc.)"
+            "One or two days of work inside the property and/or three to four "
+            "days outside the property (for example involving scaffolding etc.)"
         ),
     )
     THREE_TO_TEN_DAYS = (
         "THREE_TO_TEN_DAYS",
-        "Up to five days of work inside home, up to ten days outside the home",
+        (
+            "Up to five days of work inside the property and/or up to ten days "
+            "outside the property"
+        ),
     )
     TWO_WEEKS_TO_A_MONTH = (
         "TWO_WEEKS_TO_A_MONTH",
-        "Up to two weeks of work inside home, up to one month outside the home",
+        (
+            "Up to two weeks of work inside the property and/or up to one month "
+            "outside the property"
+        ),
     )
     UNKNOWN = "UNKNOWN", "I don't know."
 
@@ -243,23 +255,32 @@ class ContributionCapacity(models.TextChoices):
 class StateOfRepair(models.TextChoices):
     EXCELLENT = (
         "EXCELLENT",
-        "Excellent – recently renovated and all walls, roofs, windows, doors and ventilation in good condition.",
+        (
+            "Excellent – recently renovated and the walls, roofs, windows, "
+            "doors and ventilation (for example fans) are in good condition."
+        ),
     )
     GOOD = (
         "GOOD",
-        "Good – there are no known issues with the house and I have ventilation in the kitchen and bathrooms.",
+        (
+            "Good – there are no issues with the house and I have ventilation "
+            "in the kitchen and bathrooms."
+        ),
     )
     AVERAGE = (
         "AVERAGE",
         (
-            "Average  - there are no known issues with the house but I don’t know if I have "
-            "enough ventilation and I don’t know what condition the external elements (such as "
-            "roofs, walls and windows) are in."
+            "Average – there are no issues with the house but I don’t know if I "
+            "have enough ventilation and I don’t know what condition the external "
+            "elements (such as roofs, walls and windows) are in."
         ),
     )
     POOR = (
         "POOR",
-        "Poor – There are known issues with the property such as damp or leaks and/or there is no formal ventilation.",
+        (
+            "Poor – There are known issues with the property such as damp or "
+            "leaks and/or there is no formal ventilation."
+        ),
     )
     UNKNOWN = "UNKNOWN", "I don't know the state of repair of the property."
 

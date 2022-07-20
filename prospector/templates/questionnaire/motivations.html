@@ -10,25 +10,25 @@
 {% block form_content %}
     <p>
         {% if is_owner %}
-            What are the aims for upgrading this property? Please select any that apply.
+            Why are you interested in improving your property? Please select any that apply.
         {% else %}
-            What are the owner's aims for upgrading this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
+            What are the owner's aims for improving this property? Please select any that apply, or if you don't know their feelings please check "I don't know".
         {% endif %}
     </p>
 
     <p>
         {{ form.motivation_better_comfort }}
-        <label for="id_motivation_better_comfort">Better comfort</label>
+        <label for="id_motivation_better_comfort">A more comfortable property</label>
         {{ form.motivation_better_comfort.errors }}
     </p>
     <p>
         {{ form.motivation_lower_bills }}
-        <label for="id_motivation_lower_bills">Lower bills</label>
+        <label for="id_motivation_lower_bills">Reducing energy and heating bills</label>
         {{ form.motivation_lower_bills.errors }}
     </p>
     <p>
         {{ form.motivation_environment }}
-        <label for="id_motivation_environment">A more environmentally friendly home</label>
+        <label for="id_motivation_environment">A greener property - doing your bit to tackle climate change</label>
         {{ form.motivation_environment.errors }}
     </p>
     {% if not is_owner %}

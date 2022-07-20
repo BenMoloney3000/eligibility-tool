@@ -5,14 +5,14 @@
 
 {% block question_text %}
     <h2>Your consent in how your data is used</h2>
-    <p>Please tell us for which of the following purposes you are happy for us to store and use your data:</p>
+    <p>Please tell us which of the following purposes you are happy for us to store and use your data for:</p>
 {% endblock question_text %}
 
 {% block form_content %}
     <p>
         <label>
             {{ form.consented_callback }}
-            To call/email you back to provide advice
+            To call or email you to offer advice and help.
         </label>
         {{ form.consented_callback.errors }}
     </p>
@@ -20,7 +20,7 @@
     <p>
         <label>
             {{ form.consented_future_schemes }}
-            To contact you if and when we think there are schemes that are relevant for you in future
+            To contact you in the future if and when we think there are schemes relevant for you.
         </label>
         {{ form.consented_future_schemes.errors }}
     </p>
