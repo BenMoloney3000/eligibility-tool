@@ -52,6 +52,10 @@ COMPLETE_GROUP_8 = 97
 COMPLETE_GROUP_9 = 100
 
 
+class Home(TemplateView):
+    template_name = "questionnaire/home.html"
+
+
 class Start(abstract_views.SingleQuestion):
     template_name = "questionnaire/start.html"
     type_ = abstract_views.QuestionType.YesNo

@@ -23,13 +23,13 @@
         </p>
     {% endif %}
 
-    <div class="question-supplement">
-        {% block question_supplement %}
-            {% if question_supplement %}
+    {% block question_supplement %}
+        {% if question_supplement %}
+            <div class="question-supplement">
                 {{ question_supplement|safe }}
-            {% endif %}
-        {% endblock question_supplement %}
-    </div>
+            </div>
+        {% endif %}
+    {% endblock question_supplement %}
 
     <form method="POST">
         {% csrf_token %}

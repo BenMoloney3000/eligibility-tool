@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block header %}
+    <div class="home centered column">
+        <div class="logo-home"></div>
+        <h2>Upgrade your home to stay warm and save money</h2>
+    </div>
+{% endblock header %}
+
+{% block content %}
+    <div class="centered column">
+        <h2>
+            Complete the FutureFit questionnaire to find out if you are eligible for a grant to upgrade your home
+        </h2>
+        <a href="{% url 'questionnaire:start' %}">
+            <button type="button" class="button">
+                Start
+            </button>
+        </a>
+    </div>
+{% endblock content %}
