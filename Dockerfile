@@ -34,9 +34,6 @@ COPY . /app
 
 RUN ENV=offline \
     DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
-
-RUN ENV=offline \
-    DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
     python manage.py compilescss && \
     python manage.py collectstatic --noinput --ignore=*.scss
 
