@@ -34,7 +34,10 @@ COPY . /app
 
 RUN ENV=offline \
     DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
-    python manage.py compilescss && \
+    python manage.py compilescss
+
+RUN ENV=offline \
+    DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
     python manage.py collectstatic --noinput --ignore=*.scss
 
 RUN chown -R django /app
