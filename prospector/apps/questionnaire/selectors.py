@@ -9,7 +9,13 @@ from prospector.apis import fake_postcodes
 from prospector.apis import ideal_postcodes
 
 
-POSTCODE_CACHE = caches["postcodes"]
+# Running "manage.py compilescss" will import this file, so here we
+# conditionally configure postcodes cache when we are building the docker
+# image:
+if settings.ENV != "offline":
+    POSTCODE_CACHE = caches["postcodes"]
+else:
+    POSTCODE_CACHE = {}
 
 
 def data_was_changed(answers: models.Answers) -> bool:
