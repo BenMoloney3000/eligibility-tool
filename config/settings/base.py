@@ -206,6 +206,14 @@ STATICFILES_FINDERS = [
     "sass_processor.finders.CssFinder",
 ]
 
+# We're using whitenoise for STATICFILES_STORAGE in production, so configure
+# a file based storage backend for the output of sass_processor:
+SASS_PROCESSOR_STORAGE = "django.contrib.staticfiles.storage.FileSystemStorage"
+SASS_PROCESSOR_STORAGE_OPTIONS = {
+    "location": STATIC_ROOT,
+    "base_url": STATIC_URL,
+}
+
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
