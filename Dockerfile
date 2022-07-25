@@ -34,7 +34,11 @@ COPY . /app
 
 RUN ENV=offline \
     DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
-    python manage.py collectstatic --noinput
+
+RUN ENV=offline \
+    DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
+    python manage.py compilescss && \
+    python manage.py collectstatic --noinput --ignore=*.scss
 
 RUN chown -R django /app
 ARG COMMIT_ID
