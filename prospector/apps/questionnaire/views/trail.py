@@ -1139,6 +1139,7 @@ class RecommendedMeasures(abstract_views.Question):
             measure.funding_likelihood = utils.get_funding_likelihood(measure)
 
         context["measures"] = measures
+        context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
         context["sw_insulation_warning"] = (
             enums.PossibleMeasures.SOLID_WALL_INSULATION in context["measures"]
             and self.answers.in_conservation_area is True

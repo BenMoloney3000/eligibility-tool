@@ -4,16 +4,18 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
-    <h2>Recommended measures</h2>
+    <h2>Results Page</h2>
 
     <form method="POST">
         {% csrf_token %}
 
-        <p>Based on what you've told us, we think the following measures would be suitable for this property:</p>
+        <p>Great news, {{ full_name }} &#129395;</p>
+
+        <p>Based on what you’ve told us, we think your home is ready for:</p>
 
         {% for measure in measures %}
             <details>
-                <summary>{{ measure.label }}</summary>
+                <summary>&#9989;&nbsp;{{ measure.label }}</summary>
                 <ul>
                     <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
                     <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
