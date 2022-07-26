@@ -120,10 +120,7 @@ class Answers(models.Model):
     )
 
     property_age_band = models.CharField(
-        max_length=10,
-        choices=enums.PropertyAgeBand.choices,
-        blank=True,
-        null=True
+        max_length=10, choices=enums.PropertyAgeBand.choices, blank=True, null=True
     )
     property_age_band_orig = models.CharField(
         max_length=10,

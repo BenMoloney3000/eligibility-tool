@@ -285,7 +285,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
     title = "Property postcode"
     type_ = abstract_views.QuestionType.Text
     question = "Enter the property postcode"
-    supplementary = "This is the postcode for the property you're enquiring about."
+    supplementary = "This is the postcode for the property."
     next = "PropertyAddress"
     percent_complete = COMPLETE_GROUP_1 + 3
 
@@ -486,9 +486,30 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
     question = "What type of outside walls does the property have?"
     supplementary = (
-        "If you are unsure about how your property’s walls are constructed, "
-        "have a look at this guide from the Energy Savings Trust: "
-        "<br>"
+        "<h2>Working out your wall type</h2>"
+        "<p>The first thing you need to find out is what sort of walls you "
+        "have. If you can see the brickwork on the outside of the house, look at "
+        "the pattern of the bricks.</p>"
+        "<h3>Cavity wall</h3>"
+        "<p>If your home has cavity walls, the bricks will usually have an even "
+        "pattern with all the bricks laid lengthways.</p>"
+        "<h3>Solid wall</h3>"
+        "<p>If your home has solid walls, the bricks will have an alternating "
+        "pattern, with some bricks laid across the wall so you can see the "
+        "smaller ends from the outside.</p>"
+        "<p>If the brickwork has been covered, you can also tell by measuring the "
+        "width of the wall. Examine a window or door on one of your external "
+        "walls:<p>"
+        "<ul>"
+        "<li>If a brick wall is more than 260mm thick then it probably has a "
+        "cavity.</li>"
+        "<li>A narrower wall is probably solid. Stone walls may be thicker "
+        "still but are usually solid.</li>"
+        "</ul>"
+        "<p>Some houses have a different type of wall structure altogether. If "
+        "your house is a steel-frame or timber-framed building, or is made froma "
+        "pre-fabricated concrete, then you will need to ask a specialist "
+        "insulation installer to advise you.</p>"
         '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation">'
         "https://energysavingtrust.org.uk/advice/cavity-wall-insulation</a>"
     )
@@ -508,7 +529,7 @@ class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.YesNo
     note = (
         "If only some of the outside walls are insulated, choose the option that "
-        "applies to the largest external area."
+        "makes up most of the external area."
     )
     next = "SuspendedFloor"
     percent_complete = COMPLETE_GROUP_2 + 3
@@ -634,7 +655,7 @@ class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
     question = "Has the unheated loft space been well insulated?"
     type_ = abstract_views.QuestionType.YesNo
     note = (
-        "By 'well insulated' we mean with at least 25cm of mineral wool type "
+        "By 'well insulated' we mean with at least 25cm of 'mineral wool' type "
         "insulation, or similar."
     )
     percent_complete = COMPLETE_GROUP_2 + 9
@@ -974,16 +995,17 @@ class ChildBenefit(abstract_views.SingleQuestion):
 
 
 class ChildBenefitNumberElsewhere(abstract_views.SingleQuestion):
-    title = "Child benefit living elsewhere"
+    title = "Child Benefit living elsewhere"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.UpToFourOrMore.choices
     question = (
-        "Thinking of the adult that receives child benefit and lives "
-        "within the house. <br>"
+        "Thinking of the adult that receives Child Benefit and lives "
+        "within the house."
+        "<br>"
         "How many children do they have that live somewhere else most of the "
         "time (more than 50%) and for who they: "
         "<ul>"
-        " <li>receive child benefit; or,</li>"
+        " <li>receive Child Benefit; or,</li>"
         " <li>pay at least £21.80 per week towards looking after the child?</li>"
         "</ul>"
     )
@@ -997,16 +1019,19 @@ class ChildBenefitNumberElsewhere(abstract_views.SingleQuestion):
 
 
 class ChildBenefitClaimantType(abstract_views.SingleQuestion):
-    title = "Type of Child benefit claimant"
+    title = "Type of Child Benefit claimant"
     next = "ChildBenefitSummary"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.ChildBenefitClaimantType.choices
     question = (
-        "Thinking of the adult that receives child benefit and lives within "
+        "Thinking of the adult that receives Child Benefit and lives within "
         "the house.<br>"
-        "Is that adult living with a partner (someone they are married to, "
-        "civil partnered with or cohabitating as a couple) or single and "
-        "living with other adults?"
+        "Is the adult single and living with other adults or living with a "
+        "partner (ie. someone they are married to, civil partnered with or "
+        "cohabitating as a couple)?"
+    )
+    note = (
+        "Is the adult single and living with other adults, or living with a " "partner?"
     )
     percent_complete = COMPLETE_GROUP_5 + 6
 
@@ -1133,9 +1158,7 @@ class RecommendedMeasures(abstract_views.Question):
 
 class ToleratedDisruption(abstract_views.SingleQuestion):
     title = "Disruption preference"
-    question = (
-        "What level of disruption would be acceptable during home upgrade " "works?"
-    )
+    question = "What level of disruption would be acceptable during home upgrade works?"
     type_ = abstract_views.QuestionType.Choices
     next = "StateOfRepair"
     percent_complete = COMPLETE_GROUP_6 + 1

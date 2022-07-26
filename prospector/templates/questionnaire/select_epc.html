@@ -8,13 +8,21 @@
 {% endblock question_text %}
 
 {% block question_supplement %}
-    Energy Performance Certificates (EPCs) tell you how energy efficient a building is and give it a rating from A (very efficient) to G (inefficient).
-    More information: <a href="https://energysavingtrust.org.uk/advice/guide-to-energy-performance-certificates-epcs/">https://energysavingtrust.org.uk/advice/guide-to-energy-performance-certificates-epcs/</a>
+    Energy Performance Certificates (EPCs) tell you how energy efficient a
+    building is and give it a rating from A (very efficient) to G
+    (inefficient).
+    More information:
+    <a href="https://energysavingtrust.org.uk/advice/guide-to-energy-performance-certificates-epcs/" >
+        https://energysavingtrust.org.uk/advice/guide-to-energy-performance-certificates-epcs/
+    </a>
 {% endblock question_supplement %}
 
 {% block form_content %}
     <p>
-        We have found the following EPCs that may relate to the property. Please select one to confirm it is for the correct property and no significant renovation has happened since the date of inspection, or otherwise please select 'No valid EPC'.
+        We have found the following EPCs that may relate to the property.
+        Please select one to confirm it is for the correct property and no
+        significant renovation has happened since the date of inspection, or
+        otherwise please select 'No valid EPC'.
     </p>
     <p>
         {{ form.selected_epc }}

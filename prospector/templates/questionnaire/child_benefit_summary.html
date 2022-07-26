@@ -2,30 +2,30 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Child benefit: Eligibility summary | Plymouth Energy Community{% endblock %}
+{% block title %}Child Benefit: Eligibility summary | Plymouth Energy Community{% endblock %}
 
 {% block question_text %}
-    <h2>Child benefit eligibility summary:</h2>
+    <h2>Child Benefit eligibility summary:</h2>
 {% endblock question_text %}
 
 {% block form_content %}
     <ul>
-        <li>The person receiving child benefit is a
+        <li>The person receiving Child Benefit is a
             {% if answers.child_benefit_single_claimant %}
                 <b>single claimant</b>
             {% else %}
                 <b>member of a couple</b>
             {% endif %}
         </li>
-        <li>The person receiving child benefit lives with
+        <li>The person receiving Child Benefit lives with
             <b>{{ answers.children }}</b>
             child{{ answers.children|pluralize:"ren" }} who normally live in this house.
         </li>
-        <li>The person receiving child benefit has
+        <li>The person receiving Child Benefit has
             <b>{{ answers.child_benefit_number_elsewhere }}</b>
             child{{ answers.child_benefit_number_elsewhere|pluralize:"ren" }}
-            that normally live elsewhere but for who they receive child
-            benefit or contribute an equivalent amount to looking after
+            that normally live elsewhere but for who they receive Child
+            Benefit or contribute an equivalent amount to looking after
             them.
         </li>
     </ul>

@@ -5,7 +5,8 @@
 
 {% block question_text %}
     <h2>Your consent in how your data is used</h2>
-    <p>Please tell us which of the following purposes you are happy for us to store and use your data for:</p>
+    <p>Please tell us which of the following purposes you are happy for us to
+        store and use your data for:</p>
 {% endblock question_text %}
 
 {% block form_content %}
@@ -20,7 +21,8 @@
     <p>
         <label>
             {{ form.consented_future_schemes }}
-            To contact you in the future if and when we think there are schemes relevant for you.
+            To contact you in the future when we think there are grants or
+            programmes relevant for you.
         </label>
         {{ form.consented_future_schemes.errors }}
     </p>

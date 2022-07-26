@@ -334,3 +334,10 @@ form {
     background-color: $body_grey;
     border-radius: 10px;
 }
+ul.ticked li::marker {
+    content: '✓';
+    color: green;
+}
+.note {
+    font-style: italic;
+}

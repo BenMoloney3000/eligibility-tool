@@ -91,8 +91,8 @@ class NonGasFuel(models.TextChoices):
 
 class BoilerAgeBand(models.TextChoices):
     BEFORE_2004 = "BEFORE_2004", "Before 2004"
-    FROM_2004 = "2004-2014", "Between 2004 and 2014 (inclusive)"
-    FROM_2015 = "2015-2017", "Between 2015 and 2017 (inclusive)"
+    FROM_2004 = "2004-2014", "Between 2004 and 2014 (including those years)"
+    FROM_2015 = "2015-2017", "Between 2015 and 2017 (including those years)"
     FROM_2018 = "AFTER_2018", "Since 2018"
 
 
