@@ -54,7 +54,7 @@ class PropertyForm(models.TextChoices):
     )
 
 
-class PropertyAgeBand(models.IntegerChoices):
+class PropertyAgeBand(models.TextChoices):
     # We can use an integer field to parse numerical values into bands
     BEFORE_1900 = 0, "Before 1900"
     FROM_1900 = 1900, "1900-1929"
@@ -64,6 +64,7 @@ class PropertyAgeBand(models.IntegerChoices):
     FROM_1976 = 1976, "1976-1990"
     FROM_1991 = 1991, "1991-2002"
     SINCE_2003 = 2003, "Since 2003"
+    UNKNOWN = "UNKNOWN", "I don't know"
 
 
 class WallType(models.TextChoices):

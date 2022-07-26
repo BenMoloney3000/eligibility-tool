@@ -157,7 +157,9 @@ class SingleQuestion(Question):
             return forms.DecimalField(required=True)
         elif self.type_ is QuestionType.Choices:
             return forms.ChoiceField(
-                widget=forms.RadioSelect, required=True, choices=self.get_choices()
+                widget=forms.RadioSelect,
+                required=True,
+                choices=self.get_choices()
             )
         elif self.type_ is QuestionType.MultipleChoices:
             return forms.MultipleChoiceField(

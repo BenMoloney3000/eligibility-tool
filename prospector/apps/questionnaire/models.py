@@ -118,11 +118,15 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Property form according to property data source before correction",
     )
-    property_age_band = models.PositiveSmallIntegerField(
-        choices=enums.PropertyAgeBand.choices, blank=True, null=True
-    )
 
-    property_age_band_orig = models.PositiveSmallIntegerField(
+    property_age_band = models.CharField(
+        max_length=10,
+        choices=enums.PropertyAgeBand.choices,
+        blank=True,
+        null=True
+    )
+    property_age_band_orig = models.CharField(
+        max_length=10,
         choices=enums.PropertyAgeBand.choices,
         blank=True,
         null=True,
