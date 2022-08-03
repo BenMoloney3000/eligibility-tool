@@ -771,7 +771,7 @@ class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
         if self.answers.heat_pump_present:
-            self.answers.other_heating_fuel = None
+            self.answers.other_heating_fuel = ""
 
     def get_next(self):
         if self.answers.heat_pump_present:
