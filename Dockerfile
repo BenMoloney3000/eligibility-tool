@@ -1,3 +1,4 @@
+
 # ---------------------------------------------------------------------------
 # Django container build
 # ---------------------------------------------------------------------------
@@ -16,6 +17,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Set up our user
 RUN addgroup --system django \
     && adduser --system --ingroup django django
+
+# Install NVM deps
+RUN bash -c 'mkdir -p /usr/share/man/man{1,7}'
+RUN apt-get update && apt-get upgrade -qq -y && apt-get install -y \
+  curl
+
 # Install custom NVM/Node
 ENV NVM_DIR /usr/local/nvm
 RUN mkdir -p $NVM_DIR
