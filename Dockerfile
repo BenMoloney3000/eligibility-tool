@@ -34,8 +34,6 @@ ENV NVM_VERSION v0.38.0
 # https://nodejs.org/en/about/releases/
 ENV NODE_VERSION 14.13.1
 
-WORKDIR /app
-
 # install.sh will automatically install NodeJS based on the presence of $NODE_VERSION
 RUN curl -f -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
 RUN [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"   
@@ -50,6 +48,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN node -v
 RUN npm -v
 
+WORKDIR /app
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements/base.txt /app/requirements/base.txt
@@ -64,6 +63,9 @@ COPY \
 RUN chmod +x /app/migrate /app/rqscheduler /app/rqworker /app/webserver
 
 COPY . /app
+
+RUN npm install
+RUN npm run build
 
 RUN ENV=offline \
     DJANGO_SETTINGS_MODULE=config.settings.staticfiles \
