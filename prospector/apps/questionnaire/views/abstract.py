@@ -4,12 +4,12 @@ from enum import auto
 from enum import Enum
 from typing import Optional
 
+from crispy_forms_gds.helper import FormHelper
+from crispy_forms_gds.layout import Field
+from crispy_forms_gds.layout import Layout
+from crispy_forms_gds.layout import Size
 from django import forms
 from django.views.generic.edit import FormView
-from crispy_forms_gds.helper import FormHelper
-from crispy_forms_gds.layout import Field, Layout, Size, Submit
-
-from crispy_forms_gds.choices import Choice
 
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
@@ -291,9 +291,10 @@ class SinglePrePoppedQuestion(SingleQuestion):
             super(type(cls), cls).__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.layout = Layout(
-                Field.radios("field", legend_size=Size.MEDIUM, legend_tag="h1", inline=True),
+                Field.radios(
+                    "field", legend_size=Size.MEDIUM, legend_tag="h1", inline=True
+                ),
             )
-
 
         form_fields = {
             "field": self._type_to_field(),
@@ -317,7 +318,6 @@ class SinglePrePoppedQuestion(SingleQuestion):
                 required=True,
             )
             form_fields["data_correct"].label = False
-
 
         QuestionForm = type(
             "QuestionForm",

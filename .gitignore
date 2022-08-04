@@ -6,6 +6,9 @@
 *.min.js
 project.min.css
 
+prospector/static/js/main.js
+prospector/static/js/main.js.map
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -50,10 +50,10 @@ function initHandler() {
     }
 }
 
-function init () {
-    initAll();
-    initHandler();
-    console.log("Init");
+function init() {
+    initAll()
+    initHandler()
+    console.log('Init')
 }
 
-document.addEventListener("DOMContentLoaded", init, false);
+document.addEventListener('DOMContentLoaded', init, false)

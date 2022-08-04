@@ -764,7 +764,7 @@ class HwtPresent(abstract_views.SingleQuestion):
 
 class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Heat pump"
-    question = "Is the heating system powered by an air our ground source heat pump?"
+    question = "Is the heating system powered by an air or ground source heat pump?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_3 + 4
 
