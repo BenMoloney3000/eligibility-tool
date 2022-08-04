@@ -34,6 +34,8 @@ ENV NVM_VERSION v0.38.0
 # https://nodejs.org/en/about/releases/
 ENV NODE_VERSION 14.13.1
 
+WORKDIR /app
+
 # install.sh will automatically install NodeJS based on the presence of $NODE_VERSION
 RUN curl -f -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
 RUN [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"   
@@ -51,7 +53,6 @@ RUN npm -v
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements/base.txt /app/requirements/base.txt
-WORKDIR /app
 RUN pip install --no-cache-dir -r ./requirements/base.txt
 
 COPY \
