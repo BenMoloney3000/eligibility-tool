@@ -136,3 +136,18 @@ docs:  ## Build HTML docs (for other options run make in docs/)
 	make -C docs/ html
 	echo
 	echo "URL: file://`pwd`/docs/_build/html/index.html"
+
+.PHONY: js-build 
+js-build:
+	@npm run build
+
+.PHONY: js-build-dev
+js-build-dev:
+	@npm run build-dev
+
+.PHONY: watch-js-build-dev
+watch-js-build-dev:
+	while true; do \
+        make js-build-dev; \
+        inotifywait -qre close_write ./prospector/apps; \
+    done

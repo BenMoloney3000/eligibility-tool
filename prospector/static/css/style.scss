@@ -1,8 +1,18 @@
+@import "node_modules/govuk-frontend/govuk/base";
+
+$header_height: 6em;
+$footer_height: 6em;
+
 $electric_green: #4eff7b;
 $pv_purple: #1b012d;
 $fb_white: #ffffff;
 $body_grey: #fcfcfc;
 $body_black: #4a4a4a;
+
+$govuk-focus-colour: $electric_green;
+
+@import "node_modules/govuk-frontend/govuk/components/radios/radios";
+
 
 * {
     box-sizing: border-box;
@@ -18,8 +28,10 @@ $body_black: #4a4a4a;
 }
 
 header {
+    height: $header_height;
     background-color: white;
     text-align: center;
+    flex-basis: fit-content;
     h1.logo {
         color: $electric_green;
         transform: skewX(-10deg);
@@ -33,9 +45,9 @@ header {
     }
     h2 {
         margin-top: 0;
+        margin-bottom: 2em;
         transform: skewX(-10deg);
         text-transform: none;
-        margin-bottom: 0;
     }
     .home {
         height: 13em;
@@ -61,31 +73,41 @@ body {
     line-height: 1.5;
     font-family: sans-serif;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: calc(100vh - #{$footer_height});
 }
 footer {
-    height: 6em;
-    border-top: solid 2px $electric_green;
+    // position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: $footer_height;
+    border-top: solid 4px $electric_green;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    padding: 1em;
     div.wrapper {
         display: flex;
         width: 100%;
         height: 100%;
         justify-content: flex-start;
-        align-items: flex-end;
+        align-items: center;
     }
     .footer-left {
-        width: 60%;
-        img {
-            object-fit: contain;
-            width: 60%;
-            height: 100%;
-        }
+        width: 40%;
     }
     .footer-right {
-        width: 40%;
+        width: 60%;
         h2 {
             margin-bottom: 0;
             font-size: 125%;
@@ -281,9 +303,10 @@ details {
         height: 1.5em;
         -webkit-appearance: none;
         appearance: none;
-        border: 2px solid $electric_green;
+        border: 1px solid $electric_green;
         background: inherit;
         border-radius: 20px;
+        box-shadow: 0 0 0 2px $electric_green !important;
     }
 
     progress::-webkit-progress-bar {
@@ -328,6 +351,7 @@ form {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 1em;
 }
 .question-supplement {
     padding: 0.5em;
@@ -339,5 +363,6 @@ ul.ticked li::marker {
     color: green;
 }
 .note {
+    margin-top: 1em;
     font-style: italic;
 }

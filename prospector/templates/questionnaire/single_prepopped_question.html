@@ -1,9 +1,12 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block form_content %}
+    <div class="govuk-form-group">
     {% if data_orig %}
         <p>Based on the data we have on your property we think that the answer is
             <strong>{{ data_orig }}</strong>
@@ -12,18 +15,17 @@
         {% if question_type.name != 'YesNo' %}
             <p>
                 <label for="id_data_correct">Is this correct?</label>
-                {{ form.data_correct }}
+                {{ form.data_correct|as_crispy_field }}
+
             </p>
             <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
                 <p> If not please select the correct option below:</p>
-
                 {% include 'questionnaire/dynamic_question_subview.html' %}
             </div>
         {% else %}
             <p>You can correct this below if necessary:</p>
             {% include 'questionnaire/dynamic_question_subview.html' %}
         {% endif %}
-
     {% else %}
         {% include 'questionnaire/dynamic_question_subview.html' %}
     {% endif %}
@@ -31,4 +33,5 @@
     {% if question_note %}
         <p>{{ question_note|safe }}</p>
     {% endif %}
+    </div>
 {% endblock form_content %}

@@ -1,16 +1,21 @@
 {% if form.field.widget_type == 'radioselect' %}
+    <div class="govuk-radios" data-module="govuk-radios">
     {% for value, label in form.field.field.widget.choices %}
-        <p>
+        <div class="govuk-radios__item">
             <input
                 type="radio"
                 id="{{ form.field.auto_id }}_{{ value }}"
                 name="{{ form.field.html_name }}"
                 value="{{ value }}"
+                class="govuk-radios__input"
                 {% if value == form.field.initial %}checked{% endif %}>
             <label
+                class="govuk-label govuk-radios__label"
                 for="{{ form.field.auto_id }}_{{ value }}">{{ label }}</label>
-        </p>
+
+        </div>
     {% endfor %}
+    </div>
 {% elif form.field.widget_type == 'checkboxselectmultiple' %}
     {% for value, label in form.field.field.widget.choices %}
         <p>

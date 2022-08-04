@@ -6,6 +6,10 @@ from typing import Optional
 
 from django import forms
 from django.views.generic.edit import FormView
+from crispy_forms_gds.helper import FormHelper
+from crispy_forms_gds.layout import Field, Layout, Size, Submit
+
+from crispy_forms_gds.choices import Choice
 
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
@@ -283,9 +287,18 @@ class SinglePrePoppedQuestion(SingleQuestion):
                 this.validate_answer(data)
             return data
 
+        def init(cls, *args, **kwargs):
+            super(type(cls), cls).__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.layout = Layout(
+                Field.radios("field", legend_size=Size.MEDIUM, legend_tag="h1", inline=True),
+            )
+
+
         form_fields = {
             "field": self._type_to_field(),
             "clean_field": clean_field,
+            "__init__": init,
         }
 
         # Add 'Data is correct' field if this isn't a boolean field
@@ -303,6 +316,8 @@ class SinglePrePoppedQuestion(SingleQuestion):
                 widget=forms.RadioSelect,
                 required=True,
             )
+            form_fields["data_correct"].label = False
+
 
         QuestionForm = type(
             "QuestionForm",

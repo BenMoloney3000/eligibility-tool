@@ -131,6 +131,8 @@ THIRD_PARTY_APPS = [
     "django_rq",
     "waffle",
     "sass_processor",
+    "crispy_forms",
+    "crispy_forms_gds",
 ]
 LOCAL_APPS = [
     "prospector",
@@ -295,3 +297,6 @@ IDEAL_POSTCODES_API_KEY = env.str("IDEAL_POSTCODES_API_KEY", default="")
 DATA8_API_KEY = env.str("DATA8_API_KEY", default="")
 DATA8_LICENSE = env.str("DATA8_LICENSE", default="FreeTrial")
 MAIL_FROM = env.str("EMAIL_FROM", default="support@plymouthenergycommunity.com")
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["gds"]
+CRISPY_TEMPLATE_PACK = "gds"

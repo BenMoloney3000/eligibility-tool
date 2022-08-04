@@ -36,7 +36,7 @@
         {% block form_content %}
             {% include 'questionnaire/dynamic_question_subview.html' %}
             {% if question_note %}
-                <p><i>{{ question_note|safe }}</i></p>
+                <p class="note"><i>{{ question_note|safe }}</i></p>
             {% endif %}
         {% endblock form_content %}
         {% block nav_form %}

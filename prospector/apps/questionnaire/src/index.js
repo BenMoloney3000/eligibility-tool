@@ -1,4 +1,6 @@
-const correctionInputs = document.querySelectorAll('#id_data_correct input')
+import { initAll } from 'govuk-frontend'
+
+const correctionInputs = document.querySelectorAll('#div_id_data_correct input')
 const correctionInputTarget = document.querySelector('#correction')
 const roleInputs = document.querySelectorAll('input[name=respondent_role]')
 const otherRoleTarget = document.querySelector('#other-detail')
@@ -8,7 +10,7 @@ const address2Field = document.querySelector('.target-address_2 input')
 const address3Field = document.querySelector('.target-address_3 input')
 
 function setCorrectionVisibility() {
-    if (document.querySelector('#id_data_correct_1').checked) {
+    if (document.querySelector('#id_data_correct_2').checked) {
         correctionInputTarget.style.display = 'block'
     } else {
         correctionInputTarget.style.display = 'none'
@@ -48,8 +50,10 @@ function initHandler() {
     }
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHandler)
-} else {
-    initHandler()
+function init () {
+    initAll();
+    initHandler();
+    console.log("Init");
 }
+
+document.addEventListener("DOMContentLoaded", init, false);

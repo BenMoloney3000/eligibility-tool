@@ -24,3 +24,6 @@ whitenoise[brotli]       # Better static file serving
 libsass 
 django-compressor 
 django-sass-processor
+
+# GDS 
+crispy-forms-gds
