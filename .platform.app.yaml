@@ -21,8 +21,8 @@ hooks:
         export PATH=/app/.global/bin:/app/.global/vendor/bin:/opt/python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
         curl -sS https://platform.sh/cli/installer | php
         
-        # Install Python/Django requirements
-        pip-sync
+        echo 'Install Python/Django requirements (pip-sync)'
+        pip-sync ./requirements/local.txt
 
         # Install Node.js and NPM
         # https://docs.platform.sh/languages/nodejs/nvm.html#how-to-use-nvm-to-run-different-versions-of-nodejs
