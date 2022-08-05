@@ -3,7 +3,7 @@ type: python:3.8
 
 dependencies:
     python3:
-        pip: "21.0.1"
+        pip: ">=21.2"
         pip-tools: "*"
         gunicorn: "*"
 
