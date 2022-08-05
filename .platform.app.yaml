@@ -14,6 +14,8 @@ variables:
       # NODE v14 (Active LTS) EOL 2023-04-30:
       # https://nodejs.org/en/about/releases/
       NODE_VERSION: 14.13.1
+      #
+      DJANGO_SETTINGS_MODULE: "config.settings.platform"
 
 hooks:
     build: |
