@@ -35,7 +35,7 @@ hooks:
 
         echo -e '\n\nInstall Python/Django requirements (pip-sync):\n'
         python --version
-        pip install ./requirements/local.txt
+        pip install -r ./requirements/local.txt
         python manage.py compilescss
         python manage.py collectstatic --noinput
     deploy: |
