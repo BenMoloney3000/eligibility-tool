@@ -51,6 +51,7 @@ disk: 512
 
 relationships:
     database: "postgresqldb:postgresql"
+    redis: "redis:redis"
 
 
 crons:
