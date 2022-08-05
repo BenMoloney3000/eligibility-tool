@@ -102,7 +102,7 @@ if SENTRY_DSN:
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 if ENV != "offline":
-    DATABASES = {"default": env.db("DATABASE_URL", None)}
+    DATABASES = {"default": env.db("DATABASE_URL", "")}
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
     DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 
