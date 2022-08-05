@@ -2,5 +2,5 @@ postgresqldb:
     type: postgresql:13
     disk: 1024
 redis:
-  type: redis-persistent:7
+  type: redis-persistent:7.0
   disk: 256
