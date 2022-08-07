@@ -13,8 +13,6 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
-REDIS_HOST=redis
-
 # Platform.sh allows us to set variables, but they are set in a single
 # environment variable which is a JSON dict.  To make this stable across
 # environments expand those variables into environment variables:
