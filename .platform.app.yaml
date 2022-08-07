@@ -75,7 +75,7 @@ web:
         socket_family: "unix"
 
     commands:
-        start: "gunicorn -w 4 -b unix:$SOCKET prospector.wsgi:application"
+        start: "gunicorn -w 4 -b unix:$SOCKET config.wsgi:application"
 
     locations:
         "/":
