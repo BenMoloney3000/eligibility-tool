@@ -16,9 +16,11 @@
         <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
         <header class="wrapper panel">
             {% block header %}
-                <h1 class="logo">
-                    <img alt="FutureFit" src="{% static 'images/FF_LOGO_Landscape_green-trim.png' %}">
-                </h1>
+                <a href="{% url "questionnaire:home" %}">
+                    <h1 class="logo">
+                        <img alt="FutureFit" src="{% static 'images/FF_LOGO_Landscape_green-trim.png' %}">
+                    </h1>
+                </a>
                 <h2>Funding eligibility checker</h2>
             {% endblock header %}
         </header>
