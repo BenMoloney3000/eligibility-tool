@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
@@ -16,26 +17,11 @@
         {% endif %}
     </p>
 
-    <p>
-        {{ form.motivation_better_comfort }}
-        <label for="id_motivation_better_comfort">A more comfortable property</label>
-        {{ form.motivation_better_comfort.errors }}
-    </p>
-    <p>
-        {{ form.motivation_lower_bills }}
-        <label for="id_motivation_lower_bills">Reducing energy and heating bills</label>
-        {{ form.motivation_lower_bills.errors }}
-    </p>
-    <p>
-        {{ form.motivation_environment }}
-        <label for="id_motivation_environment">A greener property - doing your bit to tackle climate change</label>
-        {{ form.motivation_environment.errors }}
-    </p>
+    {{ form.motivation_better_comfort|as_crispy_field }}
+    {{ form.motivation_lower_bills|as_crispy_field }}
+    {{ form.motivation_environment|as_crispy_field }}
     {% if not is_owner %}
-        <p>
-            {{ form.motivation_unknown }}
-            <label for="id_motivation_unknown">I don't know</label>
-            {{ form.motivation_unknown.errors }}
-        </p>
+        {{ form.motivation_unknown|as_crispy_field }}
     {% endif %}
+
 {% endblock form_content %}

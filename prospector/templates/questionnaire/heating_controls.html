@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
@@ -38,47 +39,9 @@
         <p>Which of the following control systems are present in this property?</p>
     {% endif %}
 
-    <p>
-        <label for="id_trvs_present">
-            Adjustable TRV controls on your radiators (Thermostatically
-            Radiator Valves - turn valves that are positioned at one end of a
-            radiator)
-        </label>
-        {{ form.trvs_present }}
-        {{ form.trvs_present.errors }}
-    </p>
-    <p>
-        <label for="id_room_thermostat">
-            One or more room thermostats (set the desired temperature in
-            the room they are positioned in).
-        </label>
-        {{ form.room_thermostat }}
-        {{ form.room_thermostat.errors }}
-    </p>
-    <p>
-        <label for="id_ch_timer">
-            A central heating timer (a timer or programmer allows you to
-            control when your heating and hot water comes on and when it goes
-            off).
-        </label>
-        {{ form.ch_timer }}
-        {{ form.ch_timer.errors }}
-    </p>
-    <p>
-        <label for="id_programmable_thermostat">
-            A programmable central heating thermostat (combines time and
-            temperature controls in a single unit).
-        </label>
-        {{ form.programmable_thermostat }}
-        {{ form.programmable_thermostat.errors }}
-    </p>
-    <p>
-        <label for="id_smart_thermostat">
-            A smart thermostat system (more advanced control systems for
-            central heating that set temperature and timing and are connected
-            to the internet).
-        </label>
-        {{ form.smart_thermostat }}
-        {{ form.smart_thermostat.errors }}
-    </p>
+    {{ form.trvs_present|as_crispy_field }}
+    {{ form.room_thermostat|as_crispy_field }}
+    {{ form.ch_timer|as_crispy_field }}
+    {{ form.programmable_thermostat|as_crispy_field }}
+    {{ form.smart_thermostat|as_crispy_field }}
 {% endblock form_content %}

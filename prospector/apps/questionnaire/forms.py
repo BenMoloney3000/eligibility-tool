@@ -331,7 +331,6 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
 
 
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["data_correct"].label = "Is this Correct?"
@@ -349,30 +348,53 @@ class HeatingControls(AnswerFormMixin, forms.ModelForm):
         choices=enums.TRVsPresent.choices,
         widget=forms.RadioSelect,
         required=True,
+        label=(
+            "Adjustable TRV controls on your radiators (Thermostatically "
+            "Radiator Valves - turn valves that are positioned at one end of a "
+            "radiator)"
+        ),
     )
     room_thermostat = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=((True, "Yes"), (False, "No")),
         widget=forms.RadioSelect,
         required=True,
+        label=(
+            "One or more room thermostats (set the desired temperature in "
+            "the room they are positioned in)."
+        ),
     )
     ch_timer = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=((True, "Yes"), (False, "No")),
         widget=forms.RadioSelect,
         required=True,
+        label=(
+            "A central heating timer (a timer or programmer allows you to "
+            "control when your heating and hot water comes on and when it goes "
+            "off)."
+        ),
     )
     programmable_thermostat = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=((True, "Yes"), (False, "No")),
         widget=forms.RadioSelect,
         required=True,
+        label=(
+            "A programmable central heating thermostat (combines time and "
+            "temperature controls in a single unit)."
+        ),
     )
     smart_thermostat = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=((True, "Yes"), (False, "No")),
         widget=forms.RadioSelect,
         required=True,
+        label=(
+            "A smart thermostat system (more advanced control systems for "
+            "central heating that set temperature and timing and are connected "
+            "to the internet)."
+        ),
     )
 
     class Meta:
@@ -437,6 +459,12 @@ class Motivations(AnswerFormMixin, forms.ModelForm):
             "motivation_lower_bills": forms.CheckboxInput(),
             "motivation_unknown": forms.CheckboxInput(),
             "motivation_environment": forms.CheckboxInput(),
+        }
+        labels = {
+            "motivation_better_comfort": "A more comfortable property",
+            "motivation_lower_bills": "Reducing energy and heating bills",
+            "motivation_unknown": "I don't know",
+            "motivation_environment": "A greener property - doing your bit to tackle climate change",
         }
 
 

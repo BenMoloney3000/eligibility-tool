@@ -1,78 +1,76 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>Results Page</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block form_content %}
+    <p>Great news, {{ full_name }} &#129395;</p>
 
-        <p>Great news, {{ full_name }} &#129395;</p>
+    <p>Based on what you’ve told us, we think your home is ready for:</p>
 
-        <p>Based on what you’ve told us, we think your home is ready for:</p>
+    {% for measure in measures %}
+        <details>
+            <summary class="ticked">{{ measure.label }}</summary>
+            <ul>
+                <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
+                <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
+                <li><strong>Impact on energy bills:</strong> {{ measure.bill_impact }}</li>
+                <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
+            </dl>
+        </details>
+    {% endfor %}
 
-        {% for measure in measures %}
-            <details>
-                <summary>&#9989;&nbsp;{{ measure.label }}</summary>
-                <ul>
-                    <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
-                    <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
-                    <li><strong>Impact on energy bills:</strong> {{ measure.bill_impact }}</li>
-                    <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
-                </dl>
-            </details>
-        {% endfor %}
+    {% if rating == "RED" %}
+        <p>
+            <strong>You are unlikely to be eligible for funding for these measures</strong>.
+            Please <a href="https://plymouthenergycommunity.com/contact-us">get in contact</a>
+            to see if we can help in different ways.
+        </p>
+        <p>
+            We would like to ask you a few more questions about your preferences and house
+            so that we can build better schemes in the future. If you would rather not do
+            this you can stop here.
+        </p>
 
-        {% if rating == "RED" %}
-            <p>
-                <strong>You are unlikely to be eligible for funding for these measures</strong>.
-                Please <a href="https://plymouthenergycommunity.com/contact-us">get in contact</a>
-                to see if we can help in different ways.
-            </p>
-            <p>
-                We would like to ask you a few more questions about your preferences and house
-                so that we can build better schemes in the future. If you would rather not do
-                this you can stop here.
-            </p>
+    {% elif rating == "AMBER" or rating == "YELLOW" %}
+        <p>
+            <strong>You may be eligible for some funding</strong> however both your property's
+            energy performance and your household income are higher than the thresholds
+            for some funding. We will need to ask some more questions to be sure.
+        </p>
+        <p>
+            If you would rather not do this you can stop here, and a PEC staff member
+            can take these details from you over the phone at some point. Note
+            that this will delay any application for funding that we can submit for you.
+        </p>
+    {% else %}
+        <p>
+            <strong>It looks like you are eligible for funding</strong> based on the information
+            you've supplied.  We now need to ask some further questions to clarify the best
+            source of funding for you.
+        </p>
+        <p>
+            If you would rather not do this you can stop here, and a PEC staff member
+            can take these details from you over the phone at some point. Note
+            that this will delay any application for funding that we can submit for you.
+        </p>
 
-        {% elif rating == "AMBER" or rating == "YELLOW" %}
-            <p>
-                <strong>You may be eligible for some funding</strong> however both your property's
-                energy performance and your household income are higher than the thresholds
-                for some funding. We will need to ask some more questions to be sure.
-            </p>
-            <p>
-                If you would rather not do this you can stop here, and a PEC staff member
-                can take these details from you over the phone at some point. Note
-                that this will delay any application for funding that we can submit for you.
-            </p>
-        {% else %}
-            <p>
-                <strong>It looks like you are eligible for funding</strong> based on the information
-                you've supplied.  We now need to ask some further questions to clarify the best
-                source of funding for you.
-            </p>
-            <p>
-                If you would rather not do this you can stop here, and a PEC staff member
-                can take these details from you over the phone at some point. Note
-                that this will delay any application for funding that we can submit for you.
-            </p>
-
-        {% endif %}
+    {% endif %}
 
 
-        <button class="button" name="finish_now" value="True">
-            Finish now
-        </button>
+    <button class="button" name="finish_now" value="True">
+        Finish now
+    </button>
 
-        <button class="button" name="continue" value="continue">
-            Continue&nbsp;&rarr;
-        </button>
+    <button class="button" name="continue" value="continue">
+        Continue&nbsp;&rarr;
+    </button>
+{% endblock form_content %}
 
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-    </form>
-{% endblock %}
+{% block nav_form %}
+    {# remove default nav buttons #}
+{% endblock nav_form %}

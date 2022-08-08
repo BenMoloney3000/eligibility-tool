@@ -1,7 +1,7 @@
 @import 'node_modules/govuk-frontend/govuk/base';
-@import "node_modules/govuk-frontend/govuk/objects/all";
+@import 'node_modules/govuk-frontend/govuk/objects/all';
 
-$prospector_font_family: "Dosis, sans-serif";
+$prospector_font_family: 'Dosis, sans-serif';
 
 $header_height: 6em;
 $footer_height: 6em;
@@ -16,9 +16,9 @@ $govuk-font-family: $prospector_font_family;
 $govuk-focus-colour: $electric_green;
 
 @import 'node_modules/govuk-frontend/govuk/components/radios/radios';
+@import 'node_modules/govuk-frontend/govuk/components/checkboxes/checkboxes';
 @import 'node_modules/govuk-frontend/govuk/components/input/input';
 @import 'node_modules/govuk-frontend/govuk/components/select/select';
-
 
 * {
     box-sizing: border-box;
@@ -209,10 +209,10 @@ p a,
 ul a {
     color: #ee3d8a;
 }
-form input[type="radio"] {
+form input[type='radio'] {
     @extend .govuk-radios__input;
 }
-form input[type="text"],
+form input[type='text'],
 form select {
     border-radius: 14px;
     border: 2px solid rgba(74, 74, 74, 0.2);
@@ -222,7 +222,7 @@ form select {
     background: #fff;
     font-size: 1rem;
 }
-form input[type="text"] {
+form input[type='text'] {
     @extend .govuk-input;
 }
 form select {
@@ -313,6 +313,7 @@ details {
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-bottom: 1em;
     progress {
         width: 80%;
         height: 1.5em;
@@ -373,9 +374,13 @@ form {
     background-color: $body_grey;
     border-radius: 10px;
 }
-ul.ticked li::marker {
+ul.ticked li::marker,
+summary:before {
     content: '✓';
-    color: green;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding-right: 0.25em;
+    color: $electric_green;
 }
 .note {
     margin-top: 1em;

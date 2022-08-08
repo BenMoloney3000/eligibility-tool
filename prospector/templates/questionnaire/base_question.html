@@ -4,13 +4,14 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block content %}
+
     <div class="progress">
         <label for="progress">progress</label>
         <progress id="progress" min="0" max="100" value="{{ percent_complete }}">(( percent_complete }}%</progress>
     </div>
 
     {% if prev_url %}
-        <a href="{% url prev_url %}">&larr;&nbsp;Prev</a>
+        <a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a>
     {% endif %}
 
     {% block question_text %}
