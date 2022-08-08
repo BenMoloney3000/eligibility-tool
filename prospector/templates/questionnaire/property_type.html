@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
@@ -13,11 +14,9 @@
             <strong>{{ initial_form }} {{ initial_type|lower }}</strong>
         </p>
 
-        <p>
-            <label for="id_data_correct">Is this correct?</label>
-            {{ form.data_correct }}
-        </p>
-        <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %}>
+        {{ form.data_correct|as_crispy_field }}
+
+        <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %} class="govuk-form-group">
             <p> If not please select the correct option below:</p>
             <p>
                 {{ form.property_form }}

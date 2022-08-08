@@ -331,6 +331,11 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
 
 
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["data_correct"].label = "Is this Correct?"
+
     class Meta:
         model = models.Answers
         fields = [

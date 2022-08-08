@@ -317,7 +317,7 @@ class SinglePrePoppedQuestion(SingleQuestion):
                 widget=forms.RadioSelect,
                 required=True,
             )
-            form_fields["data_correct"].label = False
+            form_fields["data_correct"].label = "Is this correct?"
 
         QuestionForm = type(
             "QuestionForm",
