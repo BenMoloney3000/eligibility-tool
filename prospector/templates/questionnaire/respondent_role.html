@@ -6,23 +6,27 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    {% for value, label in form.respondent_role.field.widget.choices %}
-        {% if value %}{# filter out the empty value #}
-            <p>
-                <input
-                    type="radio"
-                    id="{{ form.respondent_role.auto_id }}_{{ value }}"
-                    name="{{ form.respondent_role.html_name }}"
-                    value="{{ value }}"
-                    {% if value == form.respondent_role.data or value == form.respondent_role.initial %}checked{% endif %}>
-                <label
-                    for="{{ form.respondent_role.auto_id }}_{{ value }}">{{ label }}</label>
-            </p>
-        {% endif %}
-    {% endfor %}
+    <div class="govuk-radios" data-module="govuk-radios">
+        {% for value, label in form.respondent_role.field.widget.choices %}
+            {% if value %}{# filter out the empty value #}
+                <div class="govuk-radios__item">
+                    <input
+                        type="radio"
+                        id="{{ form.respondent_role.auto_id }}_{{ value }}"
+                        name="{{ form.respondent_role.html_name }}"
+                        value="{{ value }}"
+                        class="govuk-radios__input"
+                        {% if value == form.respondent_role.data or value == form.respondent_role.initial %}checked{% endif %}>
+                    <label
+                        class="govuk-label govuk-radios__label"
+                        for="{{ form.respondent_role.auto_id }}_{{ value }}">{{ label }}</label>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
     {{ form.respondent_role.errors }}
 
-    <p>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) to complete this form if you haven’t so far!</p>
+    <p class="note"><i>Please ensure that you have permission from the appropriate parties (landlord, tenant, owner occupier) to complete this form if you haven’t so far!</i></p>
     <div id="other-detail"{% if form.initial.respondent_role != "OTHER" %} style="display: none"{% endif %}>
         <p>
             <label for="id_respondent_role_other">
