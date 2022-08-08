@@ -316,7 +316,7 @@ class PossibleMeasures(models.TextChoices):
     )
     RIR_INSULATION = "RIR_INSULATION", "Room-in-roof insulation"
     FLAT_ROOF_INSULATION = "FLAT_ROOF_INSULATION", "Flat roof insulation"
-    BOILER_UPGRADE = "BOILER_UPGRADE", "Boiler upgrade"
+    BOILER_UPGRADE = "BOILER_UPGRADE", "A low carbon heating upgrade"
     STORAGE_HEATER_UPGRADE = (
         "STORAGE_HEATER_UPGRADE",
         "Replacement or upgrade or night storage heaters",
@@ -325,7 +325,7 @@ class PossibleMeasures(models.TextChoices):
         "CENTRAL_HEATING_INSTALL",
         "Installation of a central heating system",
     )
-    BROKEN_BOILER_UPGRADE = "BROKEN_BOILER_UPGRADE", "Broken boiler upgrade"
+    BROKEN_BOILER_UPGRADE = "BROKEN_BOILER_UPGRADE", "A low carbon heating upgrade"
     PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"
     LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"
     HEAT_PUMP_INSTALL = "HEAT_PUMP_INSTALL", "Installation of a heat pump"
