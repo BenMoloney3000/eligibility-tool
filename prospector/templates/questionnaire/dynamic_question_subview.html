@@ -30,7 +30,7 @@
         </p>
     {% endfor %}
 {% elif form.field.widget_type == 'text' or form.field.widget_type == 'number' %}
-    <p>
+    <div class="govuk-form-group">
         <input
             type="text"
             id="{{ form.field.auto_id }}"
@@ -40,7 +40,7 @@
         {% if unit %}
             <span>{{ unit }}</span>
         {% endif %}
-    </p>
+    </div>
 {% endif %}
 
 {% for error in form.field.errors %}

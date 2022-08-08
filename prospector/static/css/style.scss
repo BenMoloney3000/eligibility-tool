@@ -1,5 +1,7 @@
 @import 'node_modules/govuk-frontend/govuk/base';
 
+$prospector_font_family: "Dosis, sans-serif";
+
 $header_height: 6em;
 $footer_height: 6em;
 
@@ -9,9 +11,12 @@ $fb_white: #ffffff;
 $body_grey: #fcfcfc;
 $body_black: #4a4a4a;
 
+$govuk-font-family: $prospector_font_family;
 $govuk-focus-colour: $electric_green;
 
 @import 'node_modules/govuk-frontend/govuk/components/radios/radios';
+@import 'node_modules/govuk-frontend/govuk/components/input/input';
+@import 'node_modules/govuk-frontend/govuk/components/select/select';
 
 * {
     box-sizing: border-box;
@@ -202,18 +207,24 @@ p a,
 ul a {
     color: #ee3d8a;
 }
-form input,
+form input[type="text"],
 form select {
     border-radius: 14px;
     border: 2px solid rgba(74, 74, 74, 0.2);
-    padding: 0.8rem 1.2rem;
+    padding: 0 1.2rem;
     outline: 0;
     margin-bottom: 0.5rem;
     background: #fff;
     font-size: 1rem;
 }
+form input[type="text"] {
+    @extend .govuk-input;
+}
+form select {
+    @extend .govuk-select;
+}
 form input:focus {
-    outline: 3px solid #40bfef;
+    outline: 3px solid $electric_green;
     outline-offset: 0;
 }
 form select {
