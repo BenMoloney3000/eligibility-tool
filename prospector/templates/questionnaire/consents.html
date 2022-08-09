@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
@@ -10,20 +11,6 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    <p>
-        <label>
-            {{ form.consented_callback }}
-            To call or email you to offer advice and help.
-        </label>
-        {{ form.consented_callback.errors }}
-    </p>
-
-    <p>
-        <label>
-            {{ form.consented_future_schemes }}
-            To contact you in the future when we think there are grants or
-            programmes relevant for you.
-        </label>
-        {{ form.consented_future_schemes.errors }}
-    </p>
+    {{ form.consented_callback|as_crispy_field }}
+    {{ form.consented_future_schemes|as_crispy_field }}
 {% endblock form_content %}

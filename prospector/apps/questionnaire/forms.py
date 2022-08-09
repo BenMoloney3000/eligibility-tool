@@ -288,12 +288,14 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
 
 class Consents(AnswerFormMixin, forms.ModelForm):
     consented_callback = forms.BooleanField(
-        required=False, label="To call/email you back to provide advice"
+        required=False,
+        label="To call or email you to offer advice and help."
     )
     consented_future_schemes = forms.BooleanField(
         required=False,
         label=(
-            "To contact you if and when we think there are schemes that are relevant for you in future"
+            "To contact you in the future when we think there are grants or "
+            "programmes relevant for you."
         ),
     )
 
