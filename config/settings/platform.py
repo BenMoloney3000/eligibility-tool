@@ -42,21 +42,12 @@ if psh_env("LOCALHOST", False):
 
 # Logging
 # ------------------------------------------------------------------------------
-
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": True,
-    "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
-        }
-    },
+    "disable_existing_loggers": False,
     "handlers": {
         "console": {
-            "level": "DEBUG",
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
         },
         "mail_admins": {
             "level": "ERROR",
@@ -64,7 +55,11 @@ LOGGING = {
         },
     },
     "loggers": {
-        "": {"handlers": ["console", "mail_admins"], "level": "DEBUG"},
+        "django": {
+            "handlers": ["console", "mail_admins"],
+            "level": os.getenv("PROSPECTOR_LOG_LEVEL", "INFO"),
+            "propagate": True,
+        },
     },
 }
 
