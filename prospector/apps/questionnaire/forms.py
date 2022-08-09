@@ -516,6 +516,23 @@ class HouseholdAdultSelfEmploymentIncome(AnswerFormMixin, forms.ModelForm):
 
 class HouseholdAdultWelfareBenefits(AnswerFormMixin, forms.Form):
 
+    field_labels = {
+        "uc": "Universal Credit",
+        "jsa": "Job Seekers Allowance (JSA)",
+        "esa": "Employment and Support Allowance (ESA)",
+        "income_support": "Income Support",
+        "child_tax_credit": "Child Tax Credit",
+        "working_tax_credit": "Working Tax Credit",
+        "child_benefit": "Child Benefit",
+        "housing_benefit": "Housing Benefit",
+        "attendance_allowance": "Attendance Allowance",
+        "carers_allowance": "Carers Allowance",
+        "dla": "Disability Living Allowance (DLA)",
+        "pip": "Personal Independence Payment (PIP)",
+        "pension_credit": "Pension Credit",
+        "other": "Other",
+    }
+
     uc = forms.BooleanField(required=False)
     jsa = forms.BooleanField(required=False)
     esa = forms.BooleanField(required=False)
@@ -542,6 +559,9 @@ class HouseholdAdultWelfareBenefits(AnswerFormMixin, forms.Form):
 
         for benefit in self.benefits:
             self.initial[benefit.benefit_type.lower()] = True
+
+        for name, field in self.fields.items():
+            field.label = self.field_labels[name]
 
 
 class HouseholdAdultWelfareBenefitAmounts(AnswerFormMixin, forms.Form):
