@@ -1,4 +1,5 @@
 import dataclasses
+import hashlib
 
 from django.conf import settings
 from django.core.cache import caches
@@ -41,6 +42,14 @@ def data_was_changed(answers: models.Answers) -> bool:
                 return True
 
     return False
+
+
+def make_key(key, key_prefix, version):
+    # Store hashed post codes to silence the warning "CacheKeyWarning: Cache
+    # key contains characters that will cause errors if used with memcached"
+    m = hashlib.md5()
+    m.update(key)
+    return "%s:%s:%s" % (key_prefix, version, m.hexdigest())
 
 
 def get_postcode(postcode):

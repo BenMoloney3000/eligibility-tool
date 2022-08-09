@@ -124,6 +124,7 @@ CACHES = {
         "OPTIONS": {
             "MAX_ENTRIES": 10000,
         },
+        "KEY_FUNCTION": "app.questionnaire.selectors.make_key",
     },
 }
 
