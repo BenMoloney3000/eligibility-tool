@@ -40,6 +40,34 @@ if psh_env("LOCALHOST", False):
     ALLOWED_HOSTS.append("localhost")
     ALLOWED_HOSTS.append("127.0.0.1")
 
+# Logging
+# ------------------------------------------------------------------------------
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "": {"handlers": ["console", "mail_admins"], "level": "DEBUG"},
+    },
+}
+
 log_file = psh_env("LOG_FILE")
 if log_file:
     LOGGING["handlers"]["file"] = {  # noqa F405
