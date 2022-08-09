@@ -428,6 +428,17 @@ class Occupants(AnswerFormMixin, forms.ModelForm):
 
 
 class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+        for name, field, in self.fields.items():
+            self.helper.layout.append(
+                Field(name)
+            )
+
     class Meta:
         model = models.Answers
         fields = [
@@ -448,6 +459,31 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_disability": forms.CheckboxInput(),
             "vulnerable_age": forms.CheckboxInput(),
             "vulnerable_child_pregnancy": forms.CheckboxInput(),
+        }
+        labels = {
+            "vulnerable_cariovascular": (
+                "A cardiovascular condition (for example: heart condition, risk "
+                "of stroke, high blood pressure etc."
+            ),
+            "vulnerable_respiratory": (
+                "A respiratory condition (for example COPD or asthma)"
+            ),
+            "vulnerable_mental_health": (
+                "A mental health condition"
+            ),
+            "vulnerable_cns": (
+                "A central nervous system condition (for example dementia, "
+                "Alzheimer's or fibromyalgia)"
+            ),
+            "vulnerable_disability": (
+                "Disability"
+            ),
+            "vulnerable_age": (
+                "Being over 65 years old"
+            ),
+            "vulnerable_child_pregnancy": (
+                "Being a child under the age of five, or being pregnant"
+            ),
         }
 
 
