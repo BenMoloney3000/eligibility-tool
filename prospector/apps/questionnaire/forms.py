@@ -288,8 +288,7 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
 
 class Consents(AnswerFormMixin, forms.ModelForm):
     consented_callback = forms.BooleanField(
-        required=False,
-        label="To call or email you to offer advice and help."
+        required=False, label="To call or email you to offer advice and help."
     )
     consented_future_schemes = forms.BooleanField(
         required=False,
@@ -434,10 +433,11 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = Layout()
-        for name, field, in self.fields.items():
-            self.helper.layout.append(
-                Field(name)
-            )
+        for (
+            name,
+            field,
+        ) in self.fields.items():
+            self.helper.layout.append(Field(name))
 
     class Meta:
         model = models.Answers
@@ -468,19 +468,13 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_respiratory": (
                 "A respiratory condition (for example COPD or asthma)"
             ),
-            "vulnerable_mental_health": (
-                "A mental health condition"
-            ),
+            "vulnerable_mental_health": ("A mental health condition"),
             "vulnerable_cns": (
                 "A central nervous system condition (for example dementia, "
                 "Alzheimer's or fibromyalgia)"
             ),
-            "vulnerable_disability": (
-                "Disability"
-            ),
-            "vulnerable_age": (
-                "Being over 65 years old"
-            ),
+            "vulnerable_disability": ("Disability"),
+            "vulnerable_age": ("Being over 65 years old"),
             "vulnerable_child_pregnancy": (
                 "Being a child under the age of five, or being pregnant"
             ),
