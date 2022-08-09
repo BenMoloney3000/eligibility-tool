@@ -1,5 +1,10 @@
 import logging
 
+from crispy_forms_gds.helper import FormHelper
+from crispy_forms_gds.layout import Div
+from crispy_forms_gds.layout import Field
+from crispy_forms_gds.layout import Fieldset
+from crispy_forms_gds.layout import Layout
 from django import forms
 from django.utils.safestring import mark_safe
 
@@ -569,6 +574,10 @@ class HouseholdAdultWelfareBenefitAmounts(AnswerFormMixin, forms.Form):
         self.household_adult = kwargs.pop("household_adult")
         super().__init__(*args, **kwargs)
 
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+
         # Instantiate the fields dynamically
         self.benefits = models.WelfareBenefit.objects.filter(
             recipient=self.household_adult
@@ -577,13 +586,31 @@ class HouseholdAdultWelfareBenefitAmounts(AnswerFormMixin, forms.Form):
         for benefit in self.benefits:
             field_prefix = benefit.benefit_type.lower()
             self.fields[f"{field_prefix}_amount"] = forms.IntegerField(
-                required=True, min_value=1, max_value=32767
+                required=True,
+                min_value=1,
+                max_value=32767,
+                label="",
             )
             self.initial[f"{field_prefix}_amount"] = benefit.amount
             self.fields[f"{field_prefix}_frequency"] = forms.ChoiceField(
-                required=True, choices=enums.BenefitPaymentFrequency.choices
+                required=True, choices=enums.BenefitPaymentFrequency.choices, label=""
             )
             self.initial[f"{field_prefix}_frequency"] = benefit.frequency
+
+            self.helper.layout.append(
+                Fieldset(
+                    Div(
+                        Field(
+                            f"{field_prefix}_amount",
+                            spellcheck="false",
+                            template="questionnaire/fields/money_field.html",
+                        ),
+                        Field(f"{field_prefix}_frequency"),
+                        css_class="fieldset_row",
+                    ),
+                    legend=enums.BenefitType(benefit.benefit_type).label,
+                )
+            )
 
 
 class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):

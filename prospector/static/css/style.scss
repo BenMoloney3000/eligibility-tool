@@ -248,6 +248,11 @@ form .currency span.symbol {
     left: 0.5rem;
     top: 0;
 }
+form .fieldset_row {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
 details {
     margin-bottom: 1rem;
 }
