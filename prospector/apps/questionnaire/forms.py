@@ -90,6 +90,7 @@ class PrePoppedMixin:
                     widget=forms.RadioSelect,
                     required=True,
                 )
+                self.fields["data_correct"].label = "Is this correct?"
 
 
 class DummyForm(AnswerFormMixin, forms.Form):
@@ -339,7 +340,6 @@ class SelectEPC(AnswerFormMixin, forms.ModelForm):
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["data_correct"].label = "Is this Correct?"
 
     class Meta:
         model = models.Answers
