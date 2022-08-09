@@ -56,7 +56,7 @@ def get_for_postcode(raw_postcode: str) -> Optional[list]:
 
     if not getattr(settings, "DATA8_API_KEY", False):
         # Probably a dev environment. Log an error and continue as if no data
-        logger.error("Postcode API not set.")
+        logger.error("DATA8_API_KEY not set.")
 
         # Can't say it's not a valid postcode, or that it wasn't found, so we'll
         # do our best to put on a brave face and continue.
