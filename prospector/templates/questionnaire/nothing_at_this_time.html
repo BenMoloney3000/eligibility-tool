@@ -1,42 +1,40 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
+
 {% load static %}
 
 {% block title %}Home upgrade eligibility: No funding at this time | Plymouth Energy Community{% endblock %}
 
-{% block content %}
+{% block question_text %}
     <h2>No funding currently available</h2>
+{% endblock question_text %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block form_content %}
+    {% if future_schemes_consent_given %}
+        <p>
+            Thanks for answering these additional questions.
+            You have given us permission to contact you about future schemes
+            and we will keep your information on file and be in touch in
+            future if and when there are new schemes relevant to you.
+        </p>
+    {% else %}
+        <p>
+            Thanks for answering all the optional questions.
+            Even though you do not qualify for any current support schemes, there
+            may be schemes in future that are relevant to you.
+        </p>
+        <p>
+            {{ form.consented_future_schemes }}
+            <label for="id_consented_future_schemes">Please contact me if and when relevant future schemes arise.</label>
+        </p>
+    {% endif %}
 
-        {% if future_schemes_consent_given %}
-            <p>
-                Thanks for answering these additional questions.
-                You have given us permission to contact you about future schemes
-                and we will keep your information on file and be in touch in
-                future if and when there are new schemes relevant to you.
-            </p>
-        {% else %}
-            <p>
-                Thanks for answering all the optional questions.
-                Even though you do not qualify for any current support schemes, there
-                may be schemes in future that are relevant to you.
-            </p>
-            <p>
-                {{ form.consented_future_schemes }}
-                <label for="id_consented_future_schemes">Please contact me if and when relevant future schemes arise.</label>
-            </p>
-        {% endif %}
+    <p>Click 'Finish' below to save and submit all your answers.</p>
 
-        <p>Click 'Finish' below to save and submit all your answers.</p>
-
-        <button class="button">
-            Finish
-        </button>
-
-        {% if prev_url %}
-            <p><a href="{% url prev_url %}">Back to previous question</a></p>
-        {% endif %}
-
-    </form>
+    <button class="button">
+        Finish
+    </button>
 {% endblock %}
+
+{% block nav_form %}
+    {# remove default nav buttons #}
+{% endblock nav_form %}
