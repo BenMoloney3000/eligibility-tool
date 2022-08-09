@@ -44,12 +44,12 @@ def data_was_changed(answers: models.Answers) -> bool:
     return False
 
 
-def make_key(key, key_prefix, version):
+def hash_key(key):
     # Store hashed post codes to silence the warning "CacheKeyWarning: Cache
     # key contains characters that will cause errors if used with memcached"
     m = hashlib.md5()
-    m.update(key)
-    return "%s:%s:%s" % (key_prefix, version, m.hexdigest())
+    m.update(key.encode(encoding="UTF-8", errors="strict"))
+    return m.hexdigest()
 
 
 def get_postcode(postcode):
@@ -57,8 +57,9 @@ def get_postcode(postcode):
 
     Uses normalised postcodes.
     """
-    if POSTCODE_CACHE.get(postcode, None):
-        return _process_cached_results(POSTCODE_CACHE.get(postcode))
+    cached_key = POSTCODE_CACHE.get(hash_key(postcode), None)
+    if cached_key:
+        return _process_cached_results(cached_key)
 
     postcoders = {
         "DATA8": data8,
@@ -71,7 +72,7 @@ def get_postcode(postcode):
 
     if addresses:
         POSTCODE_CACHE.set(
-            postcode, [dataclasses.asdict(address) for address in addresses]
+            hash_key(postcode), [dataclasses.asdict(address) for address in addresses]
         )
     return addresses
 
