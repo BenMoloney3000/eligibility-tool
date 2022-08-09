@@ -42,6 +42,7 @@ hooks:
         python manage.py compilescss
         python manage.py collectstatic --noinput
     deploy: |
+        python manage.py createcachetable
         python manage.py migrate
         unset NPM_CONFIG_PREFIX
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
