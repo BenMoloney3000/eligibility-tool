@@ -168,12 +168,15 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
     """
 
     if answers.sap_rating:
-        # With EPC
-        if answers.sap_rating >= 63:
+        # Based on having an EPC result
+        if answers.sap_rating >= 65:
+            # Property unlikely to be eligible for free or discounted schemes
             return enums.RAYG.RED
-        elif answers.sap_rating >= 45:
+        elif answers.sap_rating >= 50:
+            # Property eligible for some free or discounted schemes
             return enums.RAYG.AMBER
         else:
+            # Property eligible for free or discounted schemes
             return enums.RAYG.GREEN
     else:
         """
@@ -226,8 +229,12 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
 
     # Household income rating
     if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
+        # Gross household income below £30k therefore the Household is eligible
+        # for free or discounted schemes (based on info given).
         income_rating = enums.RAYG.GREEN
     else:
+        # Household eligible for some free or discounted schemes (based on info
+        # given)
         benefit_qualifies = answers.disability_benefits or (
             answers.child_benefit and answers.income_lt_child_benefit_threshold
         )

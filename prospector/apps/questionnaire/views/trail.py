@@ -1146,6 +1146,11 @@ class RecommendedMeasures(abstract_views.Question):
         )
 
         context["rating"] = utils.get_overall_rating(self.answers)
+        context["property_rating"] = utils.get_property_rating(self.answers)
+        context["financial_eligibility"] = utils.get_financial_eligibility(self.answers)
+        context["total_household_income"] = utils.calculate_household_income(
+            self.answers
+        )
 
         return context
 
