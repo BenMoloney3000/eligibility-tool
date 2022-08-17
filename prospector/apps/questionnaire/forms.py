@@ -511,15 +511,32 @@ class Motivations(AnswerFormMixin, forms.ModelForm):
 
 
 class HouseholdAdultName(AnswerFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+
     class Meta:
         model = models.HouseholdAdult
         fields = ["first_name", "last_name"]
 
 
 class HouseholdAdultEmployment(AnswerFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+
     class Meta:
         model = models.HouseholdAdult
-        fields = ["employment_status"]
+        fields = [
+            "employment_status",
+        ]
+        labels = {
+            "employment_status": "",
+        }
 
 
 class HouseholdAdultEmploymentIncome(AnswerFormMixin, forms.ModelForm):
@@ -536,11 +553,11 @@ class HouseholdAdultEmploymentIncome(AnswerFormMixin, forms.ModelForm):
             Fieldset(
                 Div(
                     Field(
-                        f"employed_income",
+                        "employed_income",
                         spellcheck="false",
                         template="questionnaire/fields/money_field.html",
                     ),
-                    Field(f"employed_income_frequency"),
+                    Field("employed_income_frequency"),
                     css_class="fieldset_row",
                 ),
                 legend="",
@@ -554,11 +571,49 @@ class HouseholdAdultEmploymentIncome(AnswerFormMixin, forms.ModelForm):
 
 class HouseholdAdultSelfEmploymentIncome(AnswerFormMixin, forms.ModelForm):
     self_employed_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True
+        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
     )
     business_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True
+        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+        self.helper.layout.append(
+            Fieldset(
+                Div(
+                    Field(
+                        "self_employed_income",
+                        spellcheck="false",
+                        template="questionnaire/fields/money_field.html",
+                    ),
+                    Field("self_employed_income_frequency"),
+                    css_class="fieldset_row",
+                ),
+                legend="Income from any self employment",
+            )
+        )
+        self.helper.layout.append(
+            Fieldset(
+                Div(
+                    Field(
+                        "business_income",
+                        spellcheck="false",
+                        template="questionnaire/fields/money_field.html",
+                    ),
+                    Field("business_income_frequency"),
+                    css_class="fieldset_row",
+                ),
+                legend=(
+                    "<p>Income received from profits from any business venture "
+                    "(including as a landlord)</p>"
+                    "<p>(If different from Self Employment income)</p>"
+                ),
+            )
+        )
 
     class Meta:
         model = models.HouseholdAdult
@@ -569,6 +624,10 @@ class HouseholdAdultSelfEmploymentIncome(AnswerFormMixin, forms.ModelForm):
             "business_income",
             "business_income_frequency",
         ]
+        labels = {
+            "self_employed_income": "Income",
+            "business_income": "Income",
+        }
 
 
 class HouseholdAdultWelfareBenefits(AnswerFormMixin, forms.Form):
@@ -682,12 +741,12 @@ class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):
             Fieldset(
                 Div(
                     Field(
-                        f"private_pension_income",
+                        "private_pension_income",
                         spellcheck="false",
                         template="questionnaire/fields/money_field.html",
                     ),
                     Field(
-                        f"private_pension_income_frequency",
+                        "private_pension_income_frequency",
                     ),
                     css_class="fieldset_row",
                 ),
@@ -698,11 +757,11 @@ class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):
             Fieldset(
                 Div(
                     Field(
-                        f"state_pension_income",
+                        "state_pension_income",
                         spellcheck="false",
                         template="questionnaire/fields/money_field.html",
                     ),
-                    Field(f"state_pension_income_frequency"),
+                    Field("state_pension_income_frequency"),
                     css_class="fieldset_row",
                 ),
                 legend="State Pension",
@@ -737,12 +796,12 @@ class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
             Fieldset(
                 Div(
                     Field(
-                        f"saving_investment_income",
+                        "saving_investment_income",
                         spellcheck="false",
                         template="questionnaire/fields/money_field.html",
                     ),
                     Field(
-                        f"saving_investment_income_frequency",
+                        "saving_investment_income_frequency",
                     ),
                     css_class="fieldset_row",
                 ),
