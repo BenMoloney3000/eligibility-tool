@@ -510,7 +510,8 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "your house is a steel-frame or timber-framed building, or is made froma "
         "pre-fabricated concrete, then you will need to ask a specialist "
         "insulation installer to advise you.</p>"
-        '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation">'
+        '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation" '
+        ' target="_blank">'
         "https://energysavingtrust.org.uk/advice/cavity-wall-insulation</a>"
     )
     type_ = abstract_views.QuestionType.Choices
@@ -558,7 +559,8 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
         "</p>"
         "<br> "
         "More information: "
-        '<a href="https://energysavingtrust.org.uk/advice/floor-insulation/">'
+        '<a href="https://energysavingtrust.org.uk/advice/floor-insulation/" '
+        ' target="_blank">'
         "https://energysavingtrust.org.uk/advice/floor-insulation/"
         "</a>"
     )
