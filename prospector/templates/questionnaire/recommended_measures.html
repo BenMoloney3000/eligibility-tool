@@ -5,46 +5,129 @@
 
 {% block question_text %}
     <h2>Results Page</h2>
-    <!-- Property rating: {{ property_rating }} -->
-    <!-- Financial eligibility: {{ financial_eligibility }} -->
-    <!-- Total household income: {{ total_household_income }} -->
-    <!-- Overall rating: {{ rating }} -->
 {% endblock question_text %}
 
 {% block form_content %}
-    <p>Great news, {{ full_name }} &#129395;</p>
-
-    <p>Based on what you’ve told us, we think your home is ready for:</p>
-
-    {% for measure in measures %}
-        <details>
-            <summary class="ticked">{{ measure.label }}</summary>
-            <ul>
-                <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
-                <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
-                <li><strong>Impact on energy bills:</strong> {{ measure.bill_impact }}</li>
-                <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
-            </dl>
-        </details>
-    {% endfor %}
-
     {% if rating == "RED" %}
         <p>
-            <strong>You are unlikely to be eligible for funding for these measures</strong>.
-            Please <a href="https://plymouthenergycommunity.com/contact-us">get in contact</a>
-            to see if we can help in different ways.
+            We’re so sorry, {INSERT NAME}.
         </p>
         <p>
-            We would like to ask you a few more questions about your preferences and house
-            so that we can build better schemes in the future. If you would rather not do
-            this you can stop here.
+            Thank you for taking the time to answer our questions.
+            Unfortunately, we do not think you would be eligible for funding.
         </p>
-
+        {% include 'questionnaire/snippets/recommended_measures.html' %}
+        {% if sap_rating %}
+        {% comment %}
+            With SAP rating:
+                Red (Ir,Pa|g)
+                Red (Ia|g,Pr)
+                Red (Ir,Pr)
+        {% endcomment %}
+            {% if property_rating == "GREEN" or property_rating == "AMBER" %}
+            {# Red (Ir,Pa|g) #}
+        <p>
+            Funding is targeted towards households with low incomes that are
+            living in less energy efficient homes. While it looks like you
+            would be eligible for schemes based on the energy efficiency of
+            your home, however your income would be too high. 
+        </p>
+        <p>
+            We understand this can be disappointing and there are plenty of
+            people outside the income thresholds that need support. 
+        </p>
+            {% elif property_rating == "RED" %} 
+                {% if income_rating == "RED" %}
+                {# Red (Ir,Pr) #}
+        <p>
+            Funding is targeted towards households with low incomes that are
+            living in less energy efficient homes.
+            It looks like both your income and home energy efficiency would be too high
+            to qualify. 
+        </p>
+                {% else %}
+                {# Red (Ia|g,Pr) #}
+        <p>
+            Funding is targeted towards households with low incomes that are
+            living in less energy efficient homes. While it looks like you
+            would be eligible for schemes based on your income, your property
+            would be deemed too energy efficient. 
+        </p>
+        <p>
+            We understand this can be disappointing and it does not mean your
+            property couldn’t be improved, just that it hasn’t been prioritised
+            for funding yet.
+        </p>
+                {% endif %}
+            {% endif %}
+        {% endif %}
     {% elif rating == "AMBER" or rating == "YELLOW" %}
         <p>
-            <strong>You may be eligible for some funding</strong> however both your property's
-            energy performance and your household income are higher than the thresholds
-            for some funding. We will need to ask some more questions to be sure.
+			You could be eligible for some funding towards these measures.
+        </p>
+        <p>
+			Funding is targeted towards households with low incomes that are
+			living in less energy efficient homes.
+        {% if sap_rating %}
+            {% comment %}
+                With SAP rating:
+                    Amber1 (Ia,Pg)
+                    Amber1 (Ig,Pa)
+                    Amber1 (Ia,Pa)
+            {% endcomment %}
+            {% if property_rating == "GREEN" %}
+			{# Amber1 Ia,Pg #}
+            Your property would meet the eligibility criteria for all schemes,
+            but your income would be too high for some.
+            This means it may take longer and be harder work to find a scheme
+            that can help you.
+            {% elif property_rating == "AMBER" %}
+                {% if income_rating == "GREEN" %}
+            {# Amber1 Ig,Pa #}
+            Your household income would meet the eligibility criteria for all
+            schemes, but your house would be too energy efficient for some.
+            This means it may take longer and be harder work to find a scheme
+            that can help you.
+                {% else %}
+            {# Amber1 Ia,Pa #}
+            Your house would be too energy efficient and your income too high
+            for some schemes.
+            This means it may be difficult to find a scheme that can help you,
+            but we think there will be something out there.
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% comment %}
+                Without SAP rating:
+                    Amber2 (Ig,Pa)
+                    Amber2 (Ia,Pg)
+                    Amber2 (Ia,Pa)
+            {% endcomment %}
+            {% if property_rating == "GREEN" %}
+			{# Amber2 Ia,Pg #}
+            Your house has never had an energy assessment, so we think you are
+            eligible based on our best estimate, but this may prove incorrect
+            when a survey is done. However your income would be too high for
+            some schemes.
+            This means it may take longer and be harder work to find a scheme
+            that can help you.
+            {% elif property_rating == "AMBER" %}
+            {# Amber2 Ig,Pa #}
+            Your house has never had an energy assessment, so we think you are
+            eligible based on our best estimate, but this may prove incorrect
+            when a survey is done.
+            However your income would be too high for some schemes.
+            This means it may take longer and be harder work to find a scheme
+            that can help you.
+            {% else %}
+            {# Amber2 Ia,Pa #}
+            Your income would be too high for some schemes but not all.
+            Your house has never had an energy assessment, so based on our best
+            estimate we think you would be eligible for some schemes but not
+            all. 
+            This may prove incorrect when a survey is done. 
+            {% endif %}
+        {% endif %}
         </p>
         <p>
             If you would rather not do this you can stop here, and a PEC staff member
@@ -52,27 +135,66 @@
             that this will delay any application for funding that we can submit for you.
         </p>
     {% else %}
+        {# Green results #}
+        <p>Great news, {{ full_name }} &#129395;</p>
+        {% include 'questionnaire/snippets/recommended_measures.html' %}
+        <p>The even better news is that you could be eligible for some funding!</p>
         <p>
-            <strong>It looks like you are eligible for funding</strong> based on the information
-            you've supplied.  We now need to ask some further questions to clarify the best
-            source of funding for you.
-        </p>
-        <p>
-            If you would rather not do this you can stop here, and a PEC staff member
-            can take these details from you over the phone at some point. Note
-            that this will delay any application for funding that we can submit for you.
+            Funding is targeted towards households with low incomes that are
+            living in less energy efficient homes.
+            {% if sap_rating %}
+            {# Green1 result #}
+            Both your household income and your housing efficiency would make
+            you eligible for funding.
+            {% else %}
+            {# Green2 result #}
+            We think that both your household income and your housing
+            efficiency would make you eligible for funding. However it looks
+            like your house has never had an energy assessment, so we think you
+            are eligible based on our best estimate but this may prove
+            incorrect when a survey is done.
+            {% endif %}
         </p>
 
+        <h2>What next?</h2>
+        <p>
+            Being eligible for funding doesn’t always mean it is easy to find
+            an installer who will do the work. This is where we come in.
+        </p>
+        <p>
+            We really want to help make your home warmer, save you some money and
+            cut carbon emissions. So, if you leave your details, we will let you
+            know when there is a scheme that could help you.
+        </p>
+        <p>
+            This might be through a scheme we deliver but we will continue to
+            investigate other offers available in the city and keep in touch with
+            you. We can also bring you together with other households to get
+            collective quotes that drive a better deal from installers.
+        </p>
+        <p>
+            If you could answer some further questions, it would help us to
+            match you with a scheme sooner. We know you’re a busy person
+            though, so if you don’t have more time we can work with what you
+            have already provided.
+        </p>
     {% endif %}
 
 
-    <button class="button" name="finish_now" value="True">
-        Finish now
+    <button class="button" name="continue" value="continue">
+        YES, I CAN PROVIDE FURTHER DETAILS
     </button>
 
-    <button class="button" name="continue" value="continue">
-        Continue&nbsp;&rarr;
+    <button class="button" name="finish_now" value="True">
+        SUBMIT THE INFORMATION I HAVE ALREADY PROVIDED
     </button>
+
+    <p>
+        We may not come back to you straight away if there isn’t a suitable scheme
+        available right now, but we will keep you updated from time to time. If you
+        would like to speak to one of our advisors at any point you can call 01752
+        477990 or email getintouch@plymouthenergycommunity.com.
+    </p>
 {% endblock form_content %}
 
 {% block nav_form %}

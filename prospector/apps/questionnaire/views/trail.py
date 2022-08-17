@@ -1141,7 +1141,9 @@ class RecommendedMeasures(abstract_views.Question):
         context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
         context["rating"] = utils.get_overall_rating(self.answers)
+        context["sap_rating"] = self.answers.sap_rating
         context["property_rating"] = utils.get_property_rating(self.answers)
+        context["income_rating"] = utils.get_income_rating(self.answers)
         context["financial_eligibility"] = utils.get_financial_eligibility(self.answers)
         context["total_household_income"] = utils.calculate_household_income(
             self.answers

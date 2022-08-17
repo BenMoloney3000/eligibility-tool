@@ -218,23 +218,15 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
         )
 
 
-def get_overall_rating(answers: models.Answers) -> enums.RAYG:
-    """Determine the application rating.
-
-    Used to decide the path taken for the final section of questions and the
-    text shown to the user.
-    """
-
-    property_rating = get_property_rating(answers)
-
+def get_income_rating(answers: models.Answers) -> enums.RAYG:
     # Household income rating
     if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
         # Gross household income below £30k therefore the Household is eligible
         # for free or discounted schemes (based on info given).
         income_rating = enums.RAYG.GREEN
     else:
-        # Household eligible for some free or discounted schemes (based on info
-        # given)
+        # Gross household income more than £30k, but may still be eligible for
+        # some free or discounted schemes (based on info given)
         benefit_qualifies = answers.disability_benefits or (
             answers.child_benefit and answers.income_lt_child_benefit_threshold
         )
@@ -244,9 +236,48 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
             if answers.take_home_lt_30k == enums.IncomeIsUnderThreshold.NO:
                 income_rating = enums.RAYG.RED
             else:
+                # Household take home pay below £30k.
                 income_rating = enums.RAYG.AMBER
 
-    # Overall RAYG:
+    return income_rating
+
+def get_overall_rating(answers: models.Answers) -> enums.RAYG:
+    """Determine the application rating.
+
+    Used to decide the path taken for the final section of questions and the
+    text shown to the user.
+
+        Overall rating for a EPC rating (has a sap_rating):
+
+            Green (Ig,Pg)
+            Amber (Ig,Pa)
+            Red (Ia|g,Pr)
+
+            Amber (Ia,Pg)
+            Amber (Ia,Pa)
+            Red (Ia|g,Pr)
+
+            Red (Ir,Pa|g)
+            Red (Ir,Pa|g)
+            Red (Ir,Pr)
+
+        Overall rating for no sap score:
+
+            Green2
+            Amber2 (Ig,Pa)
+            Red (Ia|g,Pr)
+
+            Amber2 (Ia,Pg)
+            Amber2 (Ia,Pa)
+            Red (Ia|g,Pr)
+
+            Red (Ir,Pa|g)
+            Red (Ir,Pa|g)
+            Red (Ir,Pr)
+    """
+    property_rating = get_property_rating(answers)
+    income_rating = get_income_rating(answers)
+
     if property_rating == enums.RAYG.RED:
         # Interpretation:
         # - There's little potential for improvement (the property rating is
