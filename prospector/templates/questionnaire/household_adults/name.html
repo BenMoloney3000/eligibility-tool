@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: Adult #{{ adult_number }}'s name | Plymouth Energy Community{% endblock %}
 
@@ -8,19 +9,5 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    <p>
-        <label for="id_first_name">
-            First name
-        </label>
-        {{ form.first_name }}
-        {{ form.first_name.errors }}
-    </p>
-
-    <p>
-        <label for="id_first_name">
-            Last name
-        </label>
-        {{ form.last_name }}
-        {{ form.last_name.errors }}
-    </p>
+    {% crispy form %}
 {% endblock form_content%}

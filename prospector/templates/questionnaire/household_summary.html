@@ -1,6 +1,7 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
 {% load humanize %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: Income summary | Plymouth Energy Community{% endblock %}
 
@@ -22,15 +23,13 @@
 
     <p>
         <label>I confirm this is an accurate description of my household members' total annual income before tax</label>
-        {{ form.confirm_or_amend_income }}
-        {{ form.confirm_or_amend_income.errors }}
+        {{ form.confirm_or_amend_income|as_crispy_field }}
     </p>
 
     {% if calculated_income > 30000 %}
         <p>
             <label>Is the take home pay of your household after tax, national insurance, energy bills and housing costs less than £30,000?</label>
-            {{ form.take_home_lt_30k_confirmation }}
-            {{ form.take_home_lt_30k_confirmation.errors }}
+            {{ form.take_home_lt_30k_confirmation|as_crispy_field }}
         </p>
     {% endif %}
 {% endblock form_content %}
