@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ full_name }}'s savings and investment income | Plymouth Energy Community{% endblock %}
 
@@ -8,14 +9,6 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    <p class="currency">
-        <span class="symbol">£</span>
-        {{ form.saving_investment_income }}
-        {{ form.saving_investment_income.errors }}
-    </p>
-    <p>
-        {{ form.saving_investment_income_frequency }}
-        {{ form.saving_investment_income_frequency.errors }}
-    </p>
-    <p><em>Where the income is negligible (less than £200pa) use a figure of £0</em></p>
+    {% crispy form %}
+    <p class="note"><em>Where the income is negligible (less than £200pa) use a figure of £0</em></p>
 {% endblock form_content %}

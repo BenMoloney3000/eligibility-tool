@@ -527,6 +527,26 @@ class HouseholdAdultEmploymentIncome(AnswerFormMixin, forms.ModelForm):
         choices=enums.PaymentFrequency.choices, required=True
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+        self.helper.layout.append(
+            Fieldset(
+                Div(
+                    Field(
+                        f"employed_income",
+                        spellcheck="false",
+                        template="questionnaire/fields/money_field.html",
+                    ),
+                    Field(f"employed_income_frequency"),
+                    css_class="fieldset_row",
+                ),
+                legend="",
+            )
+        )
+
     class Meta:
         model = models.HouseholdAdult
         fields = ["employed_income", "employed_income_frequency"]
@@ -647,11 +667,47 @@ class HouseholdAdultWelfareBenefitAmounts(AnswerFormMixin, forms.Form):
 
 class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):
     private_pension_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True
+        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
     )
     state_pension_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True
+        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+        self.helper.layout.append(
+            Fieldset(
+                Div(
+                    Field(
+                        f"private_pension_income",
+                        spellcheck="false",
+                        template="questionnaire/fields/money_field.html",
+                    ),
+                    Field(
+                        f"private_pension_income_frequency",
+                    ),
+                    css_class="fieldset_row",
+                ),
+                legend="Private Pension(s)",
+            ),
+        )
+        self.helper.layout.append(
+            Fieldset(
+                Div(
+                    Field(
+                        f"state_pension_income",
+                        spellcheck="false",
+                        template="questionnaire/fields/money_field.html",
+                    ),
+                    Field(f"state_pension_income_frequency"),
+                    css_class="fieldset_row",
+                ),
+                legend="State Pension",
+            )
+        )
 
     class Meta:
         model = models.HouseholdAdult
@@ -661,16 +717,45 @@ class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):
             "state_pension_income",
             "state_pension_income_frequency",
         ]
+        labels = {
+            "private_pension_income": "Income",
+            "state_pension_income": "Income",
+        }
 
 
 class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
     saving_investment_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True
+        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()
+        self.helper.layout.append(
+            Fieldset(
+                Div(
+                    Field(
+                        f"saving_investment_income",
+                        spellcheck="false",
+                        template="questionnaire/fields/money_field.html",
+                    ),
+                    Field(
+                        f"saving_investment_income_frequency",
+                    ),
+                    css_class="fieldset_row",
+                ),
+                legend="",
+            ),
+        )
 
     class Meta:
         model = models.HouseholdAdult
         fields = ["saving_investment_income", "saving_investment_income_frequency"]
+        labels = {
+            "saving_investment_income": "Income",
+        }
 
     def clean(self):
         data = super().clean()
@@ -704,7 +789,10 @@ class HouseholdSummary(AnswerFormMixin, forms.ModelForm):
             ("AMEND", "No - I need to amend the information I have given"),
             (
                 "NO",
-                "No -  I didn't have all the information to hand so I have only filled this in for some income sources",
+                (
+                    "No - I didn't have all the information to hand so I have "
+                    "only filled this in for some income sources"
+                ),
             ),
         ],
         widget=forms.RadioSelect,
