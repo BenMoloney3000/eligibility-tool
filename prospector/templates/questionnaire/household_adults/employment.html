@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ full_name }}'s employment status | Plymouth Energy Community{% endblock %}
 
@@ -8,8 +9,5 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    <p>
-        {{ form.employment_status }}
-        {{ form.employment_status.errors }}
-    </p>
+    {% crispy form %}
 {% endblock form_content %}

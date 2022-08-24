@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ full_name }}'s employment income | Plymouth Energy Community{% endblock %}
 
@@ -8,25 +9,5 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    <label for="id_private_pension_income">Private pension(s)</label>
-    <p class="currency">
-        <span class="symbol">£</span>
-        {{ form.private_pension_income }}
-        {{ form.private_pension_income.errors }}
-    </p>
-    <p>
-        {{ form.private_pension_income_frequency }}
-        {{ form.private_pension_income_frequency.errors }}
-    </p>
-
-    <label for="id_state_pension_income">State pension</label>
-    <p class="currency">
-        <span class="symbol">£</span>
-        {{ form.state_pension_income }}
-        {{ form.state_pension_income.errors }}
-    </p>
-    <p>
-        {{ form.state_pension_income_frequency }}
-        {{ form.state_pension_income_frequency.errors }}
-    </p>
+    {% crispy form %}
 {% endblock form_content %}

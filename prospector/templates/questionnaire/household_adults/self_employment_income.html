@@ -1,5 +1,6 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home upgrade eligibility: {{ full_name }}'s employment income | Plymouth Energy Community{% endblock %}
 
@@ -8,26 +9,5 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    <p>Income from any self employment</p>
-    <p class="currency">
-        <span class="symbol">£</span>
-        {{ form.self_employed_income }}
-        {{ form.self_employed_income.errors }}
-    </p>
-    <p>
-        {{ form.self_employed_income_frequency }}
-        {{ form.self_employed_income_frequency.errors }}
-    </p>
-
-    <p>Income received from profits from any business venture (including as a landlord)</p>
-    <p>(If different from Self Employment income)</p>
-    <p class="currency">
-        <span class="symbol">£</span>
-        {{ form.business_income }}
-        {{ form.business_income.errors }}
-    </p>
-    <p>
-        {{ form.business_income_frequency }}
-        {{ form.business_income_frequency.errors }}
-    </p>
+    {% crispy form %}
 {% endblock form_content %}
