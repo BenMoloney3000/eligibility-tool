@@ -241,6 +241,7 @@ def get_income_rating(answers: models.Answers) -> enums.RAYG:
 
     return income_rating
 
+
 def get_overall_rating(answers: models.Answers) -> enums.RAYG:
     """Determine the application rating.
 

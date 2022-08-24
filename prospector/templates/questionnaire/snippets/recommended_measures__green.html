@@ -1,0 +1,55 @@
+<h2>
+    Great news, {{ full_name }} &#129395;
+</h2>
+
+{% include 'questionnaire/snippets/recommended_measures.html' %}
+
+<p>The even better news is that you could be eligible for some funding!</p>
+<p>
+    Funding is targeted towards households with low incomes that are
+    living in less energy efficient homes.
+    {% if sap_rating %}
+    {# Green1 result #}
+    Both your household income and your housing efficiency would make
+    you eligible for funding.
+    {% else %}
+    {# Green2 result #}
+    We think that both your household income and your housing
+    efficiency would make you eligible for funding. However it looks
+    like your house has never had an energy assessment, so we think you
+    are eligible based on our best estimate but this may prove
+    incorrect when a survey is done.
+    {% endif %}
+</p>
+
+<h2>What next?</h2>
+<p>
+    Being eligible for funding doesn’t always mean it is easy to find
+    an installer who will do the work. This is where we come in.
+</p>
+<p>
+    We really want to help make your home warmer, save you some money and
+    cut carbon emissions. So, if you leave your details, we will let you
+    know when there is a scheme that could help you.
+</p>
+<p>
+    This might be through a scheme we deliver but we will continue to
+    investigate other offers available in the city and keep in touch with
+    you. We can also bring you together with other households to get
+    collective quotes that drive a better deal from installers.
+</p>
+<p>
+    If you could answer some further questions, it would help us to
+    match you with a scheme sooner. We know you’re a busy person
+    though, so if you don’t have more time we can work with what you
+    have already provided.
+</p>
+
+
+<button class="button" name="continue" value="continue">
+YES, I CAN PROVIDE FURTHER DETAILS
+</button>
+
+<button class="button" name="finish_now" value="True">
+SUBMIT THE INFORMATION I HAVE ALREADY PROVIDED
+</button>
