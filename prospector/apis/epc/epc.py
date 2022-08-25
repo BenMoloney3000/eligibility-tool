@@ -52,7 +52,8 @@ def _process_results(rows):
             (
                 int(row["main-heating-controls"])
                 if (
-                    row["main-heating-controls"].isdecimal()
+                    row["main-heating-controls"] is not None
+                    and row["main-heating-controls"].isdecimal()
                     and int(row["main-heating-controls"]) > 0
                 )
                 else None
