@@ -17,56 +17,67 @@ from prospector.dataformats import postcodes
 RATING_STRINGS = ["DUMMY", "VERY POOR", "POOR", "AVERAGE", "GOOD", "VERY GOOD"]
 
 
+def _process_result(row):
+    EPCData(
+        row["lmk-key"],
+        datetime.date.fromisoformat(row["inspection-date"]),
+        row["address1"],
+        row["address2"],
+        row["address3"],
+        row["uprn"],
+        row["property-type"],
+        row["built-form"],
+        row["construction-age-band"],
+        row["walls-description"],
+        (
+            RATING_STRINGS.index(row["walls-energy-eff"].upper())
+            if row["walls-energy-eff"].upper() in RATING_STRINGS
+            else None
+        ),
+        row["floor-description"],
+        (
+            RATING_STRINGS.index(row["floor-energy-eff"].upper())
+            if row["floor-energy-eff"].upper() in RATING_STRINGS
+            else None
+        ),
+        row["roof-description"],
+        (
+            RATING_STRINGS.index(row["roof-energy-eff"].upper())
+            if row["roof-energy-eff"].upper() in RATING_STRINGS
+            else None
+        ),
+        row["mainheat-description"],
+        row["hotwater-description"],
+        (
+            int(row["main-heating-controls"])
+            if (
+                row["main-heating-controls"] is not None
+                and row["main-heating-controls"].isdecimal()
+                and int(row["main-heating-controls"]) > 0
+            )
+            else None
+        ),
+        row["current-energy-efficiency"],
+        (
+            int(row["photo-supply"])
+            if (row["photo-supply"] is not None and row["photo-supply"].isdecimal())
+            else None
+        ),
+    )
+
+
 def _process_results(rows):
-    return [
-        EPCData(
-            row["lmk-key"],
-            datetime.date.fromisoformat(row["inspection-date"]),
-            row["address1"],
-            row["address2"],
-            row["address3"],
-            row["uprn"],
-            row["property-type"],
-            row["built-form"],
-            row["construction-age-band"],
-            row["walls-description"],
-            (
-                RATING_STRINGS.index(row["walls-energy-eff"].upper())
-                if row["walls-energy-eff"].upper() in RATING_STRINGS
-                else None
-            ),
-            row["floor-description"],
-            (
-                RATING_STRINGS.index(row["floor-energy-eff"].upper())
-                if row["floor-energy-eff"].upper() in RATING_STRINGS
-                else None
-            ),
-            row["roof-description"],
-            (
-                RATING_STRINGS.index(row["roof-energy-eff"].upper())
-                if row["roof-energy-eff"].upper() in RATING_STRINGS
-                else None
-            ),
-            row["mainheat-description"],
-            row["hotwater-description"],
-            (
-                int(row["main-heating-controls"])
-                if (
-                    row["main-heating-controls"] is not None
-                    and row["main-heating-controls"].isdecimal()
-                    and int(row["main-heating-controls"]) > 0
-                )
-                else None
-            ),
-            row["current-energy-efficiency"],
-            (
-                int(row["photo-supply"])
-                if (row["photo-supply"] is not None and row["photo-supply"].isdecimal())
-                else None
-            ),
-        )
-        for row in rows
-    ]
+    epcs = []
+
+    for row in rows:
+        try:
+            epc_data = _process_result(row)
+        except Exception as e:
+            logging.error("epc._process_result error", e, row)
+        else:
+            epcs.append(epc_data)
+
+    return epcs
 
 
 def get_for_postcode(postcode: str) -> Optional[list]:
