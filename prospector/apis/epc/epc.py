@@ -18,7 +18,7 @@ RATING_STRINGS = ["DUMMY", "VERY POOR", "POOR", "AVERAGE", "GOOD", "VERY GOOD"]
 
 
 def _process_result(row):
-    EPCData(
+    return EPCData(
         row["lmk-key"],
         datetime.date.fromisoformat(row["inspection-date"]),
         row["address1"],
