@@ -71,9 +71,7 @@ def _process_results(rows):
 
     for row in rows:
         try:
-            epcs.append(
-                _process_result(row
-            )
+            epcs.append(_process_result(row))
         except Exception as e:
             logging.error("epc._process_result error", e, row)
 
