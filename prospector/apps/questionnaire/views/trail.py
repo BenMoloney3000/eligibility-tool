@@ -422,7 +422,11 @@ class SelectEPC(abstract_views.Question):
         # pre-populate all the property energy performance questions
         if self.answers.selected_epc:
             selected_epc = self.candidate_epcs[self.answers.selected_epc]
-            self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
+            try:
+                self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
+            except Exception as e:
+                logging.error("prepopulate_from_epc failed", selected_epc, e)
+
             self.answers.save()
         else:
             # Make sure it's been deselected
