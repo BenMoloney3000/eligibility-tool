@@ -17,64 +17,87 @@ from prospector.dataformats import postcodes
 RATING_STRINGS = ["DUMMY", "VERY POOR", "POOR", "AVERAGE", "GOOD", "VERY GOOD"]
 
 
+def maybe_row(row, key, transform=lambda x: x, condition=lambda x: True, default=None):
+    value = row.get(key, default)
+
+    try:
+        if value and not condition(value):
+            return None
+    except Exception as e:
+        logging.debug('EPC condition failure: ', key, value, e)
+
+    try:
+        value = transform(value)
+    except Exception as e:
+        logging.debug('EPC transform failure: ', key, value, e)
+
+    return value
+
+
 def _process_results(rows):
     return [
         EPCData(
-            row["lmk-key"],
-            datetime.date.fromisoformat(row["inspection-date"]),
-            row["address1"],
-            row["address2"],
-            row["address3"],
-            row["uprn"],
-            row["property-type"],
-            row["built-form"],
-            row["construction-age-band"],
-            row["walls-description"],
-            (
-                RATING_STRINGS.index(row["walls-energy-eff"].upper())
-                if row["walls-energy-eff"].upper() in RATING_STRINGS
-                else None
+            maybe_row(row, "lmk-key"),
+            maybe_row(
+                row,
+                "inspection-date",
+                transform=datetime.date.fromisoformat
             ),
-            row["floor-description"],
-            (
-                RATING_STRINGS.index(row["floor-energy-eff"].upper())
-                if row["floor-energy-eff"].upper() in RATING_STRINGS
-                else None
+            maybe_row(row, "address1"),
+            maybe_row(row, "address2"),
+            maybe_row(row, "address3"),
+            maybe_row(row, "uprn"),
+            maybe_row(row, "property-type"),
+            maybe_row(row, "built-form"),
+            maybe_row(row, "construction-age-band"),
+            maybe_row(row, "walls-description"),
+            maybe_row(
+                row,
+                "walls-energy-eff",
+                transform=lambda x: RATING_STRINGS.index(x.upper()),
+                condition=lambda x: x.upper() in RATING_STRINGS
             ),
-            row["roof-description"],
-            (
-                RATING_STRINGS.index(row["roof-energy-eff"].upper())
-                if row["roof-energy-eff"].upper() in RATING_STRINGS
-                else None
+            maybe_row(row, "floor-description"),
+            maybe_row(
+                row,
+                "floor-energy-eff",
+                transform=lambda x: RATING_STRINGS.index(x.upper()),
+                condition=lambda x: x.upper() in RATING_STRINGS
             ),
-            row["mainheat-description"],
-            row["hotwater-description"],
-            (
-                int(row["main-heating-controls"])
-                if (
-                    row["main-heating-controls"] is not None
-                    and row["main-heating-controls"].isdecimal()
-                    and int(row["main-heating-controls"]) > 0
-                )
-                else None
+            maybe_row(row, "roof-description"),
+            maybe_row(
+                row,
+                "roof-energy-eff",
+                transform=lambda x: RATING_STRINGS.index(x.upper()),
+                condition=lambda x: x.upper() in RATING_STRINGS
             ),
-            row["current-energy-efficiency"],
-            (
-                int(row["photo-supply"])
-                if (row["photo-supply"] is not None and row["photo-supply"].isdecimal())
-                else None
+            maybe_row(row, "mainheat-description"),
+            maybe_row(row, "hotwater-description"),
+            maybe_row(
+                row,
+                "main-heating-controls",
+                transform=lambda x: int(x),
+                condition=lambda x: all([
+                        x.isdecimal(),
+                        int(x) > 0
+                    ])
+            ),
+            maybe_row(row, "current-energy-efficiency"),
+            maybe_row(
+                row,
+                "photo-supply",
+                transform=lambda x: int(x),
+                condition=lambda x: all([
+                        row["photo-supply"].isdecimal(),
+                    ])
             ),
         )
         for row in rows
     ]
 
 
-def get_for_postcode(postcode: str) -> Optional[list]:
-    """Return a list of EPCs for the given postcode.
 
-    None returned on failure, empty list if no EPCs found.
-    """
-
+def domestic_search(postcode: str) -> Optional[list]:
     if not settings.EPC_API_KEY:
         raise ImproperlyConfigured("No EPC API key configured")
 
@@ -100,6 +123,16 @@ def get_for_postcode(postcode: str) -> Optional[list]:
     # it could at least return a status code of 204 No Content).
     if len(results.content) == 0:
         return []
+    return results
+
+
+def get_for_postcode(postcode: str) -> Optional[list]:
+    """Return a list of EPCs for the given postcode.
+
+    None returned on failure, empty list if no EPCs found.
+    """
+
+    results = domestic_search(postcode)
 
     try:
         return _process_results(results.json()["rows"])
