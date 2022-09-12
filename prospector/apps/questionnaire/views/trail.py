@@ -299,7 +299,8 @@ class PropertyPostcode(abstract_views.SingleQuestion):
             raise ValidationError(
                 "This does not appear to be a valid UK domestic postcode. Please check and re-enter"
             )
-        if value[0:2] != "PL":
+        postcode = postcodes.normalise(value)
+        if postcode[0:2] != "PL":
             raise ValidationError(
                 "This tool is only available to properties within the Plymouth Council area."
             )

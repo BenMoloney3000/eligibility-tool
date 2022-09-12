@@ -553,3 +553,22 @@ class TestHouseholdAdultsLogic(TrailTest):
 
         assert response.status_code == 302
         assert response.url == reverse("questionnaire:adult3-welfare-benefit-amounts")
+
+
+class TestPropertyPostcode(TrailTest):
+    """Test that the redirects work correctly for the repeating questions."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.answers = factories.AnswersFactory(adults=3)
+
+    @mock.patch("prospector.apis.data8.get_for_postcode")
+    def test_validate_normalised_postcode_area(self, get_for_postcode):
+        get_for_postcode.return_value = []
+        response = self._post_trail_data(
+            "PropertyPostcode",
+            {
+                "field": "pl6 5ah",
+            },
+        )
+        assert response.status_code == 302
