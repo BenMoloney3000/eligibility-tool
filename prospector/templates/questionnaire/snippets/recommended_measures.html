@@ -1,5 +1,6 @@
+{% if measures %}
 <p>Based on what you’ve told us, we think you and your home would benefit from:</p>
-{% for measure in measures %}
+    {% for measure in measures %}
     <details>
         <summary class="ticked">{{ measure.label }}</summary>
         <ul>
@@ -9,4 +10,5 @@
             <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
         </dl>
     </details>
-{% endfor %}
+    {% endfor %}
+{% endif %}
