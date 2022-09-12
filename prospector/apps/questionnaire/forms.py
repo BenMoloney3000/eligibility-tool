@@ -899,8 +899,15 @@ class ChildBenefitSummary(AnswerFormMixin, forms.ModelForm):
         ],
         widget=forms.RadioSelect,
         required=True,
+        label=("I confirm this is an accurate description of my household members"),
     )
 
     class Meta:
         model = models.Answers
-        fields = ["child_benefit_eligibility_complete"]
+        fields = ["confirm_or_amend"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()

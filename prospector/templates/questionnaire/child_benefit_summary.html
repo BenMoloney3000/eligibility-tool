@@ -1,6 +1,7 @@
 {% extends "questionnaire/base_question.html" %}
 {% load static %}
 {% load humanize %}
+{% load crispy_forms_tags %}
 
 {% block title %}Child Benefit: Eligibility summary | Plymouth Energy Community{% endblock %}
 
@@ -30,9 +31,5 @@
         </li>
     </ul>
 
-    <p>
-        <label>I confirm this is an accurate description of my household members</label>
-        {{ form.confirm_or_amend}}
-        {{ form.confirm_or_amend.errors }}
-    </p>
+    {% crispy form %}
 {% endblock form_content %}
