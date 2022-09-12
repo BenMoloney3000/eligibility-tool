@@ -512,7 +512,7 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "still but are usually solid.</li>"
         "</ul>"
         "<p>Some houses have a different type of wall structure altogether. If "
-        "your house is a steel-frame or timber-framed building, or is made froma "
+        "your house is a steel-frame or timber-framed building, or is made from a "
         "pre-fabricated concrete, then you will need to ask a specialist "
         "insulation installer to advise you.</p>"
         '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation" '

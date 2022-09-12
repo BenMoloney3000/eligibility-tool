@@ -463,7 +463,7 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
         labels = {
             "vulnerable_cariovascular": (
                 "A cardiovascular condition (for example: heart condition, risk "
-                "of stroke, high blood pressure etc."
+                "of stroke, high blood pressure etc.)"
             ),
             "vulnerable_respiratory": (
                 "A respiratory condition (for example COPD or asthma)"

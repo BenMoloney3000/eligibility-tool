@@ -547,7 +547,7 @@ class Answers(models.Model):
     vulnerable_cariovascular = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Anyone in the house is vulnerable due to a cardiovascual condition",
+        verbose_name="Anyone in the house is vulnerable due to a cardiovascular condition",
     )
     vulnerable_respiratory = models.BooleanField(
         null=True,
