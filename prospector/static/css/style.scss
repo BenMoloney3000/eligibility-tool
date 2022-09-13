@@ -370,7 +370,7 @@ form {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 1em;
+    margin-top: 0.5em;
 }
 .question-supplement {
     padding: 0.5em;
@@ -388,4 +388,12 @@ summary:before {
 .note {
     margin-top: 1em;
     font-style: italic;
+}
+section.ticked-list {
+    p {
+        margin: 0;
+    }
+    ul {
+        margin: 0;
+    }
 }
