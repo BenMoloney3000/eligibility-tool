@@ -572,3 +572,18 @@ class TestPropertyPostcode(TrailTest):
             },
         )
         assert response.status_code == 302
+
+
+class TestPropertyAgeBand(TrailTest):
+    @classmethod
+    def setUpTestData(cls):
+        cls.answers = factories.AnswersFactory(adults=3)
+
+    def test_infer_wall_type(self):
+        response = self._post_trail_data(
+            "PropertyAgeBand",
+            {
+                "field": enums.PropertyAgeBand.UNKNOWN,
+            },
+        )
+        assert response.status_code == 302

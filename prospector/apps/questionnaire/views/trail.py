@@ -482,7 +482,10 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
         if not self.answers.wall_type_orig:
             self.answers.wall_type_orig = (
                 enums.WallType.SOLID
-                if int(self.answers.property_age_band) < 1930
+                if (
+                    self.answers.property_age_band.isdecimal()
+                    and (int(self.answers.property_age_band) < 1930)
+                )
                 else enums.WallType.CAVITY
             )
 
