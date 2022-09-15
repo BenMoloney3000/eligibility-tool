@@ -6,8 +6,8 @@ $prospector_font_family: 'Dosis', sans-serif;
 $header_height: 6em;
 $footer_height: 6em;
 
-$orange_warm: #F7941D;
-$pv_purple: #1E0F2C;
+$orange_warm: #f7941d;
+$pv_purple: #1e0f2c;
 $fb_white: #ffffff;
 $body_grey: #fcfcfc;
 $body_black: #4a4a4a;
@@ -34,6 +34,7 @@ $govuk-focus-colour: $orange_warm;
 }
 
 header {
+    flex: 0 0 auto;
     height: $header_height;
     background-color: white;
     text-align: center;
@@ -80,19 +81,20 @@ body {
     font-family: $prospector_font_family;
     margin: 0 auto;
     display: flex;
+    min-height: 100vh;
     flex-direction: column;
     flex-wrap: nowrap;
 }
 .content {
-    height: 100%;
+    flex: 1 0 auto;
+    min-height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    min-height: calc(100vh - #{$footer_height});
 }
 footer {
-    // position: fixed;
+    flex-shrink: 0;
     bottom: 0;
     width: 100%;
     height: $footer_height;
