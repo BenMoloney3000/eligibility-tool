@@ -17,26 +17,20 @@ from prospector.dataformats import postcodes
 RATING_STRINGS = ["DUMMY", "VERY POOR", "POOR", "AVERAGE", "GOOD", "VERY GOOD"]
 
 
-def maybe_row(
-    row,
-    key,
-    transform=lambda x: x,
-    condition=lambda x: True,
-    default=None
-):
+def maybe_row(row, key, transform=lambda x: x, condition=lambda x: True, default=None):
     value = row.get(key, default)
 
     try:
         if value and not condition(value):
             return None
     except Exception as e:
-        logging.debug('EPC condition failure: ', key, value, e)
+        logging.debug("EPC condition failure: ", key, value, e)
         return None
 
     try:
         value = transform(value)
     except Exception as e:
-        logging.debug('EPC transform failure: ', key, value, e)
+        logging.debug("EPC transform failure: ", key, value, e)
 
     return value
 
@@ -44,11 +38,7 @@ def maybe_row(
 def _process_result(row):
     return EPCData(
         maybe_row(row, "lmk-key"),
-        maybe_row(
-            row,
-            "inspection-date",
-            transform=datetime.date.fromisoformat
-        ),
+        maybe_row(row, "inspection-date", transform=datetime.date.fromisoformat),
         maybe_row(row, "address1"),
         maybe_row(row, "address2"),
         maybe_row(row, "address3"),
@@ -61,21 +51,21 @@ def _process_result(row):
             row,
             "walls-energy-eff",
             transform=lambda x: RATING_STRINGS.index(x.upper()),
-            condition=lambda x: x.upper() in RATING_STRINGS
+            condition=lambda x: x.upper() in RATING_STRINGS,
         ),
         maybe_row(row, "floor-description"),
         maybe_row(
             row,
             "floor-energy-eff",
             transform=lambda x: RATING_STRINGS.index(x.upper()),
-            condition=lambda x: x.upper() in RATING_STRINGS
+            condition=lambda x: x.upper() in RATING_STRINGS,
         ),
         maybe_row(row, "roof-description"),
         maybe_row(
             row,
             "roof-energy-eff",
             transform=lambda x: RATING_STRINGS.index(x.upper()),
-            condition=lambda x: x.upper() in RATING_STRINGS
+            condition=lambda x: x.upper() in RATING_STRINGS,
         ),
         maybe_row(row, "mainheat-description"),
         maybe_row(row, "hotwater-description"),
@@ -83,19 +73,18 @@ def _process_result(row):
             row,
             "main-heating-controls",
             transform=lambda x: int(x),
-            condition=lambda x: all([
-                    x.isdecimal(),
-                    int(x) > 0
-                ])
+            condition=lambda x: all([x.isdecimal(), int(x) > 0]),
         ),
         maybe_row(row, "current-energy-efficiency"),
         maybe_row(
             row,
             "photo-supply",
             transform=lambda x: int(x),
-            condition=lambda x: all([
+            condition=lambda x: all(
+                [
                     row["photo-supply"].isdecimal(),
-                ])
+                ]
+            ),
         ),
     )
 
