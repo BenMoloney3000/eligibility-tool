@@ -29,21 +29,21 @@
             you’re eligible for a grant with the click of a few buttons. How
             cool is that?
         </p>
-        <p>
-            So, if you want to potentially:
-        </p>
-        <ul class="ticked">
-            <li>save money</li>
-            <li>be warmer</li>
-            <li>help the environment</li>
-        </ul>
-        <p>
-            …you’re in the right place!
-        </p>
-        <a href="{% url 'questionnaire:start' %}">
-            <button type="button" class="button">
-                Let's get started
-            </button>
-        </a>
+        <section class="ticked-list">
+            <p>So, if you want to potentially:</p>
+            <ul class="ticked">
+                <li>save money</li>
+                <li>be warmer</li>
+                <li>help the environment</li>
+            </ul>
+            <p>…you’re in the right place!</p>
+        </section>
+        <div class="nav-form">
+            <a href="{% url 'questionnaire:start' %}">
+                <button type="button" class="button">
+                    Let's get started
+                </button>
+            </a>
+        </div>
     </div>
 {% endblock content %}
