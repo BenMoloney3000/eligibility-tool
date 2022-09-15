@@ -463,7 +463,7 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
         labels = {
             "vulnerable_cariovascular": (
                 "A cardiovascular condition (for example: heart condition, risk "
-                "of stroke, high blood pressure etc."
+                "of stroke, high blood pressure etc.)"
             ),
             "vulnerable_respiratory": (
                 "A respiratory condition (for example COPD or asthma)"
@@ -899,8 +899,15 @@ class ChildBenefitSummary(AnswerFormMixin, forms.ModelForm):
         ],
         widget=forms.RadioSelect,
         required=True,
+        label=("I confirm this is an accurate description of my household members"),
     )
 
     class Meta:
         model = models.Answers
-        fields = ["child_benefit_eligibility_complete"]
+        fields = ["confirm_or_amend"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout()

@@ -299,7 +299,8 @@ class PropertyPostcode(abstract_views.SingleQuestion):
             raise ValidationError(
                 "This does not appear to be a valid UK domestic postcode. Please check and re-enter"
             )
-        if value[0:2] != "PL":
+        postcode = postcodes.normalise(value)
+        if postcode[0:2] != "PL":
             raise ValidationError(
                 "This tool is only available to properties within the Plymouth Council area."
             )
@@ -422,7 +423,11 @@ class SelectEPC(abstract_views.Question):
         # pre-populate all the property energy performance questions
         if self.answers.selected_epc:
             selected_epc = self.candidate_epcs[self.answers.selected_epc]
-            self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
+            try:
+                self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
+            except Exception as e:
+                logging.error("prepopulate_from_epc failed", selected_epc, e)
+
             self.answers.save()
         else:
             # Make sure it's been deselected
@@ -507,7 +512,7 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "still but are usually solid.</li>"
         "</ul>"
         "<p>Some houses have a different type of wall structure altogether. If "
-        "your house is a steel-frame or timber-framed building, or is made froma "
+        "your house is a steel-frame or timber-framed building, or is made from a "
         "pre-fabricated concrete, then you will need to ask a specialist "
         "insulation installer to advise you.</p>"
         '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation" '
@@ -1145,7 +1150,7 @@ class RecommendedMeasures(abstract_views.Question):
         context["rating"] = utils.get_overall_rating(self.answers)
         context["sap_rating"] = self.answers.sap_rating
         context["property_rating"] = utils.get_property_rating(self.answers)
-        context["property_rating"] = utils.get_property_rating(self.answers)
+        context["income_rating"] = utils.get_income_rating(self.answers)
         return context
 
     def get_next(self):
