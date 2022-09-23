@@ -19,7 +19,11 @@
             {% endif %}
         </li>
         <li>
-            There are
+            {% if answers.child_benefit_number == 1 %}
+                There is
+            {% else %}
+                There are
+            {% endif %}
             <b>{{ answers.child_benefit_number }}</b>
             child{{ answers.child_benefit_number|pluralize:"ren" }}
             (whether living in the house or elsewhere)
