@@ -18,16 +18,13 @@
                 <b>member of a couple</b>
             {% endif %}
         </li>
-        <li>The person receiving Child Benefit lives with
-            <b>{{ answers.children }}</b>
-            child{{ answers.children|pluralize:"ren" }} who normally live in this house.
-        </li>
-        <li>The person receiving Child Benefit has
-            <b>{{ answers.child_benefit_number_elsewhere }}</b>
-            child{{ answers.child_benefit_number_elsewhere|pluralize:"ren" }}
-            that normally live elsewhere but for who they receive Child
-            Benefit or contribute an equivalent amount to looking after
-            them.
+        <li>
+            There are
+            <b>{{ answers.child_benefit_number }}</b>
+            child{{ answers.child_benefit_number|pluralize:"ren" }}
+            (whether living in the house or elsewhere)
+            for which benefits are calimed or for which at least £21.80 per
+            week of maintenance is paid towards.
         </li>
     </ul>
 

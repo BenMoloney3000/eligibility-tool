@@ -112,9 +112,9 @@ urlpatterns = [
     ),
     path("child-benefit", views.ChildBenefit.as_view(), name="child-benefit"),
     path(
-        "child-benefit-number-elsewhere",
-        views.ChildBenefitNumberElsewhere.as_view(),
-        name="child-benefit-number-elsewhere",
+        "child-benefit-number",
+        views.ChildBenefitNumber.as_view(),
+        name="child-benefit-number",
     ),
     path(
         "child-benefit-claimant-type",

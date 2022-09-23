@@ -66,7 +66,7 @@ def determine_recommended_measures(
 
 
 def get_child_benefit_threshold(answers: models.Answers) -> int:
-    total_qualifying = answers.children + answers.child_benefit_number_elsewhere
+    total_qualifying = answers.child_benefit_number
 
     if answers.child_benefit_claimant_type == enums.ChildBenefitClaimantType.SINGLE:
         if total_qualifying < 2:

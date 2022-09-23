@@ -510,12 +510,12 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is receiving child benefit",
     )
-    child_benefit_number_elsewhere = models.PositiveSmallIntegerField(
+    child_benefit_number = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         verbose_name=(
-            "The number of children that live elsewhere (more than 50%% of "
-            "the time) and benefits are receivived or paid for."
+            "How many children child benefit is claimed for, or for which "
+            "at least £21.80 per week of maintenance payments are made?"
         ),
         choices=enums.UpToFourOrMore.choices,
     )

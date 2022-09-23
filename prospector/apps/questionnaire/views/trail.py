@@ -999,26 +999,20 @@ class ChildBenefit(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.child_benefit:
-            return "ChildBenefitNumberElsewhere"
+            return "ChildBenefitNumber"
         else:
             return "Vulnerabilities"
 
 
-class ChildBenefitNumberElsewhere(abstract_views.SingleQuestion):
-    title = "Child Benefit living elsewhere"
+class ChildBenefitNumber(abstract_views.SingleQuestion):
+    title = "Child Benefit number"
     next = "ChildBenefitClaimantType"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.UpToFourOrMore.choices
     question = (
-        "Thinking of the adult that receives Child Benefit and lives "
-        "within the house."
-        "<br>"
-        "How many children do they have that live somewhere else most of the "
-        "time (more than 50%) and for who they: "
-        "<ul>"
-        " <li>receive Child Benefit; or,</li>"
-        " <li>pay at least £21.80 per week towards looking after the child?</li>"
-        "</ul>"
+        "How many children do you claim child benefit for "
+        "(whether living in the house or elsewhere) "
+        "or pay at least £21.80 per week of maintenance payments towards?"
     )
     percent_complete = COMPLETE_GROUP_5 + 5
 
