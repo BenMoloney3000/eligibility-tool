@@ -27,3 +27,5 @@ django-sass-processor
 
 # GDS 
 crispy-forms-gds
+
+django-import-export

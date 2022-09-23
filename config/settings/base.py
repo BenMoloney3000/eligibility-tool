@@ -133,6 +133,7 @@ THIRD_PARTY_APPS = [
     "sass_processor",
     "crispy_forms",
     "crispy_forms_gds",
+    "import_export",
 ]
 LOCAL_APPS = [
     "prospector",
