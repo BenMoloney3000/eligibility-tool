@@ -1006,6 +1006,7 @@ class ChildBenefit(abstract_views.SingleQuestion):
 
 class ChildBenefitNumberElsewhere(abstract_views.SingleQuestion):
     title = "Child Benefit living elsewhere"
+    next = "ChildBenefitClaimantType"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.UpToFourOrMore.choices
     question = (
@@ -1020,12 +1021,6 @@ class ChildBenefitNumberElsewhere(abstract_views.SingleQuestion):
         "</ul>"
     )
     percent_complete = COMPLETE_GROUP_5 + 5
-
-    def get_next(self):
-        if self.answers.adults > 1:
-            return "ChildBenefitClaimantType"
-        else:
-            return "Vulnerabilities"
 
 
 class ChildBenefitClaimantType(abstract_views.SingleQuestion):
