@@ -134,11 +134,8 @@ CACHES = {
     },
 }
 
-SENDGRID_API_KEY = psh_env("SENDGRID_API_KEY")
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# environment = os.getenv('PLATFORM_BRANCH')
 
-
+smtp_host = os.getenv("PLATFORM_SMTP_HOST")
+if smtp_host:
+    EMAIL_HOST = smtp_host
