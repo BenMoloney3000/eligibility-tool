@@ -96,9 +96,6 @@ workers:
     commands:
       start: |
         python -m celery --app=prospector.apps.crm worker
-    variables:
-      env:
-        type: 'worker'
     disk: 512
 
 # Set a local R/W mount for logs
