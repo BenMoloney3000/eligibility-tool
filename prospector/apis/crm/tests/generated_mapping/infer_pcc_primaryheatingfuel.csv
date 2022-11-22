@@ -1,0 +1,64 @@
+on_mains_gas,storage_heaters_present,other_heating_fuel,option_name,option_value
+,,,Unknown,798360000
+,,OIL,Oil,798360006
+,,LPG,LPG,798360005
+,,COAL,Coal,798360008
+,,WOOD,Biomass,798360001
+,,ELECTRIC,Electricity - standard,798360003
+,,DISTRICT,Unknown,798360000
+,True,,Unknown,798360000
+,True,OIL,Oil,798360006
+,True,LPG,LPG,798360005
+,True,COAL,Coal,798360008
+,True,WOOD,Biomass,798360001
+,True,ELECTRIC,Electricity - off peak,798360002
+,True,DISTRICT,Unknown,798360000
+,False,,Unknown,798360000
+,False,OIL,Oil,798360006
+,False,LPG,LPG,798360005
+,False,COAL,Coal,798360008
+,False,WOOD,Biomass,798360001
+,False,ELECTRIC,Electricity - standard,798360003
+,False,DISTRICT,Unknown,798360000
+True,,,Mains Gas,798360004
+True,,OIL,Mains Gas,798360004
+True,,LPG,Mains Gas,798360004
+True,,COAL,Mains Gas,798360004
+True,,WOOD,Mains Gas,798360004
+True,,ELECTRIC,Mains Gas,798360004
+True,,DISTRICT,Mains Gas,798360004
+True,True,,Mains Gas,798360004
+True,True,OIL,Mains Gas,798360004
+True,True,LPG,Mains Gas,798360004
+True,True,COAL,Mains Gas,798360004
+True,True,WOOD,Mains Gas,798360004
+True,True,ELECTRIC,Mains Gas,798360004
+True,True,DISTRICT,Mains Gas,798360004
+True,False,,Mains Gas,798360004
+True,False,OIL,Mains Gas,798360004
+True,False,LPG,Mains Gas,798360004
+True,False,COAL,Mains Gas,798360004
+True,False,WOOD,Mains Gas,798360004
+True,False,ELECTRIC,Mains Gas,798360004
+True,False,DISTRICT,Mains Gas,798360004
+False,,,Unknown,798360000
+False,,OIL,Oil,798360006
+False,,LPG,LPG,798360005
+False,,COAL,Coal,798360008
+False,,WOOD,Biomass,798360001
+False,,ELECTRIC,Electricity - standard,798360003
+False,,DISTRICT,Unknown,798360000
+False,True,,Unknown,798360000
+False,True,OIL,Oil,798360006
+False,True,LPG,LPG,798360005
+False,True,COAL,Coal,798360008
+False,True,WOOD,Biomass,798360001
+False,True,ELECTRIC,Electricity - off peak,798360002
+False,True,DISTRICT,Unknown,798360000
+False,False,,Unknown,798360000
+False,False,OIL,Oil,798360006
+False,False,LPG,LPG,798360005
+False,False,COAL,Coal,798360008
+False,False,WOOD,Biomass,798360001
+False,False,ELECTRIC,Electricity - standard,798360003
+False,False,DISTRICT,Unknown,798360000

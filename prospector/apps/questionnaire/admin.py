@@ -13,6 +13,4 @@ class QuestionnaireAdmin(ExportMixin, admin.ModelAdmin):
         "updated_at",
         "completed_at",
     )
-    list_filter = (
-        ("completed_at", admin.EmptyFieldListFilter),
-    )
+    list_filter = (("completed_at", admin.EmptyFieldListFilter),)

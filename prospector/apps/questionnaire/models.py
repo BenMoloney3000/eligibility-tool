@@ -591,6 +591,29 @@ class Answers(models.Model):
         ),
     )
 
+    # Computed Fields
+    income_rating = models.CharField(
+        choices=enums.RAYG.choices,
+        max_length=8,
+        null=True,
+        blank=True,
+        verbose_name="Income rating (computed field)",
+    )
+    property_rating = models.CharField(
+        choices=enums.RAYG.choices,
+        max_length=8,
+        null=True,
+        blank=True,
+        verbose_name="Property rating (computed field)",
+    )
+
+    def save(self, *args, **kwargs):
+        from prospector.apps.questionnaire import utils
+
+        self.income_rating = utils.get_income_rating(self)
+        self.property_rating = utils.get_property_rating(self)
+        super().save(*args, **kwargs)
+
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -615,10 +638,8 @@ class Answers(models.Model):
             enums.RespondentRole.OWNER_OCCUPIER.value,
         ]
 
-    """
     # The following logic is used to determine if the user can skip sections
     # of the questionnaire.
-    """
 
     def type_inferences_complete(self):
         # Includes age
@@ -681,9 +702,6 @@ class Answers(models.Model):
                 # Either couldn't tell if there is another CH system, or we think
                 # there is, in which case we can't infer presence of HWT.
                 return False
-
-
-# enough with that model! about time we had a different one.
 
 
 class HouseholdAdult(models.Model):

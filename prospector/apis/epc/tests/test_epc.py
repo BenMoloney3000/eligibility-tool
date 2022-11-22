@@ -1,5 +1,3 @@
-from unittest import mock
-
 import pytest
 
 from ..epc import _process_results
@@ -43,7 +41,7 @@ def test_parse_epc(fake_epc):
     assert epc.walls_description == "Cavity wall, as built, insulated (assumed)"
     assert epc.walls_rating == 4  # 'Good'
     assert epc.floor_description == "Solid, limited insulation (assumed)"
-    assert epc.floor_rating == None  # 'NO DATA!'
+    assert epc.floor_rating is None  # 'NO DATA!'
     assert epc.roof_description == "Pitched, 100 mm loft insulation"
     assert epc.roof_rating == 3  # 'Average'
     assert epc.mainheat_description == "Boiler and radiators, mains gas"

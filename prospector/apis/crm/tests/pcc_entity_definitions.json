@@ -1,0 +1,932 @@
+{
+    "@odata.context": "https://plymouthenergycommunity.crm4.dynamics.com/api/data/v9.1/$metadata#EntityDefinitions('pcc_retrofitintermediate')/Attributes(LogicalName,AttributeType,SchemaName,IsCustomAttribute,IsValidODataAttribute,EntityLogicalName)",
+    "value": [
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.MemoAttributeMetadata",
+            "AttributeType": "Memo",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_propertyprofilecomments",
+            "MetadataId": "fbfbfdbd-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_PropertyProfileComments"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_updateoptions",
+            "MetadataId": "8f534713-f501-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_UpdateOptions"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_roofinsulation",
+            "MetadataId": "4aa811a6-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_RoofInsulation"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata",
+            "AttributeType": "DateTime",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "modifiedon",
+            "MetadataId": "e5ba32db-8453-40d3-af6f-0a7785849ad7",
+            "SchemaName": "ModifiedOn"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata",
+            "AttributeType": "DateTime",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "overriddencreatedon",
+            "MetadataId": "1d10172e-92eb-4b22-82d2-a90f3ba54ac4",
+            "SchemaName": "OverriddenCreatedOn"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lladdress1county",
+            "MetadataId": "4b646241-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLAddress1County"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_structuraldamp",
+            "MetadataId": "6a0c6bfa-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_StructuralDamp"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_rooftype",
+            "MetadataId": "c61f1894-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_RoofType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata",
+            "AttributeType": "DateTime",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_dateofmostrecentepc",
+            "MetadataId": "0c63d0c2-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_DateOfMostRecentEPC"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_propertyeligibilityscore",
+            "MetadataId": "51c9eb72-3655-ed11-bba2-000d3abd864b",
+            "SchemaName": "pcc_PropertyEligibilityScore"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_inscopeformees",
+            "MetadataId": "fdfdc39d-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_InScopeForMEES"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_propertyage",
+            "MetadataId": "697bc169-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_PropertyAge"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_floorinsulation",
+            "MetadataId": "6e6d2ec6-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_FloorInsulation"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_solarpanels",
+            "MetadataId": "e48e049e-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_SolarPanels"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_landlordlookup",
+            "MetadataId": "44ce9057-543a-4964-aba8-1de3f5acb795",
+            "SchemaName": "pcc_LandlordLookup"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_secondaryheatingfuel",
+            "MetadataId": "8d2a9153-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_SecondaryHeatingFuel"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "owningbusinessunit",
+            "MetadataId": "1786d4d3-0c5f-4937-a63a-ed44b680ab14",
+            "SchemaName": "OwningBusinessUnit"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_heatingcontrols",
+            "MetadataId": "ceb8e884-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_HeatingControls"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_secondaryheatingdeliverymethod",
+            "MetadataId": "92fdd665-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_SecondaryHeatingDeliveryMethod"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StatusAttributeMetadata",
+            "AttributeType": "Status",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "statuscode",
+            "MetadataId": "921325e5-7474-4ba3-bce7-3de7f5d488d0",
+            "SchemaName": "statuscode"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata",
+            "AttributeType": "DateTime",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_occupiedfrom",
+            "MetadataId": "c9b8204b-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_OccupiedFrom"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_walltype",
+            "MetadataId": "8a01c6ea-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_WallType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_mouldgrowth",
+            "MetadataId": "48df0acd-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_MouldGrowth"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lladdress1street3",
+            "MetadataId": "09c82a2f-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLAddress1Street3"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_contactlookup",
+            "MetadataId": "db336b01-a35a-47cf-b32b-d450cbd05b08",
+            "SchemaName": "pcc_ContactLookup"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
+            "AttributeType": "Integer",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_hasapscore",
+            "MetadataId": "12f7a70d-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_HASAPScore"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_address1county",
+            "MetadataId": "b45989bf-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Address1County"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_epctype",
+            "MetadataId": "a6b41eb6-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_EPCType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_postcode",
+            "MetadataId": "67c05f52-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Postcode"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
+            "AttributeType": "Integer",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_scoreofmostrecentepc",
+            "MetadataId": "d185f8e8-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_ScoreOfMostRecentEPC"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_bedrooms",
+            "MetadataId": "d518cf57-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Bedrooms"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata",
+            "AttributeType": "DateTime",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "createdon",
+            "MetadataId": "8b2365bb-997b-468a-983c-35bd2cf37d36",
+            "SchemaName": "CreatedOn"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_occupierrole",
+            "MetadataId": "a5589069-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_OccupierRole"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "createdonbehalfby",
+            "MetadataId": "9d4609ec-2639-4fae-8c99-0dd09c5a31fd",
+            "SchemaName": "CreatedOnBehalfBy"
+        },
+        {
+            "AttributeType": "Uniqueidentifier",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_retrofitintermediateid",
+            "MetadataId": "0584126b-679a-4d68-afff-64697052f4c5",
+            "SchemaName": "pcc_retrofitintermediateId"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_solarthermal",
+            "MetadataId": "900784b0-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_SolarThermal"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_boilertype",
+            "MetadataId": "fd8f9d78-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_BoilerType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "modifiedby",
+            "MetadataId": "533e5fea-e9e4-48b4-af20-5c440902a510",
+            "SchemaName": "ModifiedBy"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
+            "AttributeType": "Integer",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "timezoneruleversionnumber",
+            "MetadataId": "9d8b6c1f-890f-4bb5-a107-cad70bcaf596",
+            "SchemaName": "TimeZoneRuleVersionNumber"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_listedproperty",
+            "MetadataId": "7e3c137c-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_ListedProperty"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_llmainphone",
+            "MetadataId": "2577a95f-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLMainPhone"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "modifiedonbehalfby",
+            "MetadataId": "5a150310-0bf1-45d8-971a-ce52240dd959",
+            "SchemaName": "ModifiedOnBehalfBy"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_county",
+            "MetadataId": "5916654c-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_County"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_address1city",
+            "MetadataId": "8f298fb3-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Address1City"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "traversedpath",
+            "MetadataId": "0fcff076-e528-49f4-aa7b-d552fb960c1f",
+            "SchemaName": "traversedpath"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_firstname",
+            "MetadataId": "d7f9d175-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_FirstName"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_domesticpropertylookup",
+            "MetadataId": "29b3574b-7d0e-49bb-a3ed-6700937e517a",
+            "SchemaName": "pcc_DomesticPropertyLookup"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "owninguser",
+            "MetadataId": "425c0f98-88c5-4164-a6bb-ca33ef609074",
+            "SchemaName": "OwningUser"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_floortype",
+            "MetadataId": "59c835b3-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_FloorType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_address1street2",
+            "MetadataId": "685d4da7-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Address1Street2"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_address1street3",
+            "MetadataId": "3d458dad-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Address1Street3"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_address1street1",
+            "MetadataId": "f4ba46a1-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Address1Street1"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lladdress1street2",
+            "MetadataId": "e83e9322-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLAddress1Street2"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_homephone",
+            "MetadataId": "8548d087-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_HomePhone"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_glazing",
+            "MetadataId": "4f6e66fd-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Glazing"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "owningteam",
+            "MetadataId": "cd800e0c-7d73-497a-ab3f-04b7574ad995",
+            "SchemaName": "OwningTeam"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lastname",
+            "MetadataId": "58a4cc7b-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LastName"
+        },
+        {
+            "AttributeType": "Uniqueidentifier",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "processid",
+            "MetadataId": "04069b78-e252-4023-a759-70f51c76e412",
+            "SchemaName": "processid"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_website",
+            "MetadataId": "bf36a077-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Website"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_condensation",
+            "MetadataId": "598bc2e0-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Condensation"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata",
+            "AttributeType": "DateTime",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_occupiedto",
+            "MetadataId": "52bd4557-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_OccupiedTo"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lladdress1city",
+            "MetadataId": "6eb9673b-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLAddress1City"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_towncity",
+            "MetadataId": "bbe26046-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_TownCity"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Owner",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "ownerid",
+            "MetadataId": "0d9e90dd-9018-4d3f-97f2-871121fb7686",
+            "SchemaName": "OwnerId"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_wallinsulation",
+            "MetadataId": "9f8728d2-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_WallInsulation"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_name",
+            "MetadataId": "0ca77ea8-baf7-ec11-bb3d-002248817889",
+            "SchemaName": "pcc_name"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_salutation",
+            "MetadataId": "452b926f-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Salutation"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.MemoAttributeMetadata",
+            "AttributeType": "Memo",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_commentsondamp",
+            "MetadataId": "40efb207-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_CommentsonDamp"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lladdress1street1",
+            "MetadataId": "7559630a-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLAddress1Street1"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StateAttributeMetadata",
+            "AttributeType": "State",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "statecode",
+            "MetadataId": "da731f47-a0ea-49ce-b16d-86b304189eb9",
+            "SchemaName": "statecode"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_propertytype",
+            "MetadataId": "5eac5e4a-e901-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_PropertyType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "createdby",
+            "MetadataId": "412bef84-72fb-4511-a872-6ba5d2fb362a",
+            "SchemaName": "CreatedBy"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_street1",
+            "MetadataId": "3c4b9427-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Street1"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_street3",
+            "MetadataId": "acb11e40-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Street3"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_street2",
+            "MetadataId": "dfe1fd39-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Street2"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_udprn",
+            "MetadataId": "2349eb5e-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_UDPRN"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_accountname",
+            "MetadataId": "0831f9fd-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_AccountName"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeType": "Lookup",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_retrofitprojectlookup",
+            "MetadataId": "538d1aa0-29e3-41e9-a35a-cb17b4a815be",
+            "SchemaName": "pcc_RetrofitProjectLookup"
+        },
+        {
+            "AttributeType": "Uniqueidentifier",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "stageid",
+            "MetadataId": "7bf80e73-f06b-4532-b7e3-56b7ac85b2fd",
+            "SchemaName": "stageid"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
+            "AttributeType": "Integer",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "utcconversiontimezonecode",
+            "MetadataId": "16ed3f00-e37a-4611-ab11-3901d84fc88b",
+            "SchemaName": "UTCConversionTimeZoneCode"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_occupanteligibilityscore",
+            "MetadataId": "86bbd093-3655-ed11-bba2-000d3abd864b",
+            "SchemaName": "pcc_OccupantEligibilityScore"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_primaryheatingfuel",
+            "MetadataId": "e4fafb2e-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_PrimaryHeatingFuel"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_gradeofmostrecentepc",
+            "MetadataId": "2373a3cf-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_GradeOfMostRecentEPC"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_likelihoodofprivatelyrented",
+            "MetadataId": "23c2518a-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LikelihoodOfPrivatelyRented"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_hasapgrade",
+            "MetadataId": "5e56bafb-e801-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_HASAPGrade"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
+            "AttributeType": "Integer",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "importsequencenumber",
+            "MetadataId": "6cba3dc7-938b-4fb8-81ba-ef34501c55e7",
+            "SchemaName": "ImportSequenceNumber"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_address1zippostalcode",
+            "MetadataId": "f42a8bc5-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Address1ZIPPostalCode"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_udprncontact",
+            "MetadataId": "7b6c22e5-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_UDPRNContact"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.BigIntAttributeMetadata",
+            "AttributeType": "BigInt",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "versionnumber",
+            "MetadataId": "31503e4f-a002-4b7c-a001-85b1f68e9541",
+            "SchemaName": "VersionNumber"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_mobile",
+            "MetadataId": "0cdfd68d-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Mobile"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_lladdress1zippostalcode",
+            "MetadataId": "2b005053-ec01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_LLAddress1ZIPPostalCode"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeType": "Picklist",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_primaryheatingdeliverymethod",
+            "MetadataId": "a955a841-ea01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_PrimaryHeatingDeliveryMethod"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeType": "String",
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_email",
+            "MetadataId": "7b104c9b-eb01-ed11-82e5-000d3a3aa389",
+            "SchemaName": "pcc_Email"
+        }
+    ]
+}

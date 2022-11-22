@@ -27,6 +27,8 @@ pytest-testmon
 pytest-pspec
 time_machine
 django-test-migrations
+pytest-harvest
+pytest-freezegun
 
 # Code quality
 # ------------------------------------------------------------------------------

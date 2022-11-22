@@ -134,11 +134,14 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_forms_gds",
     "import_export",
+    "django_celery_results",
+    "django_celery_beat",
 ]
 LOCAL_APPS = [
     "prospector",
     "prospector.apps.questionnaire",
     "prospector.apps.users",
+    "prospector.apps.crm",
     "prospector.dataformats",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -301,5 +304,28 @@ MAIL_FROM = env.str("EMAIL_FROM", default="support@plymouthenergycommunity.com")
 DEFAULT_FROM_EMAIL = MAIL_FROM
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+CRM_API = {
+    "TENANT": env.str("CRM_API_TENANT", default=""),
+    "RESOURCE": env.str("CRM_API_RESOURCE", default=""),
+    "CLIENT_ID": env.str("CRM_API_CLIENT_ID", default=""),
+    "CLIENT_SECRET": env.str("CRM_API_CLIENT_SECRET", default=""),
+}
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = ["gds"]
 CRISPY_TEMPLATE_PACK = "gds"
+
+# CELERY SETTINGS
+# https://docs.celeryproject.org/en/stable/userguide/configuration.html
+# loaded in main/celery.py with namespace='CELERY'
+CELERY_ALWAYS_EAGER = (
+    False  # set True for debug/testing (tasks will block and run synchronously).
+)
+
+
+CELERY_BROKER_URL = "redis://{0}:{1}/0".format(
+    env.str("REDIS_HOST"), env.int("REDIS_PORT", default=6379)
+)
+CELERY_BROKER_USE_SSL = env.bool("REDIS_SSL", default=False)
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_SINGLETON_BACKEND_URL = CELERY_BROKER_URL
+CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}  # 1 hour.

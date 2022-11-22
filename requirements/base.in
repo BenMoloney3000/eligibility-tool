@@ -14,6 +14,12 @@ rq                       # Redis Queue library
 django-rq                # Django integration for rq
 rq-scheduler             # RQ scheduler component
 
+# Celery
+celery[redis]
+django-celery-beat
+django-celery-results
+celery-singleton
+
 # Production deps
 ssm-parameter-store      # Extract env vars from AWS parameter store
 gunicorn                 # Web server
@@ -29,3 +35,7 @@ django-sass-processor
 crispy-forms-gds
 
 django-import-export
+
+# CRM API
+oauthlib                 # OAuth2 client
+requests_oauthlib        # OAuth2 client

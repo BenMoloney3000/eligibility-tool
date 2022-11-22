@@ -85,7 +85,9 @@ docker-dev-clean: DOCKER_LOCAL_CONF=docker-compose/dev.yml
 docker-dev-clean: export UID := $(shell id -u)
 docker-dev-clean: docker-local-clean
 
-# docker-compose -p prospector -f docker-compose/dev.yml exec web /bin/bash
+docker-dev-web:
+	env INIT_CMD=all docker-compose -p prospector -f docker-compose/dev.yml exec web /bin/bash
+.PHONY: docker-dev-up
 
 .PHONY: docker-dev-runserver
 docker-dev-runserver: docker-dev-web-ip
