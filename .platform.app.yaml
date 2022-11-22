@@ -79,7 +79,7 @@ web:
         start: |
           export REDIS_HOST=$(echo $PLATFORM_RELATIONSHIPS|base64 -d|jq -r ".redis[0].host")
           export REDIS_PORT=$(echo $PLATFORM_RELATIONSHIPS|base64 -d|jq -r ".redis[0].port")
-          "gunicorn -w 4 -b unix:$SOCKET config.wsgi:application"
+          gunicorn -w 4 -b unix:$SOCKET config.wsgi:application
 
     locations:
         "/":
