@@ -37,7 +37,6 @@ hooks:
 
         echo -e '\n\nInstall Python/Django requirements (pip-sync):\n'
         export REDIS_HOST=$(echo $PLATFORM_RELATIONSHIPS|base64 -d|jq -r ".redis[0].host")
-        export REDIS_PORT=$(echo $PLATFORM_RELATIONSHIPS|base64 -d|jq -r ".redis[0].port")
         python --version
         pip install -r ./requirements/local.txt
         python manage.py compilescss
