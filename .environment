@@ -6,4 +6,5 @@ export NO_UPDATE_NOTIFIER=1
 export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 #
-REDIS_HOST=redis
+REDIS_HOST=$(echo $PLATFORM_RELATIONSHIPS|base64 -d|jq -r ".redis[0].host")
+REDIS_PORT=$(echo $PLATFORM_RELATIONSHIPS|base64 -d|jq -r ".redis[0].port")
