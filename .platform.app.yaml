@@ -92,7 +92,7 @@ web:
 
 
 workers:
-  queue:
+  celery:
     commands:
       start: |
         python -m celery --app=prospector.apps.crm worker
