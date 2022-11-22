@@ -94,6 +94,19 @@ docker-dev-runserver: docker-dev-web-ip
 docker-dev-runserver: 
 	docker-compose -p prospector -f docker-compose/dev.yml exec web python ./manage.py runserver 0.0.0.0:8000
 
+
+.PHONY: docker-dev-celery-worker
+docker-dev-celery-worker: docker-dev-web-ip
+docker-dev-celery-worker: 
+	# TODO: redis dep
+	# env DJANGO_SETTINGS_MODULE="config.settings.local" celery -A prospector.apps.crm worker
+	docker-compose -p prospector -f docker-compose/dev.yml exec web env DJANGO_SETTINGS_MODULE="config.settings.local" python -m celery -A prospector.apps.crm worker -l DEBUG
+
+.PHONY: docker-dev-celery-status
+docker-dev-celery-status: docker-dev-web-ip
+docker-dev-celery-status: 
+	docker-compose -p prospector -f docker-compose/dev.yml exec web env DJANGO_SETTINGS_MODULE="config.settings.local" python -m celery -A prospector.apps.crm status
+
 .PHONY: docker-dev-precommit
 docker-dev-precommit: DOCKER_LOCAL_CONF=docker-compose/dev.yml 
 docker-dev-precommit:
