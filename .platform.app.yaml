@@ -90,6 +90,17 @@ web:
             root: "prospector/uploads/"
             allow: true
 
+
+workers:
+  queue:
+    commands:
+      start: |
+        python -m celery --app=prospector.apps.crm worker
+    variables:
+      env:
+        type: 'worker'
+    disk: 512
+
 # Set a local R/W mount for logs
 mounts:
     'logs':
