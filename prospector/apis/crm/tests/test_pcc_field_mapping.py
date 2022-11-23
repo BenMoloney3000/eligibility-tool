@@ -3,11 +3,16 @@ import logging
 import os
 from collections import OrderedDict
 from itertools import product
+from typing import Optional, get_args
+from inspect import signature
+
+from functools import reduce
+from operator import concat
 
 import pytest
 from pytest_harvest import create_results_bag_fixture
 
-from prospector.apis.crm import crm
+from prospector.apis.crm import crm, mapping
 from prospector.apps.questionnaire import enums
 
 
@@ -18,6 +23,50 @@ results_bag = create_results_bag_fixture("store", name="results_bag")
 def logger(request):
     return logging.getLogger(request.module.__name__)
 
+
+def parametrize(func, name):
+    """ Parametrize a function by it's siguture. """
+    sig = signature(func)
+
+    def _type_values(type_class):
+        type_values = {
+            bool: [True, False],
+            type(None): [None],
+        }
+        return type_values[type_class]
+
+    sig_types = {
+        k: reduce(
+            concat,
+            map(_type_values, get_args(v.annotation))
+        )
+        for k, v in sig.parameters.items()
+    }
+    return (
+        name,  # ','.join(sig.parameters),
+        [
+            {k: v for k, v in zip(sig.parameters, o)}
+            for o in product(
+                *[
+                    sig_types[param]
+                    for param in sig.parameters
+                ]
+            )
+        ],
+    )
+
+
+def test_get_signature():
+    def my_func(
+        foo: Optional[bool] = None,
+        bar: Optional[bool] = None,
+        baz: Optional[bool] = None,
+    ):
+        pass
+
+    sig, argvalues = parametrize(my_func, name="func_args")
+    assert sig == "func_args"
+    assert len(argvalues) == 27
 
 def _write_field_mapping_csv(path, field_names, rows):
     with open(path, "w", newline="") as csvfile:
@@ -125,7 +174,7 @@ def test_infer_pcc_primaryheatingfuel(
         "other_heating_fuel": answers.other_heating_fuel,
     }
 
-    option_name = crm.infer_pcc_primaryheatingfuel(**infer_args)
+    option_name = mapping.infer_pcc_primaryheatingfuel(**infer_args)
 
     # Test no unmapped option_names
     assert option_name is not None
@@ -142,4 +191,37 @@ def test_infer_pcc_primaryheatingfuel(
             "generated_mapping",
         ),
         "mapping": ((option_name, option_value), infer_args),
+    }
+
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_primaryheatingdeliverymethod, name="func_args")
+)
+def test_infer_pcc_primaryheatingdeliverymethod(
+    func_args,
+    answers,
+    logger,
+    results_bag,
+    request,
+):
+    answers = answers(**func_args)
+    option_name = mapping.infer_pcc_primaryheatingdeliverymethod(**func_args)
+
+    # Test no unmapped option_names
+    assert option_name is not None
+    # Test all option names map to option values
+    option_value = crm.option_value("pcc_primaryheatingdeliverymethod", option_name)
+    assert type(option_value) is int
+
+    logger.debug(
+        "option_name: '{}' option_value: '{}'".format(option_name, option_value)
+    )
+    results_bag.infer_pcc_primaryheatingdeliverymethod= {
+        "path": os.path.join(
+            os.path.dirname(os.path.abspath(request.module.__file__)),
+            "generated_mapping",
+        ),
+        "mapping": ((option_name, option_value), func_args),
     }

@@ -12,6 +12,8 @@ from requests_oauthlib import OAuth2Session
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import models
 
+from prospector.apis.crm import mapping
+
 
 logger = logging.getLogger(__name__)
 
@@ -198,35 +200,6 @@ def option_value_mapping(
     return default
 
 
-def infer_pcc_primaryheatingfuel(
-    on_mains_gas: Optional[bool] = None,
-    storage_heaters_present: Optional[bool] = None,
-    other_heating_fuel: enums.NonGasFuel = "",  # non-nullable, but blank=True
-) -> int:
-    """Map between answers and pcc_primaryheatingfuel.
-
-    Unmapped answers field values:
-        'other_heating_fuel': DISTRICT  # see pcc_heatingdeliverymethod
-
-    pcc_primaryheatingfuel:
-        No Heating System Present
-    """
-    if on_mains_gas:
-        return "Mains Gas"
-    elif other_heating_fuel == enums.NonGasFuel.ELECTRICITY:
-        if storage_heaters_present:
-            return "Electricity - off peak"
-        else:
-            return "Electricity - standard"
-    else:
-        return {
-            enums.NonGasFuel.WOOD: "Biomass",
-            enums.NonGasFuel.COAL: "Coal",
-            enums.NonGasFuel.LPG: "LPG",
-            enums.NonGasFuel.OIL: "Oil",
-        }.get(other_heating_fuel, "Unknown")
-
-
 def map_crm(answers: models.Answers) -> dict:
     STATUSCODE_SUBMITTED = "798360000"
     STATECODE_ACTIVE = "0"
@@ -256,7 +229,7 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_inscopeformees": None,  # Leave blank
         "pcc_primaryheatingfuel": option_value(
             "pcc_primaryheatingfuel",
-            infer_pcc_primaryheatingfuel(
+            mapping.infer_pcc_primaryheatingfuel(
                 on_mains_gas=answers.on_mains_gas,
                 storage_heaters_present=answers.storage_heaters_present,
                 other_heating_fuel=answers.other_heating_fuel,

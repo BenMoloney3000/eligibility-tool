@@ -1,0 +1,244 @@
+gas_boiler_present,heat_pump_present,storage_heaters_present,hhrshs_present,electric_radiators_present,option_name,option_value
+True,True,True,True,True,Central Heating,798360001
+True,True,True,True,False,Central Heating,798360001
+True,True,True,True,,Central Heating,798360001
+True,True,True,False,True,Central Heating,798360001
+True,True,True,False,False,Central Heating,798360001
+True,True,True,False,,Central Heating,798360001
+True,True,True,,True,Central Heating,798360001
+True,True,True,,False,Central Heating,798360001
+True,True,True,,,Central Heating,798360001
+True,True,False,True,True,Central Heating,798360001
+True,True,False,True,False,Central Heating,798360001
+True,True,False,True,,Central Heating,798360001
+True,True,False,False,True,Central Heating,798360001
+True,True,False,False,False,Central Heating,798360001
+True,True,False,False,,Central Heating,798360001
+True,True,False,,True,Central Heating,798360001
+True,True,False,,False,Central Heating,798360001
+True,True,False,,,Central Heating,798360001
+True,True,,True,True,Central Heating,798360001
+True,True,,True,False,Central Heating,798360001
+True,True,,True,,Central Heating,798360001
+True,True,,False,True,Central Heating,798360001
+True,True,,False,False,Central Heating,798360001
+True,True,,False,,Central Heating,798360001
+True,True,,,True,Central Heating,798360001
+True,True,,,False,Central Heating,798360001
+True,True,,,,Central Heating,798360001
+True,False,True,True,True,Central Heating,798360001
+True,False,True,True,False,Central Heating,798360001
+True,False,True,True,,Central Heating,798360001
+True,False,True,False,True,Central Heating,798360001
+True,False,True,False,False,Central Heating,798360001
+True,False,True,False,,Central Heating,798360001
+True,False,True,,True,Central Heating,798360001
+True,False,True,,False,Central Heating,798360001
+True,False,True,,,Central Heating,798360001
+True,False,False,True,True,Central Heating,798360001
+True,False,False,True,False,Central Heating,798360001
+True,False,False,True,,Central Heating,798360001
+True,False,False,False,True,Central Heating,798360001
+True,False,False,False,False,Central Heating,798360001
+True,False,False,False,,Central Heating,798360001
+True,False,False,,True,Central Heating,798360001
+True,False,False,,False,Central Heating,798360001
+True,False,False,,,Central Heating,798360001
+True,False,,True,True,Central Heating,798360001
+True,False,,True,False,Central Heating,798360001
+True,False,,True,,Central Heating,798360001
+True,False,,False,True,Central Heating,798360001
+True,False,,False,False,Central Heating,798360001
+True,False,,False,,Central Heating,798360001
+True,False,,,True,Central Heating,798360001
+True,False,,,False,Central Heating,798360001
+True,False,,,,Central Heating,798360001
+True,,True,True,True,Central Heating,798360001
+True,,True,True,False,Central Heating,798360001
+True,,True,True,,Central Heating,798360001
+True,,True,False,True,Central Heating,798360001
+True,,True,False,False,Central Heating,798360001
+True,,True,False,,Central Heating,798360001
+True,,True,,True,Central Heating,798360001
+True,,True,,False,Central Heating,798360001
+True,,True,,,Central Heating,798360001
+True,,False,True,True,Central Heating,798360001
+True,,False,True,False,Central Heating,798360001
+True,,False,True,,Central Heating,798360001
+True,,False,False,True,Central Heating,798360001
+True,,False,False,False,Central Heating,798360001
+True,,False,False,,Central Heating,798360001
+True,,False,,True,Central Heating,798360001
+True,,False,,False,Central Heating,798360001
+True,,False,,,Central Heating,798360001
+True,,,True,True,Central Heating,798360001
+True,,,True,False,Central Heating,798360001
+True,,,True,,Central Heating,798360001
+True,,,False,True,Central Heating,798360001
+True,,,False,False,Central Heating,798360001
+True,,,False,,Central Heating,798360001
+True,,,,True,Central Heating,798360001
+True,,,,False,Central Heating,798360001
+True,,,,,Central Heating,798360001
+False,True,True,True,True,Heat Pump,798360003
+False,True,True,True,False,Heat Pump,798360003
+False,True,True,True,,Heat Pump,798360003
+False,True,True,False,True,Heat Pump,798360003
+False,True,True,False,False,Heat Pump,798360003
+False,True,True,False,,Heat Pump,798360003
+False,True,True,,True,Heat Pump,798360003
+False,True,True,,False,Heat Pump,798360003
+False,True,True,,,Heat Pump,798360003
+False,True,False,True,True,Heat Pump,798360003
+False,True,False,True,False,Heat Pump,798360003
+False,True,False,True,,Heat Pump,798360003
+False,True,False,False,True,Heat Pump,798360003
+False,True,False,False,False,Heat Pump,798360003
+False,True,False,False,,Heat Pump,798360003
+False,True,False,,True,Heat Pump,798360003
+False,True,False,,False,Heat Pump,798360003
+False,True,False,,,Heat Pump,798360003
+False,True,,True,True,Heat Pump,798360003
+False,True,,True,False,Heat Pump,798360003
+False,True,,True,,Heat Pump,798360003
+False,True,,False,True,Heat Pump,798360003
+False,True,,False,False,Heat Pump,798360003
+False,True,,False,,Heat Pump,798360003
+False,True,,,True,Heat Pump,798360003
+False,True,,,False,Heat Pump,798360003
+False,True,,,,Heat Pump,798360003
+False,False,True,True,True,Night Storage Heaters - electronic control,798360004
+False,False,True,True,False,Night Storage Heaters - electronic control,798360004
+False,False,True,True,,Night Storage Heaters - electronic control,798360004
+False,False,True,False,True,Night Storage Heaters - manual control,798360005
+False,False,True,False,False,Night Storage Heaters - manual control,798360005
+False,False,True,False,,Night Storage Heaters - manual control,798360005
+False,False,True,,True,Night Storage Heaters - manual control,798360005
+False,False,True,,False,Night Storage Heaters - manual control,798360005
+False,False,True,,,Night Storage Heaters - manual control,798360005
+False,False,False,True,True,Room Heaters Fixed,798360007
+False,False,False,True,False,Unknown,798360000
+False,False,False,True,,Unknown,798360000
+False,False,False,False,True,Room Heaters Fixed,798360007
+False,False,False,False,False,Unknown,798360000
+False,False,False,False,,Unknown,798360000
+False,False,False,,True,Room Heaters Fixed,798360007
+False,False,False,,False,Unknown,798360000
+False,False,False,,,Unknown,798360000
+False,False,,True,True,Room Heaters Fixed,798360007
+False,False,,True,False,Unknown,798360000
+False,False,,True,,Unknown,798360000
+False,False,,False,True,Room Heaters Fixed,798360007
+False,False,,False,False,Unknown,798360000
+False,False,,False,,Unknown,798360000
+False,False,,,True,Room Heaters Fixed,798360007
+False,False,,,False,Unknown,798360000
+False,False,,,,Unknown,798360000
+False,,True,True,True,Night Storage Heaters - electronic control,798360004
+False,,True,True,False,Night Storage Heaters - electronic control,798360004
+False,,True,True,,Night Storage Heaters - electronic control,798360004
+False,,True,False,True,Night Storage Heaters - manual control,798360005
+False,,True,False,False,Night Storage Heaters - manual control,798360005
+False,,True,False,,Night Storage Heaters - manual control,798360005
+False,,True,,True,Night Storage Heaters - manual control,798360005
+False,,True,,False,Night Storage Heaters - manual control,798360005
+False,,True,,,Night Storage Heaters - manual control,798360005
+False,,False,True,True,Room Heaters Fixed,798360007
+False,,False,True,False,Unknown,798360000
+False,,False,True,,Unknown,798360000
+False,,False,False,True,Room Heaters Fixed,798360007
+False,,False,False,False,Unknown,798360000
+False,,False,False,,Unknown,798360000
+False,,False,,True,Room Heaters Fixed,798360007
+False,,False,,False,Unknown,798360000
+False,,False,,,Unknown,798360000
+False,,,True,True,Room Heaters Fixed,798360007
+False,,,True,False,Unknown,798360000
+False,,,True,,Unknown,798360000
+False,,,False,True,Room Heaters Fixed,798360007
+False,,,False,False,Unknown,798360000
+False,,,False,,Unknown,798360000
+False,,,,True,Room Heaters Fixed,798360007
+False,,,,False,Unknown,798360000
+False,,,,,Unknown,798360000
+,True,True,True,True,Heat Pump,798360003
+,True,True,True,False,Heat Pump,798360003
+,True,True,True,,Heat Pump,798360003
+,True,True,False,True,Heat Pump,798360003
+,True,True,False,False,Heat Pump,798360003
+,True,True,False,,Heat Pump,798360003
+,True,True,,True,Heat Pump,798360003
+,True,True,,False,Heat Pump,798360003
+,True,True,,,Heat Pump,798360003
+,True,False,True,True,Heat Pump,798360003
+,True,False,True,False,Heat Pump,798360003
+,True,False,True,,Heat Pump,798360003
+,True,False,False,True,Heat Pump,798360003
+,True,False,False,False,Heat Pump,798360003
+,True,False,False,,Heat Pump,798360003
+,True,False,,True,Heat Pump,798360003
+,True,False,,False,Heat Pump,798360003
+,True,False,,,Heat Pump,798360003
+,True,,True,True,Heat Pump,798360003
+,True,,True,False,Heat Pump,798360003
+,True,,True,,Heat Pump,798360003
+,True,,False,True,Heat Pump,798360003
+,True,,False,False,Heat Pump,798360003
+,True,,False,,Heat Pump,798360003
+,True,,,True,Heat Pump,798360003
+,True,,,False,Heat Pump,798360003
+,True,,,,Heat Pump,798360003
+,False,True,True,True,Night Storage Heaters - electronic control,798360004
+,False,True,True,False,Night Storage Heaters - electronic control,798360004
+,False,True,True,,Night Storage Heaters - electronic control,798360004
+,False,True,False,True,Night Storage Heaters - manual control,798360005
+,False,True,False,False,Night Storage Heaters - manual control,798360005
+,False,True,False,,Night Storage Heaters - manual control,798360005
+,False,True,,True,Night Storage Heaters - manual control,798360005
+,False,True,,False,Night Storage Heaters - manual control,798360005
+,False,True,,,Night Storage Heaters - manual control,798360005
+,False,False,True,True,Room Heaters Fixed,798360007
+,False,False,True,False,Unknown,798360000
+,False,False,True,,Unknown,798360000
+,False,False,False,True,Room Heaters Fixed,798360007
+,False,False,False,False,Unknown,798360000
+,False,False,False,,Unknown,798360000
+,False,False,,True,Room Heaters Fixed,798360007
+,False,False,,False,Unknown,798360000
+,False,False,,,Unknown,798360000
+,False,,True,True,Room Heaters Fixed,798360007
+,False,,True,False,Unknown,798360000
+,False,,True,,Unknown,798360000
+,False,,False,True,Room Heaters Fixed,798360007
+,False,,False,False,Unknown,798360000
+,False,,False,,Unknown,798360000
+,False,,,True,Room Heaters Fixed,798360007
+,False,,,False,Unknown,798360000
+,False,,,,Unknown,798360000
+,,True,True,True,Night Storage Heaters - electronic control,798360004
+,,True,True,False,Night Storage Heaters - electronic control,798360004
+,,True,True,,Night Storage Heaters - electronic control,798360004
+,,True,False,True,Night Storage Heaters - manual control,798360005
+,,True,False,False,Night Storage Heaters - manual control,798360005
+,,True,False,,Night Storage Heaters - manual control,798360005
+,,True,,True,Night Storage Heaters - manual control,798360005
+,,True,,False,Night Storage Heaters - manual control,798360005
+,,True,,,Night Storage Heaters - manual control,798360005
+,,False,True,True,Room Heaters Fixed,798360007
+,,False,True,False,Unknown,798360000
+,,False,True,,Unknown,798360000
+,,False,False,True,Room Heaters Fixed,798360007
+,,False,False,False,Unknown,798360000
+,,False,False,,Unknown,798360000
+,,False,,True,Room Heaters Fixed,798360007
+,,False,,False,Unknown,798360000
+,,False,,,Unknown,798360000
+,,,True,True,Room Heaters Fixed,798360007
+,,,True,False,Unknown,798360000
+,,,True,,Unknown,798360000
+,,,False,True,Room Heaters Fixed,798360007
+,,,False,False,Unknown,798360000
+,,,False,,Unknown,798360000
+,,,,True,Room Heaters Fixed,798360007
+,,,,False,Unknown,798360000
+,,,,,Unknown,798360000
