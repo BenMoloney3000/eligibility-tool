@@ -1,0 +1,595 @@
+gas_boiler_present,smart_thermostat,room_thermostat,programmable_thermostat,heat_pump_present,ch_timer,option_name,option_value
+True,False,True,True,True,True,Programmer and thermostat,798360003
+True,False,True,True,True,False,Thermostat Only,798360004
+True,False,True,True,True,,Thermostat Only,798360004
+True,False,True,True,False,True,Programmer and thermostat,798360003
+True,False,True,True,False,False,Thermostat Only,798360004
+True,False,True,True,False,,Thermostat Only,798360004
+True,False,True,True,,True,Programmer and thermostat,798360003
+True,False,True,True,,False,Thermostat Only,798360004
+True,False,True,True,,,Thermostat Only,798360004
+True,False,True,False,True,True,Programmer and thermostat,798360003
+True,False,True,False,True,False,Thermostat Only,798360004
+True,False,True,False,True,,Thermostat Only,798360004
+True,False,True,False,False,True,Programmer and thermostat,798360003
+True,False,True,False,False,False,Thermostat Only,798360004
+True,False,True,False,False,,Thermostat Only,798360004
+True,False,True,False,,True,Programmer and thermostat,798360003
+True,False,True,False,,False,Thermostat Only,798360004
+True,False,True,False,,,Thermostat Only,798360004
+True,False,True,,True,True,Programmer and thermostat,798360003
+True,False,True,,True,False,Thermostat Only,798360004
+True,False,True,,True,,Thermostat Only,798360004
+True,False,True,,False,True,Programmer and thermostat,798360003
+True,False,True,,False,False,Thermostat Only,798360004
+True,False,True,,False,,Thermostat Only,798360004
+True,False,True,,,True,Programmer and thermostat,798360003
+True,False,True,,,False,Thermostat Only,798360004
+True,False,True,,,,Thermostat Only,798360004
+True,False,False,True,True,True,Programmer only,798360002
+True,False,False,True,True,False,,
+True,False,False,True,True,,,
+True,False,False,True,False,True,Programmer only,798360002
+True,False,False,True,False,False,,
+True,False,False,True,False,,,
+True,False,False,True,,True,Programmer only,798360002
+True,False,False,True,,False,,
+True,False,False,True,,,,
+True,False,False,False,True,True,Programmer only,798360002
+True,False,False,False,True,False,No Heating Control,798360001
+True,False,False,False,True,,,
+True,False,False,False,False,True,Programmer only,798360002
+True,False,False,False,False,False,No Heating Control,798360001
+True,False,False,False,False,,,
+True,False,False,False,,True,Programmer only,798360002
+True,False,False,False,,False,No Heating Control,798360001
+True,False,False,False,,,,
+True,False,False,,True,True,Programmer only,798360002
+True,False,False,,True,False,,
+True,False,False,,True,,,
+True,False,False,,False,True,Programmer only,798360002
+True,False,False,,False,False,,
+True,False,False,,False,,,
+True,False,False,,,True,Programmer only,798360002
+True,False,False,,,False,,
+True,False,False,,,,,
+True,False,,True,True,True,Unknown,798360000
+True,False,,True,True,False,Unknown,798360000
+True,False,,True,True,,Unknown,798360000
+True,False,,True,False,True,Unknown,798360000
+True,False,,True,False,False,Unknown,798360000
+True,False,,True,False,,Unknown,798360000
+True,False,,True,,True,Unknown,798360000
+True,False,,True,,False,Unknown,798360000
+True,False,,True,,,Unknown,798360000
+True,False,,False,True,True,Unknown,798360000
+True,False,,False,True,False,Unknown,798360000
+True,False,,False,True,,Unknown,798360000
+True,False,,False,False,True,Unknown,798360000
+True,False,,False,False,False,Unknown,798360000
+True,False,,False,False,,Unknown,798360000
+True,False,,False,,True,Unknown,798360000
+True,False,,False,,False,Unknown,798360000
+True,False,,False,,,Unknown,798360000
+True,False,,,True,True,Unknown,798360000
+True,False,,,True,False,Unknown,798360000
+True,False,,,True,,Unknown,798360000
+True,False,,,False,True,Unknown,798360000
+True,False,,,False,False,Unknown,798360000
+True,False,,,False,,Unknown,798360000
+True,False,,,,True,Unknown,798360000
+True,False,,,,False,Unknown,798360000
+True,False,,,,,Unknown,798360000
+True,,True,True,True,True,Programmer and thermostat,798360003
+True,,True,True,True,False,Thermostat Only,798360004
+True,,True,True,True,,Thermostat Only,798360004
+True,,True,True,False,True,Programmer and thermostat,798360003
+True,,True,True,False,False,Thermostat Only,798360004
+True,,True,True,False,,Thermostat Only,798360004
+True,,True,True,,True,Programmer and thermostat,798360003
+True,,True,True,,False,Thermostat Only,798360004
+True,,True,True,,,Thermostat Only,798360004
+True,,True,False,True,True,Programmer and thermostat,798360003
+True,,True,False,True,False,Thermostat Only,798360004
+True,,True,False,True,,Thermostat Only,798360004
+True,,True,False,False,True,Programmer and thermostat,798360003
+True,,True,False,False,False,Thermostat Only,798360004
+True,,True,False,False,,Thermostat Only,798360004
+True,,True,False,,True,Programmer and thermostat,798360003
+True,,True,False,,False,Thermostat Only,798360004
+True,,True,False,,,Thermostat Only,798360004
+True,,True,,True,True,Programmer and thermostat,798360003
+True,,True,,True,False,Thermostat Only,798360004
+True,,True,,True,,Thermostat Only,798360004
+True,,True,,False,True,Programmer and thermostat,798360003
+True,,True,,False,False,Thermostat Only,798360004
+True,,True,,False,,Thermostat Only,798360004
+True,,True,,,True,Programmer and thermostat,798360003
+True,,True,,,False,Thermostat Only,798360004
+True,,True,,,,Thermostat Only,798360004
+True,,False,True,True,True,Programmer only,798360002
+True,,False,True,True,False,,
+True,,False,True,True,,,
+True,,False,True,False,True,Programmer only,798360002
+True,,False,True,False,False,,
+True,,False,True,False,,,
+True,,False,True,,True,Programmer only,798360002
+True,,False,True,,False,,
+True,,False,True,,,,
+True,,False,False,True,True,Programmer only,798360002
+True,,False,False,True,False,,
+True,,False,False,True,,,
+True,,False,False,False,True,Programmer only,798360002
+True,,False,False,False,False,,
+True,,False,False,False,,,
+True,,False,False,,True,Programmer only,798360002
+True,,False,False,,False,,
+True,,False,False,,,,
+True,,False,,True,True,Programmer only,798360002
+True,,False,,True,False,,
+True,,False,,True,,,
+True,,False,,False,True,Programmer only,798360002
+True,,False,,False,False,,
+True,,False,,False,,,
+True,,False,,,True,Programmer only,798360002
+True,,False,,,False,,
+True,,False,,,,,
+True,,,True,True,True,Unknown,798360000
+True,,,True,True,False,Unknown,798360000
+True,,,True,True,,Unknown,798360000
+True,,,True,False,True,Unknown,798360000
+True,,,True,False,False,Unknown,798360000
+True,,,True,False,,Unknown,798360000
+True,,,True,,True,Unknown,798360000
+True,,,True,,False,Unknown,798360000
+True,,,True,,,Unknown,798360000
+True,,,False,True,True,Unknown,798360000
+True,,,False,True,False,Unknown,798360000
+True,,,False,True,,Unknown,798360000
+True,,,False,False,True,Unknown,798360000
+True,,,False,False,False,Unknown,798360000
+True,,,False,False,,Unknown,798360000
+True,,,False,,True,Unknown,798360000
+True,,,False,,False,Unknown,798360000
+True,,,False,,,Unknown,798360000
+True,,,,True,True,Unknown,798360000
+True,,,,True,False,Unknown,798360000
+True,,,,True,,Unknown,798360000
+True,,,,False,True,Unknown,798360000
+True,,,,False,False,Unknown,798360000
+True,,,,False,,Unknown,798360000
+True,,,,,True,Unknown,798360000
+True,,,,,False,Unknown,798360000
+True,,,,,,Unknown,798360000
+False,True,True,True,False,True,Not applicable,798360005
+False,True,True,True,False,False,Not applicable,798360005
+False,True,True,True,False,,Not applicable,798360005
+False,True,True,True,,True,Unknown,798360000
+False,True,True,True,,False,Unknown,798360000
+False,True,True,True,,,Unknown,798360000
+False,True,True,False,False,True,Not applicable,798360005
+False,True,True,False,False,False,Not applicable,798360005
+False,True,True,False,False,,Not applicable,798360005
+False,True,True,False,,True,Unknown,798360000
+False,True,True,False,,False,Unknown,798360000
+False,True,True,False,,,Unknown,798360000
+False,True,True,,False,True,Not applicable,798360005
+False,True,True,,False,False,Not applicable,798360005
+False,True,True,,False,,Not applicable,798360005
+False,True,True,,,True,Unknown,798360000
+False,True,True,,,False,Unknown,798360000
+False,True,True,,,,Unknown,798360000
+False,True,False,True,False,True,Not applicable,798360005
+False,True,False,True,False,False,Not applicable,798360005
+False,True,False,True,False,,Not applicable,798360005
+False,True,False,True,,True,Unknown,798360000
+False,True,False,True,,False,Unknown,798360000
+False,True,False,True,,,Unknown,798360000
+False,True,False,False,False,True,Not applicable,798360005
+False,True,False,False,False,False,Not applicable,798360005
+False,True,False,False,False,,Not applicable,798360005
+False,True,False,False,,True,Unknown,798360000
+False,True,False,False,,False,Unknown,798360000
+False,True,False,False,,,Unknown,798360000
+False,True,False,,False,True,Not applicable,798360005
+False,True,False,,False,False,Not applicable,798360005
+False,True,False,,False,,Not applicable,798360005
+False,True,False,,,True,Unknown,798360000
+False,True,False,,,False,Unknown,798360000
+False,True,False,,,,Unknown,798360000
+False,True,,True,False,True,Not applicable,798360005
+False,True,,True,False,False,Not applicable,798360005
+False,True,,True,False,,Not applicable,798360005
+False,True,,True,,True,Unknown,798360000
+False,True,,True,,False,Unknown,798360000
+False,True,,True,,,Unknown,798360000
+False,True,,False,False,True,Not applicable,798360005
+False,True,,False,False,False,Not applicable,798360005
+False,True,,False,False,,Not applicable,798360005
+False,True,,False,,True,Unknown,798360000
+False,True,,False,,False,Unknown,798360000
+False,True,,False,,,Unknown,798360000
+False,True,,,False,True,Not applicable,798360005
+False,True,,,False,False,Not applicable,798360005
+False,True,,,False,,Not applicable,798360005
+False,True,,,,True,Unknown,798360000
+False,True,,,,False,Unknown,798360000
+False,True,,,,,Unknown,798360000
+False,False,True,True,True,True,Programmer and thermostat,798360003
+False,False,True,True,True,False,Thermostat Only,798360004
+False,False,True,True,True,,Thermostat Only,798360004
+False,False,True,True,False,True,Not applicable,798360005
+False,False,True,True,False,False,Not applicable,798360005
+False,False,True,True,False,,Not applicable,798360005
+False,False,True,True,,True,Unknown,798360000
+False,False,True,True,,False,Unknown,798360000
+False,False,True,True,,,Unknown,798360000
+False,False,True,False,True,True,Programmer and thermostat,798360003
+False,False,True,False,True,False,Thermostat Only,798360004
+False,False,True,False,True,,Thermostat Only,798360004
+False,False,True,False,False,True,Not applicable,798360005
+False,False,True,False,False,False,Not applicable,798360005
+False,False,True,False,False,,Not applicable,798360005
+False,False,True,False,,True,Unknown,798360000
+False,False,True,False,,False,Unknown,798360000
+False,False,True,False,,,Unknown,798360000
+False,False,True,,True,True,Programmer and thermostat,798360003
+False,False,True,,True,False,Thermostat Only,798360004
+False,False,True,,True,,Thermostat Only,798360004
+False,False,True,,False,True,Not applicable,798360005
+False,False,True,,False,False,Not applicable,798360005
+False,False,True,,False,,Not applicable,798360005
+False,False,True,,,True,Unknown,798360000
+False,False,True,,,False,Unknown,798360000
+False,False,True,,,,Unknown,798360000
+False,False,False,True,True,True,Programmer only,798360002
+False,False,False,True,True,False,,
+False,False,False,True,True,,,
+False,False,False,True,False,True,Not applicable,798360005
+False,False,False,True,False,False,Not applicable,798360005
+False,False,False,True,False,,Not applicable,798360005
+False,False,False,True,,True,Unknown,798360000
+False,False,False,True,,False,Unknown,798360000
+False,False,False,True,,,Unknown,798360000
+False,False,False,False,True,True,Programmer only,798360002
+False,False,False,False,True,False,No Heating Control,798360001
+False,False,False,False,True,,,
+False,False,False,False,False,True,Not applicable,798360005
+False,False,False,False,False,False,Not applicable,798360005
+False,False,False,False,False,,Not applicable,798360005
+False,False,False,False,,True,Unknown,798360000
+False,False,False,False,,False,Unknown,798360000
+False,False,False,False,,,Unknown,798360000
+False,False,False,,True,True,Programmer only,798360002
+False,False,False,,True,False,,
+False,False,False,,True,,,
+False,False,False,,False,True,Not applicable,798360005
+False,False,False,,False,False,Not applicable,798360005
+False,False,False,,False,,Not applicable,798360005
+False,False,False,,,True,Unknown,798360000
+False,False,False,,,False,Unknown,798360000
+False,False,False,,,,Unknown,798360000
+False,False,,True,True,True,Unknown,798360000
+False,False,,True,True,False,Unknown,798360000
+False,False,,True,True,,Unknown,798360000
+False,False,,True,False,True,Not applicable,798360005
+False,False,,True,False,False,Not applicable,798360005
+False,False,,True,False,,Not applicable,798360005
+False,False,,True,,True,Unknown,798360000
+False,False,,True,,False,Unknown,798360000
+False,False,,True,,,Unknown,798360000
+False,False,,False,True,True,Unknown,798360000
+False,False,,False,True,False,Unknown,798360000
+False,False,,False,True,,Unknown,798360000
+False,False,,False,False,True,Not applicable,798360005
+False,False,,False,False,False,Not applicable,798360005
+False,False,,False,False,,Not applicable,798360005
+False,False,,False,,True,Unknown,798360000
+False,False,,False,,False,Unknown,798360000
+False,False,,False,,,Unknown,798360000
+False,False,,,True,True,Unknown,798360000
+False,False,,,True,False,Unknown,798360000
+False,False,,,True,,Unknown,798360000
+False,False,,,False,True,Not applicable,798360005
+False,False,,,False,False,Not applicable,798360005
+False,False,,,False,,Not applicable,798360005
+False,False,,,,True,Unknown,798360000
+False,False,,,,False,Unknown,798360000
+False,False,,,,,Unknown,798360000
+False,,True,True,True,True,Programmer and thermostat,798360003
+False,,True,True,True,False,Thermostat Only,798360004
+False,,True,True,True,,Thermostat Only,798360004
+False,,True,True,False,True,Not applicable,798360005
+False,,True,True,False,False,Not applicable,798360005
+False,,True,True,False,,Not applicable,798360005
+False,,True,True,,True,Unknown,798360000
+False,,True,True,,False,Unknown,798360000
+False,,True,True,,,Unknown,798360000
+False,,True,False,True,True,Programmer and thermostat,798360003
+False,,True,False,True,False,Thermostat Only,798360004
+False,,True,False,True,,Thermostat Only,798360004
+False,,True,False,False,True,Not applicable,798360005
+False,,True,False,False,False,Not applicable,798360005
+False,,True,False,False,,Not applicable,798360005
+False,,True,False,,True,Unknown,798360000
+False,,True,False,,False,Unknown,798360000
+False,,True,False,,,Unknown,798360000
+False,,True,,True,True,Programmer and thermostat,798360003
+False,,True,,True,False,Thermostat Only,798360004
+False,,True,,True,,Thermostat Only,798360004
+False,,True,,False,True,Not applicable,798360005
+False,,True,,False,False,Not applicable,798360005
+False,,True,,False,,Not applicable,798360005
+False,,True,,,True,Unknown,798360000
+False,,True,,,False,Unknown,798360000
+False,,True,,,,Unknown,798360000
+False,,False,True,True,True,Programmer only,798360002
+False,,False,True,True,False,,
+False,,False,True,True,,,
+False,,False,True,False,True,Not applicable,798360005
+False,,False,True,False,False,Not applicable,798360005
+False,,False,True,False,,Not applicable,798360005
+False,,False,True,,True,Unknown,798360000
+False,,False,True,,False,Unknown,798360000
+False,,False,True,,,Unknown,798360000
+False,,False,False,True,True,Programmer only,798360002
+False,,False,False,True,False,,
+False,,False,False,True,,,
+False,,False,False,False,True,Not applicable,798360005
+False,,False,False,False,False,Not applicable,798360005
+False,,False,False,False,,Not applicable,798360005
+False,,False,False,,True,Unknown,798360000
+False,,False,False,,False,Unknown,798360000
+False,,False,False,,,Unknown,798360000
+False,,False,,True,True,Programmer only,798360002
+False,,False,,True,False,,
+False,,False,,True,,,
+False,,False,,False,True,Not applicable,798360005
+False,,False,,False,False,Not applicable,798360005
+False,,False,,False,,Not applicable,798360005
+False,,False,,,True,Unknown,798360000
+False,,False,,,False,Unknown,798360000
+False,,False,,,,Unknown,798360000
+False,,,True,True,True,Unknown,798360000
+False,,,True,True,False,Unknown,798360000
+False,,,True,True,,Unknown,798360000
+False,,,True,False,True,Not applicable,798360005
+False,,,True,False,False,Not applicable,798360005
+False,,,True,False,,Not applicable,798360005
+False,,,True,,True,Unknown,798360000
+False,,,True,,False,Unknown,798360000
+False,,,True,,,Unknown,798360000
+False,,,False,True,True,Unknown,798360000
+False,,,False,True,False,Unknown,798360000
+False,,,False,True,,Unknown,798360000
+False,,,False,False,True,Not applicable,798360005
+False,,,False,False,False,Not applicable,798360005
+False,,,False,False,,Not applicable,798360005
+False,,,False,,True,Unknown,798360000
+False,,,False,,False,Unknown,798360000
+False,,,False,,,Unknown,798360000
+False,,,,True,True,Unknown,798360000
+False,,,,True,False,Unknown,798360000
+False,,,,True,,Unknown,798360000
+False,,,,False,True,Not applicable,798360005
+False,,,,False,False,Not applicable,798360005
+False,,,,False,,Not applicable,798360005
+False,,,,,True,Unknown,798360000
+False,,,,,False,Unknown,798360000
+False,,,,,,Unknown,798360000
+,True,True,True,False,True,Unknown,798360000
+,True,True,True,False,False,Unknown,798360000
+,True,True,True,False,,Unknown,798360000
+,True,True,True,,True,Unknown,798360000
+,True,True,True,,False,Unknown,798360000
+,True,True,True,,,Unknown,798360000
+,True,True,False,False,True,Unknown,798360000
+,True,True,False,False,False,Unknown,798360000
+,True,True,False,False,,Unknown,798360000
+,True,True,False,,True,Unknown,798360000
+,True,True,False,,False,Unknown,798360000
+,True,True,False,,,Unknown,798360000
+,True,True,,False,True,Unknown,798360000
+,True,True,,False,False,Unknown,798360000
+,True,True,,False,,Unknown,798360000
+,True,True,,,True,Unknown,798360000
+,True,True,,,False,Unknown,798360000
+,True,True,,,,Unknown,798360000
+,True,False,True,False,True,Unknown,798360000
+,True,False,True,False,False,Unknown,798360000
+,True,False,True,False,,Unknown,798360000
+,True,False,True,,True,Unknown,798360000
+,True,False,True,,False,Unknown,798360000
+,True,False,True,,,Unknown,798360000
+,True,False,False,False,True,Unknown,798360000
+,True,False,False,False,False,Unknown,798360000
+,True,False,False,False,,Unknown,798360000
+,True,False,False,,True,Unknown,798360000
+,True,False,False,,False,Unknown,798360000
+,True,False,False,,,Unknown,798360000
+,True,False,,False,True,Unknown,798360000
+,True,False,,False,False,Unknown,798360000
+,True,False,,False,,Unknown,798360000
+,True,False,,,True,Unknown,798360000
+,True,False,,,False,Unknown,798360000
+,True,False,,,,Unknown,798360000
+,True,,True,False,True,Unknown,798360000
+,True,,True,False,False,Unknown,798360000
+,True,,True,False,,Unknown,798360000
+,True,,True,,True,Unknown,798360000
+,True,,True,,False,Unknown,798360000
+,True,,True,,,Unknown,798360000
+,True,,False,False,True,Unknown,798360000
+,True,,False,False,False,Unknown,798360000
+,True,,False,False,,Unknown,798360000
+,True,,False,,True,Unknown,798360000
+,True,,False,,False,Unknown,798360000
+,True,,False,,,Unknown,798360000
+,True,,,False,True,Unknown,798360000
+,True,,,False,False,Unknown,798360000
+,True,,,False,,Unknown,798360000
+,True,,,,True,Unknown,798360000
+,True,,,,False,Unknown,798360000
+,True,,,,,Unknown,798360000
+,False,True,True,True,True,Programmer and thermostat,798360003
+,False,True,True,True,False,Thermostat Only,798360004
+,False,True,True,True,,Thermostat Only,798360004
+,False,True,True,False,True,Unknown,798360000
+,False,True,True,False,False,Unknown,798360000
+,False,True,True,False,,Unknown,798360000
+,False,True,True,,True,Unknown,798360000
+,False,True,True,,False,Unknown,798360000
+,False,True,True,,,Unknown,798360000
+,False,True,False,True,True,Programmer and thermostat,798360003
+,False,True,False,True,False,Thermostat Only,798360004
+,False,True,False,True,,Thermostat Only,798360004
+,False,True,False,False,True,Unknown,798360000
+,False,True,False,False,False,Unknown,798360000
+,False,True,False,False,,Unknown,798360000
+,False,True,False,,True,Unknown,798360000
+,False,True,False,,False,Unknown,798360000
+,False,True,False,,,Unknown,798360000
+,False,True,,True,True,Programmer and thermostat,798360003
+,False,True,,True,False,Thermostat Only,798360004
+,False,True,,True,,Thermostat Only,798360004
+,False,True,,False,True,Unknown,798360000
+,False,True,,False,False,Unknown,798360000
+,False,True,,False,,Unknown,798360000
+,False,True,,,True,Unknown,798360000
+,False,True,,,False,Unknown,798360000
+,False,True,,,,Unknown,798360000
+,False,False,True,True,True,Programmer only,798360002
+,False,False,True,True,False,,
+,False,False,True,True,,,
+,False,False,True,False,True,Unknown,798360000
+,False,False,True,False,False,Unknown,798360000
+,False,False,True,False,,Unknown,798360000
+,False,False,True,,True,Unknown,798360000
+,False,False,True,,False,Unknown,798360000
+,False,False,True,,,Unknown,798360000
+,False,False,False,True,True,Programmer only,798360002
+,False,False,False,True,False,No Heating Control,798360001
+,False,False,False,True,,,
+,False,False,False,False,True,Unknown,798360000
+,False,False,False,False,False,Unknown,798360000
+,False,False,False,False,,Unknown,798360000
+,False,False,False,,True,Unknown,798360000
+,False,False,False,,False,Unknown,798360000
+,False,False,False,,,Unknown,798360000
+,False,False,,True,True,Programmer only,798360002
+,False,False,,True,False,,
+,False,False,,True,,,
+,False,False,,False,True,Unknown,798360000
+,False,False,,False,False,Unknown,798360000
+,False,False,,False,,Unknown,798360000
+,False,False,,,True,Unknown,798360000
+,False,False,,,False,Unknown,798360000
+,False,False,,,,Unknown,798360000
+,False,,True,True,True,Unknown,798360000
+,False,,True,True,False,Unknown,798360000
+,False,,True,True,,Unknown,798360000
+,False,,True,False,True,Unknown,798360000
+,False,,True,False,False,Unknown,798360000
+,False,,True,False,,Unknown,798360000
+,False,,True,,True,Unknown,798360000
+,False,,True,,False,Unknown,798360000
+,False,,True,,,Unknown,798360000
+,False,,False,True,True,Unknown,798360000
+,False,,False,True,False,Unknown,798360000
+,False,,False,True,,Unknown,798360000
+,False,,False,False,True,Unknown,798360000
+,False,,False,False,False,Unknown,798360000
+,False,,False,False,,Unknown,798360000
+,False,,False,,True,Unknown,798360000
+,False,,False,,False,Unknown,798360000
+,False,,False,,,Unknown,798360000
+,False,,,True,True,Unknown,798360000
+,False,,,True,False,Unknown,798360000
+,False,,,True,,Unknown,798360000
+,False,,,False,True,Unknown,798360000
+,False,,,False,False,Unknown,798360000
+,False,,,False,,Unknown,798360000
+,False,,,,True,Unknown,798360000
+,False,,,,False,Unknown,798360000
+,False,,,,,Unknown,798360000
+,,True,True,True,True,Programmer and thermostat,798360003
+,,True,True,True,False,Thermostat Only,798360004
+,,True,True,True,,Thermostat Only,798360004
+,,True,True,False,True,Unknown,798360000
+,,True,True,False,False,Unknown,798360000
+,,True,True,False,,Unknown,798360000
+,,True,True,,True,Unknown,798360000
+,,True,True,,False,Unknown,798360000
+,,True,True,,,Unknown,798360000
+,,True,False,True,True,Programmer and thermostat,798360003
+,,True,False,True,False,Thermostat Only,798360004
+,,True,False,True,,Thermostat Only,798360004
+,,True,False,False,True,Unknown,798360000
+,,True,False,False,False,Unknown,798360000
+,,True,False,False,,Unknown,798360000
+,,True,False,,True,Unknown,798360000
+,,True,False,,False,Unknown,798360000
+,,True,False,,,Unknown,798360000
+,,True,,True,True,Programmer and thermostat,798360003
+,,True,,True,False,Thermostat Only,798360004
+,,True,,True,,Thermostat Only,798360004
+,,True,,False,True,Unknown,798360000
+,,True,,False,False,Unknown,798360000
+,,True,,False,,Unknown,798360000
+,,True,,,True,Unknown,798360000
+,,True,,,False,Unknown,798360000
+,,True,,,,Unknown,798360000
+,,False,True,True,True,Programmer only,798360002
+,,False,True,True,False,,
+,,False,True,True,,,
+,,False,True,False,True,Unknown,798360000
+,,False,True,False,False,Unknown,798360000
+,,False,True,False,,Unknown,798360000
+,,False,True,,True,Unknown,798360000
+,,False,True,,False,Unknown,798360000
+,,False,True,,,Unknown,798360000
+,,False,False,True,True,Programmer only,798360002
+,,False,False,True,False,,
+,,False,False,True,,,
+,,False,False,False,True,Unknown,798360000
+,,False,False,False,False,Unknown,798360000
+,,False,False,False,,Unknown,798360000
+,,False,False,,True,Unknown,798360000
+,,False,False,,False,Unknown,798360000
+,,False,False,,,Unknown,798360000
+,,False,,True,True,Programmer only,798360002
+,,False,,True,False,,
+,,False,,True,,,
+,,False,,False,True,Unknown,798360000
+,,False,,False,False,Unknown,798360000
+,,False,,False,,Unknown,798360000
+,,False,,,True,Unknown,798360000
+,,False,,,False,Unknown,798360000
+,,False,,,,Unknown,798360000
+,,,True,True,True,Unknown,798360000
+,,,True,True,False,Unknown,798360000
+,,,True,True,,Unknown,798360000
+,,,True,False,True,Unknown,798360000
+,,,True,False,False,Unknown,798360000
+,,,True,False,,Unknown,798360000
+,,,True,,True,Unknown,798360000
+,,,True,,False,Unknown,798360000
+,,,True,,,Unknown,798360000
+,,,False,True,True,Unknown,798360000
+,,,False,True,False,Unknown,798360000
+,,,False,True,,Unknown,798360000
+,,,False,False,True,Unknown,798360000
+,,,False,False,False,Unknown,798360000
+,,,False,False,,Unknown,798360000
+,,,False,,True,Unknown,798360000
+,,,False,,False,Unknown,798360000
+,,,False,,,Unknown,798360000
+,,,,True,True,Unknown,798360000
+,,,,True,False,Unknown,798360000
+,,,,True,,Unknown,798360000
+,,,,False,True,Unknown,798360000
+,,,,False,False,Unknown,798360000
+,,,,False,,Unknown,798360000
+,,,,,True,Unknown,798360000
+,,,,,False,Unknown,798360000
+,,,,,,Unknown,798360000

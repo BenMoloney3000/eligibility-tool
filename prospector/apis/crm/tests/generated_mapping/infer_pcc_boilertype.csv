@@ -1,0 +1,16 @@
+gas_boiler_present,gas_boiler_age,option_name,option_value
+True,BEFORE_2004,Standard,798360002
+True,2004-2014,Condensing,798360001
+True,2015-2017,Condensing,798360001
+True,AFTER_2018,Condensing,798360001
+True,,Unknown,798360000
+False,BEFORE_2004,No Boiler,798360003
+False,2004-2014,No Boiler,798360003
+False,2015-2017,No Boiler,798360003
+False,AFTER_2018,No Boiler,798360003
+False,,No Boiler,798360003
+,BEFORE_2004,Unknown,798360000
+,2004-2014,Unknown,798360000
+,2015-2017,Unknown,798360000
+,AFTER_2018,Unknown,798360000
+,,Unknown,798360000

@@ -238,7 +238,10 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_primaryheatingdeliverymethod": None,
         "pcc_secondaryheatingfuel": None,
         "pcc_secondaryheatingdeliverymethod": None,
-        "pcc_boilertype": None,
+        "pcc_boilertype": mapping.infer_pcc_boilertype(
+            gas_boiler_present=answers.gas_boiler_present,
+            gas_boiler_age=answers.gas_boiler_age
+        )[1],
         "pcc_heatingcontrols": None,
         "pcc_solarpanels": None,
         "pcc_solarthermal": None,

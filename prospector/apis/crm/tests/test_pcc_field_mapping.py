@@ -1,10 +1,13 @@
 import csv
 import logging
 import os
+import typing
+
 from collections import OrderedDict
 from itertools import product
-from typing import Optional, get_args
+from typing import Optional
 from inspect import signature
+from enum import Enum
 
 from functools import reduce
 from operator import concat
@@ -25,21 +28,50 @@ def logger(request):
 
 
 def parametrize(func, name):
-    """ Parametrize a function by it's siguture. """
-    sig = signature(func)
+    """ Parametrize a function by it's siguture.
+
+    Note this will get called during pytest collection (not test runs).
+    """
+    sig = signature(func, follow_wrapped=True)
 
     def _type_values(type_class):
+        values = None
         type_values = {
             bool: [True, False],
+            Enum: lambda x: [*x],  # unpack the Enum options
             type(None): [None],
         }
-        return type_values[type_class]
+
+        if typing.get_origin(type_class) == typing.Literal:
+            # Handle Literals
+            values = list(typing.get_args(type_class))
+        else:
+            matched_types = [
+                k for k in type_values.keys() if issubclass(type_class, k)
+            ]
+            assert len(matched_types) == 1, "No unique type match"
+            matched_type = matched_types[0]
+            values = type_values[matched_type]
+
+        return values(type_class) if callable(values) else values
+
+    def _unpack_types(annotation):
+        origin = typing.get_origin(annotation)
+        types = []
+        if origin == typing.Union:
+            # Resolve all types in Union
+            types = reduce(
+                concat,
+                map(_type_values, typing.get_args(annotation))
+            )
+        else:
+            __import__('pdb').set_trace()
+            pass
+        return types
+
 
     sig_types = {
-        k: reduce(
-            concat,
-            map(_type_values, get_args(v.annotation))
-        )
+        k: _unpack_types(v.annotation)
         for k, v in sig.parameters.items()
     }
     return (
@@ -225,3 +257,62 @@ def test_infer_pcc_primaryheatingdeliverymethod(
         ),
         "mapping": ((option_name, option_value), func_args),
     }
+
+
+@pytest.fixture()
+def pcc_mapping(
+    func_args,
+    answers,
+    logger,
+    results_bag,
+    request,
+):
+    def assert_mapping(mapping_name):
+        mapping_func = getattr(mapping, mapping_name)
+
+        # Round trip through a model instance to check our assumptions
+        answers_record = answers(**func_args)
+        answers_fields = {
+            k: getattr(answers_record, k) for k in func_args.keys()
+        }
+        assert answers_fields == func_args
+        try:
+            option_name, option_value = mapping_func(**answers_fields)
+        except Exception as e:
+            logger.error("mapping_func exception %s", str(e))
+            # raise e
+        else:
+            # Test no unmapped option_names
+            # assert option_name is not None
+            # assert type(option_value) is int
+            logger.info(
+                "option_name: '{}' option_value: '{}'".format(option_name, option_value)
+            )
+            setattr(results_bag, mapping_name, {
+                "path": os.path.join(
+                    os.path.dirname(os.path.abspath(request.module.__file__)),
+                    "generated_mapping",
+                ),
+                "mapping": ((option_name, option_value), func_args),
+            })
+    return assert_mapping
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_boilertype, name="func_args")
+)
+def test_infer_pcc_boilertype(
+    pcc_mapping
+):
+    pcc_mapping("infer_pcc_boilertype")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_heatingcontrols, name="func_args")
+)
+def test_infer_pcc_heatingcontrols(
+    pcc_mapping
+):
+    pcc_mapping("infer_pcc_heatingcontrols")
