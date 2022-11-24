@@ -24,7 +24,7 @@ def map_pcc_values(pcc_fieldname):
             option_name = func(*args, **kwargs)
 
             if option_name is None:
-                logger.info(
+                logger.error(
                     UnmappedValueError(
                         (option_name, kwargs)
                     )
@@ -40,10 +40,11 @@ def map_pcc_values(pcc_fieldname):
     return _map_pcc_values
 
 
+@map_pcc_values('pcc_primaryheatingfuel')
 def infer_pcc_primaryheatingfuel(
     on_mains_gas: Optional[bool] = None,
     storage_heaters_present: Optional[bool] = None,
-    other_heating_fuel: enums.NonGasFuel = "",  # non-nullable, but blank=True
+    other_heating_fuel: Union[enums.NonGasFuel, Literal[""]] = "",  # non-nullable, but blank=True
 ) -> int:
     """Map between answers and pcc_primaryheatingfuel.
 
@@ -69,6 +70,7 @@ def infer_pcc_primaryheatingfuel(
         }.get(other_heating_fuel, "Unknown")
 
 
+@map_pcc_values('pcc_primaryheatingdeliverymethod')
 def infer_pcc_primaryheatingdeliverymethod(
     gas_boiler_present: Optional[bool] = None,
     heat_pump_present: Optional[bool] = None,
@@ -139,5 +141,75 @@ def infer_pcc_heatingcontrols(
                 return "No Heating Control"
         else:
             return "Unknown"
+    else:
+        return "Unknown"
+
+
+@map_pcc_values('pcc_propertytype')
+def infer_pcc_propertytype(
+    property_type: Union[enums.PropertyType, Literal[""]] = "",
+    property_form: Union[enums.PropertyForm, Literal[""]] = "",
+) -> int:
+    if property_type == enums.PropertyType.BUNGALOW:
+        if property_form == enums.PropertyForm.DETACHED:
+            return "Bungalow - Detatched"
+        elif property_form == enums.PropertyForm.SEMI_DETACHED:
+            return "Bungalow - Semi Deatched"
+        else:
+            return "Bungalow - Not Specified"
+    elif property_type == enums.PropertyType.FLAT:
+        if property_form == enums.PropertyForm.FLAT_BLOCK:
+            return "Flat - in block/mixed use building"
+        elif property_form == enums.PropertyForm.FLAT_SMALL:
+            return "Flat - in small block/converted dwelling"
+        elif property_form == enums.PropertyForm.MAISONNETTE:
+            return "Maisonette"
+        else:
+            return "Flat - Type not specified"
+    elif property_type == enums.PropertyType.HOUSE:
+        if property_form == enums.PropertyForm.DETACHED:
+            return "House - Detached"
+        elif property_form == enums.PropertyForm.SEMI_DETACHED:
+            return "House - Semi Detatched"
+        elif property_form == enums.PropertyForm.END_TERRACE:
+            return "Terraced - End"
+        elif property_form == enums.PropertyForm.MID_TERRACE:
+            return "Terraced - Mid"
+        elif property_form == enums.PropertyForm.MAISONNETTE:
+            return "Maisonette"
+        else:
+            return "House - Not Specified"
+    elif property_type == enums.PropertyType.PARK_HOME:
+        return "Park home"
+    else:
+        return "Not yet specified"
+
+
+@map_pcc_values('pcc_rooftype')
+def infer_pcc_rooftype(
+    unheated_loft: Optional[bool] = None,
+    room_in_roof: Optional[bool] = None,
+    flat_roof: Optional[bool] = None,
+) -> int:
+    if unheated_loft:
+        return "Pitched - loft space"
+    elif room_in_roof:
+        return "Pitched - converted loft"
+    elif flat_roof:
+        return "Flat roof"
+    else:
+        return "Unknown"
+
+
+@map_pcc_values('pcc_walltype')
+def infer_pcc_walltype(
+    wall_type: Union[enums.WallType, Literal[""]] = "",
+    walls_insulated: Optional[bool] = None,
+) -> int:
+    if wall_type == enums.WallType.CAVITY:
+        if walls_insulated:
+            return "Brick cavity - insulated"
+        else:
+            return "Brick cavity - not insulated"
     else:
         return "Unknown"

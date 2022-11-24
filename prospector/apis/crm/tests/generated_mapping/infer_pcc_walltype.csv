@@ -1,0 +1,10 @@
+wall_type,walls_insulated,option_name,option_value,error
+SOLID,True,Unknown,798360000,None
+SOLID,False,Unknown,798360000,None
+SOLID,None,Unknown,798360000,None
+CAVITY,True,Brick cavity - insulated,798360001,None
+CAVITY,False,Brick cavity - not insulated,798360002,None
+CAVITY,None,Brick cavity - not insulated,798360002,None
+,True,Unknown,798360000,None
+,False,Unknown,798360000,None
+,None,Unknown,798360000,None

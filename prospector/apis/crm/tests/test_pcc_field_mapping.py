@@ -122,9 +122,12 @@ def store(request):
     # TODO: maybe check the type of result (currently we presume everything the
     # a lookup field.
 
+    show_none = lambda x: "None" if x is None else x
+
     op_field_names = [
         "option_name",
         "option_value",
+        "error",
     ]
 
     fields = {}
@@ -140,7 +143,7 @@ def store(request):
                 }
 
             ops, ips = results["mapping"]
-            option_name, option_value = ops
+            option_name, option_value, error = ops
 
             ip_field_names = list(
                 # ordered set
@@ -151,8 +154,9 @@ def store(request):
             fields[field]["rows"].append(
                 {
                     "option_name": option_name,
-                    "option_value": option_value,
-                    **ips,
+                    "option_value": show_none(option_value),
+                    "error": show_none(error),
+                    **{k: show_none(v) for k, v in ips.items()},
                 }
             )
 
@@ -172,93 +176,6 @@ def store(request):
         _write_field_mapping_csv(path, field_names, rows)
 
 
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "on_mains_gas,storage_heaters_present,other_heating_fuel,expected",
-    [
-        (*v, None)
-        for v in product(  # TODO: expected not used
-            (None, True, False),
-            (None, True, False),
-            ("", *enums.NonGasFuel),
-        )
-    ],
-)
-def test_infer_pcc_primaryheatingfuel(
-    answers,
-    on_mains_gas,
-    storage_heaters_present,
-    other_heating_fuel,
-    expected,
-    logger,
-    results_bag,
-    request,
-):
-    answers = answers(
-        on_mains_gas=on_mains_gas,
-        storage_heaters_present=storage_heaters_present,
-        other_heating_fuel=other_heating_fuel,
-    )
-
-    infer_args = {
-        "on_mains_gas": answers.on_mains_gas,
-        "storage_heaters_present": answers.storage_heaters_present,
-        "other_heating_fuel": answers.other_heating_fuel,
-    }
-
-    option_name = mapping.infer_pcc_primaryheatingfuel(**infer_args)
-
-    # Test no unmapped option_names
-    assert option_name is not None
-    # Test all option names map to option values
-    option_value = crm.option_value("pcc_primaryheatingfuel", option_name)
-    assert type(option_value) is int
-
-    logger.debug(
-        "option_name: '{}' option_value: '{}'".format(option_name, option_value)
-    )
-    results_bag.infer_pcc_primaryheatingfuel = {
-        "path": os.path.join(
-            os.path.dirname(os.path.abspath(request.module.__file__)),
-            "generated_mapping",
-        ),
-        "mapping": ((option_name, option_value), infer_args),
-    }
-
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    *parametrize(mapping.infer_pcc_primaryheatingdeliverymethod, name="func_args")
-)
-def test_infer_pcc_primaryheatingdeliverymethod(
-    func_args,
-    answers,
-    logger,
-    results_bag,
-    request,
-):
-    answers = answers(**func_args)
-    option_name = mapping.infer_pcc_primaryheatingdeliverymethod(**func_args)
-
-    # Test no unmapped option_names
-    assert option_name is not None
-    # Test all option names map to option values
-    option_value = crm.option_value("pcc_primaryheatingdeliverymethod", option_name)
-    assert type(option_value) is int
-
-    logger.debug(
-        "option_name: '{}' option_value: '{}'".format(option_name, option_value)
-    )
-    results_bag.infer_pcc_primaryheatingdeliverymethod= {
-        "path": os.path.join(
-            os.path.dirname(os.path.abspath(request.module.__file__)),
-            "generated_mapping",
-        ),
-        "mapping": ((option_name, option_value), func_args),
-    }
-
-
 @pytest.fixture()
 def pcc_mapping(
     func_args,
@@ -276,15 +193,21 @@ def pcc_mapping(
             k: getattr(answers_record, k) for k in func_args.keys()
         }
         assert answers_fields == func_args
+
+        option_name = None
+        option_value = None
+        error = None
+
         try:
             option_name, option_value = mapping_func(**answers_fields)
         except Exception as e:
             logger.error("mapping_func exception %s", str(e))
-            # raise e
+            error = str(e)
         else:
             # Test no unmapped option_names
-            # assert option_name is not None
-            # assert type(option_value) is int
+            assert option_name is not None
+            assert type(option_value) is int
+        finally:
             logger.info(
                 "option_name: '{}' option_value: '{}'".format(option_name, option_value)
             )
@@ -293,18 +216,33 @@ def pcc_mapping(
                     os.path.dirname(os.path.abspath(request.module.__file__)),
                     "generated_mapping",
                 ),
-                "mapping": ((option_name, option_value), func_args),
+                "mapping": ((option_name, option_value, error), func_args),
             })
     return assert_mapping
+
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_primaryheatingfuel, name="func_args")
+)
+def test_infer_pcc_primaryheatingfuel(pcc_mapping):
+    pcc_mapping("infer_pcc_primaryheatingfuel")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_primaryheatingdeliverymethod, name="func_args")
+)
+def test_infer_pcc_primaryheatingdeliverymethod(pcc_mapping):
+    pcc_mapping("infer_pcc_primaryheatingdeliverymethod")
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     *parametrize(mapping.infer_pcc_boilertype, name="func_args")
 )
-def test_infer_pcc_boilertype(
-    pcc_mapping
-):
+def test_infer_pcc_boilertype(pcc_mapping):
     pcc_mapping("infer_pcc_boilertype")
 
 
@@ -312,7 +250,29 @@ def test_infer_pcc_boilertype(
 @pytest.mark.parametrize(
     *parametrize(mapping.infer_pcc_heatingcontrols, name="func_args")
 )
-def test_infer_pcc_heatingcontrols(
-    pcc_mapping
-):
+def test_infer_pcc_heatingcontrols(pcc_mapping):
     pcc_mapping("infer_pcc_heatingcontrols")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_propertytype, name="func_args")
+)
+def test_infer_pcc_propertytype(pcc_mapping):
+    pcc_mapping("infer_pcc_propertytype")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_rooftype, name="func_args")
+)
+def test_infer_pcc_rooftype(pcc_mapping):
+    pcc_mapping("infer_pcc_rooftype")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    *parametrize(mapping.infer_pcc_walltype, name="func_args")
+)
+def test_infer_pcc_walltype(pcc_mapping):
+    pcc_mapping("infer_pcc_walltype")

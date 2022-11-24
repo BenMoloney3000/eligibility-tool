@@ -1,0 +1,28 @@
+unheated_loft,room_in_roof,flat_roof,option_name,option_value,error
+True,True,True,Pitched - loft space,798360001,None
+True,True,False,Pitched - loft space,798360001,None
+True,True,None,Pitched - loft space,798360001,None
+True,False,True,Pitched - loft space,798360001,None
+True,False,False,Pitched - loft space,798360001,None
+True,False,None,Pitched - loft space,798360001,None
+True,None,True,Pitched - loft space,798360001,None
+True,None,False,Pitched - loft space,798360001,None
+True,None,None,Pitched - loft space,798360001,None
+False,True,True,Pitched - converted loft,798360002,None
+False,True,False,Pitched - converted loft,798360002,None
+False,True,None,Pitched - converted loft,798360002,None
+False,False,True,Flat roof,798360004,None
+False,False,False,Unknown,798360000,None
+False,False,None,Unknown,798360000,None
+False,None,True,Flat roof,798360004,None
+False,None,False,Unknown,798360000,None
+False,None,None,Unknown,798360000,None
+None,True,True,Pitched - converted loft,798360002,None
+None,True,False,Pitched - converted loft,798360002,None
+None,True,None,Pitched - converted loft,798360002,None
+None,False,True,Flat roof,798360004,None
+None,False,False,Unknown,798360000,None
+None,False,None,Unknown,798360000,None
+None,None,True,Flat roof,798360004,None
+None,None,False,Unknown,798360000,None
+None,None,None,Unknown,798360000,None
