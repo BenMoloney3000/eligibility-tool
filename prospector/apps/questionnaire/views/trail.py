@@ -1147,11 +1147,21 @@ class RecommendedMeasures(abstract_views.Question):
         return context
 
     def get_next(self):
-        if self.request.POST.get("finish_now", "") == "True":
-            services.close_questionnaire(self.answers)
-            return "Completed"
-        else:
-            return "ToleratedDisruption"
+        # Note we've disabled the rest of the questionnaire at this point at
+        # the request of the client leaving the functionality here for future
+        # development.
+        #
+        # To re-renable it, put back this code:
+        #
+        # if self.request.POST.get("finish_now", "") == "True":
+        #   services.close_questionnaire(self.answers)
+        #   return "Completed"
+        # else:
+        #   return "ToleratedDisruption"
+
+        # For now always close the questionnaire here:
+        services.close_questionnaire(self.answers)
+        return "Completed"
 
 
 class ToleratedDisruption(abstract_views.SingleQuestion):
