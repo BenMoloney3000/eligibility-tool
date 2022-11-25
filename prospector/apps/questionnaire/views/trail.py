@@ -456,11 +456,12 @@ class PropertyType(abstract_views.Question):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        # Send in the enums
         if self.answers.property_type_orig:
             context["initial_type"] = enums.PropertyType(
                 self.answers.property_type_orig
             ).label
+
+        if self.answers.property_form_orig:
             context["initial_form"] = enums.PropertyForm(
                 self.answers.property_form_orig
             ).label
