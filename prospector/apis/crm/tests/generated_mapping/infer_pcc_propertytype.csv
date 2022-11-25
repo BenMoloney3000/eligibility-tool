@@ -8,21 +8,21 @@ FLAT,FLAT_CONVERSION,Flat - in small block/converted dwelling,798360004,None
 FLAT,FLAT_BLOCK,Flat - in block/mixed use building,798360002,None
 FLAT,,Flat - Type not specified,798360011,None
 HOUSE,DETACHED,House - Detached,798360008,None
-HOUSE,SEMI_DETACHED,House - Semi Detatched,798360007,None
+HOUSE,SEMI_DETACHED,,None,'House - Semi Detatched'
 HOUSE,MID_TERRACE,Terraced - Mid,798360009,None
 HOUSE,END_TERRACE,Terraced - End,798360003,None
 HOUSE,MAISONNETTE,Maisonette,798360001,None
-HOUSE,FLAT_CONVERSION,,None,'House - Not Specified'
-HOUSE,FLAT_BLOCK,,None,'House - Not Specified'
-HOUSE,,,None,'House - Not Specified'
-BUNGALOW,DETACHED,Bungalow - Detatched,798360006,None
-BUNGALOW,SEMI_DETACHED,Bungalow - Semi Deatched,798360005,None
-BUNGALOW,MID_TERRACE,,None,'Bungalow - Not Specified'
-BUNGALOW,END_TERRACE,,None,'Bungalow - Not Specified'
-BUNGALOW,MAISONNETTE,,None,'Bungalow - Not Specified'
-BUNGALOW,FLAT_CONVERSION,,None,'Bungalow - Not Specified'
-BUNGALOW,FLAT_BLOCK,,None,'Bungalow - Not Specified'
-BUNGALOW,,,None,'Bungalow - Not Specified'
+HOUSE,FLAT_CONVERSION,House - Not Specified,798360014,None
+HOUSE,FLAT_BLOCK,House - Not Specified,798360014,None
+HOUSE,,House - Not Specified,798360014,None
+BUNGALOW,DETACHED,,None,'Bungalow - Detatched'
+BUNGALOW,SEMI_DETACHED,,None,'Bungalow - Semi Deatched'
+BUNGALOW,MID_TERRACE,Bungalow - Not Specified,798360012,None
+BUNGALOW,END_TERRACE,Bungalow - Not Specified,798360012,None
+BUNGALOW,MAISONNETTE,Bungalow - Not Specified,798360012,None
+BUNGALOW,FLAT_CONVERSION,Bungalow - Not Specified,798360012,None
+BUNGALOW,FLAT_BLOCK,Bungalow - Not Specified,798360012,None
+BUNGALOW,,Bungalow - Not Specified,798360012,None
 PARK_HOME,DETACHED,Park home,798360000,None
 PARK_HOME,SEMI_DETACHED,Park home,798360000,None
 PARK_HOME,MID_TERRACE,Park home,798360000,None

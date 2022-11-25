@@ -1,85 +1,85 @@
 gas_boiler_present,smart_thermostat,room_thermostat,programmable_thermostat,heat_pump_present,ch_timer,option_name,option_value,error
-True,True,True,True,True,True,,None,'Smart Thermostat'
-True,True,True,True,True,False,,None,'Smart Thermostat'
-True,True,True,True,True,None,,None,'Smart Thermostat'
-True,True,True,True,False,True,,None,'Smart Thermostat'
-True,True,True,True,False,False,,None,'Smart Thermostat'
-True,True,True,True,False,None,,None,'Smart Thermostat'
-True,True,True,True,None,True,,None,'Smart Thermostat'
-True,True,True,True,None,False,,None,'Smart Thermostat'
-True,True,True,True,None,None,,None,'Smart Thermostat'
-True,True,True,False,True,True,,None,'Smart Thermostat'
-True,True,True,False,True,False,,None,'Smart Thermostat'
-True,True,True,False,True,None,,None,'Smart Thermostat'
-True,True,True,False,False,True,,None,'Smart Thermostat'
-True,True,True,False,False,False,,None,'Smart Thermostat'
-True,True,True,False,False,None,,None,'Smart Thermostat'
-True,True,True,False,None,True,,None,'Smart Thermostat'
-True,True,True,False,None,False,,None,'Smart Thermostat'
-True,True,True,False,None,None,,None,'Smart Thermostat'
-True,True,True,None,True,True,,None,'Smart Thermostat'
-True,True,True,None,True,False,,None,'Smart Thermostat'
-True,True,True,None,True,None,,None,'Smart Thermostat'
-True,True,True,None,False,True,,None,'Smart Thermostat'
-True,True,True,None,False,False,,None,'Smart Thermostat'
-True,True,True,None,False,None,,None,'Smart Thermostat'
-True,True,True,None,None,True,,None,'Smart Thermostat'
-True,True,True,None,None,False,,None,'Smart Thermostat'
-True,True,True,None,None,None,,None,'Smart Thermostat'
-True,True,False,True,True,True,,None,'Smart Thermostat'
-True,True,False,True,True,False,,None,'Smart Thermostat'
-True,True,False,True,True,None,,None,'Smart Thermostat'
-True,True,False,True,False,True,,None,'Smart Thermostat'
-True,True,False,True,False,False,,None,'Smart Thermostat'
-True,True,False,True,False,None,,None,'Smart Thermostat'
-True,True,False,True,None,True,,None,'Smart Thermostat'
-True,True,False,True,None,False,,None,'Smart Thermostat'
-True,True,False,True,None,None,,None,'Smart Thermostat'
-True,True,False,False,True,True,,None,'Smart Thermostat'
-True,True,False,False,True,False,,None,'Smart Thermostat'
-True,True,False,False,True,None,,None,'Smart Thermostat'
-True,True,False,False,False,True,,None,'Smart Thermostat'
-True,True,False,False,False,False,,None,'Smart Thermostat'
-True,True,False,False,False,None,,None,'Smart Thermostat'
-True,True,False,False,None,True,,None,'Smart Thermostat'
-True,True,False,False,None,False,,None,'Smart Thermostat'
-True,True,False,False,None,None,,None,'Smart Thermostat'
-True,True,False,None,True,True,,None,'Smart Thermostat'
-True,True,False,None,True,False,,None,'Smart Thermostat'
-True,True,False,None,True,None,,None,'Smart Thermostat'
-True,True,False,None,False,True,,None,'Smart Thermostat'
-True,True,False,None,False,False,,None,'Smart Thermostat'
-True,True,False,None,False,None,,None,'Smart Thermostat'
-True,True,False,None,None,True,,None,'Smart Thermostat'
-True,True,False,None,None,False,,None,'Smart Thermostat'
-True,True,False,None,None,None,,None,'Smart Thermostat'
-True,True,None,True,True,True,,None,'Smart Thermostat'
-True,True,None,True,True,False,,None,'Smart Thermostat'
-True,True,None,True,True,None,,None,'Smart Thermostat'
-True,True,None,True,False,True,,None,'Smart Thermostat'
-True,True,None,True,False,False,,None,'Smart Thermostat'
-True,True,None,True,False,None,,None,'Smart Thermostat'
-True,True,None,True,None,True,,None,'Smart Thermostat'
-True,True,None,True,None,False,,None,'Smart Thermostat'
-True,True,None,True,None,None,,None,'Smart Thermostat'
-True,True,None,False,True,True,,None,'Smart Thermostat'
-True,True,None,False,True,False,,None,'Smart Thermostat'
-True,True,None,False,True,None,,None,'Smart Thermostat'
-True,True,None,False,False,True,,None,'Smart Thermostat'
-True,True,None,False,False,False,,None,'Smart Thermostat'
-True,True,None,False,False,None,,None,'Smart Thermostat'
-True,True,None,False,None,True,,None,'Smart Thermostat'
-True,True,None,False,None,False,,None,'Smart Thermostat'
-True,True,None,False,None,None,,None,'Smart Thermostat'
-True,True,None,None,True,True,,None,'Smart Thermostat'
-True,True,None,None,True,False,,None,'Smart Thermostat'
-True,True,None,None,True,None,,None,'Smart Thermostat'
-True,True,None,None,False,True,,None,'Smart Thermostat'
-True,True,None,None,False,False,,None,'Smart Thermostat'
-True,True,None,None,False,None,,None,'Smart Thermostat'
-True,True,None,None,None,True,,None,'Smart Thermostat'
-True,True,None,None,None,False,,None,'Smart Thermostat'
-True,True,None,None,None,None,,None,'Smart Thermostat'
+True,True,True,True,True,True,Smart Thermostat,798360006,None
+True,True,True,True,True,False,Smart Thermostat,798360006,None
+True,True,True,True,True,None,Smart Thermostat,798360006,None
+True,True,True,True,False,True,Smart Thermostat,798360006,None
+True,True,True,True,False,False,Smart Thermostat,798360006,None
+True,True,True,True,False,None,Smart Thermostat,798360006,None
+True,True,True,True,None,True,Smart Thermostat,798360006,None
+True,True,True,True,None,False,Smart Thermostat,798360006,None
+True,True,True,True,None,None,Smart Thermostat,798360006,None
+True,True,True,False,True,True,Smart Thermostat,798360006,None
+True,True,True,False,True,False,Smart Thermostat,798360006,None
+True,True,True,False,True,None,Smart Thermostat,798360006,None
+True,True,True,False,False,True,Smart Thermostat,798360006,None
+True,True,True,False,False,False,Smart Thermostat,798360006,None
+True,True,True,False,False,None,Smart Thermostat,798360006,None
+True,True,True,False,None,True,Smart Thermostat,798360006,None
+True,True,True,False,None,False,Smart Thermostat,798360006,None
+True,True,True,False,None,None,Smart Thermostat,798360006,None
+True,True,True,None,True,True,Smart Thermostat,798360006,None
+True,True,True,None,True,False,Smart Thermostat,798360006,None
+True,True,True,None,True,None,Smart Thermostat,798360006,None
+True,True,True,None,False,True,Smart Thermostat,798360006,None
+True,True,True,None,False,False,Smart Thermostat,798360006,None
+True,True,True,None,False,None,Smart Thermostat,798360006,None
+True,True,True,None,None,True,Smart Thermostat,798360006,None
+True,True,True,None,None,False,Smart Thermostat,798360006,None
+True,True,True,None,None,None,Smart Thermostat,798360006,None
+True,True,False,True,True,True,Smart Thermostat,798360006,None
+True,True,False,True,True,False,Smart Thermostat,798360006,None
+True,True,False,True,True,None,Smart Thermostat,798360006,None
+True,True,False,True,False,True,Smart Thermostat,798360006,None
+True,True,False,True,False,False,Smart Thermostat,798360006,None
+True,True,False,True,False,None,Smart Thermostat,798360006,None
+True,True,False,True,None,True,Smart Thermostat,798360006,None
+True,True,False,True,None,False,Smart Thermostat,798360006,None
+True,True,False,True,None,None,Smart Thermostat,798360006,None
+True,True,False,False,True,True,Smart Thermostat,798360006,None
+True,True,False,False,True,False,Smart Thermostat,798360006,None
+True,True,False,False,True,None,Smart Thermostat,798360006,None
+True,True,False,False,False,True,Smart Thermostat,798360006,None
+True,True,False,False,False,False,Smart Thermostat,798360006,None
+True,True,False,False,False,None,Smart Thermostat,798360006,None
+True,True,False,False,None,True,Smart Thermostat,798360006,None
+True,True,False,False,None,False,Smart Thermostat,798360006,None
+True,True,False,False,None,None,Smart Thermostat,798360006,None
+True,True,False,None,True,True,Smart Thermostat,798360006,None
+True,True,False,None,True,False,Smart Thermostat,798360006,None
+True,True,False,None,True,None,Smart Thermostat,798360006,None
+True,True,False,None,False,True,Smart Thermostat,798360006,None
+True,True,False,None,False,False,Smart Thermostat,798360006,None
+True,True,False,None,False,None,Smart Thermostat,798360006,None
+True,True,False,None,None,True,Smart Thermostat,798360006,None
+True,True,False,None,None,False,Smart Thermostat,798360006,None
+True,True,False,None,None,None,Smart Thermostat,798360006,None
+True,True,None,True,True,True,Smart Thermostat,798360006,None
+True,True,None,True,True,False,Smart Thermostat,798360006,None
+True,True,None,True,True,None,Smart Thermostat,798360006,None
+True,True,None,True,False,True,Smart Thermostat,798360006,None
+True,True,None,True,False,False,Smart Thermostat,798360006,None
+True,True,None,True,False,None,Smart Thermostat,798360006,None
+True,True,None,True,None,True,Smart Thermostat,798360006,None
+True,True,None,True,None,False,Smart Thermostat,798360006,None
+True,True,None,True,None,None,Smart Thermostat,798360006,None
+True,True,None,False,True,True,Smart Thermostat,798360006,None
+True,True,None,False,True,False,Smart Thermostat,798360006,None
+True,True,None,False,True,None,Smart Thermostat,798360006,None
+True,True,None,False,False,True,Smart Thermostat,798360006,None
+True,True,None,False,False,False,Smart Thermostat,798360006,None
+True,True,None,False,False,None,Smart Thermostat,798360006,None
+True,True,None,False,None,True,Smart Thermostat,798360006,None
+True,True,None,False,None,False,Smart Thermostat,798360006,None
+True,True,None,False,None,None,Smart Thermostat,798360006,None
+True,True,None,None,True,True,Smart Thermostat,798360006,None
+True,True,None,None,True,False,Smart Thermostat,798360006,None
+True,True,None,None,True,None,Smart Thermostat,798360006,None
+True,True,None,None,False,True,Smart Thermostat,798360006,None
+True,True,None,None,False,False,Smart Thermostat,798360006,None
+True,True,None,None,False,None,Smart Thermostat,798360006,None
+True,True,None,None,None,True,Smart Thermostat,798360006,None
+True,True,None,None,None,False,Smart Thermostat,798360006,None
+True,True,None,None,None,None,Smart Thermostat,798360006,None
 True,False,True,True,True,True,Programmer and thermostat,798360003,None
 True,False,True,True,True,False,Thermostat Only,798360004,None
 True,False,True,True,True,None,Thermostat Only,798360004,None
@@ -242,81 +242,81 @@ True,None,None,None,False,None,Unknown,798360000,None
 True,None,None,None,None,True,Unknown,798360000,None
 True,None,None,None,None,False,Unknown,798360000,None
 True,None,None,None,None,None,Unknown,798360000,None
-False,True,True,True,True,True,,None,'Smart Thermostat'
-False,True,True,True,True,False,,None,'Smart Thermostat'
-False,True,True,True,True,None,,None,'Smart Thermostat'
+False,True,True,True,True,True,Smart Thermostat,798360006,None
+False,True,True,True,True,False,Smart Thermostat,798360006,None
+False,True,True,True,True,None,Smart Thermostat,798360006,None
 False,True,True,True,False,True,Not applicable,798360005,None
 False,True,True,True,False,False,Not applicable,798360005,None
 False,True,True,True,False,None,Not applicable,798360005,None
 False,True,True,True,None,True,Unknown,798360000,None
 False,True,True,True,None,False,Unknown,798360000,None
 False,True,True,True,None,None,Unknown,798360000,None
-False,True,True,False,True,True,,None,'Smart Thermostat'
-False,True,True,False,True,False,,None,'Smart Thermostat'
-False,True,True,False,True,None,,None,'Smart Thermostat'
+False,True,True,False,True,True,Smart Thermostat,798360006,None
+False,True,True,False,True,False,Smart Thermostat,798360006,None
+False,True,True,False,True,None,Smart Thermostat,798360006,None
 False,True,True,False,False,True,Not applicable,798360005,None
 False,True,True,False,False,False,Not applicable,798360005,None
 False,True,True,False,False,None,Not applicable,798360005,None
 False,True,True,False,None,True,Unknown,798360000,None
 False,True,True,False,None,False,Unknown,798360000,None
 False,True,True,False,None,None,Unknown,798360000,None
-False,True,True,None,True,True,,None,'Smart Thermostat'
-False,True,True,None,True,False,,None,'Smart Thermostat'
-False,True,True,None,True,None,,None,'Smart Thermostat'
+False,True,True,None,True,True,Smart Thermostat,798360006,None
+False,True,True,None,True,False,Smart Thermostat,798360006,None
+False,True,True,None,True,None,Smart Thermostat,798360006,None
 False,True,True,None,False,True,Not applicable,798360005,None
 False,True,True,None,False,False,Not applicable,798360005,None
 False,True,True,None,False,None,Not applicable,798360005,None
 False,True,True,None,None,True,Unknown,798360000,None
 False,True,True,None,None,False,Unknown,798360000,None
 False,True,True,None,None,None,Unknown,798360000,None
-False,True,False,True,True,True,,None,'Smart Thermostat'
-False,True,False,True,True,False,,None,'Smart Thermostat'
-False,True,False,True,True,None,,None,'Smart Thermostat'
+False,True,False,True,True,True,Smart Thermostat,798360006,None
+False,True,False,True,True,False,Smart Thermostat,798360006,None
+False,True,False,True,True,None,Smart Thermostat,798360006,None
 False,True,False,True,False,True,Not applicable,798360005,None
 False,True,False,True,False,False,Not applicable,798360005,None
 False,True,False,True,False,None,Not applicable,798360005,None
 False,True,False,True,None,True,Unknown,798360000,None
 False,True,False,True,None,False,Unknown,798360000,None
 False,True,False,True,None,None,Unknown,798360000,None
-False,True,False,False,True,True,,None,'Smart Thermostat'
-False,True,False,False,True,False,,None,'Smart Thermostat'
-False,True,False,False,True,None,,None,'Smart Thermostat'
+False,True,False,False,True,True,Smart Thermostat,798360006,None
+False,True,False,False,True,False,Smart Thermostat,798360006,None
+False,True,False,False,True,None,Smart Thermostat,798360006,None
 False,True,False,False,False,True,Not applicable,798360005,None
 False,True,False,False,False,False,Not applicable,798360005,None
 False,True,False,False,False,None,Not applicable,798360005,None
 False,True,False,False,None,True,Unknown,798360000,None
 False,True,False,False,None,False,Unknown,798360000,None
 False,True,False,False,None,None,Unknown,798360000,None
-False,True,False,None,True,True,,None,'Smart Thermostat'
-False,True,False,None,True,False,,None,'Smart Thermostat'
-False,True,False,None,True,None,,None,'Smart Thermostat'
+False,True,False,None,True,True,Smart Thermostat,798360006,None
+False,True,False,None,True,False,Smart Thermostat,798360006,None
+False,True,False,None,True,None,Smart Thermostat,798360006,None
 False,True,False,None,False,True,Not applicable,798360005,None
 False,True,False,None,False,False,Not applicable,798360005,None
 False,True,False,None,False,None,Not applicable,798360005,None
 False,True,False,None,None,True,Unknown,798360000,None
 False,True,False,None,None,False,Unknown,798360000,None
 False,True,False,None,None,None,Unknown,798360000,None
-False,True,None,True,True,True,,None,'Smart Thermostat'
-False,True,None,True,True,False,,None,'Smart Thermostat'
-False,True,None,True,True,None,,None,'Smart Thermostat'
+False,True,None,True,True,True,Smart Thermostat,798360006,None
+False,True,None,True,True,False,Smart Thermostat,798360006,None
+False,True,None,True,True,None,Smart Thermostat,798360006,None
 False,True,None,True,False,True,Not applicable,798360005,None
 False,True,None,True,False,False,Not applicable,798360005,None
 False,True,None,True,False,None,Not applicable,798360005,None
 False,True,None,True,None,True,Unknown,798360000,None
 False,True,None,True,None,False,Unknown,798360000,None
 False,True,None,True,None,None,Unknown,798360000,None
-False,True,None,False,True,True,,None,'Smart Thermostat'
-False,True,None,False,True,False,,None,'Smart Thermostat'
-False,True,None,False,True,None,,None,'Smart Thermostat'
+False,True,None,False,True,True,Smart Thermostat,798360006,None
+False,True,None,False,True,False,Smart Thermostat,798360006,None
+False,True,None,False,True,None,Smart Thermostat,798360006,None
 False,True,None,False,False,True,Not applicable,798360005,None
 False,True,None,False,False,False,Not applicable,798360005,None
 False,True,None,False,False,None,Not applicable,798360005,None
 False,True,None,False,None,True,Unknown,798360000,None
 False,True,None,False,None,False,Unknown,798360000,None
 False,True,None,False,None,None,Unknown,798360000,None
-False,True,None,None,True,True,,None,'Smart Thermostat'
-False,True,None,None,True,False,,None,'Smart Thermostat'
-False,True,None,None,True,None,,None,'Smart Thermostat'
+False,True,None,None,True,True,Smart Thermostat,798360006,None
+False,True,None,None,True,False,Smart Thermostat,798360006,None
+False,True,None,None,True,None,Smart Thermostat,798360006,None
 False,True,None,None,False,True,Not applicable,798360005,None
 False,True,None,None,False,False,Not applicable,798360005,None
 False,True,None,None,False,None,Not applicable,798360005,None
@@ -485,81 +485,81 @@ False,None,None,None,False,None,Not applicable,798360005,None
 False,None,None,None,None,True,Unknown,798360000,None
 False,None,None,None,None,False,Unknown,798360000,None
 False,None,None,None,None,None,Unknown,798360000,None
-None,True,True,True,True,True,,None,'Smart Thermostat'
-None,True,True,True,True,False,,None,'Smart Thermostat'
-None,True,True,True,True,None,,None,'Smart Thermostat'
+None,True,True,True,True,True,Smart Thermostat,798360006,None
+None,True,True,True,True,False,Smart Thermostat,798360006,None
+None,True,True,True,True,None,Smart Thermostat,798360006,None
 None,True,True,True,False,True,Unknown,798360000,None
 None,True,True,True,False,False,Unknown,798360000,None
 None,True,True,True,False,None,Unknown,798360000,None
 None,True,True,True,None,True,Unknown,798360000,None
 None,True,True,True,None,False,Unknown,798360000,None
 None,True,True,True,None,None,Unknown,798360000,None
-None,True,True,False,True,True,,None,'Smart Thermostat'
-None,True,True,False,True,False,,None,'Smart Thermostat'
-None,True,True,False,True,None,,None,'Smart Thermostat'
+None,True,True,False,True,True,Smart Thermostat,798360006,None
+None,True,True,False,True,False,Smart Thermostat,798360006,None
+None,True,True,False,True,None,Smart Thermostat,798360006,None
 None,True,True,False,False,True,Unknown,798360000,None
 None,True,True,False,False,False,Unknown,798360000,None
 None,True,True,False,False,None,Unknown,798360000,None
 None,True,True,False,None,True,Unknown,798360000,None
 None,True,True,False,None,False,Unknown,798360000,None
 None,True,True,False,None,None,Unknown,798360000,None
-None,True,True,None,True,True,,None,'Smart Thermostat'
-None,True,True,None,True,False,,None,'Smart Thermostat'
-None,True,True,None,True,None,,None,'Smart Thermostat'
+None,True,True,None,True,True,Smart Thermostat,798360006,None
+None,True,True,None,True,False,Smart Thermostat,798360006,None
+None,True,True,None,True,None,Smart Thermostat,798360006,None
 None,True,True,None,False,True,Unknown,798360000,None
 None,True,True,None,False,False,Unknown,798360000,None
 None,True,True,None,False,None,Unknown,798360000,None
 None,True,True,None,None,True,Unknown,798360000,None
 None,True,True,None,None,False,Unknown,798360000,None
 None,True,True,None,None,None,Unknown,798360000,None
-None,True,False,True,True,True,,None,'Smart Thermostat'
-None,True,False,True,True,False,,None,'Smart Thermostat'
-None,True,False,True,True,None,,None,'Smart Thermostat'
+None,True,False,True,True,True,Smart Thermostat,798360006,None
+None,True,False,True,True,False,Smart Thermostat,798360006,None
+None,True,False,True,True,None,Smart Thermostat,798360006,None
 None,True,False,True,False,True,Unknown,798360000,None
 None,True,False,True,False,False,Unknown,798360000,None
 None,True,False,True,False,None,Unknown,798360000,None
 None,True,False,True,None,True,Unknown,798360000,None
 None,True,False,True,None,False,Unknown,798360000,None
 None,True,False,True,None,None,Unknown,798360000,None
-None,True,False,False,True,True,,None,'Smart Thermostat'
-None,True,False,False,True,False,,None,'Smart Thermostat'
-None,True,False,False,True,None,,None,'Smart Thermostat'
+None,True,False,False,True,True,Smart Thermostat,798360006,None
+None,True,False,False,True,False,Smart Thermostat,798360006,None
+None,True,False,False,True,None,Smart Thermostat,798360006,None
 None,True,False,False,False,True,Unknown,798360000,None
 None,True,False,False,False,False,Unknown,798360000,None
 None,True,False,False,False,None,Unknown,798360000,None
 None,True,False,False,None,True,Unknown,798360000,None
 None,True,False,False,None,False,Unknown,798360000,None
 None,True,False,False,None,None,Unknown,798360000,None
-None,True,False,None,True,True,,None,'Smart Thermostat'
-None,True,False,None,True,False,,None,'Smart Thermostat'
-None,True,False,None,True,None,,None,'Smart Thermostat'
+None,True,False,None,True,True,Smart Thermostat,798360006,None
+None,True,False,None,True,False,Smart Thermostat,798360006,None
+None,True,False,None,True,None,Smart Thermostat,798360006,None
 None,True,False,None,False,True,Unknown,798360000,None
 None,True,False,None,False,False,Unknown,798360000,None
 None,True,False,None,False,None,Unknown,798360000,None
 None,True,False,None,None,True,Unknown,798360000,None
 None,True,False,None,None,False,Unknown,798360000,None
 None,True,False,None,None,None,Unknown,798360000,None
-None,True,None,True,True,True,,None,'Smart Thermostat'
-None,True,None,True,True,False,,None,'Smart Thermostat'
-None,True,None,True,True,None,,None,'Smart Thermostat'
+None,True,None,True,True,True,Smart Thermostat,798360006,None
+None,True,None,True,True,False,Smart Thermostat,798360006,None
+None,True,None,True,True,None,Smart Thermostat,798360006,None
 None,True,None,True,False,True,Unknown,798360000,None
 None,True,None,True,False,False,Unknown,798360000,None
 None,True,None,True,False,None,Unknown,798360000,None
 None,True,None,True,None,True,Unknown,798360000,None
 None,True,None,True,None,False,Unknown,798360000,None
 None,True,None,True,None,None,Unknown,798360000,None
-None,True,None,False,True,True,,None,'Smart Thermostat'
-None,True,None,False,True,False,,None,'Smart Thermostat'
-None,True,None,False,True,None,,None,'Smart Thermostat'
+None,True,None,False,True,True,Smart Thermostat,798360006,None
+None,True,None,False,True,False,Smart Thermostat,798360006,None
+None,True,None,False,True,None,Smart Thermostat,798360006,None
 None,True,None,False,False,True,Unknown,798360000,None
 None,True,None,False,False,False,Unknown,798360000,None
 None,True,None,False,False,None,Unknown,798360000,None
 None,True,None,False,None,True,Unknown,798360000,None
 None,True,None,False,None,False,Unknown,798360000,None
 None,True,None,False,None,None,Unknown,798360000,None
-None,True,None,None,True,True,,None,'Smart Thermostat'
-None,True,None,None,True,False,,None,'Smart Thermostat'
-None,True,None,None,True,None,,None,'Smart Thermostat'
+None,True,None,None,True,True,Smart Thermostat,798360006,None
+None,True,None,None,True,False,Smart Thermostat,798360006,None
+None,True,None,None,True,None,Smart Thermostat,798360006,None
 None,True,None,None,False,True,Unknown,798360000,None
 None,True,None,None,False,False,Unknown,798360000,None
 None,True,None,None,False,None,Unknown,798360000,None
