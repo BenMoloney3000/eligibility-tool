@@ -1,16 +1,16 @@
+import argparse
+import csv
 import json
 import sys
-import csv
-import argparse
-
 from uuid import UUID
 
 from django.core.management.base import BaseCommand
 
 from prospector.apis.crm import crm
-#
 from prospector.apps.crm.tasks import crm_create
 from prospector.apps.questionnaire.models import Answers
+
+#
 
 
 def get_token(session):
@@ -77,17 +77,12 @@ class Command(BaseCommand):
         )
 
     def crm_request(
-        self,
-        request_function,
-        request_function_args=[],
-        request_function_kwargs={}
+        self, request_function, request_function_args=[], request_function_kwargs={}
     ):
         client = crm.get_client()
         session = crm.get_authorised_session(client)
         result = request_function(
-            session,
-            *request_function_args,
-            **request_function_kwargs
+            session, *request_function_args, **request_function_kwargs
         )
 
         return json.dumps(
@@ -98,33 +93,27 @@ class Command(BaseCommand):
 
     def write_picklists_csv(self):
         picklists = crm.pcc_picklists()
-        fieldnames = [
-            'LogicalName',
-            'Label',
-            'Value'
-        ]
+        fieldnames = ["LogicalName", "Label", "Value"]
         writer = csv.DictWriter(self.stdout, fieldnames=fieldnames)
         writer.writeheader()
         for picklist, options in picklists.items():
             for label, value in options.items():
-                writer.writerow({
-                    'LogicalName': picklist,
-                    'Label': label,
-                    'Value': value
-                })
+                writer.writerow(
+                    {"LogicalName": picklist, "Label": label, "Value": value}
+                )
 
     def handle(self, *args, **options):
-        if 'create' in options:
-            if options['answers_uuid'] is not None:
+        if "create" in options:
+            if options["answers_uuid"] is not None:
                 # CRM create for an individual Answers record
                 # Using celery task
-                answers_uuid = options['answers_uuid'][0]
+                answers_uuid = options["answers_uuid"][0]
                 result = crm_create.delay(answers_uuid)
                 for value in result.collect():
-                   print(value)
-            elif 'all' in options:
+                    print(value)
+            elif "all" in options:
                 # CRM create for all pending completed Answers records
-                __import__('pdb').set_trace()
+                __import__("pdb").set_trace()
                 pass
             sys.exit(1)
 
@@ -140,12 +129,11 @@ class Command(BaseCommand):
             return self.write_picklists_csv()
         elif options["create_raw"]:
             # CRM create for an individual Answers record
-            pk = options['answers_pk'][0]
+            pk = options["answers_pk"][0]
             answers = Answers.objects.get(pk=pk)
             crm_data = crm.map_crm(answers)
             return self.crm_request(
-                crm.create_pcc_record,
-                request_function_args=(crm_data,)
+                crm.create_pcc_record, request_function_args=(crm_data,)
             )
         else:
-            __import__('pdb').set_trace()
+            __import__("pdb").set_trace()

@@ -9,10 +9,9 @@ from django.core.exceptions import ImproperlyConfigured
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 
+from prospector.apis.crm import mapping
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import models
-
-from prospector.apis.crm import mapping
 
 
 logger = logging.getLogger(__name__)
@@ -227,40 +226,135 @@ def map_crm(answers: models.Answers) -> dict:
             default_mapping="Low",
         ),
         "pcc_inscopeformees": None,  # Leave blank
-        "pcc_primaryheatingfuel": option_value(
-            "pcc_primaryheatingfuel",
-            mapping.infer_pcc_primaryheatingfuel(
-                on_mains_gas=answers.on_mains_gas,
+        "pcc_primaryheatingfuel": mapping.infer_pcc_primaryheatingfuel(
+            on_mains_gas=answers.on_mains_gas,
+            storage_heaters_present=answers.storage_heaters_present,
+            other_heating_fuel=answers.other_heating_fuel,
+        )[1],
+        "pcc_primaryheatingdeliverymethod": (
+            mapping.infer_pcc_primaryheatingdeliverymethod(
+                gas_boiler_present=answers.gas_boiler_present,
+                heat_pump_present=answers.heat_pump_present,
                 storage_heaters_present=answers.storage_heaters_present,
-                other_heating_fuel=answers.other_heating_fuel,
-            ),
+                hhrshs_present=answers.hhrshs_present,
+                electric_radiators_present=answers.electric_radiators_present,
+            )[1]
         ),
-        "pcc_primaryheatingdeliverymethod": None,
-        "pcc_secondaryheatingfuel": None,
-        "pcc_secondaryheatingdeliverymethod": None,
+        "pcc_secondaryheatingfuel": None,  # Leave blank
+        "pcc_secondaryheatingdeliverymethod": None,  # Leave blank
         "pcc_boilertype": mapping.infer_pcc_boilertype(
             gas_boiler_present=answers.gas_boiler_present,
-            gas_boiler_age=answers.gas_boiler_age
+            gas_boiler_age=answers.gas_boiler_age,
         )[1],
-        "pcc_heatingcontrols": None,
-        "pcc_solarpanels": None,
-        "pcc_solarthermal": None,
-        "pcc_propertytype": None,
-        "pcc_bedrooms": None,
-        "pcc_propertyage": None,
-        "pcc_listedproperty": None,
-        "pcc_rooftype": None,
-        "pcc_roofinsulation": None,
-        "pcc_floortype": None,
-        "pcc_floorinsulation": None,
-        "pcc_walltype": None,
-        "pcc_wallinsulation": None,
-        "pcc_glazing": None,
-        "pcc_propertyprofilecomments": None,
-        "pcc_epctype": None,
-        "pcc_dateofmostrecentepc": None,
-        "pcc_gradeofmostrecentepc": None,
-        "pcc_scoreofmostrecentepc": None,
+        "pcc_heatingcontrols": mapping.infer_pcc_heatingcontrols(
+            gas_boiler_present=answers.gas_boiler_present,
+            smart_thermostat=answers.smart_thermostat,
+            room_thermostat=answers.room_thermostat,
+            programmable_thermostat=answers.programmable_thermostat,
+            heat_pump_present=answers.heat_pump_present,
+            ch_timer=answers.ch_timer,
+        )[1],
+        "pcc_solarpanels": option_value_mapping(
+            "pcc_solarpanels",
+            answers.has_solar_pv,
+            {
+                True: "RoofArray",
+                False: "Unknown",
+            },
+            default_mapping="Unknown",
+        ),
+        "pcc_solarthermal": None,  # Leave blank
+        "pcc_propertytype": (
+            mapping.infer_pcc_propertytype(
+                property_type=answers.property_type,
+                property_form=answers.property_form,
+            )[1]
+         ),
+        "pcc_bedrooms": None,  # Leave blank
+        "pcc_propertyage": (
+            option_value_mapping(
+                "pcc_propertyage",
+                answers.property_age_band,
+                {
+                    enums.PropertyAgeBand.BEFORE_1900: "Pre 1900",
+                    enums.PropertyAgeBand.FROM_1900: "1900 to 1929",
+                    enums.PropertyAgeBand.FROM_1930: "1930 to 1949",
+                    enums.PropertyAgeBand.FROM_1950: "1950 to 1966",
+                    enums.PropertyAgeBand.FROM_1967: "1967 to 1975",
+                    enums.PropertyAgeBand.FROM_1976: "1976 to 1990",
+                    enums.PropertyAgeBand.FROM_1991: "1991 to 2002",
+                    enums.PropertyAgeBand.SINCE_2003: "Since 2003",
+                    enums.PropertyAgeBand.UNKNOWN: "Unknown",
+                },
+                default_mapping="Unknown",
+            )
+        ),
+        "pcc_listedproperty": None,  # Leave blank
+        "pcc_rooftype": (
+            mapping.infer_pcc_rooftype(
+                unheated_loft=answers.unheated_loft,
+                room_in_roof=answers.room_in_roof,
+                flat_roof=answers.flat_roof,
+            )[1]
+         ),
+        "pcc_roofinsulation": None,  # Leave blank
+        "pcc_floortype": (
+            option_value_mapping(
+                "pcc_floortype",
+                answers.suspended_floor,
+                {
+                    True, "Yes",
+                    False, "Solid"
+                },
+                default_mapping="Unknown",
+            )
+        ),
+        "pcc_floorinsulation": (
+            option_value_mapping(
+                "pcc_floorinsulation",
+                answers.suspended_floor_insulated,
+                {
+                    True, "Insulated",
+                    False, "Uninsulated"
+                },
+                default_mapping="Unknown",
+            )
+        ),
+        "pcc_walltype": (
+            mapping.infer_pcc_walltype(
+                wall_type=answers.wall_type,
+                walls_insulated=answers.walls_insulated,
+            )[1]
+        ),
+        "pcc_wallinsulation": (
+            option_value_mapping(
+                "pcc_wallinsulation",
+                answers.walls_insulated,
+                {
+                    True, "Insulated",
+                    False, "Uninsulated"
+                },
+                default_mapping="Unknown",
+            )
+        ),
+        "pcc_glazing": None,  # Leave blank
+        "pcc_propertyprofilecomments": None,  # Leave blank
+        "pcc_epctype": (
+            option_value_mapping(
+                "pcc_epctype",
+                answers.selected_epc,
+                {
+                    True: "Acutal",
+                    False: "Unknown",
+                },
+                default_mapping="Unknown",
+            )
+        ),
+        "pcc_dateofmostrecentepc": None,  # leave blank
+        "pcc_gradeofmostrecentepc": None,  # leave blank
+        "pcc_scoreofmostrecentepc": (
+            answers.sap_rating
+        ),
         "pcc_hasapgrade": None,
         "pcc_hasapscore": None,
         "pcc_mouldgrowth": None,
@@ -296,16 +390,32 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_address1street1": answers.respondent_address_1,
         "pcc_address1street2": answers.respondent_address_2,
         "pcc_address1street3": answers.respondent_address_3,
-        "pcc_address1city": None,
+        "pcc_address1city": answers.respondent_address_3,
         "pcc_address1county": None,
         "pcc_address1zippostalcode": answers.respondent_postcode,
         "pcc_udprncontact": answers.respondent_udprn,
         # Occupier
         "pcc_occupiedfrom": None,
         "pcc_occupiedto": None,
-        "pcc_occupierrole": None,
+        "pcc_occupierrole": (
+            option_value_mapping(
+                "pcc_occupierrole",
+                answers.respondent_role,
+                {
+                    enums.RespondentRole.OWNER_OCCUPIER: "Owner - Type Not Specified ",
+                    enums.RespondentRole.TENANT: "Tenant - Type Not Specified",
+                    enums.RespondentRole.LANDLORD: "Landlord",
+                    enums.RespondentRole.OTHER: "Not Specified",
+                },
+                default_mapping="Not Specified"
+            )
+        ),
         # Landlord
-        "pcc_accountname": None,
+        "pcc_accountname": (
+            # TODO
+            None if answers.respondent_role == enums.RespondentRole.LANDLORD
+            else None
+        ),
         "pcc_lladdress1street1": None,
         "pcc_lladdress1street2": None,
         "pcc_lladdress1street3": None,

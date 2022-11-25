@@ -1,13 +1,12 @@
 import logging
-
-from functools  import wraps
-from typing import Callable
-
-from typing import Optional, Union, Literal
-from prospector.apps.questionnaire import enums
-from prospector.apps.questionnaire import models
+from functools import wraps
+from typing import Literal
+from typing import Optional
+from typing import Union
 
 from prospector.apis.crm import crm
+from prospector.apps.questionnaire import enums
+from prospector.apps.questionnaire import models
 
 
 logger = logging.getLogger(__name__)
@@ -24,27 +23,24 @@ def map_pcc_values(pcc_fieldname):
             option_name = func(*args, **kwargs)
 
             if option_name is None:
-                logger.error(
-                    UnmappedValueError(
-                        (option_name, kwargs)
-                    )
-                )
+                logger.error(UnmappedValueError((option_name, kwargs)))
                 return (option_name, None)
 
-            option_value = crm.option_value(
-                pcc_fieldname,
-                option_name
-            )
+            option_value = crm.option_value(pcc_fieldname, option_name)
             return (option_name, option_value)
+
         return wrapper
+
     return _map_pcc_values
 
 
-@map_pcc_values('pcc_primaryheatingfuel')
+@map_pcc_values("pcc_primaryheatingfuel")
 def infer_pcc_primaryheatingfuel(
     on_mains_gas: Optional[bool] = None,
     storage_heaters_present: Optional[bool] = None,
-    other_heating_fuel: Union[enums.NonGasFuel, Literal[""]] = "",  # non-nullable, but blank=True
+    other_heating_fuel: Union[
+        enums.NonGasFuel, Literal[""]
+    ] = "",  # non-nullable, but blank=True
 ) -> int:
     """Map between answers and pcc_primaryheatingfuel.
 
@@ -70,7 +66,7 @@ def infer_pcc_primaryheatingfuel(
         }.get(other_heating_fuel, "Unknown")
 
 
-@map_pcc_values('pcc_primaryheatingdeliverymethod')
+@map_pcc_values("pcc_primaryheatingdeliverymethod")
 def infer_pcc_primaryheatingdeliverymethod(
     gas_boiler_present: Optional[bool] = None,
     heat_pump_present: Optional[bool] = None,
@@ -93,7 +89,7 @@ def infer_pcc_primaryheatingdeliverymethod(
         return "Unknown"
 
 
-@map_pcc_values('pcc_boilertype')
+@map_pcc_values("pcc_boilertype")
 def infer_pcc_boilertype(
     gas_boiler_present: Optional[bool] = None,
     gas_boiler_age: Union[enums.BoilerAgeBand, Literal[""]] = "",
@@ -111,7 +107,7 @@ def infer_pcc_boilertype(
         return "Unknown"
 
 
-@map_pcc_values('pcc_heatingcontrols')
+@map_pcc_values("pcc_heatingcontrols")
 def infer_pcc_heatingcontrols(
     gas_boiler_present: Optional[bool] = None,
     smart_thermostat: Optional[bool] = None,
@@ -134,9 +130,9 @@ def infer_pcc_heatingcontrols(
             if ch_timer:
                 return "Programmer only"
             elif (
-                ch_timer is False and
-                smart_thermostat is False and
-                programmable_thermostat is False
+                ch_timer is False
+                and smart_thermostat is False
+                and programmable_thermostat is False
             ):
                 return "No Heating Control"
         else:
@@ -145,7 +141,7 @@ def infer_pcc_heatingcontrols(
         return "Unknown"
 
 
-@map_pcc_values('pcc_propertytype')
+@map_pcc_values("pcc_propertytype")
 def infer_pcc_propertytype(
     property_type: Union[enums.PropertyType, Literal[""]] = "",
     property_form: Union[enums.PropertyForm, Literal[""]] = "",
@@ -185,7 +181,7 @@ def infer_pcc_propertytype(
         return "Not yet specified"
 
 
-@map_pcc_values('pcc_rooftype')
+@map_pcc_values("pcc_rooftype")
 def infer_pcc_rooftype(
     unheated_loft: Optional[bool] = None,
     room_in_roof: Optional[bool] = None,
@@ -201,7 +197,7 @@ def infer_pcc_rooftype(
         return "Unknown"
 
 
-@map_pcc_values('pcc_walltype')
+@map_pcc_values("pcc_walltype")
 def infer_pcc_walltype(
     wall_type: Union[enums.WallType, Literal[""]] = "",
     walls_insulated: Optional[bool] = None,

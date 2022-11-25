@@ -1,31 +1,31 @@
 import pytest
 
-from prospector.apps.questionnaire import utils
-from prospector.apps.questionnaire import enums
-
 from . import factories
+from prospector.apps.questionnaire import enums
+from prospector.apps.questionnaire import utils
 
 
 @pytest.mark.django_db
 def test_get_income_rating():
-    """ Income rating:
+    """Income rating:
 
-        is dependant on the following fields (all effectively boolean):
+    is dependant on the following fields (all effectively boolean):
 
-            answers.total_income_lt_30k,
-            answers.take_home_lt_30k:
-                enums.IncomeIsUnderThreshold.choices
-                    YES = "YES", "Yes, it's under that figure"
-                    NO = "NO", "No, it's over that figure"
-                    UNKNOWN = "UNKNOWN", "I don't know"
+        answers.total_income_lt_30k,
+        answers.take_home_lt_30k:
+            enums.IncomeIsUnderThreshold.choices
+                YES = "YES", "Yes, it's under that figure"
+                NO = "NO", "No, it's over that figure"
+                UNKNOWN = "UNKNOWN", "I don't know"
 
-            answers.disability_benefits,
-            answers.child_benefit,
-            answers.income_lt_child_benefit_threshold
-                Boolean
+        answers.disability_benefits,
+        answers.child_benefit,
+        answers.income_lt_child_benefit_threshold
+            Boolean
 
-        has RAYG rating output
+    has RAYG rating output
     """
+
     def to_income_choices(value):
         return {
             True: enums.IncomeIsUnderThreshold.YES,
@@ -34,11 +34,11 @@ def test_get_income_rating():
         }[value]
 
     def get_test_vector(
-            total_income_lt_30k,
-            take_home_lt_30k,
-            disability_benefits,
-            child_benefit,
-            income_lt_child_benefit_threshold,
+        total_income_lt_30k,
+        take_home_lt_30k,
+        disability_benefits,
+        child_benefit,
+        income_lt_child_benefit_threshold,
     ):
         return factories.AnswersFactory(
             total_income_lt_30k=to_income_choices(total_income_lt_30k),
@@ -50,11 +50,8 @@ def test_get_income_rating():
 
     # Expected outputs
     income_ratings = {
-        enums.RAYG.RED: [
-            get_test_vector(False, False, False, False, True)
-        ],
-        enums.RAYG.AMBER: [
-        ],
+        enums.RAYG.RED: [get_test_vector(False, False, False, False, True)],
+        enums.RAYG.AMBER: [],
         enums.RAYG.YELLOW: [],
         enums.RAYG.GREEN: [],
     }
@@ -62,5 +59,3 @@ def test_get_income_rating():
     for expected_result, test_vectors in income_ratings.items():
         for test_vector in test_vectors:
             assert expected_result == utils.get_income_rating(test_vector)
-
-
