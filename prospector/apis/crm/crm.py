@@ -412,8 +412,8 @@ def map_crm(answers: models.Answers) -> dict:
         ),
         # Landlord
         "pcc_accountname": (
-            # TODO
-            None if answers.respondent_role == enums.RespondentRole.LANDLORD
+            "{} {}".format(first_name, last_name)
+            if answers.respondent_role == enums.RespondentRole.LANDLORD
             else None
         ),
         "pcc_lladdress1street1": None,
