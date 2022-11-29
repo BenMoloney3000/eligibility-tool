@@ -108,32 +108,32 @@ True,False,True,None,None,True,Programmer and thermostat,798360003,None
 True,False,True,None,None,False,Thermostat Only,798360004,None
 True,False,True,None,None,None,Thermostat Only,798360004,None
 True,False,False,True,True,True,Programmer only,798360002,None
-True,False,False,True,True,False,,None,None
-True,False,False,True,True,None,,None,None
+True,False,False,True,True,False,Unknown,798360000,None
+True,False,False,True,True,None,Unknown,798360000,None
 True,False,False,True,False,True,Programmer only,798360002,None
-True,False,False,True,False,False,,None,None
-True,False,False,True,False,None,,None,None
+True,False,False,True,False,False,Unknown,798360000,None
+True,False,False,True,False,None,Unknown,798360000,None
 True,False,False,True,None,True,Programmer only,798360002,None
-True,False,False,True,None,False,,None,None
-True,False,False,True,None,None,,None,None
+True,False,False,True,None,False,Unknown,798360000,None
+True,False,False,True,None,None,Unknown,798360000,None
 True,False,False,False,True,True,Programmer only,798360002,None
 True,False,False,False,True,False,No Heating Control,798360001,None
-True,False,False,False,True,None,,None,None
+True,False,False,False,True,None,Unknown,798360000,None
 True,False,False,False,False,True,Programmer only,798360002,None
 True,False,False,False,False,False,No Heating Control,798360001,None
-True,False,False,False,False,None,,None,None
+True,False,False,False,False,None,Unknown,798360000,None
 True,False,False,False,None,True,Programmer only,798360002,None
 True,False,False,False,None,False,No Heating Control,798360001,None
-True,False,False,False,None,None,,None,None
+True,False,False,False,None,None,Unknown,798360000,None
 True,False,False,None,True,True,Programmer only,798360002,None
-True,False,False,None,True,False,,None,None
-True,False,False,None,True,None,,None,None
+True,False,False,None,True,False,Unknown,798360000,None
+True,False,False,None,True,None,Unknown,798360000,None
 True,False,False,None,False,True,Programmer only,798360002,None
-True,False,False,None,False,False,,None,None
-True,False,False,None,False,None,,None,None
+True,False,False,None,False,False,Unknown,798360000,None
+True,False,False,None,False,None,Unknown,798360000,None
 True,False,False,None,None,True,Programmer only,798360002,None
-True,False,False,None,None,False,,None,None
-True,False,False,None,None,None,,None,None
+True,False,False,None,None,False,Unknown,798360000,None
+True,False,False,None,None,None,Unknown,798360000,None
 True,False,None,True,True,True,Unknown,798360000,None
 True,False,None,True,True,False,Unknown,798360000,None
 True,False,None,True,True,None,Unknown,798360000,None
@@ -189,32 +189,32 @@ True,None,True,None,None,True,Programmer and thermostat,798360003,None
 True,None,True,None,None,False,Thermostat Only,798360004,None
 True,None,True,None,None,None,Thermostat Only,798360004,None
 True,None,False,True,True,True,Programmer only,798360002,None
-True,None,False,True,True,False,,None,None
-True,None,False,True,True,None,,None,None
+True,None,False,True,True,False,Unknown,798360000,None
+True,None,False,True,True,None,Unknown,798360000,None
 True,None,False,True,False,True,Programmer only,798360002,None
-True,None,False,True,False,False,,None,None
-True,None,False,True,False,None,,None,None
+True,None,False,True,False,False,Unknown,798360000,None
+True,None,False,True,False,None,Unknown,798360000,None
 True,None,False,True,None,True,Programmer only,798360002,None
-True,None,False,True,None,False,,None,None
-True,None,False,True,None,None,,None,None
+True,None,False,True,None,False,Unknown,798360000,None
+True,None,False,True,None,None,Unknown,798360000,None
 True,None,False,False,True,True,Programmer only,798360002,None
-True,None,False,False,True,False,,None,None
-True,None,False,False,True,None,,None,None
+True,None,False,False,True,False,Unknown,798360000,None
+True,None,False,False,True,None,Unknown,798360000,None
 True,None,False,False,False,True,Programmer only,798360002,None
-True,None,False,False,False,False,,None,None
-True,None,False,False,False,None,,None,None
+True,None,False,False,False,False,Unknown,798360000,None
+True,None,False,False,False,None,Unknown,798360000,None
 True,None,False,False,None,True,Programmer only,798360002,None
-True,None,False,False,None,False,,None,None
-True,None,False,False,None,None,,None,None
+True,None,False,False,None,False,Unknown,798360000,None
+True,None,False,False,None,None,Unknown,798360000,None
 True,None,False,None,True,True,Programmer only,798360002,None
-True,None,False,None,True,False,,None,None
-True,None,False,None,True,None,,None,None
+True,None,False,None,True,False,Unknown,798360000,None
+True,None,False,None,True,None,Unknown,798360000,None
 True,None,False,None,False,True,Programmer only,798360002,None
-True,None,False,None,False,False,,None,None
-True,None,False,None,False,None,,None,None
+True,None,False,None,False,False,Unknown,798360000,None
+True,None,False,None,False,None,Unknown,798360000,None
 True,None,False,None,None,True,Programmer only,798360002,None
-True,None,False,None,None,False,,None,None
-True,None,False,None,None,None,,None,None
+True,None,False,None,None,False,Unknown,798360000,None
+True,None,False,None,None,None,Unknown,798360000,None
 True,None,None,True,True,True,Unknown,798360000,None
 True,None,None,True,True,False,Unknown,798360000,None
 True,None,None,True,True,None,Unknown,798360000,None
@@ -351,8 +351,8 @@ False,False,True,None,None,True,Unknown,798360000,None
 False,False,True,None,None,False,Unknown,798360000,None
 False,False,True,None,None,None,Unknown,798360000,None
 False,False,False,True,True,True,Programmer only,798360002,None
-False,False,False,True,True,False,,None,None
-False,False,False,True,True,None,,None,None
+False,False,False,True,True,False,Unknown,798360000,None
+False,False,False,True,True,None,Unknown,798360000,None
 False,False,False,True,False,True,Not applicable,798360005,None
 False,False,False,True,False,False,Not applicable,798360005,None
 False,False,False,True,False,None,Not applicable,798360005,None
@@ -361,7 +361,7 @@ False,False,False,True,None,False,Unknown,798360000,None
 False,False,False,True,None,None,Unknown,798360000,None
 False,False,False,False,True,True,Programmer only,798360002,None
 False,False,False,False,True,False,No Heating Control,798360001,None
-False,False,False,False,True,None,,None,None
+False,False,False,False,True,None,Unknown,798360000,None
 False,False,False,False,False,True,Not applicable,798360005,None
 False,False,False,False,False,False,Not applicable,798360005,None
 False,False,False,False,False,None,Not applicable,798360005,None
@@ -369,8 +369,8 @@ False,False,False,False,None,True,Unknown,798360000,None
 False,False,False,False,None,False,Unknown,798360000,None
 False,False,False,False,None,None,Unknown,798360000,None
 False,False,False,None,True,True,Programmer only,798360002,None
-False,False,False,None,True,False,,None,None
-False,False,False,None,True,None,,None,None
+False,False,False,None,True,False,Unknown,798360000,None
+False,False,False,None,True,None,Unknown,798360000,None
 False,False,False,None,False,True,Not applicable,798360005,None
 False,False,False,None,False,False,Not applicable,798360005,None
 False,False,False,None,False,None,Not applicable,798360005,None
@@ -432,8 +432,8 @@ False,None,True,None,None,True,Unknown,798360000,None
 False,None,True,None,None,False,Unknown,798360000,None
 False,None,True,None,None,None,Unknown,798360000,None
 False,None,False,True,True,True,Programmer only,798360002,None
-False,None,False,True,True,False,,None,None
-False,None,False,True,True,None,,None,None
+False,None,False,True,True,False,Unknown,798360000,None
+False,None,False,True,True,None,Unknown,798360000,None
 False,None,False,True,False,True,Not applicable,798360005,None
 False,None,False,True,False,False,Not applicable,798360005,None
 False,None,False,True,False,None,Not applicable,798360005,None
@@ -441,8 +441,8 @@ False,None,False,True,None,True,Unknown,798360000,None
 False,None,False,True,None,False,Unknown,798360000,None
 False,None,False,True,None,None,Unknown,798360000,None
 False,None,False,False,True,True,Programmer only,798360002,None
-False,None,False,False,True,False,,None,None
-False,None,False,False,True,None,,None,None
+False,None,False,False,True,False,Unknown,798360000,None
+False,None,False,False,True,None,Unknown,798360000,None
 False,None,False,False,False,True,Not applicable,798360005,None
 False,None,False,False,False,False,Not applicable,798360005,None
 False,None,False,False,False,None,Not applicable,798360005,None
@@ -450,8 +450,8 @@ False,None,False,False,None,True,Unknown,798360000,None
 False,None,False,False,None,False,Unknown,798360000,None
 False,None,False,False,None,None,Unknown,798360000,None
 False,None,False,None,True,True,Programmer only,798360002,None
-False,None,False,None,True,False,,None,None
-False,None,False,None,True,None,,None,None
+False,None,False,None,True,False,Unknown,798360000,None
+False,None,False,None,True,None,Unknown,798360000,None
 False,None,False,None,False,True,Not applicable,798360005,None
 False,None,False,None,False,False,Not applicable,798360005,None
 False,None,False,None,False,None,Not applicable,798360005,None
@@ -594,8 +594,8 @@ None,False,True,None,None,True,Unknown,798360000,None
 None,False,True,None,None,False,Unknown,798360000,None
 None,False,True,None,None,None,Unknown,798360000,None
 None,False,False,True,True,True,Programmer only,798360002,None
-None,False,False,True,True,False,,None,None
-None,False,False,True,True,None,,None,None
+None,False,False,True,True,False,Unknown,798360000,None
+None,False,False,True,True,None,Unknown,798360000,None
 None,False,False,True,False,True,Unknown,798360000,None
 None,False,False,True,False,False,Unknown,798360000,None
 None,False,False,True,False,None,Unknown,798360000,None
@@ -604,7 +604,7 @@ None,False,False,True,None,False,Unknown,798360000,None
 None,False,False,True,None,None,Unknown,798360000,None
 None,False,False,False,True,True,Programmer only,798360002,None
 None,False,False,False,True,False,No Heating Control,798360001,None
-None,False,False,False,True,None,,None,None
+None,False,False,False,True,None,Unknown,798360000,None
 None,False,False,False,False,True,Unknown,798360000,None
 None,False,False,False,False,False,Unknown,798360000,None
 None,False,False,False,False,None,Unknown,798360000,None
@@ -612,8 +612,8 @@ None,False,False,False,None,True,Unknown,798360000,None
 None,False,False,False,None,False,Unknown,798360000,None
 None,False,False,False,None,None,Unknown,798360000,None
 None,False,False,None,True,True,Programmer only,798360002,None
-None,False,False,None,True,False,,None,None
-None,False,False,None,True,None,,None,None
+None,False,False,None,True,False,Unknown,798360000,None
+None,False,False,None,True,None,Unknown,798360000,None
 None,False,False,None,False,True,Unknown,798360000,None
 None,False,False,None,False,False,Unknown,798360000,None
 None,False,False,None,False,None,Unknown,798360000,None
@@ -675,8 +675,8 @@ None,None,True,None,None,True,Unknown,798360000,None
 None,None,True,None,None,False,Unknown,798360000,None
 None,None,True,None,None,None,Unknown,798360000,None
 None,None,False,True,True,True,Programmer only,798360002,None
-None,None,False,True,True,False,,None,None
-None,None,False,True,True,None,,None,None
+None,None,False,True,True,False,Unknown,798360000,None
+None,None,False,True,True,None,Unknown,798360000,None
 None,None,False,True,False,True,Unknown,798360000,None
 None,None,False,True,False,False,Unknown,798360000,None
 None,None,False,True,False,None,Unknown,798360000,None
@@ -684,8 +684,8 @@ None,None,False,True,None,True,Unknown,798360000,None
 None,None,False,True,None,False,Unknown,798360000,None
 None,None,False,True,None,None,Unknown,798360000,None
 None,None,False,False,True,True,Programmer only,798360002,None
-None,None,False,False,True,False,,None,None
-None,None,False,False,True,None,,None,None
+None,None,False,False,True,False,Unknown,798360000,None
+None,None,False,False,True,None,Unknown,798360000,None
 None,None,False,False,False,True,Unknown,798360000,None
 None,None,False,False,False,False,Unknown,798360000,None
 None,None,False,False,False,None,Unknown,798360000,None
@@ -693,8 +693,8 @@ None,None,False,False,None,True,Unknown,798360000,None
 None,None,False,False,None,False,Unknown,798360000,None
 None,None,False,False,None,None,Unknown,798360000,None
 None,None,False,None,True,True,Programmer only,798360002,None
-None,None,False,None,True,False,,None,None
-None,None,False,None,True,None,,None,None
+None,None,False,None,True,False,Unknown,798360000,None
+None,None,False,None,True,None,Unknown,798360000,None
 None,None,False,None,False,True,Unknown,798360000,None
 None,None,False,None,False,False,Unknown,798360000,None
 None,None,False,None,False,None,Unknown,798360000,None

@@ -1,0 +1,6 @@
+respondent_role,option_name,option_value,error
+OWNER,Owner - Type Not Specified,798360010,None
+TENANT,Tenant - Type Not Specified,798360002,None
+LANDLORD,Landlord,798360009,None
+OTHER,Not Specified,798360006,None
+,Not Specified,798360006,None

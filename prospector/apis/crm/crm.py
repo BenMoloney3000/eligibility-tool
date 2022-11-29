@@ -303,8 +303,8 @@ def map_crm(answers: models.Answers) -> dict:
                 "pcc_floortype",
                 answers.suspended_floor,
                 {
-                    True, "Yes",
-                    False, "Solid"
+                    True: "Yes",
+                    False: "Solid"
                 },
                 default_mapping="Unknown",
             )
@@ -314,8 +314,8 @@ def map_crm(answers: models.Answers) -> dict:
                 "pcc_floorinsulation",
                 answers.suspended_floor_insulated,
                 {
-                    True, "Insulated",
-                    False, "Uninsulated"
+                    True: "Insulated",
+                    False: "Uninsulated"
                 },
                 default_mapping="Unknown",
             )
@@ -331,8 +331,8 @@ def map_crm(answers: models.Answers) -> dict:
                 "pcc_wallinsulation",
                 answers.walls_insulated,
                 {
-                    True, "Insulated",
-                    False, "Uninsulated"
+                    True: "Insulated",
+                    False: "Uninsulated"
                 },
                 default_mapping="Unknown",
             )
@@ -365,19 +365,20 @@ def map_crm(answers: models.Answers) -> dict:
             "pcc_occupanteligibilityscore",
             answers.income_rating,
             {
-                enums.RAYG.RED: "Red",
-                enums.RAYG.AMBER: "Amber",
-                enums.RAYG.YELLOW: "Yellow",
-                enums.RAYG.GREEN: "Green",
+                enums.RAYG.RED: "\U0001f7e5 Red",
+                enums.RAYG.AMBER: "\U0001f7e7 Amber",
+                enums.RAYG.YELLOW: "\U0001f7e8 Yellow",
+                enums.RAYG.GREEN: "\U0001f7e9 Green",
             },
         ),
         "pcc_propertyeligibilityscore": option_value_mapping(
             "pcc_occupanteligibilityscore",
             answers.property_rating,
             {
-                enums.RAYG.RED: "Red",
-                enums.RAYG.AMBER: "Amber",
-                enums.RAYG.GREEN: "Green",
+                enums.RAYG.RED: "\U0001f7e5 Red",
+                enums.RAYG.AMBER: "\U0001f7e7 Amber",
+                enums.RAYG.YELLOW: "\U0001f7e8 Yellow",
+                enums.RAYG.GREEN: "\U0001f7e9 Green",
             },
         ),
         # Contact
@@ -398,17 +399,9 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_occupiedfrom": None,
         "pcc_occupiedto": None,
         "pcc_occupierrole": (
-            option_value_mapping(
-                "pcc_occupierrole",
-                answers.respondent_role,
-                {
-                    enums.RespondentRole.OWNER_OCCUPIER: "Owner - Type Not Specified ",
-                    enums.RespondentRole.TENANT: "Tenant - Type Not Specified",
-                    enums.RespondentRole.LANDLORD: "Landlord",
-                    enums.RespondentRole.OTHER: "Not Specified",
-                },
-                default_mapping="Not Specified"
-            )
+            mapping.infer_pcc_occupierrole(
+                respondent_role=answers.respondent_role,
+            )[1]
         ),
         # Landlord
         "pcc_accountname": (

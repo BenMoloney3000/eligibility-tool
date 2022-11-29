@@ -229,7 +229,7 @@ def test_crm_create_with_timeout(
 @pytest.fixture()
 def pcc_entity_definitions(request):
     fixture_dir = os.path.dirname(request.module.__file__)
-    pcc_entity_definitions = os.path.join(fixture_dir, "./pcc_entity_definitions.json")
+    pcc_entity_definitions = os.path.join(fixture_dir, "../entity_definitions.json")
     with open(pcc_entity_definitions) as f:
         return json.load(f)
 

@@ -137,8 +137,7 @@ def infer_pcc_heatingcontrols(
                 return "No Heating Control"
         else:
             return "Unknown"
-    else:
-        return "Unknown"
+    return "Unknown"
 
 
 @map_pcc_values("pcc_propertytype")
@@ -148,9 +147,9 @@ def infer_pcc_propertytype(
 ) -> int:
     if property_type == enums.PropertyType.BUNGALOW:
         if property_form == enums.PropertyForm.DETACHED:
-            return "Bungalow - Detatched"
+            return "Bungalow - Detached"
         elif property_form == enums.PropertyForm.SEMI_DETACHED:
-            return "Bungalow - Semi Deatched"
+            return "Bungalow - Semi Detached"
         else:
             return "Bungalow - Not Specified"
     elif property_type == enums.PropertyType.FLAT:
@@ -166,7 +165,7 @@ def infer_pcc_propertytype(
         if property_form == enums.PropertyForm.DETACHED:
             return "House - Detached"
         elif property_form == enums.PropertyForm.SEMI_DETACHED:
-            return "House - Semi Detatched"
+            return "House - Semi Detached"
         elif property_form == enums.PropertyForm.END_TERRACE:
             return "Terraced - End"
         elif property_form == enums.PropertyForm.MID_TERRACE:
@@ -178,7 +177,7 @@ def infer_pcc_propertytype(
     elif property_type == enums.PropertyType.PARK_HOME:
         return "Park home"
     else:
-        return "Not yet specified"
+        return "Unknown"
 
 
 @map_pcc_values("pcc_rooftype")
@@ -209,3 +208,15 @@ def infer_pcc_walltype(
             return "Brick cavity - not insulated"
     else:
         return "Unknown"
+
+
+@map_pcc_values("pcc_occupierrole")
+def infer_pcc_occupierrole(
+    respondent_role: Union[enums.RespondentRole, Literal[""]] = "",
+) -> int:
+    return {
+        enums.RespondentRole.OWNER_OCCUPIER: "Owner - Type Not Specified",
+        enums.RespondentRole.TENANT: "Tenant - Type Not Specified",
+        enums.RespondentRole.LANDLORD: "Landlord",
+        enums.RespondentRole.OTHER: "Not Specified",
+    }.get(respondent_role, "Not Specified")

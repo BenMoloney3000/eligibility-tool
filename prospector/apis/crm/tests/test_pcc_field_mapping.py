@@ -256,3 +256,9 @@ def test_infer_pcc_rooftype(pcc_mapping):
 @pytest.mark.parametrize(*parametrize(mapping.infer_pcc_walltype, name="func_args"))
 def test_infer_pcc_walltype(pcc_mapping):
     pcc_mapping("infer_pcc_walltype")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_occupierrole, name="func_args"))
+def test_infer_pcc_occupierrole(pcc_mapping):
+    pcc_mapping("infer_pcc_occupierrole")
