@@ -345,6 +345,7 @@ pytest==6.2.5
     #   pytest-cov
     #   pytest-django
     #   pytest-freezegun
+    #   pytest-mock
     #   pytest-pspec
     #   pytest-sugar
     #   pytest-testmon
@@ -356,6 +357,8 @@ pytest-django==4.5.2
 pytest-freezegun==0.4.2
     # via -r requirements/local.in
 pytest-harvest==1.10.4
+    # via -r requirements/local.in
+pytest-mock==3.10.0
     # via -r requirements/local.in
 pytest-pspec==0.0.4
     # via -r requirements/local.in

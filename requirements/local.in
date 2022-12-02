@@ -20,6 +20,7 @@ pytest  # https://github.com/pytest-dev/pytest
 pytest-sugar
 pytest-django  # https://github.com/pytest-dev/pytest-django
 pytest-cov
+pytest-mock
 requests-mock
 factory-boy
 pytest-watch

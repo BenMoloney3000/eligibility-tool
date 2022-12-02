@@ -12,6 +12,8 @@ from prospector.apps.crm.models import CrmResult
 from prospector.apps.crm.models import CrmState
 from prospector.apps.questionnaire import enums
 
+from prospector.apps.questionnaire import services
+
 
 @pytest.fixture
 def mock_crm_response(mock_crm_api_settings):
@@ -349,3 +351,12 @@ def test_answers_to_submit_no_resubmit_with_crmresult(answers, crmresult):
     # records.
     unsubmitted_answers = crm.answers_to_submit()
     assert set(unsubmitted_answers) == set(dummy_answers_batch[1::2])
+
+
+@pytest.mark.django_db
+def test_close_questionnaire_calls_async_crm_create(mocker, answers):
+    dummy_answers = answers()
+
+    mock_task = mocker.patch('prospector.apps.crm.tasks.crm_create.delay')
+    services.close_questionnaire(dummy_answers)
+    assert mock_task.call_count == 1

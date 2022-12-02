@@ -10,6 +10,7 @@ from django.utils import timezone
 from . import enums
 from . import models
 from prospector.apis.epc import EPCData
+from prospector.apps.crm.tasks import crm_create
 
 
 logger = logging.getLogger(__name__)
@@ -625,6 +626,8 @@ def close_questionnaire(answers: models.Answers):
 
     answers.completed_at = timezone.now()
     answers.save()
+
+    crm_create.delay(str(answers.uuid))
 
     context = {
         "full_name": f"{answers.first_name} {answers.last_name}",
