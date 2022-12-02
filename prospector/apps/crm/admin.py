@@ -4,6 +4,7 @@ from import_export.admin import ExportMixin
 from . import models
 
 
+
 @admin.register(models.CrmResult)
 class QuestionnaireAdmin(ExportMixin, admin.ModelAdmin):
     list_display = (
@@ -12,3 +13,5 @@ class QuestionnaireAdmin(ExportMixin, admin.ModelAdmin):
         "state",
         "result",
     )
+    list_select_related = ('answers',)
+    raw_id_admin = ('answers', )
