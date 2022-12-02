@@ -7,7 +7,6 @@ from celery_singleton import Singleton
 from prospector.apis.crm import crm
 from prospector.apps.crm.models import Answers
 from prospector.apps.crm.models import CrmState
-from prospector.apps.questionnaire import models
 
 
 class CRMApiRequestTask(Singleton):
@@ -24,7 +23,6 @@ class CRMApiRequestTask(Singleton):
 @shared_task(base=CRMApiRequestTask, bind=True, raise_on_duplicate=True)
 def crm_create(self, answers_uuid: uuid.uuid4) -> Optional[dict]:
     result = None
-    state = None
     answers = Answers.objects.get(uuid=answers_uuid)
 
     # TODO: Updates not yet supported

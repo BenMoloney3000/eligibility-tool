@@ -254,10 +254,10 @@ def map_crm(answers: models.Answers) -> dict:
             heat_pump_present=answers.heat_pump_present,
             ch_timer=answers.ch_timer,
         )[1],
-        "pcc_solarpanels": option_value_mapping(
+        "pcc_solarpanels": (
             mapping.infer_pcc_solarpanels(
                 has_solar_pv=answers.has_solar_pv,
-            )[1],
+            )[1]
         ),
         "pcc_solarthermal": None,  # Leave blank
         "pcc_propertytype": (
@@ -265,7 +265,7 @@ def map_crm(answers: models.Answers) -> dict:
                 property_type=answers.property_type,
                 property_form=answers.property_form,
             )[1]
-         ),
+        ),
         "pcc_bedrooms": None,  # Leave blank
         "pcc_propertyage": (
             option_value_mapping(
@@ -292,16 +292,13 @@ def map_crm(answers: models.Answers) -> dict:
                 room_in_roof=answers.room_in_roof,
                 flat_roof=answers.flat_roof,
             )[1]
-         ),
+        ),
         "pcc_roofinsulation": None,  # Leave blank
         "pcc_floortype": (
             option_value_mapping(
                 "pcc_floortype",
                 answers.suspended_floor,
-                {
-                    True: "Yes",
-                    False: "Solid"
-                },
+                {True: "Yes", False: "Solid"},
                 default_mapping="Unknown",
             )
         ),
@@ -309,10 +306,7 @@ def map_crm(answers: models.Answers) -> dict:
             option_value_mapping(
                 "pcc_floorinsulation",
                 answers.suspended_floor_insulated,
-                {
-                    True: "Insulated",
-                    False: "Uninsulated"
-                },
+                {True: "Insulated", False: "Uninsulated"},
                 default_mapping="Unknown",
             )
         ),
@@ -326,10 +320,7 @@ def map_crm(answers: models.Answers) -> dict:
             option_value_mapping(
                 "pcc_wallinsulation",
                 answers.walls_insulated,
-                {
-                    True: "Insulated",
-                    False: "Uninsulated"
-                },
+                {True: "Insulated", False: "Uninsulated"},
                 default_mapping="Unknown",
             )
         ),
@@ -348,9 +339,7 @@ def map_crm(answers: models.Answers) -> dict:
         ),
         "pcc_dateofmostrecentepc": None,  # leave blank
         "pcc_gradeofmostrecentepc": None,  # leave blank
-        "pcc_scoreofmostrecentepc": (
-            answers.sap_rating
-        ),
+        "pcc_scoreofmostrecentepc": (answers.sap_rating),
         "pcc_hasapgrade": None,
         "pcc_hasapscore": None,
         "pcc_mouldgrowth": None,
@@ -401,7 +390,7 @@ def map_crm(answers: models.Answers) -> dict:
         ),
         # Landlord
         "pcc_accountname": (
-            "{} {}".format(first_name, last_name)
+            "{} {}".format(answers.first_name, answers.last_name)
             if answers.respondent_role == enums.RespondentRole.LANDLORD
             else None
         ),

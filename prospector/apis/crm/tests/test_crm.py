@@ -11,7 +11,6 @@ from prospector.apps.crm import tasks
 from prospector.apps.crm.models import CrmResult
 from prospector.apps.crm.models import CrmState
 from prospector.apps.questionnaire import enums
-
 from prospector.apps.questionnaire import services
 
 
@@ -194,7 +193,7 @@ def test_crm_create(mock_session_token, mock_crm_request, mock_crm_response, ans
     )
 
     assert dummy_answers.crmresult_set.count() == 0
-    task_result = tasks.crm_create(dummy_answers.uuid)
+    tasks.crm_create(dummy_answers.uuid)
     assert mocker.call_count == 1
     assert dummy_answers.crmresult_set.count() == 1
 
@@ -204,14 +203,11 @@ def test_crm_create(mock_session_token, mock_crm_request, mock_crm_response, ans
 
 
 @pytest.mark.django_db
-def test_crm_create_with_timeout(
-    mock_session_token, mock_crm_request_exc, mock_crm_response, answers
-):
+def test_crm_create_with_timeout(mock_session_token, mock_crm_request_exc, answers):
     dummy_answers = answers()
 
     # mock request
     query = "pcc_retrofitintermediates"
-    response = mock_crm_response(query)
     mocker = mock_crm_request_exc(
         query,
         mock_request_method="post",
@@ -220,7 +216,7 @@ def test_crm_create_with_timeout(
 
     assert dummy_answers.crmresult_set.count() == 0
     with pytest.raises(requests.exceptions.ConnectTimeout):
-        task_result = tasks.crm_create(dummy_answers.uuid)
+        tasks.crm_create(dummy_answers.uuid)
         assert mocker.call_count == 1
         assert dummy_answers.crmresult_set.count() == 1
 
@@ -357,6 +353,6 @@ def test_answers_to_submit_no_resubmit_with_crmresult(answers, crmresult):
 def test_close_questionnaire_calls_async_crm_create(mocker, answers):
     dummy_answers = answers()
 
-    mock_task = mocker.patch('prospector.apps.crm.tasks.crm_create.delay')
+    mock_task = mocker.patch("prospector.apps.crm.tasks.crm_create.delay")
     services.close_questionnaire(dummy_answers)
     assert mock_task.call_count == 1

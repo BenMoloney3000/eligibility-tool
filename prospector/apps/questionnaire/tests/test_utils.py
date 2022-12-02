@@ -7,7 +7,7 @@ from prospector.apps.questionnaire import utils
 
 @pytest.mark.django_db
 def test_get_income_rating():
-    """Income rating:
+    """Test get_Income_rating.
 
     is dependant on the following fields (all effectively boolean):
 

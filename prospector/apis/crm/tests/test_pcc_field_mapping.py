@@ -13,10 +13,7 @@ from typing import Optional
 import pytest
 from pytest_harvest import create_results_bag_fixture
 
-from prospector.apis.crm import crm
 from prospector.apis.crm import mapping
-from prospector.apps.questionnaire import enums
-
 
 results_bag = create_results_bag_fixture("store", name="results_bag")
 
@@ -108,7 +105,8 @@ def store(request):
     # TODO: maybe check the type of result (currently we presume everything the
     # a lookup field.
 
-    show_none = lambda x: "None" if x is None else x
+    def show_none(x):
+        return "None" if x is None else x
 
     op_field_names = [
         "option_name",

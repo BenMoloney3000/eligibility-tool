@@ -6,7 +6,6 @@ from typing import Union
 
 from prospector.apis.crm import crm
 from prospector.apps.questionnaire import enums
-from prospector.apps.questionnaire import models
 
 
 logger = logging.getLogger(__name__)
@@ -227,6 +226,6 @@ def infer_pcc_solarpanels(
     has_solar_pv: Optional[bool] = None,
 ) -> int:
     return {
-            True: "Roof Array",
-            False: "None",
+        True: "Roof Array",
+        False: "None",
     }.get(has_solar_pv, "Unknown")
