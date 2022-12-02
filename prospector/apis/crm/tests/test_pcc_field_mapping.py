@@ -187,6 +187,7 @@ def pcc_mapping(
         except Exception as e:
             logger.error("mapping_func exception %s", str(e))
             error = str(e)
+            pytest.fail(error)
         else:
             # Test no unmapped option_names
             assert option_name is not None
@@ -262,3 +263,9 @@ def test_infer_pcc_walltype(pcc_mapping):
 @pytest.mark.parametrize(*parametrize(mapping.infer_pcc_occupierrole, name="func_args"))
 def test_infer_pcc_occupierrole(pcc_mapping):
     pcc_mapping("infer_pcc_occupierrole")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_solarpanels, name="func_args"))
+def test_infer_pcc_solarpanels(pcc_mapping):
+    pcc_mapping("infer_pcc_solarpanels")

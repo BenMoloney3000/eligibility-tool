@@ -1,0 +1,4 @@
+has_solar_pv,option_name,option_value,error
+True,Roof Array,798360001,None
+False,None,798360002,None
+None,Unknown,798360000,None

@@ -220,3 +220,13 @@ def infer_pcc_occupierrole(
         enums.RespondentRole.LANDLORD: "Landlord",
         enums.RespondentRole.OTHER: "Not Specified",
     }.get(respondent_role, "Not Specified")
+
+
+@map_pcc_values("pcc_solarpanels")
+def infer_pcc_solarpanels(
+    has_solar_pv: Optional[bool] = None,
+) -> int:
+    return {
+            True: "Roof Array",
+            False: "None",
+    }.get(has_solar_pv, "Unknown")

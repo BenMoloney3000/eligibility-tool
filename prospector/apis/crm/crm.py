@@ -255,13 +255,9 @@ def map_crm(answers: models.Answers) -> dict:
             ch_timer=answers.ch_timer,
         )[1],
         "pcc_solarpanels": option_value_mapping(
-            "pcc_solarpanels",
-            answers.has_solar_pv,
-            {
-                True: "RoofArray",
-                False: "Unknown",
-            },
-            default_mapping="Unknown",
+            mapping.infer_pcc_solarpanels(
+                has_solar_pv=answers.has_solar_pv,
+            )[1],
         ),
         "pcc_solarthermal": None,  # Leave blank
         "pcc_propertytype": (
