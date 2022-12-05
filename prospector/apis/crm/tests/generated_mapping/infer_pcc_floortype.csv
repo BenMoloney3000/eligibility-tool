@@ -1,0 +1,4 @@
+suspended_floor,option_name,option_value,error
+True,Suspended,798360003,None
+False,Solid,798360001,None
+None,Unknown,798360000,None

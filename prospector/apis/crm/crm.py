@@ -295,12 +295,9 @@ def map_crm(answers: models.Answers) -> dict:
         ),
         "pcc_roofinsulation": None,  # Leave blank
         "pcc_floortype": (
-            option_value_mapping(
-                "pcc_floortype",
+            mapping.infer_pcc_floortype(
                 answers.suspended_floor,
-                {True: "Yes", False: "Solid"},
-                default_mapping="Unknown",
-            )
+            )[1]
         ),
         "pcc_floorinsulation": (
             option_value_mapping(

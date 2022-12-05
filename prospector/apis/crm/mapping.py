@@ -229,3 +229,10 @@ def infer_pcc_solarpanels(
         True: "Roof Array",
         False: "None",
     }.get(has_solar_pv, "Unknown")
+
+
+@map_pcc_values("pcc_floortype")
+def infer_pcc_floortype(
+    suspended_floor: Optional[bool] = None,
+) -> int:
+    return {True: "Suspended", False: "Solid"}.get(suspended_floor, "Unknown")

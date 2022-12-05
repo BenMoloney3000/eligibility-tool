@@ -267,3 +267,9 @@ def test_infer_pcc_occupierrole(pcc_mapping):
 @pytest.mark.parametrize(*parametrize(mapping.infer_pcc_solarpanels, name="func_args"))
 def test_infer_pcc_solarpanels(pcc_mapping):
     pcc_mapping("infer_pcc_solarpanels")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_floortype, name="func_args"))
+def test_infer_pcc_floortype(pcc_mapping):
+    pcc_mapping("infer_pcc_floortype")
