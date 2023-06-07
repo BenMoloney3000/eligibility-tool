@@ -19,6 +19,13 @@ class CRMApiRequestTask(Singleton):
             self._session = crm.get_authorised_session(client)
         return self._session
 
+    @property
+    def new_session(self):
+        # Always return new session
+        client = crm.get_client()
+        self._session = crm.get_authorised_session(client)
+        return self._session
+
 
 @shared_task(base=CRMApiRequestTask, bind=True, raise_on_duplicate=True)
 def crm_create(self, answers_uuid: uuid.uuid4) -> Optional[dict]:
@@ -31,9 +38,12 @@ def crm_create(self, answers_uuid: uuid.uuid4) -> Optional[dict]:
 
     try:
         result = crm.create_pcc_record(crm_create.session, crm.map_crm(answers))
-    except Exception as e:
-        answers.crmresult_set.create(result=result, state=CrmState.FAILURE)
-        raise e  # re-raise for celery
-
+    except Exception:
+        try:
+            # Retry with new session
+            result = crm.create_pcc_record(crm_create.new_session, crm.map_crm(answers))
+        except Exception as e:
+            answers.crmresult_set.create(result=result, state=CrmState.FAILURE)
+            raise e  # re-raise for celery
     answers.crmresult_set.create(result=result, state=CrmState.SUCCESS)
     return result
