@@ -280,6 +280,7 @@ urlpatterns = [
         name="adult4-savings-income",
     ),
     path("summary", views.HouseholdSummary.as_view(), name="household-summary"),
+    path("answers-summary", views.AnswersSummary.as_view(), name="answers-summary"),
     path("eligibility", views.EligibilitySummary.as_view(), name="eligibility-summary"),
     path("complete", views.Completed.as_view(), name="completed"),
 ]

@@ -18,7 +18,6 @@ from prospector.apps.questionnaire import services
 from prospector.apps.questionnaire import utils
 from prospector.trail import mixin
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -124,6 +123,14 @@ class Question(mixin.TrailMixin, FormView):
 
     def get_percent_complete(self) -> int:
         return getattr(self, "percent_complete", 0)
+
+
+class NoQuestion(Question):
+    """Produces a non-question view, e.g. summary or info view."""
+
+    type_: QuestionType
+    question: None
+    next: str
 
 
 class SingleQuestion(Question):

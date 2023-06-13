@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Home upgrade eligibility: {{ user_data.title }} | Plymouth Energy Community{% endblock %}
+
+{% block content %}
+
+    <div class="progress">
+        <label for="progress">progress</label>
+        <progress id="progress" min="0" max="100" value="{{ percent_complete }}">{{ percent_complete }}</progress>
+    </div>
+    {% if prev_url %}
+        <a href="{% url prev_url %}">&larr;&nbsp;Back to previous question</a>
+    {% endif %}
+
+    {% block question_text %}
+        <h2>Summary of your answers</h2>
+    {% endblock question_text %}
+
+    <h4>Your details</h4>
+
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>{{ user_data.full_name }}</td>
+            <td><a href='{% url "questionnaire:respondent-name" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{ user_data.email }}</td>
+            <td><a href='{% url "questionnaire:email" %}'>CHANGE</a></td>
+        </tr>
+        {% if user_data.address %}
+            <tr>
+                <td>Address</td>
+                <td>{{ user_data.address }}</td>
+                <td><a href='{% url "questionnaire:respondent-address" %}'>CHANGE</a></td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>Phone number</td>
+            <td>{% if user_data.phone %}{{ user_data.phone }}{% else %}N/A{% endif %}</td>
+            <td><a href='{% url "questionnaire:contact-phone" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>Mobile number</td>
+            <td>{% if user_data.mobile %}{{ user_data.mobile }}{% else %}N/A{% endif %}</td>
+            <td><a href='{% url "questionnaire:contact-phone" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>What is your relationship to the property?</td>
+            <td>{{ user_data.respondent_role|lower|capfirst }}</td>
+            <td><a href='{% url "questionnaire:respondent-role" %}'>CHANGE</a></td>
+        </tr>
+        {% if user_data.respondent_role == "I am filling this out on behalf of the tenant or owner" %}
+            <tr>
+                <td>Whose home is this?</td>
+                <td>{{ user_data.occupant_name }}</td>
+                <td><a href='{% url "questionnaire:occupant-name" %}'>CHANGE</a></td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <h4>Details of the property</h4>
+
+    <table>
+        <tr>
+            <td>Address</td>
+            <td>{{ user_data.property_address }}</td>
+            <td><a href='{% url "questionnaire:property-address" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>What is the tenure of the property - how is it occupied?</td>
+            <td>{{ user_data.ownership|lower|capfirst }}</td>
+            <td><a href='{% url "questionnaire:property-ownership" %}'>CHANGE</a></td>
+        </tr>
+    </table>
+
+    <h4>Property energy performance details</h4>
+
+    <table>
+        <tr>
+            <td>Type</td>
+            <td>{{ user_data.property_type|lower|capfirst }}</td>
+            <td><a href='{% url "questionnaire:property-type" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>When was the property built?</td>
+            <td>{{ user_data.property_age_band }}</td>
+            <td><a href='{% url "questionnaire:property-age-band" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>What type of outside walls does the property have?</td>
+            <td>{{ user_data.wall_type|lower|capfirst }}</td>
+            <td><a href='{% url "questionnaire:wall-type" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>Are the outside walls in this property insulated?</td>
+            <td>{{ user_data.walls_insulated|yesno|capfirst }}</td>
+            <td><a href='{% url "questionnaire:walls-insulated" %}'>CHANGE</a></td>
+        </tr>
+        <tr>
+            <td>Does the property have a suspended timber ground floor with a void underneath?</td>
+            <td>{{ user_data.suspended_floor|yesno|capfirst }}</td>
+            <td><a href='{% url "questionnaire:suspended-floor" %}'>CHANGE</a></td>
+        </tr>
+        {% if user_data.suspended_floor %}
+            <tr>
+                <td>Is the suspended timber floor insulated?</td>
+                <td>{{ user_data.suspended_floor_insulated|yesno|capfirst }}</td>
+                <td><a href='{% url "questionnaire:suspended-floor-insulated" %}'>CHANGE</a></td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>Does the property have an unheated loft space directly above it?</td>
+            <td>{{ user_data.unheated_loft|yesno|capfirst }}</td>
+            <td><a href='{% url "questionnaire:unheated-loft" %}'>CHANGE</a></td>
+        </tr>
+        {% if user_data.unheated_loft %}
+            <tr>
+                <td>Has the unheated loft space been well insulated?</td>
+                <td>{{ user_data.roof_space_insulated|yesno|capfirst }}</td>
+                <td><a href='{% url "questionnaire:roof-space-insulated" %}'>CHANGE</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>Is there a 'room-in-the-roof' space, for example a loft conversion or similar?</td>
+                <td>{{ user_data.room_in_roof|yesno|capfirst }}</td>
+                <td><a href='{% url "questionnaire:room-in-roof" %}'>CHANGE</a></td>
+            </tr>
+            {% if user_data.room_in_roof %}
+                <tr>
+                    <td>Has the 'room-in-the-roof' space been well insulated?</td>
+                    <td>{{ user_data.room_in_roof_insulated|yesno|capfirst }}</td>
+                    <td><a href='{% url "questionnaire:rir-insulated" %}'>CHANGE</a></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>Does the property have a flat roof?</td>
+                    <td>{{ user_data.flat_roof|yesno|capfirst }}</td>
+                    <td><a href='{% url "questionnaire:flat-roof" %}'>CHANGE</a></td>
+                </tr>
+                {% if user_data.flat_roof %}
+                    <tr>
+                        <td>Is your flat roof well insulated?</td>
+                        <td>{{ user_data.flat_roof_insulated }}</td>
+                        <td><a href='{% url "questionnaire:flat-roof-insulated" %}'>CHANGE</a></td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <tr>
+            <td>Does the property have a central heating system with a boiler running off mains gas?</td>
+            <td>{{ user_data.gas_boiler_present|yesno|capfirst }}</td>
+            <td><a href='{% url "questionnaire:gas-boiler-present" %}'>CHANGE</a></td>
+        </tr>
+        {% if user_data.gas_boiler_present %}
+            {% include "questionnaire/includes/gas_boiler_present.html" with user_data=user_data %}
+        {% else %}
+            <tr>
+                <td>Is the property connected to the mains gas network?</td>
+                <td>{{ user_data.on_mains_gas|yesno|capfirst }}</td>
+                <td><a href='{% url "questionnaire:on-mains-gas" %}'>CHANGE</a></td>
+            </tr>
+            <tr>
+                <td>Does the property have a non-gas central heating system?</td>
+                <td>{{ user_data.other_heating_present|yesno|capfirst }}</td>
+                <td><a href='{% url "questionnaire:other-heating-present" %}'>CHANGE</a></td>
+            </tr>
+            {% if user_data.other_heating_present %}
+                {% include "questionnaire/includes/gas_boiler_present.html" with user_data=user_data %}
+            {% else %}
+                <tr>
+                    <td>Are there storage heaters in the property?</td>
+                    <td>{{ user_data.storage_heaters_present|yesno|capfirst }}</td>
+                    <td><a href='{% url "questionnaire:storage-heaters-present" %}'>CHANGE</a></td>
+                </tr>
+                {% if user_data.storage_heaters_present %}
+                    <tr>
+                        <td>Are the storage heaters in the property Dimplex Quantum or other high heat retention storage heaters?</td>
+                        <td>{{ user_data.hhrshs_present|yesno|capfirst }}</td>
+                        <td><a href='{% url "questionnaire:hhrshs-present" %}'>CHANGE</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>Are there other electric radiators in the property?</td>
+                        <td>{{ user_data.electric_radiators_present|yesno|capfirst }}</td>
+                        <td><a href='{% url "questionnaire:electric-radiators-present" %}'>CHANGE</a></td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <table>
+            <tr>
+                <td>Does this property have Solar PV panels installed?</td>
+                <td>{{ user_data.has_solar_pv|yesno|capfirst }}</td>
+                <td><a href='{% url "questionnaire:has-solar-pv" %}'>CHANGE</a></td>
+            </tr>
+            <tr>
+                <td>How many adults live in the property?</td>
+                <td>{{ user_data.adults }}</td>
+                <td><a href='{% url "questionnaire:occupants" %}'>CHANGE</a></td>
+            </tr>
+            <tr>
+                <td>How many children live in the property?</td>
+                <td>{{ user_data.children }}</td>
+                <td><a href='{% url "questionnaire:occupants" %}'>CHANGE</a></td>
+            </tr>
+            <tr>
+                <td>Is the household income less than £30,000 before tax?</td>
+                <td>{{ user_data.total_income_lt_30k }}</td>
+                <td><a href='{% url "questionnaire:household-income" %}'>CHANGE</a></td>
+            </tr>
+            {% if "Yes" in user_data.total_income_lt_30k %}
+                {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
+
+            {% else %}
+
+                <tr>
+                    <td>Is the household income less than £30,000 after tax, mortgage/rent, and energy bills?</td>
+                    <td>{{ user_data.take_home_lt_30k_confirmation|yesno:"Yes&#44; it's under that figure,No&#44; it's over that figure,I don't know"|safe }}</td>
+                    <td><a href='{% url "questionnaire:household-take-home-income" %}'>CHANGE</a></td>
+                </tr>
+                <tr>
+                    <td>Does anybody living in the home receive any disability related benefits?</td>
+                    <td>{{ user_data.disability_benefits|yesno|capfirst }}</td>
+                    <td><a href='{% url "questionnaire:disability-benefits" %}'>CHANGE</a></td>
+
+                    {% if user_data.disability_benefits %}
+                        {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
+
+                    {% else %}
+
+                        <tr>
+                            <td>Does anybody living in the home receive Child Benefit?</td>
+                            <td>{{ user_data.child_benefit|yesno:"Yes,No" }}</td>
+                            <td><a href='{% url "questionnaire:child-benefit" %}'>CHANGE</a></td>
+                        </tr>
+
+                        {% if user_data.child_benefit %}
+
+                            <tr>
+                                <td>How many children do you claim child benefit for (whether living in the house or elsewhere) or pay at least £21.80 per week of maintenance payments towards?</td>
+                                <td>{{ user_data.child_benefit_number }}</td>
+                                <td><a href='{% url "questionnaire:child-benefit-number" %}'>CHANGE</a></td>
+                            </tr>
+                            <tr>
+                                <td>Is the adult that receives Child Benefit single and living with other adults or living with a partner (ie. someone they are married to, civil partnered with or cohabitating as a couple)?</td>
+                                <td>{{ user_data.child_benefit_claimant_type }}</td>
+                                <td><a href='{% url "questionnaire:child-benefit-claimant-type" %}'>CHANGE</a></td>
+                            </tr>
+                            {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
+
+                        {% else %}
+
+                            {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
+
+                        {% endif %}
+                    {% endif %}
+                </tr>
+            {% endif %}
+        </table>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% block nav_form %}
+                <div class="nav-form">
+                    <button class="button">
+                        Next&nbsp;&rarr;
+                    </button>
+                </div>
+            {% endblock nav_form %}
+        </form>
+
+{% endblock %}

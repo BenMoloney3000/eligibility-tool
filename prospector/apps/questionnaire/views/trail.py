@@ -14,7 +14,6 @@ from prospector.apps.questionnaire import services
 from prospector.apps.questionnaire import utils
 from prospector.dataformats import postcodes
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -1119,9 +1118,89 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
 class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
     title = "Specific vulnerabilities of household members"
-    next = "RecommendedMeasures"
+    next = "AnswersSummary"
     percent_complete = COMPLETE_GROUP_5 + 9
     form_class = questionnaire_forms.Vulnerabilities
+
+
+class AnswersSummary(abstract_views.NoQuestion):
+    title = "Summary of your answers"
+    next = "RecommendedMeasures"
+    percent_complete = COMPLETE_GROUP_5 + 9
+    template_name = "questionnaire/answers_summary.html"
+
+    def get_context_data(self, *args, **kwargs):
+        a = self.answers
+        context = super().get_context_data(*args, **kwargs)
+
+        context["user_data"] = {
+            "full_name": f"{a.first_name} {a.last_name}",
+            "email": a.email,
+            "respondent_role": a.get_respondent_role_display(),
+            "respondent_role_other": a.respondent_role_other,
+            "phone": a.contact_phone,
+            "mobile": a.contact_mobile,
+            "property_address": f"{a.property_address_1} \
+            {a.property_address_2} {a.property_address_3} \
+            {a.property_postcode}",
+            "ownership": a.get_property_ownership_display(),
+            "property_type": f'{a.property_type.replace("_", " ")}, {a.property_form.replace("_", " ")}',
+            "property_age_band": a.get_property_age_band_display(),
+            "wall_type": a.wall_type,
+            "walls_insulated": a.walls_insulated,
+            "suspended_floor": a.suspended_floor,
+            "suspended_floor_insulated": a.suspended_floor_insulated,
+            "unheated_loft": a.unheated_loft,
+            "room_in_roof": a.room_in_roof,
+            "room_in_roof_insulated": a.rir_insulated,
+            "roof_space_insulated": a.roof_space_insulated,
+            "flat_roof": a.flat_roof,
+            "flat_roof_insulated": a.get_flat_roof_insulated_display(),
+            "gas_boiler_present": a.gas_boiler_present,
+            "gas_boiler_age": a.get_gas_boiler_age_display(),
+            "gas_boiler_broken": a.gas_boiler_broken,
+            "on_mains_gas": a.on_mains_gas,
+            "other_heating_present": a.other_heating_present,
+            "heat_pump_present": a.heat_pump_present,
+            "other_heating_fuel": a.get_other_heating_fuel_display(),
+            "storage_heaters_present": a.storage_heaters_present,
+            "hhrshs_present": a.hhrshs_present,
+            "electric_radiators_present": a.electric_radiators_present,
+            "hwt_present": a.hwt_present,
+            "trvs_present": a.trvs_present,
+            "room_thermostat": a.room_thermostat,
+            "ch_timer": a.ch_timer,
+            "programmable_thermostat": a.programmable_thermostat,
+            "smart_thermostat": a.smart_thermostat,
+            "has_solar_pv": a.has_solar_pv,
+            "adults": a.adults,
+            "children": a.children,
+            "total_income_lt_30k": a.get_total_income_lt_30k_display(),
+            "take_home_lt_30k_confirmation": a.take_home_lt_30k_confirmation,
+            "vulnerable_cariovascular": a.vulnerable_cariovascular,
+            "vulnerable_respiratory": a.vulnerable_respiratory,
+            "vulnerable_mental_health": a.vulnerable_mental_health,
+            "vulnerable_cns": a.vulnerable_cns,
+            "vulnerable_disability": a.vulnerable_disability,
+            "vulnerable_age": a.vulnerable_age,
+            "vulnerable_child_pregnancy": a.vulnerable_child_pregnancy,
+            "disability_benefits": a.disability_benefits,
+            "child_benefit": a.child_benefit,
+            "child_benefit_number": a.get_child_benefit_number_display(),
+            "child_benefit_claimant_type": a.get_child_benefit_claimant_type_display(),
+        }
+
+        if a.respondent_address_1 or a.respondent_address_2 or a.respondent_address_3:
+            context["user_data"][
+                "address"
+            ] = f"{a.respondent_address_1} {a.respondent_address_2} {a.respondent_address_3} {a.respondent_postcode}"
+
+        if a.occupant_first_name or a.occupant_last_name:
+            context["user_data"][
+                "occupant_name"
+            ] = f"{a.occupant_first_name} {a.occupant_last_name}"
+
+        return context
 
 
 class RecommendedMeasures(abstract_views.Question):

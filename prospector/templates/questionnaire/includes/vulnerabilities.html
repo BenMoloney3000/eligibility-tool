@@ -1,0 +1,41 @@
+</table>
+<h4>Is anybody living in the property vulnerable to living in a cold home through one of the following? (select all that apply)</h4>
+<table>
+    <tr>
+        <td>A cardiovascular condition (for example: heart condition, risk of stroke, high blood pressure etc.)</td>
+        <td>{{ user_data.vulnerable_cariovascular|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>A respiratory condition (for example COPD or asthma)</td>
+        <td>{{ user_data.vulnerable_respiratory|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>A mental health condition</td>
+        <td>{{ user_data.vulnerable_mental_health|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>A central nervous system condition (for example dementia, Alzheimer's or fibromyalgia)</td>
+        <td>{{ user_data.vulnerable_cns|yesno|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>Disability</td>
+        <td>{{ user_data.vulnerable_disability|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Being over 65 years old</td>
+        <td>{{ user_data.vulnerable_age|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Being a child under the age of five, or being pregnant</td>
+        <td>{{ user_data.vulnerable_child_pregnancy|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+</table>
+<table>
+

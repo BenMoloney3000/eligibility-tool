@@ -7,7 +7,6 @@ os.environ["DJANGO_READ_DOT_ENV_FILE"] = "true"  # noqa
 from .base import *  # noqa
 from .base import env  # noqa
 
-
 # GENERAL
 # ------------------------------------------------------------------------------
 ENV = "local"
@@ -21,6 +20,18 @@ SECRET_KEY = env(
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "*"]
+
+
+# DATABASE
+# ------------------------------------------------------------------------------
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(ROOT_DIR, "prospector_db.sqlite3"),  # noqa
+        "ATOMIC_REQUESTS": True,
+    }
+}
+
 
 # CACHES
 # ------------------------------------------------------------------------------

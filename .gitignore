@@ -76,6 +76,8 @@ target/
 # Jupyter notebooks
 *.ipynb
 
+# SQlite
+*.sqlite3
 
 # Environments
 .venv
@@ -298,3 +300,4 @@ pip-selfcheck.json
 
 # Silver searcher
 .ignore
+

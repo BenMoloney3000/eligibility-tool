@@ -1,0 +1,44 @@
+<tr>
+    <td>Does the property have a hot water storage tank?</td>
+    <td>{{ user_data.hwt_present|yesno|capfirst }}</td>
+    <td><a href='{% url "questionnaire:hwt-present" %}'>CHANGE</a></td>
+</tr>
+<tr>
+    <td>When was the current boiler installed?</td>
+    <td>{{ user_data.gas_boiler_age }}</td>
+    <td><a href='{% url "questionnaire:gas-boiler-age" %}'>CHANGE</a></td>
+</tr>
+<tr>
+    <td>Is the gas boiler currently broken?</td>
+    <td>{{ user_data.gas_boiler_broken|yesno|capfirst }}</td>
+    <td><a href='{% url "questionnaire:gas-boiler-broken" %}'>CHANGE</a></td>
+</tr>
+</table>
+<h5>Which of the following control systems are present in this property?</h5>
+<table>
+    <tr>
+        <td>Adjustable TRV controls on your radiators (Thermostatically Radiator Valves - turn valves that are positioned at one end of a radiator)</td>
+        <td>{{ user_data.trvs_present|yesno|capfirst }}</td>
+        <td><a href='{% url "questionnaire:heating-controls" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>One or more room thermostats (set the desired temperature in the room they are positioned in)</td>
+        <td>{{ user_data.room_thermostat|yesno|capfirst }}</td>
+        <td><a href='{% url "questionnaire:heating-controls" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>A central heating timer (a timer or programmer allows you to control when your heating and hot water comes on and when it goes off)</td>
+        <td>{{ user_data.ch_timer|yesno|capfirst }}</td>
+        <td><a href='{% url "questionnaire:heating-controls" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>A programmable central heating thermostat (combines time and temperature controls in a single unit)</td>
+        <td>{{ user_data.programmable_thermostat|yesno|capfirst }}</td>
+        <td><a href='{% url "questionnaire:heating-controls" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>A smart thermostat system (more advanced control systems for central heating that set temperature and timing and are connected to the internet)</td>
+        <td>{{ user_data.smart_thermostat|yesno|capfirst }}</td>
+        <td><a href='{% url "questionnaire:heating-controls" %}'>CHANGE</a></td>
+    </tr>
+</table>
