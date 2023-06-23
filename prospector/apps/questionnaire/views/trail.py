@@ -1125,7 +1125,6 @@ class Vulnerabilities(abstract_views.Question):
 
 class AnswersSummary(abstract_views.NoQuestion):
     title = "Summary of your answers"
-    next = "RecommendedMeasures"
     percent_complete = COMPLETE_GROUP_5 + 9
     template_name = "questionnaire/answers_summary.html"
 
@@ -1202,14 +1201,19 @@ class AnswersSummary(abstract_views.NoQuestion):
 
         return context
 
+    def get_next(self):
+        return "RecommendedMeasures"
+
 
 class RecommendedMeasures(abstract_views.Question):
     template_name = "questionnaire/recommended_measures.html"
     title = "Recommendations for this property"
     percent_complete = COMPLETE_GROUP_6 + 0
+    next = "Completed"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        services.close_questionnaire(self.answers)
         measures = utils.determine_recommended_measures(self.answers)
         for measure in measures:
             measure.disruption = utils.get_disruption(measure)
@@ -1225,22 +1229,22 @@ class RecommendedMeasures(abstract_views.Question):
         context["income_rating"] = utils.get_income_rating(self.answers)
         return context
 
-    def get_next(self):
-        # Note we've disabled the rest of the questionnaire at this point at
-        # the request of the client leaving the functionality here for future
-        # development.
-        #
-        # To re-renable it, put back this code:
-        #
-        # if self.request.POST.get("finish_now", "") == "True":
-        #   services.close_questionnaire(self.answers)
-        #   return "Completed"
-        # else:
-        #   return "ToleratedDisruption"
+    # def get_next(self):
+    #     # Note we've disabled the rest of the questionnaire at this point at
+    #     # the request of the client leaving the functionality here for future
+    #     # development.
+    #     #
+    #     # To re-renable it, put back this code:
+    #     #
+    #     # if self.request.POST.get("finish_now", "") == "True":
+    #     #   services.close_questionnaire(self.answers)
+    #     #   return "Completed"
+    #     # else:
+    #     #   return "ToleratedDisruption"
 
-        # For now always close the questionnaire here:
-        services.close_questionnaire(self.answers)
-        return "Completed"
+    #     # For now always close the questionnaire here:
+    #     services.close_questionnaire(self.answers)
+    #     return "Completed"
 
 
 class ToleratedDisruption(abstract_views.SingleQuestion):
