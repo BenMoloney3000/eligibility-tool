@@ -519,7 +519,7 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "pre-fabricated concrete, then you will need to ask a specialist "
         "insulation installer to advise you.</p>"
         '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation" '
-        ' target="_blank">'
+        ' target="_blank" rel="noopener norefferer">'
         "https://energysavingtrust.org.uk/advice/cavity-wall-insulation</a>"
     )
     type_ = abstract_views.QuestionType.Choices
@@ -568,7 +568,7 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
         "<br> "
         "More information: "
         '<a href="https://energysavingtrust.org.uk/advice/floor-insulation/" '
-        ' target="_blank">'
+        ' target="_blank" rel="noopener norefferer">'
         "https://energysavingtrust.org.uk/advice/floor-insulation/"
         "</a>"
     )
