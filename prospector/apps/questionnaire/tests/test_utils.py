@@ -11,8 +11,8 @@ def test_get_income_rating():
 
     is dependant on the following fields (all effectively boolean):
 
-        answers.total_income_lt_30k,
-        answers.take_home_lt_30k:
+        answers.total_income_lt_31k,
+        answers.take_home_lt_31k:
             enums.IncomeIsUnderThreshold.choices
                 YES = "YES", "Yes, it's under that figure"
                 NO = "NO", "No, it's over that figure"
@@ -34,15 +34,15 @@ def test_get_income_rating():
         }[value]
 
     def get_test_vector(
-        total_income_lt_30k,
-        take_home_lt_30k,
+        total_income_lt_31k,
+        take_home_lt_31k,
         disability_benefits,
         child_benefit,
         income_lt_child_benefit_threshold,
     ):
         return factories.AnswersFactory(
-            total_income_lt_30k=to_income_choices(total_income_lt_30k),
-            take_home_lt_30k=to_income_choices(take_home_lt_30k),
+            total_income_lt_31k=to_income_choices(total_income_lt_31k),
+            take_home_lt_31k=to_income_choices(take_home_lt_31k),
             disability_benefits=disability_benefits,
             child_benefit=child_benefit,
             income_lt_child_benefit_threshold=income_lt_child_benefit_threshold,

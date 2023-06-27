@@ -912,8 +912,8 @@ class Occupants(abstract_views.Question):
 
 
 class HouseholdIncome(abstract_views.SingleQuestion):
-    answer_field = "total_income_lt_30k"
-    question = "Is the household income less than £30,000 before tax?"
+    answer_field = "total_income_lt_31k"
+    question = "Is the household income less than £31,000 before tax?"
     note = (
         "Household income means the combined income of everyone living in the property."
     )
@@ -924,24 +924,24 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES.value:
-            self.answers.take_home_lt_30k = enums.IncomeIsUnderThreshold.YES.value
+        if self.answers.total_income_lt_31k == enums.IncomeIsUnderThreshold.YES.value:
+            self.answers.take_home_lt_31k = enums.IncomeIsUnderThreshold.YES.value
             self.answers.disability_benefits = None
             self.answers.child_benefit = None
             self.answers.child_benefit_threshold = None
             self.answers.income_lt_child_benefit_threshold = None
 
     def get_next(self):
-        if self.answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES.value:
+        if self.answers.total_income_lt_31k == enums.IncomeIsUnderThreshold.YES.value:
             return "Vulnerabilities"
         else:
             return "HouseholdTakeHomeIncome"
 
 
 class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
-    answer_field = "take_home_lt_30k"
+    answer_field = "take_home_lt_31k"
     question = (
-        "Is the household income less than £30,000 after tax, mortgage/rent, "
+        "Is the household income less than £31,000 after tax, mortgage/rent, "
         " and energy bills?"
     )
     note = (
@@ -1174,8 +1174,8 @@ class AnswersSummary(abstract_views.NoQuestion):
             "has_solar_pv": a.has_solar_pv,
             "adults": a.adults,
             "children": a.children,
-            "total_income_lt_30k": a.get_total_income_lt_30k_display(),
-            "take_home_lt_30k_confirmation": a.take_home_lt_30k_confirmation,
+            "total_income_lt_31k": a.get_total_income_lt_31k_display(),
+            "take_home_lt_31k_confirmation": a.take_home_lt_31k_confirmation,
             "vulnerable_cariovascular": a.vulnerable_cariovascular,
             "vulnerable_respiratory": a.vulnerable_respiratory,
             "vulnerable_mental_health": a.vulnerable_mental_health,
@@ -1541,8 +1541,8 @@ class HouseholdSummary(abstract_views.Question):
             self.answers.incomes_complete = (
                 self.answers.confirm_or_amend_income == "YES"
             )
-            if utils.calculate_household_income(self.answers) < 30000:
-                self.answers.take_home_lt_30k_confirmation = True
+            if utils.calculate_household_income(self.answers) < 31000:
+                self.answers.take_home_lt_31k_confirmation = True
 
 
 class EligibilitySummary(abstract_views.Question):

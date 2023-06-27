@@ -488,17 +488,17 @@ class Answers(models.Model):
         choices=enums.UpToFourOrMore.choices,
     )
 
-    total_income_lt_30k = models.CharField(
+    total_income_lt_31k = models.CharField(
         choices=enums.IncomeIsUnderThreshold.choices,
         max_length=7,
         blank=True,
-        verbose_name="Total gross household income is under £30,000 pa",
+        verbose_name="Total gross household income is under £31,000 pa",
     )
-    take_home_lt_30k = models.CharField(
+    take_home_lt_31k = models.CharField(
         choices=enums.IncomeIsUnderThreshold.choices,
         blank=True,
         max_length=7,
-        verbose_name="Total household take home pay is under £30,000 pa",
+        verbose_name="Total household take home pay is under £31,000 pa",
     )
     disability_benefits = models.BooleanField(
         null=True,
@@ -582,12 +582,12 @@ class Answers(models.Model):
     incomes_complete = models.BooleanField(
         blank=True, null=True, verbose_name="This is a full account of household income"
     )
-    take_home_lt_30k_confirmation = models.BooleanField(
+    take_home_lt_31k_confirmation = models.BooleanField(
         blank=True,
         null=True,
         verbose_name=(
             "Household take home pay after tax, national insurance, energy bills "
-            "and housing costs is less than £30k"
+            "and housing costs is less than £31k"
         ),
     )
 

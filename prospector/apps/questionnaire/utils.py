@@ -4,7 +4,6 @@ from typing import List
 from . import enums
 from . import models
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -220,12 +219,12 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
 
 def get_income_rating(answers: models.Answers) -> enums.RAYG:
     # Household income rating
-    if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
-        # Gross household income below £30k therefore the Household is eligible
+    if answers.total_income_lt_31k == enums.IncomeIsUnderThreshold.YES:
+        # Gross household income below £31k therefore the Household is eligible
         # for free or discounted schemes (based on info given).
         income_rating = enums.RAYG.GREEN
     else:
-        # Gross household income more than £30k, but may still be eligible for
+        # Gross household income more than £31k, but may still be eligible for
         # some free or discounted schemes (based on info given)
         benefit_qualifies = answers.disability_benefits or (
             answers.child_benefit and answers.income_lt_child_benefit_threshold
@@ -233,10 +232,10 @@ def get_income_rating(answers: models.Answers) -> enums.RAYG:
         if benefit_qualifies:
             income_rating = enums.RAYG.YELLOW
         else:
-            if answers.take_home_lt_30k == enums.IncomeIsUnderThreshold.NO:
+            if answers.take_home_lt_31k == enums.IncomeIsUnderThreshold.NO:
                 income_rating = enums.RAYG.RED
             else:
-                # Household take home pay below £30k.
+                # Household take home pay below £31k.
                 income_rating = enums.RAYG.AMBER
 
     return income_rating
@@ -357,16 +356,15 @@ def _annualise_benefit_income(benefit: models.WelfareBenefit):
 
 
 def get_financial_eligibility(answers: models.Answers) -> enums.FinancialEligibility:
-
     total_household_income = calculate_household_income(answers)
 
-    if total_household_income < 30000:
+    if total_household_income < 31000:
         return enums.FinancialEligibility.ALL
     else:
         benefit_present = models.WelfareBenefit.objects.filter(
             recipient__answers=answers
         ).exists()
-        if answers.take_home_lt_30k_confirmation or benefit_present:
+        if answers.take_home_lt_31k_confirmation or benefit_present:
             return enums.FinancialEligibility.SOME
         else:
             return enums.FinancialEligibility.NONE

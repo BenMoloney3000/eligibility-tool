@@ -26,10 +26,10 @@
         {{ form.confirm_or_amend_income|as_crispy_field }}
     </p>
 
-    {% if calculated_income > 30000 %}
+    {% if calculated_income > 31000 %}
         <p>
-            <label>Is the take home pay of your household after tax, national insurance, energy bills and housing costs less than £30,000?</label>
-            {{ form.take_home_lt_30k_confirmation|as_crispy_field }}
+            <label>Is the take home pay of your household after tax, national insurance, energy bills and housing costs less than £31,000?</label>
+            {{ form.take_home_lt_31k_confirmation|as_crispy_field }}
         </p>
     {% endif %}
 {% endblock form_content %}

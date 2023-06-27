@@ -208,18 +208,18 @@
                 <td><a href='{% url "questionnaire:occupants" %}'>CHANGE</a></td>
             </tr>
             <tr>
-                <td>Is the household income less than £30,000 before tax?</td>
-                <td>{{ user_data.total_income_lt_30k }}</td>
+                <td>Is the household income less than £31,000 before tax?</td>
+                <td>{{ user_data.total_income_lt_31k }}</td>
                 <td><a href='{% url "questionnaire:household-income" %}'>CHANGE</a></td>
             </tr>
-            {% if "Yes" in user_data.total_income_lt_30k %}
+            {% if "Yes" in user_data.total_income_lt_31k %}
                 {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
 
             {% else %}
 
                 <tr>
-                    <td>Is the household income less than £30,000 after tax, mortgage/rent, and energy bills?</td>
-                    <td>{{ user_data.take_home_lt_30k_confirmation|yesno:"Yes&#44; it's under that figure,No&#44; it's over that figure,I don't know"|safe }}</td>
+                    <td>Is the household income less than £31,000 after tax, mortgage/rent, and energy bills?</td>
+                    <td>{{ user_data.take_home_lt_31k_confirmation|yesno:"Yes&#44; it's under that figure,No&#44; it's over that figure,I don't know"|safe }}</td>
                     <td><a href='{% url "questionnaire:household-take-home-income" %}'>CHANGE</a></td>
                 </tr>
                 <tr>

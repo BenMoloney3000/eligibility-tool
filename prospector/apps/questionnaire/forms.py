@@ -13,7 +13,6 @@ from . import models
 from . import utils
 from prospector.dataformats import phone_numbers
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -29,7 +28,6 @@ class BooleanChoiceField(forms.ChoiceField):
 
 
 class StyledErrorList(forms.utils.ErrorList):
-
     # (Since Django seems to prefer putting markup in the logic to writing more
     # flexible template tags)
 
@@ -631,7 +629,6 @@ class HouseholdAdultSelfEmploymentIncome(AnswerFormMixin, forms.ModelForm):
 
 
 class HouseholdAdultWelfareBenefits(AnswerFormMixin, forms.Form):
-
     field_labels = {
         "uc": "Universal Credit",
         "jsa": "Job Seekers Allowance (JSA)",
@@ -857,7 +854,7 @@ class HouseholdSummary(AnswerFormMixin, forms.ModelForm):
         widget=forms.RadioSelect,
         required=True,
     )
-    take_home_lt_30k_confirmation = forms.TypedChoiceField(
+    take_home_lt_31k_confirmation = forms.TypedChoiceField(
         coerce=lambda x: x == "True",
         choices=((True, "Yes"), (False, "No")),
         widget=forms.RadioSelect,
@@ -866,19 +863,19 @@ class HouseholdSummary(AnswerFormMixin, forms.ModelForm):
 
     class Meta:
         model = models.Answers
-        fields = ["take_home_lt_30k_confirmation"]
-        optional_fields = ["take_home_lt_30k_confirmation"]
+        fields = ["take_home_lt_31k_confirmation"]
+        optional_fields = ["take_home_lt_31k_confirmation"]
 
     def __init__(self, *args, **kwargs):
-        """Dynamically whether take_home_lt_30k_confirmation is required.
+        """Dynamically whether take_home_lt_31k_confirmation is required.
 
-        (only required if total income > £30k)
+        (only required if total income > £31k)
         """
 
         # get self.answers populated:
         super().__init__(*args, **kwargs)
-        if utils.calculate_household_income(self.answers) > 30000:
-            self.fields["take_home_lt_30k_confirmation"].required = True
+        if utils.calculate_household_income(self.answers) > 31000:
+            self.fields["take_home_lt_31k_confirmation"].required = True
 
 
 class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):
