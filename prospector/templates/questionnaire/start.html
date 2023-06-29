@@ -25,18 +25,23 @@
         the data we hold about you by emailing
         <a href="mailto:energyteam@plymouthenergycommunity.com">energyteam@plymouthenergycommunity.com</a>
     </p>
-    <div>
-        <input
-            type="checkbox"
-            id="{{ form.field.auto_id }}_{{ value }}"
-            name="{{ form.field.html_name }}"
-            value="True"
-        >
-        <label for="{{ form.field.auto_id }}_{{ value }}">
-            {{ question_text }}
-        </label>
-        {% for error in form.field.errors %}
-            <span class="input-error">Please accept our privacy terms to continue.</span>
-        {% endfor %}
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+            <input
+                type="checkbox"
+                class="govuk-checkboxes__input"
+                id="{{ form.field.auto_id }}_{{ value }}"
+                name="{{ form.field.html_name }}"
+                value="True"
+            >
+            <label
+                class="govuk-label govuk-checkboxes__label"
+                for="{{ form.field.auto_id }}_{{ value }}">
+                {{ question_text }}
+            </label>
+            {% for error in form.field.errors %}
+                <span class="input-error">Please accept our privacy terms to continue.</span>
+            {% endfor %}
+        </div>
     </div>
 {% endblock form_content %}
