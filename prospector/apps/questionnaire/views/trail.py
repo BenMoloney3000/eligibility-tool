@@ -62,7 +62,7 @@ class Start(abstract_views.SingleQuestion):
     answer_field = "terms_accepted_at"
     question = "Please confirm that you have read and accept our data privacy policy."
     next = "RespondentName"
-    percent_complete = COMPLETE_GROUP_0 + 0
+    percent_complete = COMPLETE_GROUP_0
 
     def pre_save(self):
         self.answers.terms_accepted_at = timezone.now()
@@ -72,7 +72,7 @@ class RespondentName(abstract_views.Question):
     title = "Your name"
     template_name = "questionnaire/respondent_name.html"
     next = "RespondentRole"
-    percent_complete = COMPLETE_GROUP_0 + 1
+    percent_complete = COMPLETE_GROUP_0 + 2
     form_class = questionnaire_forms.RespondentName
 
 
@@ -80,7 +80,7 @@ class RespondentRole(abstract_views.Question):
     title = "Your role"
     form_class = questionnaire_forms.RespondentRole
     template_name = "questionnaire/respondent_role.html"
-    percent_complete = COMPLETE_GROUP_0 + 2
+    percent_complete = COMPLETE_GROUP_0 + 4
 
     def pre_save(self):
         if self.answers.is_occupant:
@@ -107,7 +107,7 @@ class RespondentRole(abstract_views.Question):
 class RespondentHasPermission(abstract_views.SingleQuestion):
     title = "Householder permission"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_0 + 3
+    percent_complete = COMPLETE_GROUP_0 + 6
 
     def get_question(self):
         # Wording of question depends on role:
@@ -145,7 +145,7 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
 class NeedPermission(abstract_views.Question):
     title = "Sorry, we can't help you."
     template_name = "questionnaire/need_permission.html"
-    percent_complete = COMPLETE_GROUP_0 + 4
+    percent_complete = COMPLETE_GROUP_0
 
     def get_initial(self):
         # If we don't have permission, we need to delete everything entered so far
@@ -161,7 +161,7 @@ class RespondentPostcode(abstract_views.SingleQuestion):
         "about which you're enquiring."
     )
     next = "RespondentAddress"
-    percent_complete = COMPLETE_GROUP_0 + 5
+    percent_complete = COMPLETE_GROUP_1 + 1
 
     def sanitise_answer(self, data):
         data = postcodes.normalise(data)
@@ -180,7 +180,7 @@ class RespondentAddress(abstract_views.Question):
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
     next = "Email"
-    percent_complete = COMPLETE_GROUP_0 + 6
+    percent_complete = COMPLETE_GROUP_1 + 3
     prefilled_addresses = {}
 
     # Perform the API call to provide the choices for the address
@@ -252,7 +252,7 @@ class Email(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
     question = "Enter your email address"
     next = "ContactPhone"
-    percent_complete = COMPLETE_GROUP_1 + 0
+    percent_complete = COMPLETE_GROUP_1 + 5
 
     @staticmethod
     def validate_answer(field):
@@ -263,7 +263,7 @@ class ContactPhone(abstract_views.Question):
     title = "Your phone number"
     form_class = questionnaire_forms.RespondentPhone
     template_name = "questionnaire/respondent_phone.html"
-    percent_complete = COMPLETE_GROUP_1 + 1
+    percent_complete = COMPLETE_GROUP_1 + 7
 
     def get_next(self):
         if self.answers.is_occupant:
@@ -277,7 +277,7 @@ class OccupantName(abstract_views.Question):
     template_name = "questionnaire/occupant_name.html"
     form_class = questionnaire_forms.OccupantName
     next = "PropertyPostcode"
-    percent_complete = COMPLETE_GROUP_1 + 2
+    percent_complete = COMPLETE_GROUP_2 + 1
 
 
 class PropertyPostcode(abstract_views.SingleQuestion):
@@ -286,7 +286,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
     question = "Enter the property postcode"
     supplementary = "This is the postcode for the property."
     next = "PropertyAddress"
-    percent_complete = COMPLETE_GROUP_1 + 3
+    percent_complete = COMPLETE_GROUP_2 + 3
 
     def sanitise_answer(self, data):
         data = postcodes.normalise(data)
@@ -310,7 +310,7 @@ class PropertyAddress(abstract_views.Question):
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
     next = "PropertyOwnership"
-    percent_complete = COMPLETE_GROUP_1 + 4
+    percent_complete = COMPLETE_GROUP_2 + 5
     prefilled_addresses = {}
 
     # Perform the API call to provide the choices for the address
@@ -366,7 +366,7 @@ class PropertyOwnership(abstract_views.SingleQuestion):
     question = "What is the tenure of the property - how is it occupied?"
     choices = enums.PropertyOwnership.choices
     next = "Consents"
-    percent_complete = COMPLETE_GROUP_1 + 5
+    percent_complete = COMPLETE_GROUP_2 + 7
 
 
 class Consents(abstract_views.Question):
@@ -374,7 +374,7 @@ class Consents(abstract_views.Question):
     template_name = "questionnaire/consents.html"
     form_class = questionnaire_forms.Consents
     next = "SelectEPC"
-    percent_complete = COMPLETE_GROUP_1 + 6
+    percent_complete = COMPLETE_GROUP_2 + 9
 
 
 class SelectEPC(abstract_views.Question):
@@ -383,7 +383,7 @@ class SelectEPC(abstract_views.Question):
     form_class = questionnaire_forms.SelectEPC
     candidate_epcs = {}
     next = "PropertyType"
-    percent_complete = COMPLETE_GROUP_1 + 7
+    percent_complete = COMPLETE_GROUP_3 + 1
 
     def get_form_kwargs(self):
         """Pass the possible EPCs into the form."""
@@ -439,7 +439,7 @@ class PropertyType(abstract_views.Question):
     template_name = "questionnaire/property_type.html"
     form_class = questionnaire_forms.PropertyType
     next = "PropertyAgeBand"
-    percent_complete = COMPLETE_GROUP_2 + 0
+    percent_complete = COMPLETE_GROUP_3 + 3
 
     def get_initial(self):
         data = super().get_initial()
@@ -474,7 +474,7 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     supplementary = "If you don't know the exact year it's fine to give us an estimate."
     type_ = abstract_views.QuestionType.Choices
     choices = enums.PropertyAgeBand.choices
-    percent_complete = COMPLETE_GROUP_2 + 1
+    percent_complete = COMPLETE_GROUP_3 + 5
     next = "WallType"
 
     def pre_save(self):
@@ -529,7 +529,7 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "that makes up the most of the external area."
     )
     next = "WallsInsulated"
-    percent_complete = COMPLETE_GROUP_2 + 2
+    percent_complete = COMPLETE_GROUP_3 + 7
 
 
 class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
@@ -541,7 +541,7 @@ class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
         "makes up most of the external area."
     )
     next = "SuspendedFloor"
-    percent_complete = COMPLETE_GROUP_2 + 3
+    percent_complete = COMPLETE_GROUP_3 + 9
 
 
 class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
@@ -577,7 +577,7 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
         "If the property has different types of ground floor, choose the option that applies "
         "to the largest floor area. If the property is a non-ground-floor flat, select 'No'."
     )
-    percent_complete = COMPLETE_GROUP_2 + 4
+    percent_complete = COMPLETE_GROUP_3 + 11
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -595,7 +595,7 @@ class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Floor insulation"
     question = "Is the suspended timber floor insulated?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_2 + 5
+    percent_complete = COMPLETE_GROUP_4 + 1
     next = "UnheatedLoft"
 
 
@@ -603,7 +603,7 @@ class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
     title = "Property roof"
     question = "Does the property have an unheated loft space directly above it?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_2 + 6
+    percent_complete = COMPLETE_GROUP_4 + 3
 
     def get_note(self):
         if self.answers.property_type == enums.PropertyType.FLAT:
@@ -635,7 +635,7 @@ class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
         "similar?"
     )
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_2 + 7
+    percent_complete = COMPLETE_GROUP_4 + 5
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -656,7 +656,7 @@ class RirInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof insulation"
     question = "Has the 'room-in-the-roof' space been well insulated?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_2 + 8
+    percent_complete = COMPLETE_GROUP_4 + 7
     next = "GasBoilerPresent"
 
 
@@ -668,7 +668,7 @@ class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
         "By 'well insulated' we mean with at least 25cm of 'mineral wool' type "
         "insulation, or similar."
     )
-    percent_complete = COMPLETE_GROUP_2 + 9
+    percent_complete = COMPLETE_GROUP_4 + 9
     next = "GasBoilerPresent"
 
 
@@ -680,7 +680,7 @@ class FlatRoof(abstract_views.SinglePrePoppedQuestion):
         "If the property has different roof types, choose the answer that applies "
         "to the largest roof area."
     )
-    percent_complete = COMPLETE_GROUP_2 + 10
+    percent_complete = COMPLETE_GROUP_5
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -700,14 +700,14 @@ class FlatRoofInsulated(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Choices
     next = "GasBoilerPresent"
     choices = enums.InsulationConfidence.choices
-    percent_complete = COMPLETE_GROUP_2 + 11
+    percent_complete = COMPLETE_GROUP_5 + 2
 
 
 class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Gas boiler"
     question = "Does the property have a central heating system with a boiler running off mains gas?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_3 + 0
+    percent_complete = COMPLETE_GROUP_5 + 4
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -734,14 +734,14 @@ class OnMainsGas(abstract_views.SinglePrePoppedQuestion):
     question = "Is the property connected to the mains gas network?"
     type_ = abstract_views.QuestionType.YesNo
     next = "OtherHeatingPresent"
-    percent_complete = COMPLETE_GROUP_3 + 1
+    percent_complete = COMPLETE_GROUP_5 + 6
 
 
 class OtherHeatingPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Other central heating system"
     question = "Does the property have a non-gas central heating system?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_3 + 2
+    percent_complete = COMPLETE_GROUP_5 + 8
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -763,7 +763,7 @@ class HwtPresent(abstract_views.SingleQuestion):
     title = "Hot water tank"
     question = "Does the property have a hot water storage tank?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_3 + 3
+    percent_complete = COMPLETE_GROUP_6
 
     def get_next(self):
         if self.answers.gas_boiler_present:
@@ -776,7 +776,7 @@ class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Heat pump"
     question = "Is the heating system powered by an air or ground source heat pump?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_3 + 4
+    percent_complete = COMPLETE_GROUP_6 + 2
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -796,7 +796,7 @@ class OtherHeatingFuel(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.Choices
     choices = enums.NonGasFuel.choices
     next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_3 + 5
+    percent_complete = COMPLETE_GROUP_6 + 4
 
 
 class GasBoilerAge(abstract_views.SingleQuestion):
@@ -805,7 +805,7 @@ class GasBoilerAge(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Choices
     choices = enums.BoilerAgeBand.choices
     next = "GasBoilerBroken"
-    percent_complete = COMPLETE_GROUP_3 + 6
+    percent_complete = COMPLETE_GROUP_7 + 1
 
 
 class GasBoilerBroken(abstract_views.SingleQuestion):
@@ -813,7 +813,7 @@ class GasBoilerBroken(abstract_views.SingleQuestion):
     question = "Is the gas boiler currently broken?"
     type_ = abstract_views.QuestionType.YesNo
     next = "HeatingControls"
-    percent_complete = COMPLETE_GROUP_3 + 7
+    percent_complete = COMPLETE_GROUP_7 + 3
 
 
 class HeatingControls(abstract_views.Question):
@@ -821,7 +821,7 @@ class HeatingControls(abstract_views.Question):
     template_name = "questionnaire/heating_controls.html"
     form_class = questionnaire_forms.HeatingControls
     next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_3 + 8
+    percent_complete = COMPLETE_GROUP_7 + 5
 
     def get_initial(self):
         data = super().get_initial()
@@ -850,7 +850,7 @@ class StorageHeatersPresent(abstract_views.SinglePrePoppedQuestion):
     question = "Are there storage heaters in the property?"
     type_ = abstract_views.QuestionType.YesNo
     next = "HhrshsPresent"
-    percent_complete = COMPLETE_GROUP_3 + 9
+    percent_complete = COMPLETE_GROUP_7 + 7
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -872,7 +872,7 @@ class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
     note = "These may be fixed panel radiators or freestanding heaters."
     type_ = abstract_views.QuestionType.YesNo
     next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_3 + 10
+    percent_complete = COMPLETE_GROUP_7 + 9
 
 
 class HhrshsPresent(abstract_views.SingleQuestion):
@@ -880,14 +880,14 @@ class HhrshsPresent(abstract_views.SingleQuestion):
     question = "Are the storage heaters in the property Dimplex Quantum or other high heat retention storage heaters?"
     type_ = abstract_views.QuestionType.YesNo
     next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_3 + 11
+    percent_complete = COMPLETE_GROUP_7 + 11
 
 
 class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     title = "Solar PV"
     question = "Does this property have Solar PV (photovoltaic) panels installed?"
     type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_4 + 0
+    percent_complete = COMPLETE_GROUP_7 + 13
 
     def get_next(self):
         if selectors.data_was_changed(self.answers):
@@ -900,14 +900,14 @@ class AccuracyWarning(abstract_views.Question):
     template_name = "questionnaire/accuracy_warning.html"
     title = "Data has been changed"
     next = "Occupants"
-    percent_complete = COMPLETE_GROUP_4 + 2
+    percent_complete = COMPLETE_GROUP_7 + 15
 
 
 class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
     title = "The Household"
     next = "HouseholdIncome"
-    percent_complete = COMPLETE_GROUP_5 + 0
+    percent_complete = COMPLETE_GROUP_7 + 17
     form_class = questionnaire_forms.Occupants
 
 
@@ -920,7 +920,7 @@ class HouseholdIncome(abstract_views.SingleQuestion):
     title = "Gross household income"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
-    percent_complete = COMPLETE_GROUP_5 + 1
+    percent_complete = COMPLETE_GROUP_7 + 19
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -951,7 +951,7 @@ class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
     next = "DisabilityBenefits"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.IncomeIsUnderThreshold.choices
-    percent_complete = COMPLETE_GROUP_5 + 2
+    percent_complete = COMPLETE_GROUP_7 + 21
 
 
 class DisabilityBenefits(abstract_views.SingleQuestion):
@@ -965,7 +965,7 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
         "Income Related ESA, Personal Independence Payment, Armed Forces Independence Payment, "
         "Industrial Injuries Disablement Benefit, Mobility Supplement or Severe Disablement Allowance."
     )
-    percent_complete = COMPLETE_GROUP_5 + 3
+    percent_complete = COMPLETE_GROUP_7 + 23
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -988,7 +988,7 @@ class ChildBenefit(abstract_views.SingleQuestion):
     title = "Child benefit"
     type_ = abstract_views.QuestionType.YesNo
     question = "Does anybody living in the home receive Child Benefit?"
-    percent_complete = COMPLETE_GROUP_5 + 4
+    percent_complete = COMPLETE_GROUP_7 + 25
 
     def pre_save(self):
         # Set the benefit threshold dependent on the household composition
@@ -1014,7 +1014,7 @@ class ChildBenefitNumber(abstract_views.SingleQuestion):
         "(whether living in the house or elsewhere) "
         "or pay at least £21.80 per week of maintenance payments towards?"
     )
-    percent_complete = COMPLETE_GROUP_5 + 5
+    percent_complete = COMPLETE_GROUP_7 + 27
 
 
 class ChildBenefitClaimantType(abstract_views.SingleQuestion):
@@ -1032,14 +1032,14 @@ class ChildBenefitClaimantType(abstract_views.SingleQuestion):
     note = (
         "Is the adult single and living with other adults, or living with a " "partner?"
     )
-    percent_complete = COMPLETE_GROUP_5 + 6
+    percent_complete = COMPLETE_GROUP_7 + 29
 
 
 class ChildBenefitSummary(abstract_views.Question):
     template_name = "questionnaire/child_benefit_summary.html"
     next = "IncomeLtChildBenefitThreshold"
     form_class = questionnaire_forms.ChildBenefitSummary
-    percent_complete = COMPLETE_GROUP_5 + 7
+    percent_complete = COMPLETE_GROUP_7 + 31
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -1083,7 +1083,7 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
 
     title = "Income in relation to child benefit threshold"
     next = "Vulnerabilities"
-    percent_complete = COMPLETE_GROUP_5 + 8
+    percent_complete = COMPLETE_GROUP_8
     type_ = abstract_views.QuestionType.YesNo
 
     def get_question(self):
@@ -1119,13 +1119,13 @@ class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
     title = "Specific vulnerabilities of household members"
     next = "AnswersSummary"
-    percent_complete = COMPLETE_GROUP_5 + 9
+    percent_complete = COMPLETE_GROUP_8 + 1
     form_class = questionnaire_forms.Vulnerabilities
 
 
 class AnswersSummary(abstract_views.NoQuestion):
     title = "Summary of your answers"
-    percent_complete = COMPLETE_GROUP_5 + 9
+    percent_complete = COMPLETE_GROUP_9
     template_name = "questionnaire/answers_summary.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -1208,7 +1208,7 @@ class AnswersSummary(abstract_views.NoQuestion):
 class RecommendedMeasures(abstract_views.Question):
     template_name = "questionnaire/recommended_measures.html"
     title = "Recommendations for this property"
-    percent_complete = COMPLETE_GROUP_6 + 0
+    percent_complete = COMPLETE_GROUP_9
     next = "Completed"
 
     def get_context_data(self, *args, **kwargs):
