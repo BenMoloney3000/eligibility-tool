@@ -1,7 +1,10 @@
-{% extends 'base_error.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
     {% with error=exception %}
-        {{ block.super }}
+        <h3>{{ exception }}</h3>
+        <p>We're sorry, but the page you requested could not be found.</p>
+        <p>Did you mistype the URL?</p>
+        <p>Please click on the FutureFit logo above to go to the main page.</p>
     {% endwith %}
 {% endblock content %}
