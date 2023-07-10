@@ -7,6 +7,7 @@ $header_height: 6em;
 $footer_height: 6em;
 
 $orange_warm: #f7941d;
+$orange_light: lighten($orange_warm, 20%);
 $pv_purple: #1e0f2c;
 $fb_white: #ffffff;
 $body_grey: #fcfcfc;
@@ -276,36 +277,21 @@ details {
     margin: 0 0.5rem 0 0.2rem;
 }
 .button {
-    border-color: $orange_warm;
     color: $body_black;
+    border-color: $orange_light;
     font-size: 1rem;
-    padding: 0.25rem 1.125rem 0.3125rem;
+    padding: 0.3125rem 1.125rem 0.3125rem;
     border-radius: 50px;
     font-weight: 600;
-    transition: color 0.2s ease-in 0.2s, border-color 0.2s ease-in 0.2s;
+    transition: background-color ease-in 0.125s, border-color ease-in 0.125s;
     position: relative;
     overflow: hidden;
-    background-color: transparent;
+    background-color: $orange_warm;
     z-index: 1;
 }
 .button:hover {
-    color: $body_black;
-    border-color: $orange_warm;
-}
-.button::before {
-    content: '';
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 101%;
-    transition: all 0.3s ease-in;
-    z-index: -1;
-    background: $orange_warm;
-    transform: skew(30deg) translateX(-103%);
-}
-.button:hover::before {
-    transform: skew(0) translateX(0);
+    background-color: $orange_light;
+    border-color: lighten($orange_light, 20%);
 }
 .wrapper {
     max-width: 40em;

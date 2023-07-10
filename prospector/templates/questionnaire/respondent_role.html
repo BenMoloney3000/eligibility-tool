@@ -16,6 +16,7 @@
                         name="{{ form.respondent_role.html_name }}"
                         value="{{ value }}"
                         class="govuk-radios__input"
+                        required
                         {% if value == form.respondent_role.data or value == form.respondent_role.initial %}checked{% endif %}>
                     <label
                         class="govuk-label govuk-radios__label"

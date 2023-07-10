@@ -8,6 +8,7 @@
                     name="{{ form.field.html_name }}"
                     value="{{ value }}"
                     class="govuk-radios__input"
+                    required
                     {% if value == form.field.initial %}checked{% endif %}>
                 <label
                     class="govuk-label govuk-radios__label"

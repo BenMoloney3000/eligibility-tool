@@ -301,3 +301,4 @@ pip-selfcheck.json
 # Silver searcher
 .ignore
 
+prospector/static/css/style.css
