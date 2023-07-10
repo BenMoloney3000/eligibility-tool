@@ -169,7 +169,23 @@
                 <td><a href='{% url "questionnaire:other-heating-present" %}'>CHANGE</a></td>
             </tr>
             {% if user_data.other_heating_present %}
-                {% include "questionnaire/includes/gas_boiler_present.html" with user_data=user_data %}
+                <tr>
+                    <td>Does the property have a hot water storage tank?</td>
+                    <td>{{ user_data.hwt_present|yesno|capfirst }}</td>
+                    <td><a href='{% url "questionnaire:hwt-present" %}'>CHANGE</a></td>
+                </tr>
+                <tr>
+                    <td>Is the heating system powered by an air or ground source heat pump?</td>
+                    <td>{{ user_data.heat_pump_present|yesno|capfirst }}</td>
+                    <td><a href='{% url "questionnaire:heat-pump-present" %}'>CHANGE</a></td>
+                </tr>
+                {% if not user_data.heat_pump_present %}
+                    <tr>
+                        <td>What fuel does the central heating system run on?</td>
+                        <td>{{ user_data.other_heating_fuel }}</td>
+                        <td><a href='{% url "questionnaire:other-heating-fuel" %}'>CHANGE</a></td>
+                    </tr>
+                {% endif %}
             {% else %}
                 <tr>
                     <td>Are there storage heaters in the property?</td>
