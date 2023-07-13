@@ -277,19 +277,21 @@ details {
     margin: 0 0.5rem 0 0.2rem;
 }
 .button {
-    color: $body_black;
+    color: #3a2a2a;
     border-color: $orange_light;
     font-size: 1rem;
-    padding: 0.3125rem 1.125rem 0.3125rem;
+    padding: 0.75rem 1.25rem;
     border-radius: 50px;
     font-weight: 600;
-    transition: background-color ease-in 0.125s, border-color ease-in 0.125s;
+    transition: background-color ease-in 0.125s, border-color ease-in 0.125s,
+        color ease-in 0.125s;
     position: relative;
     overflow: hidden;
     background-color: $orange_warm;
     z-index: 1;
 }
 .button:hover {
+    color: lighten(#3a2a2a, 20%);
     background-color: $orange_light;
     border-color: lighten($orange_light, 20%);
 }
@@ -384,4 +386,24 @@ section.ticked-list {
     ul {
         margin: 0;
     }
+}
+
+table {
+    border-spacing: 0;
+
+    & + & {
+        margin-top: 3rem;
+    }
+}
+
+tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+td {
+    padding: 0.5em 0.75em;
 }
