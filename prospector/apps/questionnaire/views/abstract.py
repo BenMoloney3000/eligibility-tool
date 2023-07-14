@@ -148,6 +148,7 @@ class SingleQuestion(Question):
     note: Optional[str]
     unit: Optional[str]
     next: Optional[str]
+    icon: Optional[str]
 
     template_name = "questionnaire/single_question.html"
 
@@ -216,6 +217,8 @@ class SingleQuestion(Question):
         if hasattr(self, "unit"):
             context["unit"] = self.unit
         context["question_note"] = self.get_note()
+        if hasattr(self, "icon"):
+            context["question_icon"] = self.icon
         return context
 
     def get_answer_field(self):

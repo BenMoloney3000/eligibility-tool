@@ -18,7 +18,10 @@
         <h2>Summary of your answers</h2>
     {% endblock question_text %}
 
-    <h4>Your details</h4>
+    <h4 class="summary-heading">
+        {% include "./includes/icon_person.html" %}
+        Your details
+    </h4>
 
     <table>
         <tr>
@@ -62,7 +65,10 @@
         {% endif %}
     </table>
 
-    <h4>Details of the property</h4>
+    <h4 class="summary-heading">
+        {% include "./includes/icon_house.html" %}
+        Details of the property
+    </h4>
 
     <table>
         <tr>
@@ -77,7 +83,10 @@
         </tr>
     </table>
 
-    <h4>Property energy performance details</h4>
+    <h4 class="summary-heading">
+        {% include "./includes/icon_flame.html" %}
+        Property energy performance details
+    </h4>
 
     <table>
         <tr>

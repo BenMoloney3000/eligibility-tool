@@ -15,7 +15,18 @@
     {% endif %}
 
     {% block question_text %}
-        <h2>{{ question_text|safe }}</h2>
+        <h2 class="question-heading">
+            {% if question_icon == "house" %}
+                {% include "./includes/icon_house.html" %}
+            {% elif question_icon == "flame" %}
+                {% include "./includes/icon_flame.html" %}
+            {% elif question_icon == "sun" %}
+                {% include "./includes/icon_sun.html" %}
+            {% else %}
+                {% include "./includes/icon_person.html" %}
+            {% endif %}
+            {{ question_text|safe }}
+        </h2>
     {% endblock question_text %}
     {% if messages %}
         <p>

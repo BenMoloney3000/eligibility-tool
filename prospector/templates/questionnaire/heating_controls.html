@@ -5,7 +5,10 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block question_text %}
-    <h2>How is the heating in this property controlled?</h2>
+    <h2 class="question-heading">
+        {% include "./includes/icon_control.html" %}
+        How is the heating in this property controlled?
+    </h2>
 {% endblock question_text %}
 
 {% block question_supplement %}

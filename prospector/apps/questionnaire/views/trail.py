@@ -379,6 +379,7 @@ class Consents(abstract_views.Question):
 
 class SelectEPC(abstract_views.Question):
     title = "Energy Performance Certificate (EPC)"
+    icon = "house"
     template_name = "questionnaire/select_epc.html"
     form_class = questionnaire_forms.SelectEPC
     candidate_epcs = {}
@@ -436,6 +437,7 @@ class SelectEPC(abstract_views.Question):
 class PropertyType(abstract_views.Question):
     title = "Property type"
     question = "What type of property is this?"
+    icon = "house"
     template_name = "questionnaire/property_type.html"
     form_class = questionnaire_forms.PropertyType
     next = "PropertyAgeBand"
@@ -471,6 +473,7 @@ class PropertyType(abstract_views.Question):
 class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     title = "Property age"
     question = "When was the property built?"
+    icon = "house"
     supplementary = "If you don't know the exact year it's fine to give us an estimate."
     type_ = abstract_views.QuestionType.Choices
     choices = enums.PropertyAgeBand.choices
@@ -493,6 +496,7 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
 class WallType(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
     question = "What type of outside walls does the property have?"
+    icon = "house"
     supplementary = (
         "<h2>Working out your wall type</h2>"
         "<p>The first thing you need to find out is what sort of walls you "
@@ -535,6 +539,7 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
 class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
     question = "Are the outside walls in this property insulated?"
+    icon = "house"
     type_ = abstract_views.QuestionType.YesNo
     note = (
         "If only some of the outside walls are insulated, choose the option that "
@@ -550,6 +555,7 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
         "Does the property have a suspended timber ground floor with a void "
         "underneath?"
     )
+    icon = "house"
     supplementary = (
         "<p>"
         "If you have air bricks or ventilation bricks on the outside wall(s) "
@@ -594,6 +600,7 @@ class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
 class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Floor insulation"
     question = "Is the suspended timber floor insulated?"
+    icon = "house"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_4 + 1
     next = "UnheatedLoft"
@@ -602,6 +609,7 @@ class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
 class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
     title = "Property roof"
     question = "Does the property have an unheated loft space directly above it?"
+    icon = "house"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_4 + 3
 
@@ -630,6 +638,7 @@ class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
 
 class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof"
+    icon = "house"
     question = (
         "Is there a 'room-in-the-roof' space, for example a loft conversion or "
         "similar?"
@@ -655,6 +664,7 @@ class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
 class RirInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Room in roof insulation"
     question = "Has the 'room-in-the-roof' space been well insulated?"
+    icon = "house"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_4 + 7
     next = "GasBoilerPresent"
@@ -663,6 +673,7 @@ class RirInsulated(abstract_views.SinglePrePoppedQuestion):
 class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
     title = "Loft insulation"
     question = "Has the unheated loft space been well insulated?"
+    icon = "house"
     type_ = abstract_views.QuestionType.YesNo
     note = (
         "By 'well insulated' we mean with at least 25cm of 'mineral wool' type "
@@ -675,6 +686,7 @@ class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
 class FlatRoof(abstract_views.SinglePrePoppedQuestion):
     title = "Flat roof"
     question = "Does the property have a flat roof?"
+    icon = "house"
     type_ = abstract_views.QuestionType.YesNo
     note = (
         "If the property has different roof types, choose the answer that applies "
@@ -697,6 +709,7 @@ class FlatRoof(abstract_views.SinglePrePoppedQuestion):
 class FlatRoofInsulated(abstract_views.SingleQuestion):
     title = "Flat roof type"
     question = "Is your flat roof well insulated?"
+    icon = "house"
     type_ = abstract_views.QuestionType.Choices
     next = "GasBoilerPresent"
     choices = enums.InsulationConfidence.choices
@@ -706,6 +719,7 @@ class FlatRoofInsulated(abstract_views.SingleQuestion):
 class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Gas boiler"
     question = "Does the property have a central heating system with a boiler running off mains gas?"
+    icon = "flame"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_5 + 4
 
@@ -731,6 +745,7 @@ class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
 
 class OnMainsGas(abstract_views.SinglePrePoppedQuestion):
     title = "Mains gas"
+    icon = "flame"
     question = "Is the property connected to the mains gas network?"
     type_ = abstract_views.QuestionType.YesNo
     next = "OtherHeatingPresent"
@@ -739,6 +754,7 @@ class OnMainsGas(abstract_views.SinglePrePoppedQuestion):
 
 class OtherHeatingPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Other central heating system"
+    icon = "flame"
     question = "Does the property have a non-gas central heating system?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_5 + 8
@@ -761,6 +777,7 @@ class OtherHeatingPresent(abstract_views.SinglePrePoppedQuestion):
 
 class HwtPresent(abstract_views.SingleQuestion):
     title = "Hot water tank"
+    icon = "house"
     question = "Does the property have a hot water storage tank?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_6
@@ -774,6 +791,7 @@ class HwtPresent(abstract_views.SingleQuestion):
 
 class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Heat pump"
+    icon = "flame"
     question = "Is the heating system powered by an air or ground source heat pump?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_6 + 2
@@ -792,6 +810,7 @@ class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
 
 class OtherHeatingFuel(abstract_views.SinglePrePoppedQuestion):
     title = "Heating fuel source"
+    icon = "flame"
     question = "What fuel does the central heating system run on?"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.NonGasFuel.choices
@@ -801,6 +820,7 @@ class OtherHeatingFuel(abstract_views.SinglePrePoppedQuestion):
 
 class GasBoilerAge(abstract_views.SingleQuestion):
     title = "Boiler age"
+    icon = "flame"
     question = "When was the current boiler installed?"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.BoilerAgeBand.choices
@@ -811,6 +831,7 @@ class GasBoilerAge(abstract_views.SingleQuestion):
 class GasBoilerBroken(abstract_views.SingleQuestion):
     title = "Boiler condition"
     question = "Is the gas boiler currently broken?"
+    icon = "flame"
     type_ = abstract_views.QuestionType.YesNo
     next = "HeatingControls"
     percent_complete = COMPLETE_GROUP_7 + 3
@@ -818,6 +839,7 @@ class GasBoilerBroken(abstract_views.SingleQuestion):
 
 class HeatingControls(abstract_views.Question):
     title = "Heating controls"
+    icon = "flame"
     template_name = "questionnaire/heating_controls.html"
     form_class = questionnaire_forms.HeatingControls
     next = "HasSolarPv"
@@ -847,6 +869,7 @@ class HeatingControls(abstract_views.Question):
 
 class StorageHeatersPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Storage heaters"
+    icon = "flame"
     question = "Are there storage heaters in the property?"
     type_ = abstract_views.QuestionType.YesNo
     next = "HhrshsPresent"
@@ -868,6 +891,7 @@ class StorageHeatersPresent(abstract_views.SinglePrePoppedQuestion):
 
 class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
     title = "Electric radiators"
+    icon = "flame"
     question = "Are there other electric radiators in the property?"
     note = "These may be fixed panel radiators or freestanding heaters."
     type_ = abstract_views.QuestionType.YesNo
@@ -877,6 +901,7 @@ class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
 
 class HhrshsPresent(abstract_views.SingleQuestion):
     title = "Storage heater performance"
+    icon = "flame"
     question = "Are the storage heaters in the property Dimplex Quantum or other high heat retention storage heaters?"
     type_ = abstract_views.QuestionType.YesNo
     next = "HasSolarPv"
@@ -885,6 +910,7 @@ class HhrshsPresent(abstract_views.SingleQuestion):
 
 class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
     title = "Solar PV"
+    icon = "sun"
     question = "Does this property have Solar PV (photovoltaic) panels installed?"
     type_ = abstract_views.QuestionType.YesNo
     percent_complete = COMPLETE_GROUP_7 + 13

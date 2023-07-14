@@ -4,7 +4,10 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block question_text %}
-    <h2>Contacting you by phone</h2>
+    <h2 class="question-heading">
+        {% include "./includes/icon_phone.html" %}
+        Contacting you by phone
+    </h2>
     <p>Please give us at least one telephone number:</p>
 {% endblock question_text %}
 

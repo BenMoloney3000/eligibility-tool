@@ -4,7 +4,10 @@
 {% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
 
 {% block question_text %}
-    <h2>Property address</h2>
+    <h2 class="question-heading">
+        {% include "./includes/icon_house.html" %}
+        Property address
+    </h2>
     <p>Please tell us the address of the property you're enquiring about.</p>
 {% endblock question_text %}
 

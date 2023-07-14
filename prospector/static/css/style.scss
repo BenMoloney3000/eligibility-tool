@@ -278,8 +278,8 @@ details {
 }
 .button {
     color: #3a2a2a;
-    border-color: $orange_light;
-    font-size: 1rem;
+    border: 2px solid currentColor;
+    font-size: 1.1rem;
     padding: 0.75rem 1.25rem;
     border-radius: 50px;
     font-weight: 600;
@@ -289,11 +289,16 @@ details {
     overflow: hidden;
     background-color: $orange_warm;
     z-index: 1;
+    margin-bottom: 1px;
 }
-.button:hover {
+.button:hover,
+.button:focus {
     color: lighten(#3a2a2a, 20%);
     background-color: $orange_light;
-    border-color: lighten($orange_light, 20%);
+}
+.button:active {
+    top: 1px;
+    margin-bottom: 0;
 }
 .wrapper {
     max-width: 40em;
@@ -360,7 +365,7 @@ form {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 0.5em;
+    margin-top: 1em;
 }
 .question-supplement {
     padding: 0.5em;
@@ -406,4 +411,25 @@ tr:nth-child(even) {
 
 td {
     padding: 0.5em 0.75em;
+}
+
+.svg-icon {
+    width: 1.1em;
+    height: 1.1em;
+    min-width: 1.1em;
+}
+
+.summary-heading,
+.question-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.question-heading {
+    gap: 0.25em;
+}
+
+.govuk-label {
+    color: inherit;
 }

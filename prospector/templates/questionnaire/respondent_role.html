@@ -2,7 +2,10 @@
 {% load static %}
 
 {% block question_text %}
-    <h2>What is your relationship to the property?</h2>
+    <h2 class="question-heading">
+        {% include "./includes/icon_person.html" %}
+        What is your relationship to the property?
+    </h2>
 {% endblock question_text %}
 
 {% block form_content %}
