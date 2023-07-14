@@ -285,6 +285,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
     question = "Enter the property postcode"
     supplementary = "This is the postcode for the property."
+    icon = "house"
     next = "PropertyAddress"
     percent_complete = COMPLETE_GROUP_2 + 3
 
@@ -365,6 +366,7 @@ class PropertyOwnership(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Choices
     question = "What is the tenure of the property - how is it occupied?"
     choices = enums.PropertyOwnership.choices
+    icon = "house"
     next = "Consents"
     percent_complete = COMPLETE_GROUP_2 + 7
 
