@@ -5,3 +5,5 @@
 ## Documentation
 
 For 'Getting Started' info, see [docs/developing/getting-started.rst](docs/developing/getting-started.rst).
+
+For 'Uploading Parity Data' info, see [docs/developing/uploading-parity-data.rst](docs/developing/uploading-parity-data.rst).
