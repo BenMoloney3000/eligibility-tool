@@ -219,7 +219,7 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
 
 def get_income_rating(answers: models.Answers) -> enums.RAYG:
     # Household income rating
-    if answers.total_income_lt_31k == enums.IncomeIsUnderThreshold.YES:
+    if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
         # Gross household income below £31k therefore the Household is eligible
         # for free or discounted schemes (based on info given).
         income_rating = enums.RAYG.GREEN

@@ -488,7 +488,7 @@ class Answers(models.Model):
         choices=enums.UpToFourOrMore.choices,
     )
 
-    total_income_lt_31k = models.CharField(
+    total_income_lt_30k = models.CharField(
         choices=enums.IncomeIsUnderThreshold.choices,
         max_length=7,
         blank=True,

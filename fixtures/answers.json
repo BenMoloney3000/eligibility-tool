@@ -106,7 +106,7 @@
             "consented_future_schemes": true,
             "adults": 1,
             "children": 1,
-            "total_income_lt_31k": "NO",
+            "total_income_lt_30k": "NO",
             "take_home_lt_31k": "NO",
             "disability_benefits": false,
             "child_benefit": false,

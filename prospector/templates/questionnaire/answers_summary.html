@@ -234,10 +234,10 @@
             </tr>
             <tr>
                 <td>Is the household income less than £31,000 before tax?</td>
-                <td>{{ user_data.total_income_lt_31k }}</td>
+                <td>{{ user_data.total_income_lt_30k }}</td>
                 <td><a href='{% url "questionnaire:household-income" %}'>CHANGE</a></td>
             </tr>
-            {% if "Yes" in user_data.total_income_lt_31k %}
+            {% if "Yes" in user_data.total_income_lt_30k %}
                 {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
 
             {% else %}

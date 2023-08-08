@@ -248,7 +248,7 @@ def test_map_crm(answers):
         # Force property_rating to be Red
         sap_rating=65,
         # Force income_rating to be Green
-        total_income_lt_31k=enums.IncomeIsUnderThreshold.YES,
+        total_income_lt_30k=enums.IncomeIsUnderThreshold.YES,
     )
     crm_data = crm.map_crm(dummy_answers)
     assert crm_data["pcc_name"] == str(dummy_answers.uuid)
