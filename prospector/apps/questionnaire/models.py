@@ -1,3 +1,4 @@
+import uuid as uuid_lib
 from typing import Optional
 
 from django.db import models
@@ -13,12 +14,8 @@ class Answers(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
-    uuid = models.CharField(
-        db_index=True,
-        max_length=10,
-        default=None,
-        editable=False,
-        unique=True,
+    uuid = models.UUIDField(
+        db_index=True, default=uuid_lib.uuid4, editable=False, unique=True
     )
 
     """
@@ -610,16 +607,11 @@ class Answers(models.Model):
         verbose_name="Property rating (computed field)",
     )
 
-    def save(self, *args, **kwargs):  # noqa
+    def save(self, *args, **kwargs):
         from prospector.apps.questionnaire import utils
 
         self.income_rating = utils.get_income_rating(self)
         self.property_rating = utils.get_property_rating(self)
-        if not self.uuid:
-            # Generate uuid field value once, then check the db. If exists, keep trying.
-            self.uuid = utils.generate_id()  # noqa
-            while Answers.objects.filter(uuid=self.uuid).exists():
-                self.uuid = utils.generate_id()  # noqa
         super().save(*args, **kwargs)
 
     @property

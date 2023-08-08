@@ -1,3 +1,4 @@
+import uuid
 from typing import Optional
 
 from celery import shared_task
@@ -27,7 +28,7 @@ class CRMApiRequestTask(Singleton):
 
 
 @shared_task(base=CRMApiRequestTask, bind=True, raise_on_duplicate=True)
-def crm_create(self, answers_uuid: str) -> Optional[dict]:
+def crm_create(self, answers_uuid: uuid.uuid4) -> Optional[dict]:
     result = None
     answers = Answers.objects.get(uuid=answers_uuid)
 

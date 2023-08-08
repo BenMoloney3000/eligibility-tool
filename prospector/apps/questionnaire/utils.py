@@ -1,31 +1,10 @@
 import logging
-import random
 from typing import List
 
 from . import enums
 from . import models
 
 logger = logging.getLogger(__name__)
-
-
-def generate_id():
-    """
-    Generate string to be utilised as the "uuid" value.
-
-    Composed from 5 uppercase letters and 5 numbers.
-    """
-
-    id_string = ""
-    chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
-    for i in range(10):
-        if i < 5:
-            index = random.randint(0, 25)
-            id_string += chars[index]
-        else:
-            index = random.randint(25, len(chars) - 1)
-            id_string += chars[index]
-
-    return "".join(random.sample(id_string, len(id_string)))
 
 
 def determine_recommended_measures(
