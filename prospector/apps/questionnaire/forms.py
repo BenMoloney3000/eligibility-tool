@@ -231,8 +231,8 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         self.prefilled_addresses = prefilled_addresses
 
         udprn_choices = [
-            (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
-            for udprn, house in prefilled_addresses.items()
+            (id, f"{house.address_1}, {house.address_2}".strip(", "))
+            for id, house in prefilled_addresses.items()
         ]
         udprn_choices.append((None, "Address not in list"))
 

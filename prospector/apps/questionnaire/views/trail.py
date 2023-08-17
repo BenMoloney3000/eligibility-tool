@@ -7,6 +7,7 @@ from django.views.generic.base import TemplateView
 
 from . import abstract as abstract_views
 from prospector.apis import epc
+from prospector.apps.parity.utils import get_addresses_for_postcode
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
 from prospector.apps.questionnaire import selectors
@@ -319,10 +320,11 @@ class PropertyAddress(abstract_views.Question):
         kwargs = super().get_form_kwargs()
 
         try:
-            # Cache these in the session to avoid another call on POST
             self.prefilled_addresses = {
-                address.udprn: address
-                for address in selectors.get_postcode(self.answers.property_postcode)
+                address.id: address
+                for address in get_addresses_for_postcode(
+                    self.answers.property_postcode
+                )
             }
         except ValueError:
             pass
@@ -335,9 +337,9 @@ class PropertyAddress(abstract_views.Question):
         context["property_postcode"] = self.answers.property_postcode
         context["all_postcode_addresses"] = {
             key: {
-                "address1": address.line_1,
-                "address2": address.line_2,
-                "address3": address.line_3,
+                "address1": address.address_1,
+                "address2": address.address_2,
+                "address3": address.address_3,
             }
             for key, address in self.prefilled_addresses.items()
         }
