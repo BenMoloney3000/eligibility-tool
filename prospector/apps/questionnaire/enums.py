@@ -32,44 +32,197 @@ class PropertyDataSource(models.TextChoices):
     # in future.
     EPC = "EPC", "EPC"
     HA = "HA", "Home Analytics"
+    PDB = "PDB", "Parity Database"
+
+
+# class PropertyTypeOld(models.TextChoices):
+#     FLAT = "FLAT", "Flat or maisonette"
+#     HOUSE = "HOUSE", "House"
+#     BUNGALOW = "BUNGALOW", "Bungalow"
+#     PARK_HOME = "PARK_HOME", "Park Home"
 
 
 class PropertyType(models.TextChoices):
-    FLAT = "FLAT", "Flat or maisonette"
+    FLAT = "FLAT", "Flat"
     HOUSE = "HOUSE", "House"
     BUNGALOW = "BUNGALOW", "Bungalow"
     PARK_HOME = "PARK_HOME", "Park Home"
+    MAISONNETTE = "MAISONNETTE", "Maisonette"
 
 
-class PropertyForm(models.TextChoices):
+# class PropertyForm(models.TextChoices):
+#     DETACHED = "DETACHED", "Detached"
+#     SEMI_DETACHED = "SEMI_DETACHED", "Semi-detached"
+#     MID_TERRACE = "MID_TERRACE", "Mid-terrace"
+#     END_TERRACE = "END_TERRACE", "End-terrace"
+#     MAISONNETTE = "MAISONNETTE", "Maisonette"
+#     FLAT_SMALL = "FLAT_CONVERSION", "Flat (converted house or block of 5 or less flats)"
+#     FLAT_BLOCK = (
+#         "FLAT_BLOCK",
+#         "Flat (block of 5 or more flats or flat in mixed use building)",
+#     )
+
+
+# Below defines attributes coresponding with Attachment field in ParityData model
+class PropertyAttachment(models.TextChoices):
     DETACHED = "DETACHED", "Detached"
     SEMI_DETACHED = "SEMI_DETACHED", "Semi-detached"
     MID_TERRACE = "MID_TERRACE", "Mid-terrace"
     END_TERRACE = "END_TERRACE", "End-terrace"
-    MAISONNETTE = "MAISONNETTE", "Maisonette"
-    FLAT_SMALL = "FLAT_CONVERSION", "Flat (converted house or block of 5 or less flats)"
-    FLAT_BLOCK = (
-        "FLAT_BLOCK",
-        "Flat (block of 5 or more flats or flat in mixed use building)",
-    )
+    ENCLOSED_END_TERRACE = "ENCLOSED_END_TERRACE", "Enclosed-end-terrace"
+    ENCLOSED_MID_TERRACE = "ENCLOSED_MID_TERRACE", "Enclosed-mid-terrace"
 
 
-class PropertyAgeBand(models.TextChoices):
-    # We can use an integer field to parse numerical values into bands
-    BEFORE_1900 = 0, "Before 1900"
+# class PropertyAgeBand(models.TextChoices):
+#     # We can use an integer field to parse numerical values into bands
+#     BEFORE_1900 = 0, "Before 1900"
+#     FROM_1900 = 1900, "1900-1929"
+#     FROM_1930 = 1930, "1930-1949"
+#     FROM_1950 = 1950, "1950-1966"
+#     FROM_1967 = 1967, "1967-1975"
+#     FROM_1976 = 1976, "1976-1990"
+#     FROM_1991 = 1991, "1991-2002"
+#     SINCE_2003 = 2003, "Since 2003"
+#     UNKNOWN = "UNKNOWN", "I don't know"
+
+
+class PropertyConstructionYears(models.TextChoices):
     FROM_1900 = 1900, "1900-1929"
     FROM_1930 = 1930, "1930-1949"
     FROM_1950 = 1950, "1950-1966"
     FROM_1967 = 1967, "1967-1975"
-    FROM_1976 = 1976, "1976-1990"
-    FROM_1991 = 1991, "1991-2002"
-    SINCE_2003 = 2003, "Since 2003"
-    UNKNOWN = "UNKNOWN", "I don't know"
+    FROM_1976 = 1976, "1976-1982"
+    FROM_1983 = 1983, "1983-1990"
+    FROM_1991 = 1991, "1991-1995"
+    FROM_1996 = 1996, "1996-2002"
+    FROM_2003 = 2003, "2003-2006"
+    FROM_2007 = 2007, "2007-2011"
+    FROM_2012 = 2012, "2012 onwards"
+    BEFORE_1900 = 0, "Before 1900"
 
 
-class WallType(models.TextChoices):
-    SOLID = "SOLID", "Solid walls"
-    CAVITY = "CAVITY", "Cavity walls"
+# class WallType(models.TextChoices):
+#     SOLID = "SOLID", "Solid walls"
+#     CAVITY = "CAVITY", "Cavity walls"
+
+
+class WallConstruction(models.TextChoices):  # To replace WallType with Parity dataset
+    CAVITY = "CAVITY", "Cavity"
+    COB = "COB", "Cob"
+    GRANITE = "GRANITE", "Granite"
+    PARK_HOME = "PARK_HOME", "Park Home"
+    SANDSTONE = "SANDSTONE", "Sandstone"
+    SOLID_BRICK = "SOLID_BRICK", "Solid Brick"
+    SYSTEM = "SYSTEM", "System"
+    TIMBER_FRAME = "TIMBER_FRAME", "Timber Frame"
+
+
+class WallInsulated(models.TextChoices):
+    AS_BUILT = "AsBuilt", "As Built"
+    EXTERNAL = "External", "External"
+    FC = "FilledCavity", "Filled Cavity"
+    FCE = "FilledCavityPlusExternal", "Filled Cavity Plus External"
+    FCI = "FilledCavityPlusInternal", "Filled Cavity Plus Internal"
+    INTERNAL = "Internal", "Internal"
+
+
+class RoofConstruction(models.TextChoices):
+    ADB = "AnotherDwellingAbove", "Another Dwelling Above"
+    FLAT = "Flat", "Flat"
+    PNLA = "PitchedNormalLoftAccess", "Pitched Normal Loft Access"
+    PNNLA = "PitchedNormalNoLoftAccess", "Pitched Normal No Loft Access"
+    PT = "PitchedThatched", "Pitched Thatched"
+    PWSC = "PitchedWithSlopingCeiling", "Pitched With Sloping Ceiling"
+
+
+class RoofInsulation(models.TextChoices):
+    ADB = "AnotherDwellingAbove", "Another Dwelling Above"
+    AS_BUILD = "AsBuilt", "As Build"
+    MM_100 = "mm100", "100 mm"
+    MM_12 = "mm12", "12 mm"
+    MM_150 = "mm150", "150 mm"
+    MM_200 = "mm200", "200 mm"
+    MM_25 = "mm25", "25 mm"
+    MM_250 = "mm250", "250 mm"
+    MM_270 = "mm270", "270 mm"
+    MM_300 = "mm300", "300 mm"
+    MM_350 = "mm350", "350 mm"
+    MM_400 = "mm400", "400 mm"
+    MM_50 = "mm50", "50 mm"
+    MM_75 = "mm75", "75 mm"
+    NO_INSULATION = "None", "None"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class FloorConstruction(models.TextChoices):
+    SOLID = "Solid", "Solid"
+    SNT = "SuspendedNotTimber", "Suspended Not Timber"
+    ST = "SuspendedTimber", "Suspended Timber"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class FloorInsulation(models.TextChoices):
+    AS_BUILT = "AsBuilt", "As Built"
+    RETRO_FITTED = "RetroFitted", "Retro Fitted"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class Glazing(models.TextChoices):
+    DOUBLE_2002_PLUS = "Double2002orLater", "Double 2002 or later"
+    DOUBLE_BEFORE_2002 = "DoubleBefore2002", "Double before 2002"
+    DOUBLE_UNKNOWN = "DoubleButAgeUnknown", "Double but age unknown"
+    NOT_DEFINED = "NotDefined", "Not Defined"
+    SECONDARY = "Secondary", "Secondary"
+    SINGLE = "Single", "Single"
+    TRIPLE = "Triple", "Triple"
+
+
+class Heating(models.TextChoices):
+    BOILERS = "Boilers", "Boilers"
+    COMMUNITY = "Community", "Community"
+    EUF = "Electric underfloor", "Electric Under Floor"
+    HP_WARM = "Heat pumps (warm air)", "Heat Pumps (Warm Air)"
+    HP_WET = "Heat pumps (wet)", "Heat Pumps (Wet)"
+    OTHER = "Other systems", "Other Systems"
+    RH = "Room heaters", "Room Heaters"
+    SH = "Storage heaters", "Storage Heaters"
+    AIR = "Warm Air (not heat pump)", "Warm Air (Not Heat Pump)"
+
+
+class MainFuel(models.TextChoices):
+    ANTHRACITE = "Anthracite", "Anthracite"
+    BWP = "BulkWoodPellets", "Bulk Wood Pellets"
+    DFMW = "DualFuelMineralWood", "Dual Fuel Mineral Wood"
+    EC = "ElectricityCommunity", "Electricity Community"
+    ENC = "ElectricityNotCommunity", "Electricity Not Community"
+    GBLPG = "GasBottledLPG", "Gas Bottled LPG"
+    HCNC = "HouseCoalNotCommunity", "House Coal Not Community"
+    LPGC = "LPGCommunity", "LPG Community"
+    LPGNC = "LPGNotCommunity", "LPG Not Community"
+    LPGSC = "LPGSpecialCondition", "LPG Special Condition"
+    MGC = "MainsGasCommunity", "Mains Gas Community"
+    MGNC = "MainsGasNotCommunity", "Mains Gas Not Community"
+    OC = "OilCommunity", "Oil Community"
+    ONC = "OilNotCommunity", "Oil Not Community"
+    SC = "SmokelessCoal", "Smokeless Coal"
+    WC = "WoodChips", "Wood Chips"
+    WL = "WoodLogs", "Wood Logs"
+
+
+class EfficiencyBand(models.TextChoices):
+    A = "a", "A"
+    B = "b", "B"
+    C = "c", "C"
+    D = "d", "D"
+    E = "e", "E"
+    F = "f", "F"
+    G = "g", "G"
+
+
+class ControlsAdequacy(models.TextChoices):
+    OPTIMAL = "Optimal", "Optimal"
+    SUB_OPTIMAL = "SubOptimal", "Sub Optimal"
+    TOP_SPEC = "TopSpec", "Top Spec"
 
 
 class InsulationConfidence(models.TextChoices):

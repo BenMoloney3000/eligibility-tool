@@ -362,6 +362,17 @@ class PropertyAddress(abstract_views.Question):
 
         # TODO (maybe) same edge case as with RespondentAddress above.
 
+        if self.answers.property_address1 and self.answers.property_address_2:
+            try:
+                self.answers = services.prepopulate_from_parity(self.answers)
+            except Exception as e:
+                logging.error("prepopulate_from_parity failed", e)
+
+            self.answers.save()
+        else:
+            # Make sure it's been deselected
+            self.answers = services.depopulate_orig_fields(self.answers)
+
 
 class PropertyOwnership(abstract_views.SingleQuestion):
     title = "Property ownership"
@@ -377,65 +388,65 @@ class Consents(abstract_views.Question):
     title = "Your consent to our use of your data"
     template_name = "questionnaire/consents.html"
     form_class = questionnaire_forms.Consents
-    next = "SelectEPC"
+    next = "PropertyType"
     percent_complete = COMPLETE_GROUP_2 + 9
 
 
-class SelectEPC(abstract_views.Question):
-    title = "Energy Performance Certificate (EPC)"
-    icon = "house"
-    template_name = "questionnaire/select_epc.html"
-    form_class = questionnaire_forms.SelectEPC
-    candidate_epcs = {}
-    next = "PropertyType"
-    percent_complete = COMPLETE_GROUP_3 + 1
+# class SelectEPC(abstract_views.Question):
+#     title = "Energy Performance Certificate (EPC)"
+#     icon = "house"
+#     template_name = "questionnaire/select_epc.html"
+#     form_class = questionnaire_forms.SelectEPC
+#     candidate_epcs = {}
+#     next = "PropertyType"
+#     percent_complete = COMPLETE_GROUP_3 + 1
 
-    def get_form_kwargs(self):
-        """Pass the possible EPCs into the form."""
-        kwargs = super().get_form_kwargs()
-        kwargs["candidate_epcs"] = self.candidate_epcs
-        return kwargs
+#     def get_form_kwargs(self):
+#         """Pass the possible EPCs into the form."""
+#         kwargs = super().get_form_kwargs()
+#         kwargs["candidate_epcs"] = self.candidate_epcs
+#         return kwargs
 
-    def prereq(self):
-        try:
-            postcode_epcs = epc.get_for_postcode(self.answers.property_postcode) or []
+# def prereq(self):
+#     try:
+#         postcode_epcs = epc.get_for_postcode(self.answers.property_postcode) or []
 
-            # Try to reduce the possible EPCs by UPRN
-            # (can only filter out anything with a different UPRN)
-            # TODO could be some attempt to match the (full) address itself but it will
-            # require a lot of experimentation for possibly not much benefit.
-            # NB this does nothing with Data8 which cannot supply both UPRN & UDPRN
-            if self.answers.uprn:
-                postcode_epcs = [
-                    epc
-                    for epc in postcode_epcs
-                    if epc.uprn == "" or epc.uprn == str(self.answers.uprn)
-                ]
-                # At this point anything with a UPRN will be our UPRN, move
-                # that/them to the top of the list
-                postcode_epcs.sort(reverse=True, key=lambda x: bool(x.uprn))
-            self.candidate_epcs = {epc.id: epc for epc in postcode_epcs}
-        except ValueError:
-            pass
+#         # Try to reduce the possible EPCs by UPRN
+#         # (can only filter out anything with a different UPRN)
+#         # TODO could be some attempt to match the (full) address itself but it will
+#         # require a lot of experimentation for possibly not much benefit.
+#         # NB this does nothing with Data8 which cannot supply both UPRN & UDPRN
+#         if self.answers.uprn:
+#             postcode_epcs = [
+#                 epc
+#                 for epc in postcode_epcs
+#                 if epc.uprn == "" or epc.uprn == str(self.answers.uprn)
+#             ]
+#             # At this point anything with a UPRN will be our UPRN, move
+#             # that/them to the top of the list
+#             postcode_epcs.sort(reverse=True, key=lambda x: bool(x.uprn))
+#         self.candidate_epcs = {epc.id: epc for epc in postcode_epcs}
+#     except ValueError:
+#         pass
 
-        if len(self.candidate_epcs) == 0:
-            # No valid EPC. Continue.
-            return self.redirect()
+#     if len(self.candidate_epcs) == 0:
+#         # No valid EPC. Continue.
+#         return self.redirect()
 
-    def pre_save(self):
-        # If we selected an EPC, this is where we interrogate its data to
-        # pre-populate all the property energy performance questions
-        if self.answers.selected_epc:
-            selected_epc = self.candidate_epcs[self.answers.selected_epc]
-            try:
-                self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
-            except Exception as e:
-                logging.error("prepopulate_from_epc failed", selected_epc, e)
+# def pre_save(self):
+#     # If we selected an EPC, this is where we interrogate its data to
+#     # pre-populate all the property energy performance questions
+#     if self.answers.selected_epc:
+#         selected_epc = self.candidate_epcs[self.answers.selected_epc]
+#         try:
+#             self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
+#         except Exception as e:
+#             logging.error("prepopulate_from_epc failed", selected_epc, e)
 
-            self.answers.save()
-        else:
-            # Make sure it's been deselected
-            self.answers = services.depopulate_orig_fields(self.answers)
+#         self.answers.save()
+#     else:
+#         # Make sure it's been deselected
+#         self.answers = services.depopulate_orig_fields(self.answers)
 
 
 class PropertyType(abstract_views.Question):
@@ -480,7 +491,7 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     icon = "house"
     supplementary = "If you don't know the exact year it's fine to give us an estimate."
     type_ = abstract_views.QuestionType.Choices
-    choices = enums.PropertyAgeBand.choices
+    choices = enums.PropertyConstructionYears.choices
     percent_complete = COMPLETE_GROUP_3 + 5
     next = "WallType"
 
@@ -531,7 +542,7 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "https://energysavingtrust.org.uk/advice/cavity-wall-insulation</a>"
     )
     type_ = abstract_views.QuestionType.Choices
-    choices = enums.WallType.choices
+    choices = enums.WallConstruction.choices
     note = (
         "If the property has more than one type of outside wall, choose the one "
         "that makes up the most of the external area."

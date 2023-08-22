@@ -32,7 +32,7 @@ urlpatterns = [
         name="property-ownership",
     ),
     path("consents", views.Consents.as_view(), name="consents"),
-    path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
+    # path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
     path("type", views.PropertyType.as_view(), name="property-type"),
     path("age", views.PropertyAgeBand.as_view(), name="property-age-band"),
     path("wall-type", views.WallType.as_view(), name="wall-type"),

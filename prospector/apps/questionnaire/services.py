@@ -7,12 +7,50 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
-from . import enums
-from . import models
 from prospector.apis.epc import EPCData
 from prospector.apps.crm.tasks import crm_create
+from prospector.apps.parity.models import ParityData
+
+from . import enums, models
 
 logger = logging.getLogger(__name__)
+
+
+def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
+    parity_object = ParityData.objects.filter(
+        address_1=answers.property_address_1,
+        address_2=answers.property_address_2,
+        postcode=answers.property_postcode,
+    ).first()
+
+    if parity_object:
+        """Parse Parity contents to populate initial values for property energy data."""
+        po = parity_object
+
+        answers.property_type_orig = po.type
+        answers.property_attachment_orig = po.attachment
+        answers.property_construction_years_orig = po.construction_years
+        answers.wall_construction_orig = po.wall_construction
+        answers.wall_insulation_orig = po.wall_insulation
+        answers.roof_construction_orig = po.roof_construction
+        answers.roof_insulation_orig = po.roof_insulation
+        answers.floor_construction_orig = po.floor_construction
+        answers.floor_insulation_orig = po.floor_construction
+        answers.heating_orig = po.heating
+        answers.main_fuel_orig = po.main_fuel
+        answers.sap_score = int(po.sap_score)
+        answers.sap_band = po.sap_band
+        answers.lodged_epc_score = po.lodged_epc_score
+        answers.lodged_epc_band = po.lodged_epc_band
+        answers.glazing_orig = po.glazing
+        answers.boiler_efficiency_orig = po.boiler_efficiency
+        answers.controls_adequacy_orig = po.controls_adequacy
+        answers.heated_rooms_orig = po.heated_rooms
+        answers.tCO2_current_orig = po.tco2_current
+        answers.realistic_fuel_bill_orig = po.realistic_fuel_bill
+        answers.uprn = po.uprn
+
+        return answers
 
 
 def prepopulate_from_epc(
@@ -107,7 +145,7 @@ def _detect_property_type(epc: EPCData) -> Optional[enums.PropertyType]:
         return enums.PropertyType.FLAT
 
 
-def _detect_property_form(epc: EPCData) -> Optional[enums.PropertyForm]:
+def _detect_property_form(epc: EPCData) -> Optional[enums.PropertyAttachment]:
     p_form = epc.built_form.upper().replace("-", " ")
 
     # Catch "Enclosed End/Mid-Terrace"
@@ -120,7 +158,7 @@ def _detect_property_form(epc: EPCData) -> Optional[enums.PropertyForm]:
         return enums.PropertyForm.MAISONNETTE
 
 
-def _detect_property_age(epc: EPCData) -> Optional[enums.PropertyAgeBand]:
+def _detect_property_age(epc: EPCData) -> Optional[enums.PropertyConstructionYears]:
     age_band = epc.construction_age_band.upper()
 
     # Standard bands:
@@ -153,7 +191,7 @@ def _detect_property_age(epc: EPCData) -> Optional[enums.PropertyAgeBand]:
                 return enums.PropertyAgeBand(threshold)
 
 
-def _detect_wall_type(epc: EPCData) -> Optional[enums.WallType]:
+def _detect_wall_type(epc: EPCData) -> Optional[enums.WallConstruction]:
     wall_desc = epc.walls_description.upper()
 
     if "CAVITY" in wall_desc:
