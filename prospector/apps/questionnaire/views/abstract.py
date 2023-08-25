@@ -1,21 +1,16 @@
 import contextlib
 import logging
-from enum import auto
-from enum import Enum
+from enum import Enum, auto
 from typing import Optional
 
 from crispy_forms_gds.helper import FormHelper
-from crispy_forms_gds.layout import Field
-from crispy_forms_gds.layout import Layout
-from crispy_forms_gds.layout import Size
+from crispy_forms_gds.layout import Field, Layout, Size
 from django import forms
 from django.views.generic.edit import FormView
 
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
-from prospector.apps.questionnaire import models
-from prospector.apps.questionnaire import services
-from prospector.apps.questionnaire import utils
+from prospector.apps.questionnaire import models, services, utils
 from prospector.trail import mixin
 
 logger = logging.getLogger(__name__)

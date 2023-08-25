@@ -362,7 +362,7 @@ class PropertyAddress(abstract_views.Question):
 
         # TODO (maybe) same edge case as with RespondentAddress above.
 
-        if self.answers.property_address1 and self.answers.property_address_2:
+        if self.answers.property_address_1 and self.answers.property_address_2:
             try:
                 self.answers = services.prepopulate_from_parity(self.answers)
             except Exception as e:
@@ -455,7 +455,7 @@ class PropertyType(abstract_views.Question):
     icon = "house"
     template_name = "questionnaire/property_type.html"
     form_class = questionnaire_forms.PropertyType
-    next = "PropertyAgeBand"
+    next = "PropertyConstructionYears"
     percent_complete = COMPLETE_GROUP_3 + 3
 
     def get_initial(self):
@@ -463,9 +463,9 @@ class PropertyType(abstract_views.Question):
         if data.get("property_type"):
             data["data_correct"] = bool(
                 data.get("property_type_orig")
-                and data.get("property_form_orig")
+                and data.get("property_attachment_orig")
                 and data["property_type"] == data["property_type_orig"]
-                and data["property_form"] == data["property_form_orig"]
+                and data["property_attachment"] == data["property_attachment_orig"]
             )
         return data
 
@@ -477,15 +477,15 @@ class PropertyType(abstract_views.Question):
                 self.answers.property_type_orig
             ).label
 
-        if self.answers.property_form_orig:
-            context["initial_form"] = enums.PropertyForm(
-                self.answers.property_form_orig
+        if self.answers.property_attachment_orig:
+            context["initial_attachment"] = enums.PropertyAttachment(
+                self.answers.property_attachment_orig
             ).label
 
         return context
 
 
-class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
+class PropertyConstructionYears(abstract_views.SinglePrePoppedQuestion):
     title = "Property age"
     question = "When was the property built?"
     icon = "house"
@@ -493,23 +493,23 @@ class PropertyAgeBand(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.Choices
     choices = enums.PropertyConstructionYears.choices
     percent_complete = COMPLETE_GROUP_3 + 5
-    next = "WallType"
+    next = "WallConstruction"
 
     def pre_save(self):
         # If we didn't get the likely wall type, infer from the age now.
-        if not self.answers.wall_type_orig:
-            self.answers.wall_type_orig = (
-                enums.WallType.SOLID
+        if not self.answers.wall_construction_orig:
+            self.answers.wall_construction_orig = (
+                enums.WallConstruction.SOLID_BRICK
                 if (
-                    self.answers.property_age_band.isdecimal()
-                    and (int(self.answers.property_age_band) < 1930)
+                    self.answers.property_construction_years.isdecimal()
+                    and (int(self.answers.property_construction_years) < 1930)
                 )
-                else enums.WallType.CAVITY
+                else enums.WallConstruction.CAVITY
             )
 
 
-class WallType(abstract_views.SinglePrePoppedQuestion):
-    title = "Wall type"
+class WallConstruction(abstract_views.SinglePrePoppedQuestion):
+    title = "Wall construction"
     question = "What type of outside walls does the property have?"
     icon = "house"
     supplementary = (
@@ -547,15 +547,16 @@ class WallType(abstract_views.SinglePrePoppedQuestion):
         "If the property has more than one type of outside wall, choose the one "
         "that makes up the most of the external area."
     )
-    next = "WallsInsulated"
+    next = "WallsInsulation"
     percent_complete = COMPLETE_GROUP_3 + 7
 
 
-class WallsInsulated(abstract_views.SinglePrePoppedQuestion):
+class WallsInsulation(abstract_views.SinglePrePoppedQuestion):
     title = "Wall type"
-    question = "Are the outside walls in this property insulated?"
+    question = "How the outside walls in this property are insulated?"
     icon = "house"
-    type_ = abstract_views.QuestionType.YesNo
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.WallInsulation.choices
     note = (
         "If only some of the outside walls are insulated, choose the option that "
         "makes up most of the external area."

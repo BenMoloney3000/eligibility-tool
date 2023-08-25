@@ -98,33 +98,26 @@ def depopulate_orig_fields(answers: models.Answers) -> models.Answers:
     """Clear all the inferred data fields."""
 
     answers.property_type_orig = ""
-    answers.property_form_orig = ""
-    answers.property_age_band_orig = None
-    answers.wall_type_orig = ""
-    answers.walls_insulated_orig = None
-    answers.suspended_floor_orig = None
-    answers.suspended_floor_insulated_orig = None
-    answers.unheated_loft_orig = None
-    answers.room_in_roof_orig = None
-    answers.rir_insulated_orig = None
-    answers.roof_space_insulated_orig = None
-    answers.flat_roof_orig = None
-    answers.gas_boiler_present_orig = None
-    answers.other_heating_present_orig = None
-    answers.on_mains_gas_orig = None
-    answers.heat_pump_present_orig = None
-    answers.other_heating_fuel_orig = ""
-    answers.storage_heaters_present_orig = None
-    answers.hhrshs_present_orig = None
-    answers.electric_radiators_present_orig = None
-    answers.trvs_present_orig = None
-    answers.room_thermostat_orig = None
-    answers.ch_timer_orig = None
-    answers.programmable_thermostat_orig = None
-    answers.sap_rating = None
-    answers.has_solar_pv_orig = None
-
-    return answers
+    answers.property_attachment_orig = ""
+    answers.property_construction_years_orig = None
+    answers.wall_construction_orig = ""
+    answers.wall_insulation_orig = None
+    answers.roof_construction_orig = None
+    answers.roof_insulation_orig = None
+    answers.floor_construction_orig = None
+    answers.floor_insulation_orig = None
+    answers.heating_orig = None
+    answers.main_fuel_orig = None
+    answers.glazing_orig = None
+    answers.boiler_efficiency_orig = None
+    answers.controls_adequacy_orig = None
+    answers.heated_rooms_orig = None
+    answers.tCO2_current_orig = None
+    answers.realistic_fuel_bill_orig = None
+    answers.sap_score = None
+    answers.sap_band = None
+    answers.lodged_epc_band = None
+    answers.lodged_epc_score = None
 
 
 """
@@ -158,37 +151,37 @@ def _detect_property_form(epc: EPCData) -> Optional[enums.PropertyAttachment]:
         return enums.PropertyForm.MAISONNETTE
 
 
-def _detect_property_age(epc: EPCData) -> Optional[enums.PropertyConstructionYears]:
-    age_band = epc.construction_age_band.upper()
+# def _detect_property_age(epc: EPCData) -> Optional[enums.PropertyConstructionYears]:
+#     age_band = epc.construction_age_band.upper()
 
-    # Standard bands:
-    if age_band == "ENGLAND AND WALES: BEFORE 1900":
-        return enums.PropertyAgeBand.BEFORE_1900
-    elif age_band == "ENGLAND AND WALES: 1900-1929":
-        return enums.PropertyAgeBand.FROM_1900
-    elif age_band == "ENGLAND AND WALES: 1930-1949":
-        return enums.PropertyAgeBand.FROM_1930
-    elif age_band == "ENGLAND AND WALES: 1950-1966":
-        return enums.PropertyAgeBand.FROM_1950
-    elif age_band == "ENGLAND AND WALES: 1967-1975":
-        return enums.PropertyAgeBand.FROM_1967
-    elif age_band in ["ENGLAND AND WALES: 1976-1982", "ENGLAND AND WALES: 1983-1990"]:
-        return enums.PropertyAgeBand.FROM_1976
-    elif age_band in ["ENGLAND AND WALES: 1991-1995", "ENGLAND AND WALES: 1996-2002"]:
-        return enums.PropertyAgeBand.FROM_1991
-    elif age_band in [
-        "ENGLAND AND WALES: 2003-2006",
-        "ENGLAND AND WALES: 2007 ONWARDS",
-        "ENGLAND AND WALES: 2007-2011",
-        "ENGLAND AND WALES: 2012 ONWARDS",
-    ]:
-        # Seems to get less 'standard' as it gets more recent!
-        return enums.PropertyAgeBand.SINCE_2003
-    elif age_band.isdecimal():
-        # Purely numerical value, compare with age bands
-        for threshold in reversed(enums.PropertyAgeBand):
-            if int(age_band) >= threshold:
-                return enums.PropertyAgeBand(threshold)
+#     # Standard bands:
+#     if age_band == "ENGLAND AND WALES: BEFORE 1900":
+#         return enums.PropertyAgeBand.BEFORE_1900
+#     elif age_band == "ENGLAND AND WALES: 1900-1929":
+#         return enums.PropertyAgeBand.FROM_1900
+#     elif age_band == "ENGLAND AND WALES: 1930-1949":
+#         return enums.PropertyAgeBand.FROM_1930
+#     elif age_band == "ENGLAND AND WALES: 1950-1966":
+#         return enums.PropertyAgeBand.FROM_1950
+#     elif age_band == "ENGLAND AND WALES: 1967-1975":
+#         return enums.PropertyAgeBand.FROM_1967
+#     elif age_band in ["ENGLAND AND WALES: 1976-1982", "ENGLAND AND WALES: 1983-1990"]:
+#         return enums.PropertyAgeBand.FROM_1976
+#     elif age_band in ["ENGLAND AND WALES: 1991-1995", "ENGLAND AND WALES: 1996-2002"]:
+#         return enums.PropertyAgeBand.FROM_1991
+#     elif age_band in [
+#         "ENGLAND AND WALES: 2003-2006",
+#         "ENGLAND AND WALES: 2007 ONWARDS",
+#         "ENGLAND AND WALES: 2007-2011",
+#         "ENGLAND AND WALES: 2012 ONWARDS",
+#     ]:
+#         # Seems to get less 'standard' as it gets more recent!
+#         return enums.PropertyAgeBand.SINCE_2003
+#     elif age_band.isdecimal():
+#         # Purely numerical value, compare with age bands
+#         for threshold in reversed(enums.PropertyAgeBand):
+#             if int(age_band) >= threshold:
+#                 return enums.PropertyAgeBand(threshold)
 
 
 def _detect_wall_type(epc: EPCData) -> Optional[enums.WallConstruction]:
@@ -565,8 +558,8 @@ def _detect_programmable_thermostat(epc: EPCData) -> Optional[bool]:
 
 def set_type_from_orig(answers: models.Answers) -> models.Answers:
     answers.property_type = answers.property_type_orig
-    answers.property_form = answers.property_form_orig
-    answers.property_age_band = answers.property_age_band_orig
+    answers.property_attachment = answers.property_attachment_orig
+    answers.property_construction_years = answers.property_construction_years_orig
 
     return answers
 

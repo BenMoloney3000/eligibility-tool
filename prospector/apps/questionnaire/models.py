@@ -106,13 +106,6 @@ class Answers(models.Model):
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True, null=True
     )
 
-    # data_source = models.CharField(
-    #     max_length=10,
-    #     choices=enums.PropertyDataSource.choices,
-    #     blank=True,
-    #     verbose_name="Initial property data source",
-    # )
-
     # PROPERTY ENERGY PERFORMANCE DETAILS
 
     # All below fields are duplicated for user data and original data
@@ -162,12 +155,12 @@ class Answers(models.Model):
     )
     walls_insulation = models.CharField(
         max_length=24,
-        choices=enums.WallInsulated.choices,
+        choices=enums.WallInsulation.choices,
         blank=True,
     )
     walls_insulation_orig = models.CharField(
         max_length=24,
-        choices=enums.WallInsulated.choices,
+        choices=enums.WallInsulation.choices,
         blank=True,
     )
 
@@ -234,248 +227,6 @@ class Answers(models.Model):
     )
     realistic_fuel_bill = models.CharField(max_length=9, blank=True, null=True)
     realistic_fuel_bill_orig = models.CharField(max_length=9, blank=True, null=True)
-
-    # suspended_floor = models.BooleanField(
-    #     null=True, blank=True, verbose_name="Property has a suspended timber floor"
-    # )
-    # suspended_floor_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a suspended timber floor, according to property data source before correction",
-    # )
-
-    # suspended_floor_insulated = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has an insulated suspended timber floor",
-    # )
-    # suspended_floor_insulated_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has an insulated suspended floor, according to property data source before correction",
-    # )
-
-    # unheated_loft = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has an unheated loft space with exposed rafters and joists",
-    # )
-    # unheated_loft_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has an unheated loft space, according to property data source before correction",
-    # )
-
-    # room_in_roof = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a room in the roof space",
-    # )
-    # room_in_roof_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a room in the roof space, according to property data source before correction",
-    # )
-
-    # rir_insulated = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Room-in-roof is insulated",
-    # )
-    # rir_insulated_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Room-in-roof is insulated, according to property data source before correction",
-    # )
-
-    # roof_space_insulated = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Roof space is insulated",
-    # )
-    # roof_space_insulated_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Roof space is insulated, according to property data source before correction",
-    # )
-
-    # flat_roof = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Main part of property has a flat roof",
-    # )
-    # flat_roof_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Main part of property has a flat roof, according to property data source before correction",
-    # )
-    # flat_roof_insulated = models.CharField(
-    #     max_length=14,
-    #     choices=enums.InsulationConfidence.choices,
-    #     blank=True,
-    #     verbose_name="The property's flat roof is well insulated",
-    # )
-    # gas_boiler_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a mains gas central heating boiler",
-    # )
-    # gas_boiler_present_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a mains gas central heating boiler according to property data before correction",
-    # )
-    # gas_boiler_age = models.CharField(
-    #     max_length=11, choices=enums.BoilerAgeBand.choices, blank=True
-    # )
-    # gas_boiler_broken = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property's mains gas central heating boiler is currently not working",
-    # )
-    # on_mains_gas = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property is connected to the mains gas network",
-    # )
-    # on_mains_gas_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property is connected to the mains gas network according to property data before correction",
-    # )
-    # other_heating_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a non-gas-powered central heating system",
-    # )
-    # other_heating_present_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has non-gas-powered central heating according to property data before correction",
-    # )
-    # heat_pump_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a heat pump",
-    # )
-    # heat_pump_present_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a heat pump, according to property data before correction",
-    # )
-    # other_heating_fuel = models.CharField(
-    #     max_length=11,
-    #     choices=enums.NonGasFuel.choices,
-    #     blank=True,
-    #     verbose_name="Non-gas central heating fuel used in property",
-    # )
-    # other_heating_fuel_orig = models.CharField(
-    #     max_length=11,
-    #     choices=enums.NonGasFuel.choices,
-    #     blank=True,
-    # )
-    # storage_heaters_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has electric storage heaters",
-    # )
-    # storage_heaters_present_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has electric storage heaters according to property data before correction",
-    # )
-    # hhrshs_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has high heat retention storage heaters",
-    # )
-    # hhrshs_present_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has high heat retention storage heaters according to property data before correction",
-    # )
-    # electric_radiators_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has instantaneous electric heaters",
-    # )
-    # electric_radiators_present_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has instantaneous electric heaters according to property data before correction",
-    # )
-    # hwt_present = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a hot water tank",
-    # )
-    # trvs_present_old = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has themostatic radiator valves",
-    # )
-    # trvs_present_orig_old = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has thermostatic radiator valves according to property data before correction",
-    # )
-    # trvs_present = models.CharField(
-    #     max_length=8,
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has themostatic radiator valves",
-    # )
-    # trvs_present_orig = models.CharField(
-    #     max_length=8,
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has thermostatic radiator valves according to property data before correction",
-    # )
-    # room_thermostat = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a room thermostat",
-    # )
-    # room_thermostat_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a room thermostat according to property data before correction",
-    # )
-    # ch_timer = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a heating timer control",
-    # )
-    # ch_timer_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a heating timer control according to property data before correction",
-    # )
-    # programmable_thermostat = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a programmable thermostat control",
-    # )
-    # programmable_thermostat_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a programmable thermostat control according to property data before correction",
-    # )
-    # smart_thermostat = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has a smart thermostat control",
-    # )
-    # has_solar_pv = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has solar PV",
-    # )
-    # has_solar_pv_orig = models.BooleanField(
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Property has solar PV before correction",
-    # )
 
     """
     # Store whether the user wishes to correct the inferred data.
@@ -573,13 +324,13 @@ class Answers(models.Model):
         choices=enums.UpToFourOrMore.choices,
     )
 
-    total_income_lt_30k = models.CharField(
+    total_income = models.CharField(
         choices=enums.IncomeIsUnderThreshold.choices,
         max_length=7,
         blank=True,
         verbose_name="Total gross household income is under £31,000 pa",
     )
-    take_home_lt_31k = models.CharField(
+    take_home = models.CharField(
         choices=enums.IncomeIsUnderThreshold.choices,
         blank=True,
         max_length=7,
@@ -692,10 +443,6 @@ class Answers(models.Model):
         verbose_name="Property rating (computed field)",
     )
 
-    # User's Comments Field
-
-    user_comment = models.TextField(null=True, blank=True)
-
     def save(self, *args, **kwargs):
         from prospector.apps.questionnaire import utils
 
@@ -740,8 +487,8 @@ class Answers(models.Model):
         # Includes age
         return (
             self.property_type_orig is not None
-            and self.property_form_orig is not None
-            and self.property_age_band_orig is not None
+            and self.property_attachment_orig is not None
+            and self.property_construction_years_orig is not None
         )
 
     def wall_inferences_complete(self):

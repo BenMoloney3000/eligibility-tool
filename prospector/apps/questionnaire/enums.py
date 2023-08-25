@@ -43,11 +43,11 @@ class PropertyDataSource(models.TextChoices):
 
 
 class PropertyType(models.TextChoices):
-    FLAT = "FLAT", "Flat"
-    HOUSE = "HOUSE", "House"
-    BUNGALOW = "BUNGALOW", "Bungalow"
-    PARK_HOME = "PARK_HOME", "Park Home"
-    MAISONNETTE = "MAISONNETTE", "Maisonette"
+    FLAT = "Flat", "Flat"
+    HOUSE = "House", "House"
+    BUNGALOW = "Bungalow", "Bungalow"
+    PARK_HOME = "ParkHome", "Park home"
+    MAISONNETTE = "Maisonette", "Maisonette"
 
 
 # class PropertyForm(models.TextChoices):
@@ -65,12 +65,12 @@ class PropertyType(models.TextChoices):
 
 # Below defines attributes coresponding with Attachment field in ParityData model
 class PropertyAttachment(models.TextChoices):
-    DETACHED = "DETACHED", "Detached"
-    SEMI_DETACHED = "SEMI_DETACHED", "Semi-detached"
-    MID_TERRACE = "MID_TERRACE", "Mid-terrace"
-    END_TERRACE = "END_TERRACE", "End-terrace"
-    ENCLOSED_END_TERRACE = "ENCLOSED_END_TERRACE", "Enclosed-end-terrace"
-    ENCLOSED_MID_TERRACE = "ENCLOSED_MID_TERRACE", "Enclosed-mid-terrace"
+    DETACHED = "Detached", "Detached"
+    SEMI_DETACHED = "SemiDetached", "Semi detached"
+    MID_TERRACE = "MidTerrace", "Mid terrace"
+    END_TERRACE = "EndTerrace", "End terrace"
+    ENCLOSED_END_TERRACE = "EnclosedEndTerrace", "Enclosed end terrace"
+    ENCLOSED_MID_TERRACE = "EnclosedMidTerrace", "Enclosed mid terrace"
 
 
 # class PropertyAgeBand(models.TextChoices):
@@ -87,6 +87,7 @@ class PropertyAttachment(models.TextChoices):
 
 
 class PropertyConstructionYears(models.TextChoices):
+    BEFORE_1900 = 0, "Before 1900"
     FROM_1900 = 1900, "1900-1929"
     FROM_1930 = 1930, "1930-1949"
     FROM_1950 = 1950, "1950-1966"
@@ -98,7 +99,6 @@ class PropertyConstructionYears(models.TextChoices):
     FROM_2003 = 2003, "2003-2006"
     FROM_2007 = 2007, "2007-2011"
     FROM_2012 = 2012, "2012 onwards"
-    BEFORE_1900 = 0, "Before 1900"
 
 
 # class WallType(models.TextChoices):
@@ -112,12 +112,12 @@ class WallConstruction(models.TextChoices):  # To replace WallType with Parity d
     GRANITE = "GRANITE", "Granite"
     PARK_HOME = "PARK_HOME", "Park Home"
     SANDSTONE = "SANDSTONE", "Sandstone"
-    SOLID_BRICK = "SOLID_BRICK", "Solid Brick"
+    SOLID_BRICK = "SOLID_BRICK", "Solid brick"
     SYSTEM = "SYSTEM", "System"
-    TIMBER_FRAME = "TIMBER_FRAME", "Timber Frame"
+    TIMBER_FRAME = "TIMBER_FRAME", "Timber frame"
 
 
-class WallInsulated(models.TextChoices):
+class WallInsulation(models.TextChoices):
     AS_BUILT = "AsBuilt", "As Built"
     EXTERNAL = "External", "External"
     FC = "FilledCavity", "Filled Cavity"

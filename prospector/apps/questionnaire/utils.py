@@ -186,60 +186,60 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
     Can only be RED / AMBER / GREEN.
     """
 
-    if answers.sap_rating:
+    if answers.sap_score:
         # Based on having an EPC result
-        if answers.sap_rating >= 65:
+        if answers.sap_score >= 65:
             # Property unlikely to be eligible for free or discounted schemes
             return enums.RAYG.RED
-        elif answers.sap_rating >= 50:
+        elif answers.sap_score >= 50:
             # Property eligible for some free or discounted schemes
             return enums.RAYG.AMBER
         else:
             # Property eligible for free or discounted schemes
             return enums.RAYG.GREEN
-    else:
-        """
-        Without an EPC construct the property RAG rating as follows:
+    # else:
+    #     """
+    #     Without an EPC construct the property RAG rating as follows:
 
-        G: Heating is Gas (gas_boiler_present)
-        I: Walls are insulated (walls_insulated)
-        S: Has Solar PV (has_solar_pv)
+    #     G: Heating is Gas (gas_boiler_present)
+    #     I: Walls are insulated (walls_insulated)
+    #     S: Has Solar PV (has_solar_pv)
 
-            G I S  Interpretation:
-        G   N N N  - Large potential for improvement.
-        Y   Y N N
-        Y   N Y N
-        Y   N N Y
-        R   Y Y N
-        R   Y N Y
-        R   N Y Y
-        R   Y Y Y  - Little potential for improvement.
-        """
+    #         G I S  Interpretation:
+    #     G   N N N  - Large potential for improvement.
+    #     Y   Y N N
+    #     Y   N Y N
+    #     Y   N N Y
+    #     R   Y Y N
+    #     R   Y N Y
+    #     R   N Y Y
+    #     R   Y Y Y  - Little potential for improvement.
+    #     """
 
-        RAG_LOOKUP = {
-            #  (G, I, S) -> RAG value
-            (False, False, False): enums.RAYG.GREEN,
-            (True, False, False): enums.RAYG.AMBER,
-            (False, True, False): enums.RAYG.AMBER,
-            (False, False, True): enums.RAYG.AMBER,
-            (True, True, False): enums.RAYG.RED,
-            (True, False, True): enums.RAYG.RED,
-            (False, True, True): enums.RAYG.RED,
-            (True, True, True): enums.RAYG.RED,
-        }
+    #     RAG_LOOKUP = {
+    #         #  (G, I, S) -> RAG value
+    #         (False, False, False): enums.RAYG.GREEN,
+    #         (True, False, False): enums.RAYG.AMBER,
+    #         (False, True, False): enums.RAYG.AMBER,
+    #         (False, False, True): enums.RAYG.AMBER,
+    #         (True, True, False): enums.RAYG.RED,
+    #         (True, False, True): enums.RAYG.RED,
+    #         (False, True, True): enums.RAYG.RED,
+    #         (True, True, True): enums.RAYG.RED,
+    #     }
 
-        return RAG_LOOKUP.get(
-            (
-                answers.gas_boiler_present,
-                answers.walls_insulated,
-                answers.has_solar_pv,
-            )
-        )
+    #     return RAG_LOOKUP.get(
+    #         (
+    #             answers.gas_boiler_present,
+    #             answers.walls_insulated,
+    #             answers.has_solar_pv,
+    #         )
+    #     )
 
 
 def get_income_rating(answers: models.Answers) -> enums.RAYG:
     # Household income rating
-    if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
+    if answers.total_income == enums.IncomeIsUnderThreshold.YES:
         # Gross household income below £31k therefore the Household is eligible
         # for free or discounted schemes (based on info given).
         income_rating = enums.RAYG.GREEN
@@ -252,7 +252,7 @@ def get_income_rating(answers: models.Answers) -> enums.RAYG:
         if benefit_qualifies:
             income_rating = enums.RAYG.YELLOW
         else:
-            if answers.take_home_lt_31k == enums.IncomeIsUnderThreshold.NO:
+            if answers.take_home == enums.IncomeIsUnderThreshold.NO:
                 income_rating = enums.RAYG.RED
             else:
                 # Household take home pay below £31k.

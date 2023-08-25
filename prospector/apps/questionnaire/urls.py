@@ -34,9 +34,13 @@ urlpatterns = [
     path("consents", views.Consents.as_view(), name="consents"),
     # path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
     path("type", views.PropertyType.as_view(), name="property-type"),
-    path("age", views.PropertyAgeBand.as_view(), name="property-age-band"),
-    path("wall-type", views.WallType.as_view(), name="wall-type"),
-    path("wall-insulation", views.WallsInsulated.as_view(), name="walls-insulated"),
+    path(
+        "age",
+        views.PropertyConstructionYears.as_view(),
+        name="property-construction-years",
+    ),
+    path("wall-type", views.WallConstruction.as_view(), name="wall-construction"),
+    path("wall-insulation", views.WallsInsulation.as_view(), name="walls-insulation"),
     path("floor-type", views.SuspendedFloor.as_view(), name="suspended-floor"),
     path(
         "floor-insulation",
