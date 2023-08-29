@@ -7,11 +7,11 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from . import enums
+from . import models
 from prospector.apis.epc import EPCData
 from prospector.apps.crm.tasks import crm_create
 from prospector.apps.parity.models import ParityData
-
-from . import enums, models
 
 logger = logging.getLogger(__name__)
 
@@ -51,47 +51,6 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.uprn = po.uprn
 
         return answers
-
-
-def prepopulate_from_epc(
-    answers: models.Answers, selected_epc: EPCData
-) -> models.Answers:
-    """Parse EPC contents to populate initial values for property energy data."""
-
-    answers.property_type_orig = _detect_property_type(selected_epc) or ""
-    answers.property_form_orig = _detect_property_form(selected_epc) or ""
-    answers.property_age_band_orig = _detect_property_age(selected_epc) or None
-    answers.wall_type_orig = _detect_wall_type(selected_epc) or ""
-    answers.walls_insulated_orig = _detect_walls_insulated(selected_epc)
-    answers.suspended_floor_orig = _detect_suspended_floor(selected_epc)
-    answers.suspended_floor_insulated_orig = _detect_suspended_floor_insulation(
-        selected_epc
-    )
-    answers.unheated_loft_orig = _detect_unheated_loft(selected_epc)
-    answers.room_in_roof_orig = _detect_room_in_roof(selected_epc)
-    answers.rir_insulated_orig = _detect_rir_insulated(selected_epc)
-    answers.roof_space_insulated_orig = _detect_roof_insulated(selected_epc)
-    answers.flat_roof_orig = _detect_flat_roof(selected_epc)
-    answers.gas_boiler_present_orig = _detect_gas_boiler(selected_epc)
-    answers.other_heating_present_orig = _detect_other_ch(selected_epc)
-    answers.on_mains_gas_orig = _detect_mains_gas(selected_epc)
-    answers.heat_pump_present_orig = _detect_heat_pump(selected_epc)
-    answers.other_heating_fuel_orig = _detect_other_ch_fuel(selected_epc) or ""
-    answers.storage_heaters_present_orig = _detect_storage_heaters(selected_epc)
-    answers.hhrshs_present_orig = _detect_hhrshs(selected_epc)
-    answers.electric_radiators_present_orig = _detect_electric_radiators(selected_epc)
-    answers.trvs_present_orig = _detect_trvs(selected_epc)
-    answers.room_thermostat_orig = _detect_room_thermostat(selected_epc)
-    answers.ch_timer_orig = _detect_timer(selected_epc)
-    answers.programmable_thermostat_orig = _detect_programmable_thermostat(selected_epc)
-    answers.sap_rating = int(selected_epc.current_energy_rating)
-    answers.has_solar_pv_orig = (
-        bool(int(selected_epc.photo_supply))
-        if isinstance(selected_epc.photo_supply, int)
-        else None
-    )
-
-    return answers
 
 
 def depopulate_orig_fields(answers: models.Answers) -> models.Answers:

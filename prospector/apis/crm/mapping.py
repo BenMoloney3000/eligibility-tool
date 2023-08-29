@@ -1,6 +1,8 @@
 import logging
 from functools import wraps
-from typing import Literal, Optional, Union
+from typing import Literal
+from typing import Optional
+from typing import Union
 
 from prospector.apis.crm import crm
 from prospector.apps.questionnaire import enums

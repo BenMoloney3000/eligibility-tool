@@ -5,14 +5,10 @@ from django.core.validators import validate_email
 from django.utils import timezone
 from django.views.generic.base import TemplateView
 
-from . import abstract as abstract_views
-from prospector.apis import epc
 from prospector.apps.parity.utils import get_addresses_for_postcode
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
-from prospector.apps.questionnaire import selectors
-from prospector.apps.questionnaire import services
-from prospector.apps.questionnaire import utils
+from prospector.apps.questionnaire import selectors, services, utils
 from prospector.dataformats import postcodes
 
 logger = logging.getLogger(__name__)
@@ -392,63 +388,6 @@ class Consents(abstract_views.Question):
     percent_complete = COMPLETE_GROUP_2 + 9
 
 
-# class SelectEPC(abstract_views.Question):
-#     title = "Energy Performance Certificate (EPC)"
-#     icon = "house"
-#     template_name = "questionnaire/select_epc.html"
-#     form_class = questionnaire_forms.SelectEPC
-#     candidate_epcs = {}
-#     next = "PropertyType"
-#     percent_complete = COMPLETE_GROUP_3 + 1
-
-#     def get_form_kwargs(self):
-#         """Pass the possible EPCs into the form."""
-#         kwargs = super().get_form_kwargs()
-#         kwargs["candidate_epcs"] = self.candidate_epcs
-#         return kwargs
-
-# def prereq(self):
-#     try:
-#         postcode_epcs = epc.get_for_postcode(self.answers.property_postcode) or []
-
-#         # Try to reduce the possible EPCs by UPRN
-#         # (can only filter out anything with a different UPRN)
-#         # TODO could be some attempt to match the (full) address itself but it will
-#         # require a lot of experimentation for possibly not much benefit.
-#         # NB this does nothing with Data8 which cannot supply both UPRN & UDPRN
-#         if self.answers.uprn:
-#             postcode_epcs = [
-#                 epc
-#                 for epc in postcode_epcs
-#                 if epc.uprn == "" or epc.uprn == str(self.answers.uprn)
-#             ]
-#             # At this point anything with a UPRN will be our UPRN, move
-#             # that/them to the top of the list
-#             postcode_epcs.sort(reverse=True, key=lambda x: bool(x.uprn))
-#         self.candidate_epcs = {epc.id: epc for epc in postcode_epcs}
-#     except ValueError:
-#         pass
-
-#     if len(self.candidate_epcs) == 0:
-#         # No valid EPC. Continue.
-#         return self.redirect()
-
-# def pre_save(self):
-#     # If we selected an EPC, this is where we interrogate its data to
-#     # pre-populate all the property energy performance questions
-#     if self.answers.selected_epc:
-#         selected_epc = self.candidate_epcs[self.answers.selected_epc]
-#         try:
-#             self.answers = services.prepopulate_from_epc(self.answers, selected_epc)
-#         except Exception as e:
-#             logging.error("prepopulate_from_epc failed", selected_epc, e)
-
-#         self.answers.save()
-#     else:
-#         # Make sure it's been deselected
-#         self.answers = services.depopulate_orig_fields(self.answers)
-
-
 class PropertyType(abstract_views.Question):
     title = "Property type"
     question = "What type of property is this?"
@@ -561,63 +500,26 @@ class WallsInsulation(abstract_views.SinglePrePoppedQuestion):
         "If only some of the outside walls are insulated, choose the option that "
         "makes up most of the external area."
     )
-    next = "SuspendedFloor"
+    next = "FloorConstruction"
     percent_complete = COMPLETE_GROUP_3 + 9
 
 
-class SuspendedFloor(abstract_views.SinglePrePoppedQuestion):
-    title = "Floor type"
-    question = (
-        "Does the property have a suspended timber ground floor with a void "
-        "underneath?"
-    )
+class FloorConstruction(abstract_views.SinglePrePoppedQuestion):
+    title = "Floor construction"
+    question = "What type of floor does the property have?"
     icon = "house"
-    supplementary = (
-        "<p>"
-        "If you have air bricks or ventilation bricks on the outside wall(s) "
-        "of your house that are below floor level, you probably have a "
-        "suspended timber floor."
-        "</p>"
-        "<p>"
-        "If you have a basement or cellar beneath your house that you can get "
-        "into safely, take a look down there to see what type of floor you "
-        "have. "
-        "</p>"
-        "<p>"
-        "If the floor is a suspended wooden floor, you will probably be able to "
-        "see wooden joists and the undersides of the floorboards. "
-        "</p>"
-        "<br> "
-        "More information: "
-        '<a href="https://energysavingtrust.org.uk/advice/floor-insulation/" '
-        ' target="_blank" rel="noopener norefferer">'
-        "https://energysavingtrust.org.uk/advice/floor-insulation/"
-        "</a>"
-    )
-    type_ = abstract_views.QuestionType.YesNo
-    note = (
-        "If the property has different types of ground floor, choose the option that applies "
-        "to the largest floor area. If the property is a non-ground-floor flat, select 'No'."
-    )
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.FloorConstruction.choices
+    next = "FloorInsulation"
     percent_complete = COMPLETE_GROUP_3 + 11
 
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if not self.answers.suspended_floor:
-            self.answers.suspended_floor_insulated = None
 
-    def get_next(self):
-        if self.answers.suspended_floor:
-            return "SuspendedFloorInsulated"
-        else:
-            return "UnheatedLoft"
-
-
-class SuspendedFloorInsulated(abstract_views.SinglePrePoppedQuestion):
+class FloorInsulation(abstract_views.SinglePrePoppedQuestion):
     title = "Floor insulation"
-    question = "Is the suspended timber floor insulated?"
+    question = "How is the floor insulated?"
     icon = "house"
-    type_ = abstract_views.QuestionType.YesNo
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.FloorInsulation.choices
     percent_complete = COMPLETE_GROUP_4 + 1
     next = "UnheatedLoft"
 

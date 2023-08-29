@@ -2,7 +2,8 @@ import logging
 import random
 from typing import List
 
-from . import enums, models
+from . import enums
+from . import models
 
 logger = logging.getLogger(__name__)
 
