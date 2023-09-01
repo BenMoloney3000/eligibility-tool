@@ -521,330 +521,90 @@ class FloorInsulation(abstract_views.SinglePrePoppedQuestion):
     type_ = abstract_views.QuestionType.Choices
     choices = enums.FloorInsulation.choices
     percent_complete = COMPLETE_GROUP_4 + 1
-    next = "UnheatedLoft"
+    next = "RoofConstruction"
 
 
-class UnheatedLoft(abstract_views.SinglePrePoppedQuestion):
-    title = "Property roof"
-    question = "Does the property have an unheated loft space directly above it?"
+class RoofConstruction(abstract_views.SinglePrePoppedQuestion):
+    title = "Roof construction"
+    question = "What type of roof does the property have?"
     icon = "house"
-    type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_4 + 3
-
-    def get_note(self):
-        if self.answers.property_type == enums.PropertyType.FLAT:
-            return "If the flat isn't on the top floor, please answer 'no'."
-
-        return None
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.unheated_loft:
-            self.answers.room_in_roof = None
-            self.answers.rir_insulated = None
-            self.answers.flat_roof = None
-            self.answers.flat_roof_insulated = ""
-        else:
-            self.answers.roof_space_insulated = None
-
-    def get_next(self):
-        if self.answers.unheated_loft:
-            return "RoofSpaceInsulated"
-        else:
-            return "RoomInRoof"
-
-
-class RoomInRoof(abstract_views.SinglePrePoppedQuestion):
-    title = "Room in roof"
-    icon = "house"
-    question = (
-        "Is there a 'room-in-the-roof' space, for example a loft conversion or "
-        "similar?"
-    )
-    type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_4 + 5
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.room_in_roof:
-            self.answers.flat_roof = None
-            self.answers.flat_roof_insulated = ""
-        else:
-            self.answers.rir_insulated = None
-
-    def get_next(self):
-        if self.answers.room_in_roof:
-            return "RirInsulated"
-        else:
-            return "FlatRoof"
-
-
-class RirInsulated(abstract_views.SinglePrePoppedQuestion):
-    title = "Room in roof insulation"
-    question = "Has the 'room-in-the-roof' space been well insulated?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_4 + 7
-    next = "GasBoilerPresent"
-
-
-class RoofSpaceInsulated(abstract_views.SinglePrePoppedQuestion):
-    title = "Loft insulation"
-    question = "Has the unheated loft space been well insulated?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.YesNo
-    note = (
-        "By 'well insulated' we mean with at least 25cm of 'mineral wool' type "
-        "insulation, or similar."
-    )
-    percent_complete = COMPLETE_GROUP_4 + 9
-    next = "GasBoilerPresent"
-
-
-class FlatRoof(abstract_views.SinglePrePoppedQuestion):
-    title = "Flat roof"
-    question = "Does the property have a flat roof?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.YesNo
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.RoofConstruction.choices
     note = (
         "If the property has different roof types, choose the answer that applies "
         "to the largest roof area."
     )
     percent_complete = COMPLETE_GROUP_5
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if not self.answers.flat_roof:
-            self.answers.flat_roof_insulated = ""
-
-    def get_next(self):
-        if self.answers.flat_roof:
-            return "FlatRoofInsulated"
-        else:
-            return "GasBoilerPresent"
+    next = "RoofInsulation"
 
 
-class FlatRoofInsulated(abstract_views.SingleQuestion):
-    title = "Flat roof type"
-    question = "Is your flat roof well insulated?"
+class RoofInsulation(abstract_views.SinglePrePoppedQuestion):
+    title = "Roof insulation"
+    question = "How is the roof insulated?"
     icon = "house"
     type_ = abstract_views.QuestionType.Choices
-    next = "GasBoilerPresent"
-    choices = enums.InsulationConfidence.choices
+    choices = enums.RoofInsulation.choices
     percent_complete = COMPLETE_GROUP_5 + 2
+    next = "Glazing"
 
 
-class GasBoilerPresent(abstract_views.SinglePrePoppedQuestion):
-    title = "Gas boiler"
-    question = "Does the property have a central heating system with a boiler running off mains gas?"
+class Glazing(abstract_views.SinglePrePoppedQuestion):
+    title = "Glazing"
     icon = "flame"
-    type_ = abstract_views.QuestionType.YesNo
+    question = "What type of glazing does the property have?"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.Glazing.choices
     percent_complete = COMPLETE_GROUP_5 + 4
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.gas_boiler_present:
-            self.answers.other_heating_present = None
-            self.answers.other_heating_fuel = ""
-            self.answers.storage_heaters_present = None
-            self.answers.hhrshs_present = None
-            self.answers.on_mains_gas = None
-            self.answers.heat_pump_present = None
-        else:
-            self.answers.gas_boiler_age = ""
-            self.answers.gas_boiler_broken = None
-
-    def get_next(self):
-        if self.answers.gas_boiler_present:
-            return "HwtPresent"
-        else:
-            return "OnMainsGas"
+    next = "Heating"
 
 
-class OnMainsGas(abstract_views.SinglePrePoppedQuestion):
-    title = "Mains gas"
+class Heating(abstract_views.SinglePrePoppedQuestion):
+    title = "Heating system"
+    question = "What is the heating system of the property?"
     icon = "flame"
-    question = "Is the property connected to the mains gas network?"
-    type_ = abstract_views.QuestionType.YesNo
-    next = "OtherHeatingPresent"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.Heating.choices
     percent_complete = COMPLETE_GROUP_5 + 6
+    next = "MainFuel"
 
 
-class OtherHeatingPresent(abstract_views.SinglePrePoppedQuestion):
-    title = "Other central heating system"
+class MainFuel(abstract_views.SinglePrePoppedQuestion):
+    title = "Main fuel"
     icon = "flame"
-    question = "Does the property have a non-gas central heating system?"
-    type_ = abstract_views.QuestionType.YesNo
+    question = "What is the main fuel source?"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.MainFuel.choices
+    next = "Glazing"
     percent_complete = COMPLETE_GROUP_5 + 8
 
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.other_heating_present:
-            self.answers.storage_heaters_present = None
-            self.answers.hhrshs_present = None
-        else:
-            self.answers.hwt_present = None
-            self.answers.other_heating_fuel = ""
-
+    # In the Parity dataset the only objects without boiler_efficiency
+    # value are the ones with community heating.
+    # If that's a case we skip BoilerEfficiency view:
     def get_next(self):
-        if self.answers.other_heating_present:
-            return "HwtPresent"
+        if self.answers.boiler_efficiency_orig != "":
+            return "BoilerEfficiency"
         else:
-            return "StorageHeatersPresent"
+            return "ControlsAdequacy"
 
 
-class HwtPresent(abstract_views.SingleQuestion):
-    title = "Hot water tank"
+class BoilerEfficiency(abstract_views.SinglePrePoppedQuestion):
+    title = "Boiler Efficiency"
     icon = "house"
-    question = "Does the property have a hot water storage tank?"
-    type_ = abstract_views.QuestionType.YesNo
+    question = "What is the boiler efficiency rating?"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.EfficiencyBand.choices
     percent_complete = COMPLETE_GROUP_6
-
-    def get_next(self):
-        if self.answers.gas_boiler_present:
-            return "GasBoilerAge"
-        else:
-            return "HeatPumpPresent"
+    next = "ControlsAdequacy"
 
 
-class HeatPumpPresent(abstract_views.SinglePrePoppedQuestion):
+class ControlsAdequacy(abstract_views.SinglePrePoppedQuestion):
     title = "Heat pump"
     icon = "flame"
-    question = "Is the heating system powered by an air or ground source heat pump?"
-    type_ = abstract_views.QuestionType.YesNo
+    question = "What is the Controls Adequacy?"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.ControlsAdequacy.choices
     percent_complete = COMPLETE_GROUP_6 + 2
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.heat_pump_present:
-            self.answers.other_heating_fuel = ""
-
-    def get_next(self):
-        if self.answers.heat_pump_present:
-            return "HasSolarPv"
-        else:
-            return "OtherHeatingFuel"
-
-
-class OtherHeatingFuel(abstract_views.SinglePrePoppedQuestion):
-    title = "Heating fuel source"
-    icon = "flame"
-    question = "What fuel does the central heating system run on?"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.NonGasFuel.choices
-    next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_6 + 4
-
-
-class GasBoilerAge(abstract_views.SingleQuestion):
-    title = "Boiler age"
-    icon = "flame"
-    question = "When was the current boiler installed?"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.BoilerAgeBand.choices
-    next = "GasBoilerBroken"
-    percent_complete = COMPLETE_GROUP_7 + 1
-
-
-class GasBoilerBroken(abstract_views.SingleQuestion):
-    title = "Boiler condition"
-    question = "Is the gas boiler currently broken?"
-    icon = "flame"
-    type_ = abstract_views.QuestionType.YesNo
-    next = "HeatingControls"
-    percent_complete = COMPLETE_GROUP_7 + 3
-
-
-class HeatingControls(abstract_views.Question):
-    title = "Heating controls"
-    icon = "flame"
-    template_name = "questionnaire/heating_controls.html"
-    form_class = questionnaire_forms.HeatingControls
-    next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_7 + 5
-
-    def get_initial(self):
-        data = super().get_initial()
-        for field in self.get_form_class().declared_fields:
-            orig_field = field + "_orig"
-            data[field] = getattr(self.answers, field)
-            if data[field] is None:
-                data[field] = getattr(self.answers, orig_field, None)
-
-        return data
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-
-        for field in self.get_form_class().declared_fields:
-            orig_field = field + "_orig"
-            context[orig_field] = getattr(self.answers, orig_field, None)
-            if context[orig_field]:
-                context["any_orig"] = True
-
-        return context
-
-
-class StorageHeatersPresent(abstract_views.SinglePrePoppedQuestion):
-    title = "Storage heaters"
-    icon = "flame"
-    question = "Are there storage heaters in the property?"
-    type_ = abstract_views.QuestionType.YesNo
-    next = "HhrshsPresent"
-    percent_complete = COMPLETE_GROUP_7 + 7
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.storage_heaters_present:
-            self.answers.electric_radiators_present = None
-        else:
-            self.answers.hhrshs_present = None
-
-    def get_next(self):
-        if self.answers.storage_heaters_present:
-            return "HhrshsPresent"
-        else:
-            return "ElectricRadiatorsPresent"
-
-
-class ElectricRadiatorsPresent(abstract_views.SinglePrePoppedQuestion):
-    title = "Electric radiators"
-    icon = "flame"
-    question = "Are there other electric radiators in the property?"
-    note = "These may be fixed panel radiators or freestanding heaters."
-    type_ = abstract_views.QuestionType.YesNo
-    next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_7 + 9
-
-
-class HhrshsPresent(abstract_views.SingleQuestion):
-    title = "Storage heater performance"
-    icon = "flame"
-    question = "Are the storage heaters in the property Dimplex Quantum or other high heat retention storage heaters?"
-    type_ = abstract_views.QuestionType.YesNo
-    next = "HasSolarPv"
-    percent_complete = COMPLETE_GROUP_7 + 11
-
-
-class HasSolarPv(abstract_views.SinglePrePoppedQuestion):
-    title = "Solar PV"
-    icon = "sun"
-    question = "Does this property have Solar PV (photovoltaic) panels installed?"
-    type_ = abstract_views.QuestionType.YesNo
-    percent_complete = COMPLETE_GROUP_7 + 13
-
-    def get_next(self):
-        if selectors.data_was_changed(self.answers):
-            return "AccuracyWarning"
-        else:
-            return "Occupants"
-
-
-class AccuracyWarning(abstract_views.Question):
-    template_name = "questionnaire/accuracy_warning.html"
-    title = "Data has been changed"
     next = "Occupants"
-    percent_complete = COMPLETE_GROUP_7 + 15
 
 
 class Occupants(abstract_views.Question):

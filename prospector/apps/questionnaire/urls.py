@@ -47,60 +47,24 @@ urlpatterns = [
         views.FloorInsulation.as_view(),
         name="floor-insulation",
     ),
-    path("unheated-loft", views.UnheatedLoft.as_view(), name="unheated-loft"),
-    path("loft-conversion", views.RoomInRoof.as_view(), name="room-in-roof"),
+    path("roof-type", views.RoofConstruction.as_view(), name="roof-construction"),
     path(
-        "loft-conversion-insulated", views.RirInsulated.as_view(), name="rir-insulated"
+        "roof-insulation",
+        views.RoofInsulation.as_view(),
+        name="roof-insulation",
+    ),
+    path("heating", views.Heating.as_view(), name="heating"),
+    path("main-fuel", views.MainFuel.as_view(), name="main-fuel"),
+    path(
+        "glazing",
+        views.Glazing.as_view(),
+        name="glazing",
     ),
     path(
-        "loft-insulation",
-        views.RoofSpaceInsulated.as_view(),
-        name="roof-space-insulated",
-    ),
-    path("flat-roof", views.FlatRoof.as_view(), name="flat-roof"),
-    path(
-        "flat-roof-insulated",
-        views.FlatRoofInsulated.as_view(),
-        name="flat-roof-insulated",
-    ),
-    path("gas-boiler", views.GasBoilerPresent.as_view(), name="gas-boiler-present"),
-    path("hot-water-tank", views.HwtPresent.as_view(), name="hwt-present"),
-    path("mains-gas", views.OnMainsGas.as_view(), name="on-mains-gas"),
-    path(
-        "other-heating-system",
-        views.OtherHeatingPresent.as_view(),
-        name="other-heating-present",
-    ),
-    path("heat-pump", views.HeatPumpPresent.as_view(), name="heat-pump-present"),
-    path("heating-fuel", views.OtherHeatingFuel.as_view(), name="other-heating-fuel"),
-    path("boiler-age", views.GasBoilerAge.as_view(), name="gas-boiler-age"),
-    path("boiler-condition", views.GasBoilerBroken.as_view(), name="gas-boiler-broken"),
-    path("heating-controls", views.HeatingControls.as_view(), name="heating-controls"),
-    path(
-        "storage-heaters",
-        views.StorageHeatersPresent.as_view(),
-        name="storage-heaters-present",
+        "boiler-efficiency", views.BoilerEfficiency.as_view(), name="boiler-efficiency"
     ),
     path(
-        "electric-radiators",
-        views.ElectricRadiatorsPresent.as_view(),
-        name="electric-radiators-present",
-    ),
-    path(
-        "storage-heater-performance",
-        views.HhrshsPresent.as_view(),
-        name="hhrshs-present",
-    ),
-    path(
-        "has-solar-pv",
-        views.HasSolarPv.as_view(),
-        name="has-solar-pv",
-    ),
-    path("accuracy-warning", views.AccuracyWarning.as_view(), name="accuracy-warning"),
-    path(
-        "recommendations",
-        views.RecommendedMeasures.as_view(),
-        name="recommended-measures",
+        "controls-adequacy", views.ControlsAdequacy.as_view(), name="controls-adequacy"
     ),
     path("occupants", views.Occupants.as_view(), name="occupants"),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
