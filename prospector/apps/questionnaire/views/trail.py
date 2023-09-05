@@ -2,6 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.utils import timezone
 from django.views.generic.base import TemplateView
 
 from . import abstract as abstract_views
@@ -54,8 +55,17 @@ class Home(TemplateView):
     template_name = "questionnaire/home.html"
 
 
-class Start(TemplateView):
-    template_name = "questionnaire/home.html"
+class Start(abstract_views.SingleQuestion):
+    template_name = "questionnaire/start.html"
+    type_ = abstract_views.QuestionType.YesNo
+    title = "About this tool"
+    answer_field = "terms_accepted_at"
+    question = "Please confirm that you have read and accept our data privacy policy."
+    next = "RespondentName"
+    percent_complete = COMPLETE_GROUP_0
+
+    def pre_save(self):
+        self.answers.terms_accepted_at = timezone.now()
 
 
 class RespondentName(abstract_views.Question):

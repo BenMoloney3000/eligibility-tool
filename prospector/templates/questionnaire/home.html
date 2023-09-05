@@ -15,15 +15,35 @@
     <div class="centered column">
         <h2>The Future Fit funding eligibility checker</h2>
         <p>
-            Hello, we are currently in the process of upgrading this tool to account
-            for new eligibility criteria for the latest retrofit funding schemes.
+            We’re here to help you upgrade your home so you can stay warm and save money.
         </p>
-        <p>We are aiming to complete this upgrade by November. Please try again then.</p>
         <p>
-            In the meantime, if you have any questions relating to our retrofit services,
-            please email us on
-            <a href="mailto:futurefit@plymouthenergycommunity.com">futurefit@plymouthenergycommunity.com</a>
+            Through our partnership with Plymouth City Council, we’ve got
+            access to money that can help you improve your home, but to get
+            some of this you have to meet certain criteria.
         </p>
-        <p>Thank you for your patience.</p>
+        <p>
+            We know it can be frustrating to spend loads of time on the phone,
+            so we’ve made this handy online eligibility checker. Completing it
+            should take around 10-15 minutes, but it means you can find out if
+            you’re eligible for a grant with the click of a few buttons. How
+            cool is that?
+        </p>
+        <section class="ticked-list">
+            <p>So, if you want to potentially:</p>
+            <ul class="ticked">
+                <li>save money</li>
+                <li>be warmer</li>
+                <li>help the environment</li>
+            </ul>
+            <p>…you’re in the right place!</p>
+        </section>
+        <div class="nav-form">
+            <a href="{% url 'questionnaire:start' %}">
+                <button type="button" class="button">
+                    Let's get started
+                </button>
+            </a>
+        </div>
     </div>
 {% endblock content %}
