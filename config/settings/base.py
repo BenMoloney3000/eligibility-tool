@@ -143,6 +143,7 @@ LOCAL_APPS = [
     "prospector.apps.users",
     "prospector.apps.crm",
     "prospector.dataformats",
+    "prospector.apps.parity",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
