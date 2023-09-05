@@ -17,9 +17,6 @@ __pycache__/
 # C extensions
 *.so
 
-# External data
-external_data/
-
 # Distribution / packaging
 .Python
 build/
