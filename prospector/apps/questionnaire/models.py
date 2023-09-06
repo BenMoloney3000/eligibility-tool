@@ -219,10 +219,10 @@ class Answers(models.Model):
     )
     heated_rooms = models.IntegerField(blank=True, null=True)
     heated_rooms_orig = models.IntegerField(blank=True, null=True)
-    tCO2_current = models.DecimalField(
+    t_co2_current = models.DecimalField(
         max_digits=2, decimal_places=1, blank=True, null=True
     )
-    tCO2_current_orig = models.DecimalField(
+    t_co2_current_orig = models.DecimalField(
         max_digits=2, decimal_places=1, blank=True, null=True
     )
     realistic_fuel_bill = models.CharField(max_length=9, blank=True, null=True)

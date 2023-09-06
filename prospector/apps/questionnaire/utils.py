@@ -198,44 +198,6 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
         else:
             # Property eligible for free or discounted schemes
             return enums.RAYG.GREEN
-    # else:
-    #     """
-    #     Without an EPC construct the property RAG rating as follows:
-
-    #     G: Heating is Gas (gas_boiler_present)
-    #     I: Walls are insulated (walls_insulated)
-    #     S: Has Solar PV (has_solar_pv)
-
-    #         G I S  Interpretation:
-    #     G   N N N  - Large potential for improvement.
-    #     Y   Y N N
-    #     Y   N Y N
-    #     Y   N N Y
-    #     R   Y Y N
-    #     R   Y N Y
-    #     R   N Y Y
-    #     R   Y Y Y  - Little potential for improvement.
-    #     """
-
-    #     RAG_LOOKUP = {
-    #         #  (G, I, S) -> RAG value
-    #         (False, False, False): enums.RAYG.GREEN,
-    #         (True, False, False): enums.RAYG.AMBER,
-    #         (False, True, False): enums.RAYG.AMBER,
-    #         (False, False, True): enums.RAYG.AMBER,
-    #         (True, True, False): enums.RAYG.RED,
-    #         (True, False, True): enums.RAYG.RED,
-    #         (False, True, True): enums.RAYG.RED,
-    #         (True, True, True): enums.RAYG.RED,
-    #     }
-
-    #     return RAG_LOOKUP.get(
-    #         (
-    #             answers.gas_boiler_present,
-    #             answers.walls_insulated,
-    #             answers.has_solar_pv,
-    #         )
-    #     )
 
 
 def get_income_rating(answers: models.Answers) -> enums.RAYG:

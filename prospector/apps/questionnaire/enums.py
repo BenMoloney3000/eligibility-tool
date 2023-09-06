@@ -35,32 +35,12 @@ class PropertyDataSource(models.TextChoices):
     PDB = "PDB", "Parity Database"
 
 
-# class PropertyTypeOld(models.TextChoices):
-#     FLAT = "FLAT", "Flat or maisonette"
-#     HOUSE = "HOUSE", "House"
-#     BUNGALOW = "BUNGALOW", "Bungalow"
-#     PARK_HOME = "PARK_HOME", "Park Home"
-
-
 class PropertyType(models.TextChoices):
     FLAT = "Flat", "Flat"
     HOUSE = "House", "House"
     BUNGALOW = "Bungalow", "Bungalow"
     PARK_HOME = "ParkHome", "Park home"
     MAISONNETTE = "Maisonette", "Maisonette"
-
-
-# class PropertyForm(models.TextChoices):
-#     DETACHED = "DETACHED", "Detached"
-#     SEMI_DETACHED = "SEMI_DETACHED", "Semi-detached"
-#     MID_TERRACE = "MID_TERRACE", "Mid-terrace"
-#     END_TERRACE = "END_TERRACE", "End-terrace"
-#     MAISONNETTE = "MAISONNETTE", "Maisonette"
-#     FLAT_SMALL = "FLAT_CONVERSION", "Flat (converted house or block of 5 or less flats)"
-#     FLAT_BLOCK = (
-#         "FLAT_BLOCK",
-#         "Flat (block of 5 or more flats or flat in mixed use building)",
-#     )
 
 
 # Below defines attributes coresponding with Attachment field in ParityData model
@@ -71,19 +51,6 @@ class PropertyAttachment(models.TextChoices):
     END_TERRACE = "EndTerrace", "End terrace"
     ENCLOSED_END_TERRACE = "EnclosedEndTerrace", "Enclosed end terrace"
     ENCLOSED_MID_TERRACE = "EnclosedMidTerrace", "Enclosed mid terrace"
-
-
-# class PropertyAgeBand(models.TextChoices):
-#     # We can use an integer field to parse numerical values into bands
-#     BEFORE_1900 = 0, "Before 1900"
-#     FROM_1900 = 1900, "1900-1929"
-#     FROM_1930 = 1930, "1930-1949"
-#     FROM_1950 = 1950, "1950-1966"
-#     FROM_1967 = 1967, "1967-1975"
-#     FROM_1976 = 1976, "1976-1990"
-#     FROM_1991 = 1991, "1991-2002"
-#     SINCE_2003 = 2003, "Since 2003"
-#     UNKNOWN = "UNKNOWN", "I don't know"
 
 
 class PropertyConstructionYears(models.TextChoices):
@@ -99,11 +66,6 @@ class PropertyConstructionYears(models.TextChoices):
     FROM_2003 = 2003, "2003-2006"
     FROM_2007 = 2007, "2007-2011"
     FROM_2012 = 2012, "2012 onwards"
-
-
-# class WallType(models.TextChoices):
-#     SOLID = "SOLID", "Solid walls"
-#     CAVITY = "CAVITY", "Cavity walls"
 
 
 class WallConstruction(models.TextChoices):  # To replace WallType with Parity dataset

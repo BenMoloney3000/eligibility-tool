@@ -314,27 +314,6 @@ class Consents(AnswerFormMixin, forms.ModelForm):
         return data
 
 
-# class SelectEPC(AnswerFormMixin, forms.ModelForm):
-#     def __init__(self, *args, **kwargs):
-#         # Get the candidate EPCs to populate the select field
-#         candidate_epcs = kwargs.pop("candidate_epcs")
-#         super().__init__(*args, **kwargs)
-
-#         self.candidate_epcs = candidate_epcs
-
-#         epc_choices = [(lmk_id, str(epc)) for lmk_id, epc in candidate_epcs.items()]
-#         epc_choices.append((None, "No valid EPC"))
-#         self.fields["selected_epc"] = forms.ChoiceField(
-#             required=False, choices=epc_choices, initial=epc_choices[0][0]
-#         )
-
-#     class Meta:
-#         model = models.Answers
-#         fields = [
-#             "selected_epc",
-#         ]
-
-
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

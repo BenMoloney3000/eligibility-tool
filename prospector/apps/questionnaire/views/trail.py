@@ -5,10 +5,13 @@ from django.core.validators import validate_email
 from django.utils import timezone
 from django.views.generic.base import TemplateView
 
+from . import abstract as abstract_views
 from prospector.apps.parity.utils import get_addresses_for_postcode
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
-from prospector.apps.questionnaire import selectors, services, utils
+from prospector.apps.questionnaire import selectors
+from prospector.apps.questionnaire import services
+from prospector.apps.questionnaire import utils
 from prospector.dataformats import postcodes
 
 logger = logging.getLogger(__name__)

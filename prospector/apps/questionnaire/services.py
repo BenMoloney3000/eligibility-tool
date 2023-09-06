@@ -110,39 +110,6 @@ def _detect_property_form(epc: EPCData) -> Optional[enums.PropertyAttachment]:
         return enums.PropertyForm.MAISONNETTE
 
 
-# def _detect_property_age(epc: EPCData) -> Optional[enums.PropertyConstructionYears]:
-#     age_band = epc.construction_age_band.upper()
-
-#     # Standard bands:
-#     if age_band == "ENGLAND AND WALES: BEFORE 1900":
-#         return enums.PropertyAgeBand.BEFORE_1900
-#     elif age_band == "ENGLAND AND WALES: 1900-1929":
-#         return enums.PropertyAgeBand.FROM_1900
-#     elif age_band == "ENGLAND AND WALES: 1930-1949":
-#         return enums.PropertyAgeBand.FROM_1930
-#     elif age_band == "ENGLAND AND WALES: 1950-1966":
-#         return enums.PropertyAgeBand.FROM_1950
-#     elif age_band == "ENGLAND AND WALES: 1967-1975":
-#         return enums.PropertyAgeBand.FROM_1967
-#     elif age_band in ["ENGLAND AND WALES: 1976-1982", "ENGLAND AND WALES: 1983-1990"]:
-#         return enums.PropertyAgeBand.FROM_1976
-#     elif age_band in ["ENGLAND AND WALES: 1991-1995", "ENGLAND AND WALES: 1996-2002"]:
-#         return enums.PropertyAgeBand.FROM_1991
-#     elif age_band in [
-#         "ENGLAND AND WALES: 2003-2006",
-#         "ENGLAND AND WALES: 2007 ONWARDS",
-#         "ENGLAND AND WALES: 2007-2011",
-#         "ENGLAND AND WALES: 2012 ONWARDS",
-#     ]:
-#         # Seems to get less 'standard' as it gets more recent!
-#         return enums.PropertyAgeBand.SINCE_2003
-#     elif age_band.isdecimal():
-#         # Purely numerical value, compare with age bands
-#         for threshold in reversed(enums.PropertyAgeBand):
-#             if int(age_band) >= threshold:
-#                 return enums.PropertyAgeBand(threshold)
-
-
 def _detect_wall_type(epc: EPCData) -> Optional[enums.WallConstruction]:
     wall_desc = epc.walls_description.upper()
 
