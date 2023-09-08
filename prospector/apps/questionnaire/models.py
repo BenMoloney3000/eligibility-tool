@@ -88,8 +88,7 @@ class Answers(models.Model):
         max_length=10, choices=enums.PropertyOwnership.choices, blank=True
     )
     # UPRN is 12 digits, too big for a PositiveIntegerField
-    uprn = models.PositiveBigIntegerField(null=True, blank=True)
-
+    uprn = models.CharField(max_length=120, blank=True, null=True)
     respondent_has_permission = models.BooleanField(null=True, blank=True)
 
     """
