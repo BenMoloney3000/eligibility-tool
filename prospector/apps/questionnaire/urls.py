@@ -221,5 +221,10 @@ urlpatterns = [
     path("summary", views.HouseholdSummary.as_view(), name="household-summary"),
     path("answers-summary", views.AnswersSummary.as_view(), name="answers-summary"),
     path("eligibility", views.EligibilitySummary.as_view(), name="eligibility-summary"),
+    path(
+        "recommended-measures",
+        views.RecommendedMeasures.as_view(),
+        name="recommended-measures",
+    ),
     path("complete", views.Completed.as_view(), name="completed"),
 ]

@@ -434,7 +434,7 @@ class Occupants(abstract_views.Question):
 
 
 class HouseholdIncome(abstract_views.SingleQuestion):
-    answer_field = "total_income_lt_30k"
+    answer_field = "total_income"
     question = "Is the household income less than £31,000 before tax?"
     note = (
         "Household income means the combined income of everyone living in the property."
@@ -446,22 +446,22 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES.value:
-            self.answers.take_home_lt_31k = enums.IncomeIsUnderThreshold.YES.value
+        if self.answers.total_income == enums.IncomeIsUnderThreshold.YES.value:
+            self.answers.take_home = enums.IncomeIsUnderThreshold.YES.value
             self.answers.disability_benefits = None
             self.answers.child_benefit = None
             self.answers.child_benefit_threshold = None
             self.answers.income_lt_child_benefit_threshold = None
 
     def get_next(self):
-        if self.answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES.value:
+        if self.answers.total_income == enums.IncomeIsUnderThreshold.YES.value:
             return "Vulnerabilities"
         else:
             return "HouseholdTakeHomeIncome"
 
 
 class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
-    answer_field = "take_home_lt_31k"
+    answer_field = "take_home"
     question = (
         "Is the household income less than £31,000 after tax, mortgage/rent, "
         " and energy bills?"
@@ -665,38 +665,9 @@ class AnswersSummary(abstract_views.NoQuestion):
             {a.property_address_2} {a.property_address_3} \
             {a.property_postcode}",
             "ownership": a.get_property_ownership_display(),
-            "property_type": f'{a.property_type.replace("_", " ")}, {a.property_form.replace("_", " ")}',
-            "property_age_band": a.get_property_age_band_display(),
-            "wall_type": a.wall_type,
-            "walls_insulated": a.walls_insulated,
-            "suspended_floor": a.suspended_floor,
-            "suspended_floor_insulated": a.suspended_floor_insulated,
-            "unheated_loft": a.unheated_loft,
-            "room_in_roof": a.room_in_roof,
-            "room_in_roof_insulated": a.rir_insulated,
-            "roof_space_insulated": a.roof_space_insulated,
-            "flat_roof": a.flat_roof,
-            "flat_roof_insulated": a.get_flat_roof_insulated_display(),
-            "gas_boiler_present": a.gas_boiler_present,
-            "gas_boiler_age": a.get_gas_boiler_age_display(),
-            "gas_boiler_broken": a.gas_boiler_broken,
-            "on_mains_gas": a.on_mains_gas,
-            "other_heating_present": a.other_heating_present,
-            "heat_pump_present": a.heat_pump_present,
-            "other_heating_fuel": a.get_other_heating_fuel_display(),
-            "storage_heaters_present": a.storage_heaters_present,
-            "hhrshs_present": a.hhrshs_present,
-            "electric_radiators_present": a.electric_radiators_present,
-            "hwt_present": a.hwt_present,
-            "trvs_present": a.trvs_present,
-            "room_thermostat": a.room_thermostat,
-            "ch_timer": a.ch_timer,
-            "programmable_thermostat": a.programmable_thermostat,
-            "smart_thermostat": a.smart_thermostat,
-            "has_solar_pv": a.has_solar_pv,
             "adults": a.adults,
             "children": a.children,
-            "total_income_lt_30k": a.get_total_income_lt_30k_display(),
+            "total_income": a.get_total_income_display(),
             "take_home_lt_31k_confirmation": a.take_home_lt_31k_confirmation,
             "vulnerable_cariovascular": a.vulnerable_cariovascular,
             "vulnerable_respiratory": a.vulnerable_respiratory,
@@ -736,37 +707,15 @@ class RecommendedMeasures(abstract_views.Question):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         services.close_questionnaire(self.answers)
-        measures = utils.determine_recommended_measures(self.answers)
-        for measure in measures:
-            measure.disruption = utils.get_disruption(measure)
-            measure.comfort_benefit = utils.get_comfort_benefit(measure)
-            measure.bill_impact = utils.get_bill_impact(measure)
-            measure.funding_likelihood = utils.get_funding_likelihood(measure)
-
-        context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
         context["rating"] = utils.get_overall_rating(self.answers)
-        context["sap_rating"] = self.answers.sap_rating
         context["property_rating"] = utils.get_property_rating(self.answers)
         context["income_rating"] = utils.get_income_rating(self.answers)
         return context
 
-    # def get_next(self):
-    #     # Note we've disabled the rest of the questionnaire at this point at
-    #     # the request of the client leaving the functionality here for future
-    #     # development.
-    #     #
-    #     # To re-renable it, put back this code:
-    #     #
-    #     # if self.request.POST.get("finish_now", "") == "True":
-    #     #   services.close_questionnaire(self.answers)
-    #     #   return "Completed"
-    #     # else:
-    #     #   return "ToleratedDisruption"
-
-    #     # For now always close the questionnaire here:
-    #     services.close_questionnaire(self.answers)
-    #     return "Completed"
+    def get_next(self):
+        services.close_questionnaire(self.answers)
+        return "Completed"
 
 
 class ToleratedDisruption(abstract_views.SingleQuestion):
