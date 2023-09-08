@@ -2,7 +2,7 @@ from django.db import models
 
 
 class ParityData(models.Model):
-    org_ref = models.IntegerField()
+    org_ref = models.CharField(max_length=120)
     address_link = models.CharField(max_length=80)
     googlemaps = models.CharField(max_length=120)
     address_1 = models.CharField(max_length=120)
@@ -35,7 +35,7 @@ class ParityData(models.Model):
     parliamentary_constituency = models.CharField(max_length=128)
     region_name = models.CharField(max_length=128)
     tenure = models.CharField(max_length=128)
-    uprn = models.IntegerField(blank=True, null=True)
+    uprn = models.CharField(max_length=120, blank=True, null=True)
     lat_coordinate = models.DecimalField(
         max_digits=10, decimal_places=8, blank=True, null=True
     )
