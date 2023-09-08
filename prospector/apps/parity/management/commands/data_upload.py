@@ -66,4 +66,4 @@ class Command(BaseCommand):
                 raise CommandError("An error occured during uploading csv data")
 
         if len(temp_data) > 0:
-            ParityData.objects.bulk_create(temp_data)
+            ParityData.objects.bulk_create(temp_data, batch_size=500)
