@@ -1,0 +1,95 @@
+{% extends "questionnaire/base_question.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block question_text %}
+
+    <h2 class=""question-heading>
+        {% include "./includes/icon_house.html" %}
+        Property measures
+    </h2>
+
+
+    <table>
+        <tr>
+            <td>Type</td>
+            <td>{% if property_data.type %}{{ property_data.type }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Attachment</td>
+            <td>{% if property_data.attachment %}{{ property_data.attachment }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Construction years</td>
+            <td>{% if property_data.construction_years %}{{ property_data.construction_years }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Wall construction</td>
+            <td>{% if property_data.wall_construction %}{{ property_data.wall_construction }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Walls insulation</td>
+            <td>{% if property_data.walls_insulation %}{{ property_data.walls_insulation }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Roof construction</td>
+            <td>{% if property_data.roof_construction %}{{ property_data.roof_construction }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Roof insulation</td>
+            <td>{% if property_data.roof_insulation %}{{ property_data.roof_insulation }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Floor construction</td>
+            <td>{% if property_data.floor_construction %}{{ property_data.floor_construction }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Floor insulation</td>
+            <td>{% if property_data.floor_insulation %}{{ property_data.floor_insulation }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Glazing</td>
+            <td>{% if property_data.glazing %}{{ property_data.glazing }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Heating</td>
+            <td>{% if property_data.heating %}{{ property_data.heating }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Main fuel</td>
+            <td>{% if property_data.main_fuel %}{{ property_data.main_fuel }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Boiler efficiency</td>
+            <td>{% if property_data.boiler_efficiency %}{{ property_data.boiler_efficiency }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Controls adequacy</td>
+            <td>{% if property_data.controls_adequacy %}{{ property_data.controls_adequacy }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Heated rooms</td>
+            <td>{% if property_data.heated_rooms %}{{ property_data.heated_rooms }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Realistic fuel bill</td>
+            <td>{% if property_data.realistic_fuel_bill %}{{ property_data.realistic_fuel_bill }}{% else %}No data{% endif %}</td>
+        </tr>
+    </table>
+{% endblock question_text %}
+{% block form_content %}
+    <div>
+        <p>
+            <label for="id_respondent_comments">
+                Your comments:
+            </label><br>
+            {{ form.respondent_comments }}
+        </p>
+    </div>
+{% endblock form_content %}
+
+
+
+
+

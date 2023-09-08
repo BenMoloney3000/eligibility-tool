@@ -387,227 +387,42 @@ class Consents(abstract_views.Question):
     title = "Your consent to our use of your data"
     template_name = "questionnaire/consents.html"
     form_class = questionnaire_forms.Consents
-    next = "PropertyType"
+    next = "PropertyMeasuresSummary"
     percent_complete = COMPLETE_GROUP_2 + 9
 
 
-class PropertyType(abstract_views.Question):
-    title = "Property type"
-    question = "What type of property is this?"
-    icon = "house"
-    template_name = "questionnaire/property_type.html"
-    form_class = questionnaire_forms.PropertyType
-    next = "PropertyConstructionYears"
-    percent_complete = COMPLETE_GROUP_3 + 3
-
-    def get_initial(self):
-        data = super().get_initial()
-        if data.get("property_type"):
-            data["data_correct"] = bool(
-                data.get("property_type_orig")
-                and data.get("property_attachment_orig")
-                and data["property_type"] == data["property_type_orig"]
-                and data["property_attachment"] == data["property_attachment_orig"]
-            )
-        return data
+class PropertyMeasuresSummary(abstract_views.Question):
+    title = "Summary of property measures"
+    form_class = questionnaire_forms.PropertyMeasuresSummary
+    answer_field = "respondent_comments"
+    template_name = "questionnaire/property_summary.html"
+    next = "Occupants"
+    percent_complete = COMPLETE_GROUP_2 + 11
 
     def get_context_data(self, *args, **kwargs):
+        a = self.answers
         context = super().get_context_data(*args, **kwargs)
 
-        if self.answers.property_type_orig:
-            context["initial_type"] = enums.PropertyType(
-                self.answers.property_type_orig
-            ).label
-
-        if self.answers.property_attachment_orig:
-            context["initial_attachment"] = enums.PropertyAttachment(
-                self.answers.property_attachment_orig
-            ).label
+        context["property_data"] = {
+            "type": f"{a.get_property_type_display()}",
+            "attachment": f"{a.get_property_attachment_display()}",
+            "construction_years": f"{a.get_property_construction_years_display()}",
+            "wall_construction": f"{a.get_wall_construction_display()}",
+            "walls_insulation": f"{a.get_walls_insulation_display()}",
+            "roof_construction": f"{a.get_roof_construction_display()}",
+            "roof_insulation": f"{a.get_roof_insulation_display()}",
+            "floor_construction": f"{a.get_floor_construction_display()}",
+            "floor_insulation": f"{a.get_floor_insulation_display()}",
+            "glazing": f"{a.get_glazing_display()}",
+            "heating": f"{a.get_heating_display()}",
+            "main_fuel": f"{a.get_main_fuel_display()}",
+            "boiler_efficiency": f"{a.get_boiler_efficiency_display()}",
+            "controls_adequacy": f"{a.get_controls_adequacy_display()}",
+            "heated_rooms": f"{a.heated_rooms}",
+            "realistic_fuel_bill": f"{a.realistic_fuel_bill}",
+        }
 
         return context
-
-
-class PropertyConstructionYears(abstract_views.SinglePrePoppedQuestion):
-    title = "Property age"
-    question = "When was the property built?"
-    icon = "house"
-    supplementary = "If you don't know the exact year it's fine to give us an estimate."
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.PropertyConstructionYears.choices
-    percent_complete = COMPLETE_GROUP_3 + 5
-    next = "WallConstruction"
-
-    def pre_save(self):
-        # If we didn't get the likely wall type, infer from the age now.
-        if not self.answers.wall_construction_orig:
-            self.answers.wall_construction_orig = (
-                enums.WallConstruction.SOLID_BRICK
-                if (
-                    self.answers.property_construction_years.isdecimal()
-                    and (int(self.answers.property_construction_years) < 1930)
-                )
-                else enums.WallConstruction.CAVITY
-            )
-
-
-class WallConstruction(abstract_views.SinglePrePoppedQuestion):
-    title = "Wall construction"
-    question = "What type of outside walls does the property have?"
-    icon = "house"
-    supplementary = (
-        "<h2>Working out your wall type</h2>"
-        "<p>The first thing you need to find out is what sort of walls you "
-        "have. If you can see the brickwork on the outside of the house, look at "
-        "the pattern of the bricks.</p>"
-        "<h3>Cavity wall</h3>"
-        "<p>If your home has cavity walls, the bricks will usually have an even "
-        "pattern with all the bricks laid lengthways.</p>"
-        "<h3>Solid wall</h3>"
-        "<p>If your home has solid walls, the bricks will have an alternating "
-        "pattern, with some bricks laid across the wall so you can see the "
-        "smaller ends from the outside.</p>"
-        "<p>If the brickwork has been covered, you can also tell by measuring the "
-        "width of the wall. Examine a window or door on one of your external "
-        "walls:<p>"
-        "<ul>"
-        "<li>If a brick wall is more than 260mm thick then it probably has a "
-        "cavity.</li>"
-        "<li>A narrower wall is probably solid. Stone walls may be thicker "
-        "still but are usually solid.</li>"
-        "</ul>"
-        "<p>Some houses have a different type of wall structure altogether. If "
-        "your house is a steel-frame or timber-framed building, or is made from a "
-        "pre-fabricated concrete, then you will need to ask a specialist "
-        "insulation installer to advise you.</p>"
-        '<a href="https://energysavingtrust.org.uk/advice/cavity-wall-insulation" '
-        ' target="_blank" rel="noopener norefferer">'
-        "https://energysavingtrust.org.uk/advice/cavity-wall-insulation</a>"
-    )
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.WallConstruction.choices
-    note = (
-        "If the property has more than one type of outside wall, choose the one "
-        "that makes up the most of the external area."
-    )
-    next = "WallsInsulation"
-    percent_complete = COMPLETE_GROUP_3 + 7
-
-
-class WallsInsulation(abstract_views.SinglePrePoppedQuestion):
-    title = "Wall type"
-    question = "How the outside walls in this property are insulated?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.WallInsulation.choices
-    note = (
-        "If only some of the outside walls are insulated, choose the option that "
-        "makes up most of the external area."
-    )
-    next = "FloorConstruction"
-    percent_complete = COMPLETE_GROUP_3 + 9
-
-
-class FloorConstruction(abstract_views.SinglePrePoppedQuestion):
-    title = "Floor construction"
-    question = "What type of floor does the property have?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.FloorConstruction.choices
-    next = "FloorInsulation"
-    percent_complete = COMPLETE_GROUP_3 + 11
-
-
-class FloorInsulation(abstract_views.SinglePrePoppedQuestion):
-    title = "Floor insulation"
-    question = "How is the floor insulated?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.FloorInsulation.choices
-    percent_complete = COMPLETE_GROUP_4 + 1
-    next = "RoofConstruction"
-
-
-class RoofConstruction(abstract_views.SinglePrePoppedQuestion):
-    title = "Roof construction"
-    question = "What type of roof does the property have?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.RoofConstruction.choices
-    note = (
-        "If the property has different roof types, choose the answer that applies "
-        "to the largest roof area."
-    )
-    percent_complete = COMPLETE_GROUP_5
-    next = "RoofInsulation"
-
-
-class RoofInsulation(abstract_views.SinglePrePoppedQuestion):
-    title = "Roof insulation"
-    question = "How is the roof insulated?"
-    icon = "house"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.RoofInsulation.choices
-    percent_complete = COMPLETE_GROUP_5 + 2
-    next = "Glazing"
-
-
-class Glazing(abstract_views.SinglePrePoppedQuestion):
-    title = "Glazing"
-    icon = "flame"
-    question = "What type of glazing does the property have?"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.Glazing.choices
-    percent_complete = COMPLETE_GROUP_5 + 4
-    next = "Heating"
-
-
-class Heating(abstract_views.SinglePrePoppedQuestion):
-    title = "Heating system"
-    question = "What is the heating system of the property?"
-    icon = "flame"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.Heating.choices
-    percent_complete = COMPLETE_GROUP_5 + 6
-    next = "MainFuel"
-
-
-class MainFuel(abstract_views.SinglePrePoppedQuestion):
-    title = "Main fuel"
-    icon = "flame"
-    question = "What is the main fuel source?"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.MainFuel.choices
-    next = "Glazing"
-    percent_complete = COMPLETE_GROUP_5 + 8
-
-    # In the Parity dataset the only objects without boiler_efficiency
-    # value are the ones with community heating.
-    # If that's a case we skip BoilerEfficiency view:
-    def get_next(self):
-        if self.answers.boiler_efficiency_orig != "":
-            return "BoilerEfficiency"
-        else:
-            return "ControlsAdequacy"
-
-
-class BoilerEfficiency(abstract_views.SinglePrePoppedQuestion):
-    title = "Boiler Efficiency"
-    icon = "house"
-    question = "What is the boiler efficiency rating?"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.EfficiencyBand.choices
-    percent_complete = COMPLETE_GROUP_6
-    next = "ControlsAdequacy"
-
-
-class ControlsAdequacy(abstract_views.SinglePrePoppedQuestion):
-    title = "Heat pump"
-    icon = "flame"
-    question = "What is the Controls Adequacy?"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.ControlsAdequacy.choices
-    percent_complete = COMPLETE_GROUP_6 + 2
-    next = "Occupants"
 
 
 class Occupants(abstract_views.Question):

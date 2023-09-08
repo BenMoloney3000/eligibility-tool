@@ -27,27 +27,27 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         """Parse Parity contents to populate initial values for property energy data."""
         po = parity_object
 
-        answers.property_type_orig = po.type
-        answers.property_attachment_orig = po.attachment
-        answers.property_construction_years_orig = po.construction_years
-        answers.wall_construction_orig = po.wall_construction
-        answers.wall_insulation_orig = po.wall_insulation
-        answers.roof_construction_orig = po.roof_construction
-        answers.roof_insulation_orig = po.roof_insulation
-        answers.floor_construction_orig = po.floor_construction
-        answers.floor_insulation_orig = po.floor_construction
-        answers.heating_orig = po.heating
-        answers.main_fuel_orig = po.main_fuel
+        answers.property_type = po.type
+        answers.property_attachment = po.attachment
+        answers.property_construction_years = po.construction_years
+        answers.wall_construction = po.wall_construction
+        answers.wall_insulation = po.wall_insulation
+        answers.roof_construction = po.roof_construction
+        answers.roof_insulation = po.roof_insulation
+        answers.floor_construction = po.floor_construction
+        answers.floor_insulation = po.floor_construction
+        answers.heating = po.heating
+        answers.main_fuel = po.main_fuel
         answers.sap_score = int(po.sap_score)
         answers.sap_band = po.sap_band
         answers.lodged_epc_score = po.lodged_epc_score
         answers.lodged_epc_band = po.lodged_epc_band
-        answers.glazing_orig = po.glazing
-        answers.boiler_efficiency_orig = po.boiler_efficiency
-        answers.controls_adequacy_orig = po.controls_adequacy
-        answers.heated_rooms_orig = po.heated_rooms
-        answers.tCO2_current_orig = po.tco2_current
-        answers.realistic_fuel_bill_orig = po.realistic_fuel_bill
+        answers.glazing = po.glazing
+        answers.boiler_efficiency = po.boiler_efficiency
+        answers.controls_adequacy = po.controls_adequacy
+        answers.heated_rooms = po.heated_rooms
+        answers.t_co2_current = po.tco2_current
+        answers.realistic_fuel_bill = po.realistic_fuel_bill
         answers.uprn = po.uprn
 
         return answers

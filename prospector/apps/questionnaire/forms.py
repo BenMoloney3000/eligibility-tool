@@ -314,6 +314,14 @@ class Consents(AnswerFormMixin, forms.ModelForm):
         return data
 
 
+class PropertyMeasuresSummary(AnswerFormMixin, forms.ModelForm):
+    respondent_comments = forms.CharField(widget=forms.Textarea, required=False)
+
+    class Meta:
+        model = models.Answers
+        fields = ["respondent_comments"]
+
+
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

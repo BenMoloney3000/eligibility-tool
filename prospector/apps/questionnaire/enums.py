@@ -43,7 +43,6 @@ class PropertyType(models.TextChoices):
     MAISONNETTE = "Maisonette", "Maisonette"
 
 
-# Below defines attributes coresponding with Attachment field in ParityData model
 class PropertyAttachment(models.TextChoices):
     DETACHED = "Detached", "Detached"
     SEMI_DETACHED = "SemiDetached", "Semi detached"
@@ -68,11 +67,11 @@ class PropertyConstructionYears(models.TextChoices):
     FROM_2012 = 2012, "2012 onwards"
 
 
-class WallConstruction(models.TextChoices):  # To replace WallType with Parity dataset
+class WallConstruction(models.TextChoices):
     CAVITY = "CAVITY", "Cavity"
     COB = "COB", "Cob"
     GRANITE = "GRANITE", "Granite"
-    PARK_HOME = "PARK_HOME", "Park Home"
+    PARK_HOME = "PARK_HOME", "Park home"
     SANDSTONE = "SANDSTONE", "Sandstone"
     SOLID_BRICK = "SOLID_BRICK", "Solid brick"
     SYSTEM = "SYSTEM", "System"
@@ -80,26 +79,26 @@ class WallConstruction(models.TextChoices):  # To replace WallType with Parity d
 
 
 class WallInsulation(models.TextChoices):
-    AS_BUILT = "AsBuilt", "As Built"
+    AS_BUILT = "AsBuilt", "As built"
     EXTERNAL = "External", "External"
-    FC = "FilledCavity", "Filled Cavity"
-    FCE = "FilledCavityPlusExternal", "Filled Cavity Plus External"
-    FCI = "FilledCavityPlusInternal", "Filled Cavity Plus Internal"
+    FC = "FilledCavity", "Filled cavity"
+    FCE = "FilledCavityPlusExternal", "Filled cavity plus external"
+    FCI = "FilledCavityPlusInternal", "Filled cavity plus internal"
     INTERNAL = "Internal", "Internal"
 
 
 class RoofConstruction(models.TextChoices):
-    ADB = "AnotherDwellingAbove", "Another Dwelling Above"
+    ADB = "AnotherDwellingAbove", "Another dwelling above"
     FLAT = "Flat", "Flat"
-    PNLA = "PitchedNormalLoftAccess", "Pitched Normal Loft Access"
-    PNNLA = "PitchedNormalNoLoftAccess", "Pitched Normal No Loft Access"
-    PT = "PitchedThatched", "Pitched Thatched"
-    PWSC = "PitchedWithSlopingCeiling", "Pitched With Sloping Ceiling"
+    PNLA = "PitchedNormalLoftAccess", "Pitched normal loft access"
+    PNNLA = "PitchedNormalNoLoftAccess", "Pitched normal no loft access"
+    PT = "PitchedThatched", "Pitched thatched"
+    PWSC = "PitchedWithSlopingCeiling", "Pitched with sloping ceiling"
 
 
 class RoofInsulation(models.TextChoices):
-    ADB = "AnotherDwellingAbove", "Another Dwelling Above"
-    AS_BUILD = "AsBuilt", "As Build"
+    ADB = "AnotherDwellingAbove", "Another dwelling above"
+    AS_BUILD = "AsBuilt", "As build"
     MM_100 = "mm100", "100 mm"
     MM_12 = "mm12", "12 mm"
     MM_150 = "mm150", "150 mm"
@@ -118,14 +117,14 @@ class RoofInsulation(models.TextChoices):
 
 class FloorConstruction(models.TextChoices):
     SOLID = "Solid", "Solid"
-    SNT = "SuspendedNotTimber", "Suspended Not Timber"
-    ST = "SuspendedTimber", "Suspended Timber"
+    SNT = "SuspendedNotTimber", "Suspended not timber"
+    ST = "SuspendedTimber", "Suspended timber"
     UNKNOWN = "Unknown", "Unknown"
 
 
 class FloorInsulation(models.TextChoices):
-    AS_BUILT = "AsBuilt", "As Built"
-    RETRO_FITTED = "RetroFitted", "Retro Fitted"
+    AS_BUILT = "AsBuilt", "As built"
+    RETRO_FITTED = "RetroFitted", "Retro fitted"
     UNKNOWN = "Unknown", "Unknown"
 
 
@@ -142,33 +141,33 @@ class Glazing(models.TextChoices):
 class Heating(models.TextChoices):
     BOILERS = "Boilers", "Boilers"
     COMMUNITY = "Community", "Community"
-    EUF = "Electric underfloor", "Electric Under Floor"
-    HP_WARM = "Heat pumps (warm air)", "Heat Pumps (Warm Air)"
-    HP_WET = "Heat pumps (wet)", "Heat Pumps (Wet)"
-    OTHER = "Other systems", "Other Systems"
-    RH = "Room heaters", "Room Heaters"
-    SH = "Storage heaters", "Storage Heaters"
-    AIR = "Warm Air (not heat pump)", "Warm Air (Not Heat Pump)"
+    EUF = "Electric underfloor", "Electric under floor"
+    HP_WARM = "Heat pumps (warm air)", "Heat pumps (warm air)"
+    HP_WET = "Heat pumps (wet)", "Heat pumps (wet)"
+    OTHER = "Other systems", "Other systems"
+    RH = "Room heaters", "Room heaters"
+    SH = "Storage heaters", "Storage heaters"
+    AIR = "Warm Air (not heat pump)", "Warm air (not heat pump)"
 
 
 class MainFuel(models.TextChoices):
     ANTHRACITE = "Anthracite", "Anthracite"
-    BWP = "BulkWoodPellets", "Bulk Wood Pellets"
-    DFMW = "DualFuelMineralWood", "Dual Fuel Mineral Wood"
-    EC = "ElectricityCommunity", "Electricity Community"
-    ENC = "ElectricityNotCommunity", "Electricity Not Community"
-    GBLPG = "GasBottledLPG", "Gas Bottled LPG"
-    HCNC = "HouseCoalNotCommunity", "House Coal Not Community"
-    LPGC = "LPGCommunity", "LPG Community"
-    LPGNC = "LPGNotCommunity", "LPG Not Community"
-    LPGSC = "LPGSpecialCondition", "LPG Special Condition"
-    MGC = "MainsGasCommunity", "Mains Gas Community"
-    MGNC = "MainsGasNotCommunity", "Mains Gas Not Community"
-    OC = "OilCommunity", "Oil Community"
-    ONC = "OilNotCommunity", "Oil Not Community"
-    SC = "SmokelessCoal", "Smokeless Coal"
-    WC = "WoodChips", "Wood Chips"
-    WL = "WoodLogs", "Wood Logs"
+    BWP = "BulkWoodPellets", "Bulk wood pellets"
+    DFMW = "DualFuelMineralWood", "Dual fuel mineral wood"
+    EC = "ElectricityCommunity", "Electricity community"
+    ENC = "ElectricityNotCommunity", "Electricity not community"
+    GBLPG = "GasBottledLPG", "Gas bottled LPG"
+    HCNC = "HouseCoalNotCommunity", "House coal not community"
+    LPGC = "LPGCommunity", "LPG community"
+    LPGNC = "LPGNotCommunity", "LPG not community"
+    LPGSC = "LPGSpecialCondition", "LPG special condition"
+    MGC = "MainsGasCommunity", "Mains gas community"
+    MGNC = "MainsGasNotCommunity", "Mains gas not community"
+    OC = "OilCommunity", "Oil community"
+    ONC = "OilNotCommunity", "Oil not community"
+    SC = "SmokelessCoal", "Smokeless coal"
+    WC = "WoodChips", "Wood chips"
+    WL = "WoodLogs", "Wood logs"
 
 
 class EfficiencyBand(models.TextChoices):
@@ -183,8 +182,8 @@ class EfficiencyBand(models.TextChoices):
 
 class ControlsAdequacy(models.TextChoices):
     OPTIMAL = "Optimal", "Optimal"
-    SUB_OPTIMAL = "SubOptimal", "Sub Optimal"
-    TOP_SPEC = "TopSpec", "Top Spec"
+    SUB_OPTIMAL = "SubOptimal", "Sub optimal"
+    TOP_SPEC = "TopSpec", "Top spec"
 
 
 class InsulationConfidence(models.TextChoices):

@@ -32,38 +32,10 @@ urlpatterns = [
         name="property-ownership",
     ),
     path("consents", views.Consents.as_view(), name="consents"),
-    path("type", views.PropertyType.as_view(), name="property-type"),
     path(
-        "age",
-        views.PropertyConstructionYears.as_view(),
-        name="property-construction-years",
-    ),
-    path("wall-type", views.WallConstruction.as_view(), name="wall-construction"),
-    path("wall-insulation", views.WallsInsulation.as_view(), name="walls-insulation"),
-    path("floor-type", views.FloorConstruction.as_view(), name="floor-construction"),
-    path(
-        "floor-insulation",
-        views.FloorInsulation.as_view(),
-        name="floor-insulation",
-    ),
-    path("roof-type", views.RoofConstruction.as_view(), name="roof-construction"),
-    path(
-        "roof-insulation",
-        views.RoofInsulation.as_view(),
-        name="roof-insulation",
-    ),
-    path("heating", views.Heating.as_view(), name="heating"),
-    path("main-fuel", views.MainFuel.as_view(), name="main-fuel"),
-    path(
-        "glazing",
-        views.Glazing.as_view(),
-        name="glazing",
-    ),
-    path(
-        "boiler-efficiency", views.BoilerEfficiency.as_view(), name="boiler-efficiency"
-    ),
-    path(
-        "controls-adequacy", views.ControlsAdequacy.as_view(), name="controls-adequacy"
+        "property-summary",
+        views.PropertyMeasuresSummary.as_view(),
+        name="property-measures-summary",
     ),
     path("occupants", views.Occupants.as_view(), name="occupants"),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
