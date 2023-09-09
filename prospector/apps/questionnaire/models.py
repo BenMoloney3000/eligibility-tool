@@ -111,32 +111,32 @@ class Answers(models.Model):
     # If the user agrees with the presented data, the _orig field is left empty
 
     property_type = models.CharField(
-        max_length=11, choices=enums.PropertyType.choices, blank=True
+        max_length=128, choices=enums.PropertyType.choices, blank=True
     )
     property_type_orig = models.CharField(
-        max_length=11,
+        max_length=128,
         choices=enums.PropertyType.choices,
         blank=True,
         verbose_name="Property type according to property data source before correction",
     )
     property_attachment = models.CharField(
-        max_length=20, choices=enums.PropertyAttachment.choices, blank=True
+        max_length=128, choices=enums.PropertyAttachment.choices, blank=True
     )
     property_attachment_orig = models.CharField(
-        max_length=20,
+        max_length=128,
         choices=enums.PropertyAttachment.choices,
         blank=True,
         verbose_name="Property form according to property data source before correction",
     )
 
     property_construction_years = models.CharField(
-        max_length=10,
+        max_length=12,
         choices=enums.PropertyConstructionYears.choices,
         blank=True,
         null=True,
     )
     property_construction_years_orig = models.CharField(
-        max_length=10,
+        max_length=12,
         choices=enums.PropertyConstructionYears.choices,
         blank=True,
         null=True,
@@ -144,65 +144,69 @@ class Answers(models.Model):
     )
 
     wall_construction = models.CharField(
-        max_length=12, choices=enums.WallConstruction.choices, blank=True
+        max_length=128, choices=enums.WallConstruction.choices, blank=True
     )
     wall_construction_orig = models.CharField(
-        max_length=12,
+        max_length=128,
         choices=enums.WallConstruction.choices,
         blank=True,
         verbose_name="Wall type according to property data source before correction",
     )
     walls_insulation = models.CharField(
-        max_length=24,
+        max_length=128,
         choices=enums.WallInsulation.choices,
         blank=True,
     )
     walls_insulation_orig = models.CharField(
-        max_length=24,
+        max_length=128,
         choices=enums.WallInsulation.choices,
         blank=True,
     )
 
     roof_construction = models.CharField(
-        max_length=25, choices=enums.RoofConstruction.choices, blank=True
+        max_length=128, choices=enums.RoofConstruction.choices, blank=True
     )
 
     roof_construction_orig = models.CharField(
-        max_length=25, choices=enums.RoofConstruction.choices, blank=True
+        max_length=128, choices=enums.RoofConstruction.choices, blank=True
     )
 
     roof_insulation = models.CharField(
-        max_length=20, choices=enums.RoofInsulation.choices, blank=True
+        max_length=128, choices=enums.RoofInsulation.choices, blank=True
     )
 
     roof_insulation_orig = models.CharField(
-        max_length=20, choices=enums.RoofInsulation.choices, blank=True
+        max_length=128, choices=enums.RoofInsulation.choices, blank=True
     )
     floor_construction = models.CharField(
-        max_length=18, choices=enums.FloorConstruction.choices, blank=True
+        max_length=128, choices=enums.FloorConstruction.choices, blank=True
     )
     floor_construction_orig = models.CharField(
-        max_length=18, choices=enums.FloorConstruction.choices, blank=True
+        max_length=128, choices=enums.FloorConstruction.choices, blank=True
     )
     floor_insulation = models.CharField(
-        max_length=11, choices=enums.FloorInsulation.choices, blank=True
+        max_length=128, choices=enums.FloorInsulation.choices, blank=True
     )
     floor_insulation_orig = models.CharField(
-        max_length=11, choices=enums.FloorInsulation.choices, blank=True
+        max_length=128, choices=enums.FloorInsulation.choices, blank=True
     )
-    glazing = models.CharField(max_length=19, choices=enums.Glazing.choices, blank=True)
+    glazing = models.CharField(
+        max_length=128, choices=enums.Glazing.choices, blank=True
+    )
     glazing_orig = models.CharField(
-        max_length=19, choices=enums.Glazing.choices, blank=True
+        max_length=128, choices=enums.Glazing.choices, blank=True
     )
-    heating = models.CharField(max_length=24, choices=enums.Heating.choices, blank=True)
+    heating = models.CharField(
+        max_length=128, choices=enums.Heating.choices, blank=True
+    )
     heating_orig = models.CharField(
-        max_length=24, choices=enums.Heating.choices, blank=True
+        max_length=128, choices=enums.Heating.choices, blank=True
     )
     main_fuel = models.CharField(
-        max_length=23, choices=enums.MainFuel.choices, blank=True
+        max_length=128, choices=enums.MainFuel.choices, blank=True
     )
     main_fuel_orig = models.CharField(
-        max_length=23, choices=enums.MainFuel.choices, blank=True
+        max_length=128, choices=enums.MainFuel.choices, blank=True
     )
     boiler_efficiency = models.CharField(
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True
@@ -211,18 +215,18 @@ class Answers(models.Model):
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True
     )
     controls_adequacy = models.CharField(
-        max_length=10, choices=enums.ControlsAdequacy.choices, blank=True
+        max_length=128, choices=enums.ControlsAdequacy.choices, blank=True
     )
     controls_adequacy_orig = models.CharField(
-        max_length=10, choices=enums.ControlsAdequacy.choices, blank=True
+        max_length=128, choices=enums.ControlsAdequacy.choices, blank=True
     )
     heated_rooms = models.IntegerField(blank=True, null=True)
     heated_rooms_orig = models.IntegerField(blank=True, null=True)
     t_co2_current = models.DecimalField(
-        max_digits=2, decimal_places=1, blank=True, null=True
+        max_digits=3, decimal_places=1, blank=True, null=True
     )
     t_co2_current_orig = models.DecimalField(
-        max_digits=2, decimal_places=1, blank=True, null=True
+        max_digits=3, decimal_places=1, blank=True, null=True
     )
     realistic_fuel_bill = models.CharField(max_length=9, blank=True, null=True)
     realistic_fuel_bill_orig = models.CharField(max_length=9, blank=True, null=True)
