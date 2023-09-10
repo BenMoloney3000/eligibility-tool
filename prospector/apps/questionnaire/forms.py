@@ -315,10 +315,14 @@ class Consents(AnswerFormMixin, forms.ModelForm):
 
 
 class PropertyMeasuresSummary(AnswerFormMixin, forms.ModelForm):
-    respondent_comments = forms.CharField(widget=forms.Textarea, required=False)
+    respondent_comments = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+    )
 
     class Meta:
         model = models.Answers
+        optional_fields = ["respondent_comments"]
         fields = ["respondent_comments"]
 
 
