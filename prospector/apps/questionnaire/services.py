@@ -39,11 +39,11 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.heating = po.heating
         answers.main_fuel = po.main_fuel
         answers.sap_score = int(po.sap_score)
-        answers.sap_band = po.sap_band.lower()
+        answers.sap_band = po.sap_band
         answers.lodged_epc_score = po.lodged_epc_score
-        answers.lodged_epc_band = po.lodged_epc_band.lower()
+        answers.lodged_epc_band = po.lodged_epc_band
         answers.glazing = po.glazing
-        answers.boiler_efficiency = po.boiler_efficiency.lower()
+        answers.boiler_efficiency = po.boiler_efficiency
         answers.controls_adequacy = po.controls_adequacy
         answers.heated_rooms = po.heated_rooms
         answers.t_co2_current = po.tco2_current

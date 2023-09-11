@@ -171,13 +171,13 @@ class MainFuel(models.TextChoices):
 
 
 class EfficiencyBand(models.TextChoices):
-    A = "a", "A"
-    B = "b", "B"
-    C = "c", "C"
-    D = "d", "D"
-    E = "e", "E"
-    F = "f", "F"
-    G = "g", "G"
+    A = "A", "A"
+    B = "B", "B"
+    C = "C", "C"
+    D = "D", "D"
+    E = "E", "E"
+    F = "F", "F"
+    G = "G", "G"
 
 
 class ControlsAdequacy(models.TextChoices):
