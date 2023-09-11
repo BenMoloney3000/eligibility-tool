@@ -35,7 +35,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.roof_construction = po.roof_construction
         answers.roof_insulation = po.roof_insulation
         answers.floor_construction = po.floor_construction
-        answers.floor_insulation = po.floor_construction
+        answers.floor_insulation = po.floor_insulation
         answers.heating = po.heating
         answers.main_fuel = po.main_fuel
         answers.sap_score = int(po.sap_score)
