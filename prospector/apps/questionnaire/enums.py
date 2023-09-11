@@ -53,29 +53,29 @@ class PropertyAttachment(models.TextChoices):
 
 
 class PropertyConstructionYears(models.TextChoices):
-    BEFORE_1900 = 0, "Before 1900"
-    FROM_1900 = 1900, "1900-1929"
-    FROM_1930 = 1930, "1930-1949"
-    FROM_1950 = 1950, "1950-1966"
-    FROM_1967 = 1967, "1967-1975"
-    FROM_1976 = 1976, "1976-1982"
-    FROM_1983 = 1983, "1983-1990"
-    FROM_1991 = 1991, "1991-1995"
-    FROM_1996 = 1996, "1996-2002"
-    FROM_2003 = 2003, "2003-2006"
-    FROM_2007 = 2007, "2007-2011"
-    FROM_2012 = 2012, "2012 onwards"
+    BEFORE_1900 = "Before 1900", "Before 1900"
+    FROM_1900 = "1900-1929", "1900-1929"
+    FROM_1930 = "1930-1949", "1930-1949"
+    FROM_1950 = "1950-1966", "1950-1966"
+    FROM_1967 = "1967-1975", "1967-1975"
+    FROM_1976 = "1976-1982", "1976-1982"
+    FROM_1983 = "1983-1990", "1983-1990"
+    FROM_1991 = "1991-1995", "1991-1995"
+    FROM_1996 = "1996-2002", "1996-2002"
+    FROM_2003 = "2003-2006", "2003-2006"
+    FROM_2007 = "2007-2011", "2007-2011"
+    FROM_2012 = "2012 onwards", "2012 onwards"
 
 
 class WallConstruction(models.TextChoices):
-    CAVITY = "CAVITY", "Cavity"
-    COB = "COB", "Cob"
-    GRANITE = "GRANITE", "Granite"
-    PARK_HOME = "PARK_HOME", "Park home"
-    SANDSTONE = "SANDSTONE", "Sandstone"
-    SOLID_BRICK = "SOLID_BRICK", "Solid brick"
-    SYSTEM = "SYSTEM", "System"
-    TIMBER_FRAME = "TIMBER_FRAME", "Timber frame"
+    CAVITY = "Cavity", "Cavity"
+    COB = "Cob", "Cob"
+    GRANITE = "Granite", "Granite"
+    PARK_HOME = "Park home", "Park home"
+    SANDSTONE = "Sandstone", "Sandstone"
+    SOLID_BRICK = "Solid brick", "Solid brick"
+    SYSTEM = "System", "System"
+    TIMBER_FRAME = "Timber frame", "Timber frame"
 
 
 class WallInsulation(models.TextChoices):
@@ -97,7 +97,7 @@ class RoofConstruction(models.TextChoices):
 
 
 class RoofInsulation(models.TextChoices):
-    ADB = "AnotherDwellingAbove", "Another dwelling above"
+    ADB = "Another Dwelling Above", "Another dwelling above"
     AS_BUILD = "AsBuilt", "As build"
     MM_100 = "mm100", "100 mm"
     MM_12 = "mm12", "12 mm"
@@ -129,9 +129,9 @@ class FloorInsulation(models.TextChoices):
 
 
 class Glazing(models.TextChoices):
-    DOUBLE_2002_PLUS = "Double2002orLater", "Double 2002 or later"
-    DOUBLE_BEFORE_2002 = "DoubleBefore2002", "Double before 2002"
-    DOUBLE_UNKNOWN = "DoubleButAgeUnknown", "Double but age unknown"
+    DOUBLE_2002_PLUS = "Double 2002 or later", "Double 2002 or later"
+    DOUBLE_BEFORE_2002 = "Double before 2002", "Double before 2002"
+    DOUBLE_UNKNOWN = "Double but age unknown", "Double but age unknown"
     NOT_DEFINED = "NotDefined", "Not Defined"
     SECONDARY = "Secondary", "Secondary"
     SINGLE = "Single", "Single"

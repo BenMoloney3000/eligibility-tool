@@ -456,6 +456,7 @@ class Answers(models.Model):
             self.short_uid = utils.generate_id()  # noqa
             while Answers.objects.filter(short_uid=self.short_uid).exists():
                 self.short_uid = utils.generate_id()  # noqa
+        self.full_clean()
         super().save(*args, **kwargs)
 
     @property
