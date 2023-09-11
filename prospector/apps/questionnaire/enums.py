@@ -182,8 +182,8 @@ class EfficiencyBand(models.TextChoices):
 
 class ControlsAdequacy(models.TextChoices):
     OPTIMAL = "Optimal", "Optimal"
-    SUB_OPTIMAL = "SubOptimal", "Sub optimal"
-    TOP_SPEC = "TopSpec", "Top spec"
+    SUB_OPTIMAL = "Sub Optimal", "Sub optimal"
+    TOP_SPEC = "Top Spec", "Top spec"
 
 
 class InsulationConfidence(models.TextChoices):
