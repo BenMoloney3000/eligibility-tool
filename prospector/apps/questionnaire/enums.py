@@ -69,11 +69,11 @@ class WallConstruction(models.TextChoices):
     CAVITY = "Cavity", "Cavity"
     COB = "Cob", "Cob"
     GRANITE = "Granite", "Granite"
-    PARK_HOME = "Park home", "Park home"
+    PARK_HOME = "Park Home", "Park home"
     SANDSTONE = "Sandstone", "Sandstone"
-    SOLID_BRICK = "Solid brick", "Solid brick"
+    SOLID_BRICK = "Solid Brick", "Solid brick"
     SYSTEM = "System", "System"
-    TIMBER_FRAME = "Timber frame", "Timber frame"
+    TIMBER_FRAME = "Timber Frame", "Timber frame"
 
 
 class WallInsulation(models.TextChoices):
