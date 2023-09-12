@@ -655,7 +655,6 @@ class AnswersSummary(abstract_views.NoQuestion):
             "property_address": f"{a.property_address_1} \
             {a.property_address_2} {a.property_address_3} \
             {a.property_postcode}",
-            "ownership": a.get_property_ownership_display(),
             "adults": a.adults,
             "children": a.children,
             "total_income": a.get_total_income_display(),

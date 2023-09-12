@@ -66,24 +66,6 @@
     </table>
 
     <h4 class="summary-heading">
-        {% include "./includes/icon_house.html" %}
-        Details of the property
-    </h4>
-
-    <table>
-        <tr>
-            <td>Address</td>
-            <td>{{ user_data.property_address }}</td>
-            <td><a href='{% url "questionnaire:property-address" %}'>CHANGE</a></td>
-        </tr>
-        <tr>
-            <td>What is the tenure of the property - how is it occupied?</td>
-            <td>{{ user_data.ownership|lower|capfirst }}</td>
-            <td><a href='{% url "questionnaire:property-ownership" %}'>CHANGE</a></td>
-        </tr>
-    </table>
-
-    <h4 class="summary-heading">
         {% include "./includes/icon_person.html" %}
         Household details
     </h4>
