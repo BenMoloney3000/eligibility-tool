@@ -49,6 +49,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.t_co2_current = po.tco2_current
         answers.realistic_fuel_bill = po.realistic_fuel_bill
         answers.uprn = po.uprn
+        answers.tenure = po.tenure
 
         return answers
 

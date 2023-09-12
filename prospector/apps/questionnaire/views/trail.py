@@ -310,7 +310,7 @@ class PropertyAddress(abstract_views.Question):
     title = "Address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
-    next = "PropertyOwnership"
+    next = "Consents"
     percent_complete = COMPLETE_GROUP_2 + 5
     prefilled_addresses = {}
 
@@ -373,16 +373,6 @@ class PropertyAddress(abstract_views.Question):
             self.answers = services.depopulate_orig_fields(self.answers)
 
 
-class PropertyOwnership(abstract_views.SingleQuestion):
-    title = "Property ownership"
-    type_ = abstract_views.QuestionType.Choices
-    question = "What is the tenure of the property - how is it occupied?"
-    choices = enums.PropertyOwnership.choices
-    icon = "house"
-    next = "Consents"
-    percent_complete = COMPLETE_GROUP_2 + 7
-
-
 class Consents(abstract_views.Question):
     title = "Your consent to our use of your data"
     template_name = "questionnaire/consents.html"
@@ -404,6 +394,7 @@ class PropertyMeasuresSummary(abstract_views.Question):
         context = super().get_context_data(*args, **kwargs)
 
         context["property_data"] = {
+            "tenure": f"{a.get_tenure_display()}",
             "type": f"{a.get_property_type_display()}",
             "attachment": f"{a.get_property_attachment_display()}",
             "construction_years": f"{a.get_property_construction_years_display()}",

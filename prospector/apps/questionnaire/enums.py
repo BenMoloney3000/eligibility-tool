@@ -3,16 +3,14 @@ from enum import auto
 from django.db import models
 
 
-class PropertyOwnership(models.TextChoices):
-    OWNED = "OWNED", "The property is in private ownership"
-    PRIVATE_TENANCY = "RENTAL", "The property is rented from a private landlord"
-    SOCIAL_TENANCY = (
-        "SOCIAL",
-        (
-            "The property is rented from a social landlord (eg. a housing "
-            "association) or local authority"
-        ),
+class Tenure(models.TextChoices):
+    OWNER_OCCUPIED = "OwnerOccupied", "The property is occupied by its owner"
+    RENTED_PRIVATE = "RentedPrivate", "The property is rented from a private landlord"
+    RENTED_SOCIAL = (
+        "RentedSocial",
+        ("The property is rented from a social landlord or local authority"),
     )
+    UNKNOWN = "Unknown", "Unknown"
 
 
 class RespondentRole(models.TextChoices):

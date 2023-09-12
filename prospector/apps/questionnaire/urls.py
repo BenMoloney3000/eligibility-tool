@@ -26,11 +26,6 @@ urlpatterns = [
         "property-postcode", views.PropertyPostcode.as_view(), name="property-postcode"
     ),
     path("property-address", views.PropertyAddress.as_view(), name="property-address"),
-    path(
-        "property-ownership",
-        views.PropertyOwnership.as_view(),
-        name="property-ownership",
-    ),
     path("consents", views.Consents.as_view(), name="consents"),
     path(
         "property-summary",

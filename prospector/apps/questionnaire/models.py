@@ -84,9 +84,7 @@ class Answers(models.Model):
     )
     lower_super_output_area_code = models.CharField(max_length=50, blank=True)
 
-    property_ownership = models.CharField(
-        max_length=10, choices=enums.PropertyOwnership.choices, blank=True
-    )
+    tenure = models.CharField(max_length=128, choices=enums.Tenure.choices, blank=True)
     # UPRN is 12 digits, too big for a PositiveIntegerField
     uprn = models.CharField(max_length=120, blank=True, null=True)
     respondent_has_permission = models.BooleanField(null=True, blank=True)
