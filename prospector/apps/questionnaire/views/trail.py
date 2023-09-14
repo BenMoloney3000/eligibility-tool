@@ -681,6 +681,10 @@ class RecommendedMeasures(abstract_views.Question):
         context["income_rating"] = utils.get_income_rating(self.answers)
         return context
 
+    # Due to closing questionnaire we also remove "Back to previous question" link
+    def get_prev_url(self):
+        return None
+
 
 class ToleratedDisruption(abstract_views.SingleQuestion):
     title = "Disruption preference"
