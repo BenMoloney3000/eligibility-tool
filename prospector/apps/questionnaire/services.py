@@ -592,7 +592,7 @@ def close_questionnaire(answers: models.Answers):
             "postcode": answers.property_postcode,
             "consented_callback": answers.consented_callback,
             "consented_future_schemes": answers.consented_future_schemes,
-            "uuid": answers.uuid,
+            "short_uid": answers.short_uid,
         }
         message_body_txt = render_to_string("emails/acknowledgement.txt", context)
         message_body_html = render_to_string("emails/acknowledgement.html", context)
