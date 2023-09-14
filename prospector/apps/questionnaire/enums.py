@@ -427,20 +427,13 @@ class PossibleMeasures(models.TextChoices):
         "Underfloor insulation for suspended floors",
     )
     RIR_INSULATION = "RIR_INSULATION", "Room-in-roof insulation"
-    FLAT_ROOF_INSULATION = "FLAT_ROOF_INSULATION", "Flat roof insulation"
     BOILER_UPGRADE = "BOILER_UPGRADE", "A low carbon heating upgrade"
-    STORAGE_HEATER_UPGRADE = (
-        "STORAGE_HEATER_UPGRADE",
-        "Replacement or upgrade or night storage heaters",
+    SOLAR_PV_INSTALLATION = (
+        "SOLAR_PV_INSTALLATION",
+        "Installation of a solar electricity panels",
     )
-    CENTRAL_HEATING_INSTALL = (
-        "CENTRAL_HEATING_INSTALL",
-        "Installation of a central heating system",
-    )
-    BROKEN_BOILER_UPGRADE = "BROKEN_BOILER_UPGRADE", "A low carbon heating upgrade"
-    PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"
     LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"
-    HEAT_PUMP_INSTALL = "HEAT_PUMP_INSTALL", "Installation of a heat pump"
+    HEAT_PUMP_INSTALLATION = "HEAT_PUMP_INSTALLATION", "Installation of a heat pump"
 
 
 class EmploymentStatus(models.TextChoices):

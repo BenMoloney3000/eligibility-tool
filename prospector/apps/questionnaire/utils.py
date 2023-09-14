@@ -31,56 +31,133 @@ def generate_id():
 def determine_recommended_measures(
     answers: models.Answers,
 ) -> List[enums.PossibleMeasures]:
-    # From logic by JB in "Copy of SWEH Tool Rag Rating.xlsx" supplied 2022-03-03
     measures = []
 
-    if answers.wall_type == enums.WallType.CAVITY and answers.walls_insulated is False:
+    if (
+        answers.wall_construction == enums.WallConstruction.CAVITY
+        and answers.walls_insulation == enums.WallInsulation.AS_BUILT
+    ):
         measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
 
-    if answers.unheated_loft is True and answers.roof_space_insulated is False:
-        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
-
-    party_walled_forms = [
-        enums.PropertyForm.SEMI_DETACHED,
-        enums.PropertyForm.MID_TERRACE,
-        enums.PropertyForm.END_TERRACE,
+    solid_walls = [
+        enums.WallConstruction.GRANITE,
+        enums.WallConstruction.SANDSTONE,
+        enums.WallConstruction.SOLID_BRICK,
+        enums.WallConstruction.SYSTEM,
     ]
+
     if (
-        answers.wall_type == enums.WallType.CAVITY
-        and answers.property_form in party_walled_forms
+        answers.floor_construction in solid_walls
+        and answers.walls_insulation == enums.WallInsulation.AS_BUILT
     ):
-        measures.append(enums.PossibleMeasures.PARTY_WALL_INSULATION)
-
-    if answers.suspended_floor is True and answers.suspended_floor_insulated is False:
-        measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
-
-    if answers.wall_type == enums.WallType.SOLID and answers.walls_insulated is False:
         measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
 
-    if answers.room_in_roof is True and answers.rir_insulated is False:
-        measures.append(enums.PossibleMeasures.RIR_INSULATION)
-
-    if answers.flat_roof is True and answers.flat_roof_insulated in [
-        enums.InsulationConfidence.PROBABLY_NOT.value,
-        enums.InsulationConfidence.DEFINITELY_NOT.value,
-    ]:
-        measures.append(enums.PossibleMeasures.FLAT_ROOF_INSULATION)
+    floor_insulation_options = [
+        enums.FloorInsulation.AS_BUILT,
+        enums.FloorInsulation.UNKNOWN,
+    ]
 
     if (
-        answers.gas_boiler_present is True
-        and answers.gas_boiler_age == enums.BoilerAgeBand.BEFORE_2004
+        answers.floor_construction == enums.FloorConstruction.ST
+        and answers.floor_insulation in floor_insulation_options
+    ):
+        measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
+
+    roof_construction_for_ri = [
+        enums.RoofConstruction.PNLA,
+        enums.RoofConstruction.PNNLA,
+    ]
+
+    roof_insulation_for_ri = [
+        enums.RoofInsulation.MM_100,
+        enums.RoofInsulation.MM_12,
+        enums.RoofInsulation.MM_150,
+        enums.RoofInsulation.MM_25,
+        enums.RoofInsulation.MM_50,
+        enums.RoofInsulation.MM_75,
+        enums.RoofInsulation.NO_INSULATION,
+    ]
+
+    if (
+        answers.roof_construction in roof_construction_for_ri
+        and answers.roof_insulation in roof_insulation_for_ri
+    ):
+        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
+
+    roof_insulation_for_rir = [
+        enums.RoofInsulation.AS_BUILD,
+        enums.RoofInsulation.MM_12,
+        enums.RoofInsulation.MM_25,
+        enums.RoofInsulation.MM_50,
+        enums.RoofInsulation.MM_75,
+        enums.RoofInsulation.NO_INSULATION,
+    ]
+
+    if (
+        answers.roof_insulation in roof_insulation_for_rir
+        and answers.roof_construction == enums.RoofConstruction.PWSC
+    ):
+        measures.append(enums.PossibleMeasures.RIR_INSULATION)
+
+    main_fuel_for_bu = [
+        enums.MainFuel.MGC,
+        enums.MainFuel.MGNC,
+    ]
+
+    boiler_efficiency_for_bu = [
+        enums.EfficiencyBand.C,
+        enums.EfficiencyBand.D,
+        enums.EfficiencyBand.E,
+        enums.EfficiencyBand.F,
+        enums.EfficiencyBand.G,
+    ]
+
+    if (
+        answers.main_fuel in main_fuel_for_bu
+        and answers.boiler_efficiency in boiler_efficiency_for_bu
+        and answers.heating == enums.Heating.BOILERS
     ):
         measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
 
-    if answers.gas_boiler_present and answers.gas_boiler_broken:
-        measures.append(enums.PossibleMeasures.BROKEN_BOILER_UPGRADE)
+    fuel_1_for_hpi = [
+        enums.MainFuel.ANTHRACITE,
+        enums.MainFuel.GBLPG,
+        enums.MainFuel.HCNC,
+        enums.MainFuel.LPGC,
+        enums.MainFuel.LPGNC,
+        enums.MainFuel.LPGSC,
+        enums.MainFuel.OC,
+        enums.MainFuel.ONC,
+        enums.MainFuel.SC,
+    ]
 
-    if answers.storage_heaters_present is True and answers.hhrshs_present is False:
-        measures.append(enums.PossibleMeasures.STORAGE_HEATER_UPGRADE)
+    fuel_2_for_hpi = [
+        enums.MainFuel.EC,
+        enums.MainFuel.ENC,
+    ]
 
-    if answers.gas_boiler_present is False and answers.other_heating_present is False:
-        measures.append(enums.PossibleMeasures.CENTRAL_HEATING_INSTALL)
-        measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALL)
+    heating_for_hpi = [
+        enums.Heating.BOILERS,
+        enums.Heating.EUF,
+        enums.Heating.OTHER,
+        enums.Heating.RH,
+        enums.Heating.SH,
+        enums.Heating.AIR,
+    ]
+
+    if answers.main_fuel in fuel_1_for_hpi or (
+        answers.main_fuel in fuel_2_for_hpi and answers.heating in heating_for_hpi
+    ):
+        measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
+
+    roof_for_PV = [
+        enums.RoofConstruction.PNLA,
+        enums.RoofConstruction.PNNLA,
+        enums.RoofConstruction.PWSC,
+    ]
+
+    if answers.floor_construction in roof_for_PV:
+        measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
 
     return measures
 
@@ -112,13 +189,11 @@ def get_disruption(measure: enums.PossibleMeasures) -> str:
     if measure in [
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.FLAT_ROOF_INSULATION,
     ]:
         return "High"
     elif measure in [
         enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.CENTRAL_HEATING_INSTALL,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALL,
+        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
     ]:
         return "Medium"
     else:
@@ -130,14 +205,11 @@ def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
         enums.PossibleMeasures.CAVITY_WALL_INSULATION,
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.BROKEN_BOILER_UPGRADE,
     ]:
         return "High"
     elif measure in [
         enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.PARTY_WALL_INSULATION,
         enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.FLAT_ROOF_INSULATION,
     ]:
         return "Medium"
     else:
@@ -146,15 +218,12 @@ def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
 
 def get_bill_impact(measure: enums.PossibleMeasures) -> str:
     if measure in [
-        enums.PossibleMeasures.PARTY_WALL_INSULATION,
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.BROKEN_BOILER_UPGRADE,
     ]:
         return "Low"
     elif measure in [
         enums.PossibleMeasures.LOFT_INSULATION,
         enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.FLAT_ROOF_INSULATION,
     ]:
         return "Medium"
     else:
@@ -165,16 +234,13 @@ def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
     if measure in [
         enums.PossibleMeasures.CAVITY_WALL_INSULATION,
         enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.PARTY_WALL_INSULATION,
     ]:
         return "High"
     elif measure in [
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
         enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.BROKEN_BOILER_UPGRADE,
-        enums.PossibleMeasures.STORAGE_HEATER_UPGRADE,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALL,
+        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
     ]:
         return "Medium"
     else:

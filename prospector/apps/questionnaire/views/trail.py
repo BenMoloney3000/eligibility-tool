@@ -667,6 +667,14 @@ class RecommendedMeasures(abstract_views.Question):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         services.close_questionnaire(self.answers)
+        measures = utils.determine_recommended_measures(self.answers)
+        for measure in measures:
+            measure.disruption = utils.get_disruption(measure)
+            measure.comfort_benefit = utils.get_comfort_benefit(measure)
+            measure.bill_impact = utils.get_bill_impact(measure)
+            measure.funding_likelihood = utils.get_funding_likelihood(measure)
+
+        context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
         context["rating"] = utils.get_overall_rating(self.answers)
         context["property_rating"] = utils.get_property_rating(self.answers)
