@@ -16,15 +16,15 @@
 
     <table>
         <tr>
-            <td>Type</td>
+            <td>Property type</td>
             <td>{% if property_data.type %}{{ property_data.type }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
-            <td>Attachment</td>
+            <td>Attachment type</td>
             <td>{% if property_data.attachment %}{{ property_data.attachment }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
-            <td>Construction years</td>
+            <td>Construction period</td>
             <td>{% if property_data.construction_years %}{{ property_data.construction_years }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
@@ -32,7 +32,7 @@
             <td>{% if property_data.wall_construction %}{{ property_data.wall_construction }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
-            <td>Walls insulation</td>
+            <td>Wall insulation</td>
             <td>{% if property_data.walls_insulation %}{{ property_data.walls_insulation }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
@@ -68,16 +68,16 @@
             <td>{% if property_data.boiler_efficiency %}{{ property_data.boiler_efficiency }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
-            <td>Controls adequacy</td>
+            <td>Standard of heating controls</td>
             <td>{% if property_data.controls_adequacy %}{{ property_data.controls_adequacy }}{% else %}No data{% endif %}</td>
-        </tr>
-        <tr>
-            <td>Heated rooms</td>
-            <td>{% if property_data.heated_rooms %}{{ property_data.heated_rooms }}{% else %}No data{% endif %}</td>
         </tr>
         <tr>
             <td>Realistic fuel bill</td>
             <td>{% if property_data.realistic_fuel_bill %}{{ property_data.realistic_fuel_bill }}{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Energy Performance Grade</td>
+            <td>{% if property_data.sap_band %}{{ property_data.sap_band }}{% else %}No data{% endif %}</td>
         </tr>
     </table>
 {% endblock question_text %}

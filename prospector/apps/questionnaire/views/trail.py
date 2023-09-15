@@ -389,8 +389,8 @@ class PropertyMeasuresSummary(abstract_views.Question):
             "main_fuel": f"{a.get_main_fuel_display()}",
             "boiler_efficiency": f"{a.get_boiler_efficiency_display()}",
             "controls_adequacy": f"{a.get_controls_adequacy_display()}",
-            "heated_rooms": f"{a.heated_rooms}",
             "realistic_fuel_bill": f"{a.realistic_fuel_bill}",
+            "sap_band": f"{a.sap_band}",
         }
 
         return context
