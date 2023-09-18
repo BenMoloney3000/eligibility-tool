@@ -230,23 +230,6 @@ def get_bill_impact(measure: enums.PossibleMeasures) -> str:
         return "High"
 
 
-def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
-    if measure in [
-        enums.PossibleMeasures.CAVITY_WALL_INSULATION,
-        enums.PossibleMeasures.LOFT_INSULATION,
-    ]:
-        return "High"
-    elif measure in [
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
-    ]:
-        return "Medium"
-    else:
-        return "Low"
-
-
 def get_property_rating(answers: models.Answers) -> enums.RAYG:
     """Property rating.
 

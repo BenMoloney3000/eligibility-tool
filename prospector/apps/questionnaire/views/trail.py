@@ -681,7 +681,6 @@ class RecommendedMeasures(abstract_views.Question):
             measure.disruption = utils.get_disruption(measure)
             measure.comfort_benefit = utils.get_comfort_benefit(measure)
             measure.bill_impact = utils.get_bill_impact(measure)
-            measure.funding_likelihood = utils.get_funding_likelihood(measure)
 
         context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
