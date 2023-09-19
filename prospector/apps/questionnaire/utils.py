@@ -187,13 +187,14 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
 
 def get_disruption(measure: enums.PossibleMeasures) -> str:
     if measure in [
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
     ]:
         return "High"
     elif measure in [
         enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
+        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.BOILER_UPGRADE,
     ]:
         return "Medium"
     else:
@@ -203,13 +204,14 @@ def get_disruption(measure: enums.PossibleMeasures) -> str:
 def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
     if measure in [
         enums.PossibleMeasures.CAVITY_WALL_INSULATION,
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
+        enums.PossibleMeasures.RIR_INSULATION,
+        enums.PossibleMeasures.LOFT_INSULATION,
     ]:
         return "High"
     elif measure in [
-        enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
+        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
     ]:
         return "Medium"
     else:
@@ -219,11 +221,6 @@ def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
 def get_bill_impact(measure: enums.PossibleMeasures) -> str:
     if measure in [
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-    ]:
-        return "Low"
-    elif measure in [
-        enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
     ]:
         return "Medium"
     else:
