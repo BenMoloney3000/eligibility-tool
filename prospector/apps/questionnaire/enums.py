@@ -5,11 +5,8 @@ from django.db import models
 
 class Tenure(models.TextChoices):
     OWNER_OCCUPIED = "OwnerOccupied", "The property is occupied by its owner"
-    RENTED_PRIVATE = "RentedPrivate", "The property is rented from a private landlord"
-    RENTED_SOCIAL = (
-        "RentedSocial",
-        ("The property is rented from a social landlord or local authority"),
-    )
+    RENTED_PRIVATE = "RentedPrivate", "Rented - private"
+    RENTED_SOCIAL = "RentedSocial", "Rented - social"
     UNKNOWN = "Unknown", "Unknown"
 
 
@@ -78,18 +75,18 @@ class WallConstruction(models.TextChoices):
 
 class WallInsulation(models.TextChoices):
     AS_BUILT = "AsBuilt", "As built"
-    EXTERNAL = "External", "External"
+    EXTERNAL = "External", "External wall insulation"
     FC = "FilledCavity", "Filled cavity"
-    FCE = "FilledCavityPlusExternal", "Filled cavity plus external"
-    FCI = "FilledCavityPlusInternal", "Filled cavity plus internal"
-    INTERNAL = "Internal", "Internal"
+    FCE = "FilledCavityPlusExternal", "Filled cavity plus external wall insulation"
+    FCI = "FilledCavityPlusInternal", "Filled cavity plus internal wall insulation"
+    INTERNAL = "Internal", "Internal wall insulation"
 
 
 class RoofConstruction(models.TextChoices):
     ADB = "AnotherDwellingAbove", "Another dwelling above"
     FLAT = "Flat", "Flat"
-    PNLA = "PitchedNormalLoftAccess", "Pitched normal loft access"
-    PNNLA = "PitchedNormalNoLoftAccess", "Pitched normal no loft access"
+    PNLA = "PitchedNormalLoftAccess", "Pitched - loft access"
+    PNNLA = "PitchedNormalNoLoftAccess", "Pitched - no loft access"
     PT = "PitchedThatched", "Pitched thatched"
     PWSC = "PitchedWithSlopingCeiling", "Pitched with sloping ceiling"
 
@@ -115,14 +112,14 @@ class RoofInsulation(models.TextChoices):
 
 class FloorConstruction(models.TextChoices):
     SOLID = "Solid", "Solid"
-    SNT = "SuspendedNotTimber", "Suspended not timber"
-    ST = "SuspendedTimber", "Suspended timber"
+    SNT = "SuspendedNotTimber", "Suspended - not timber"
+    ST = "SuspendedTimber", "Suspended - timber"
     UNKNOWN = "Unknown", "Unknown"
 
 
 class FloorInsulation(models.TextChoices):
     AS_BUILT = "AsBuilt", "As built"
-    RETRO_FITTED = "RetroFitted", "Retro fitted"
+    RETRO_FITTED = "RetroFitted", "Retrofitted"
     UNKNOWN = "Unknown", "Unknown"
 
 
@@ -152,17 +149,17 @@ class MainFuel(models.TextChoices):
     ANTHRACITE = "Anthracite", "Anthracite"
     BWP = "BulkWoodPellets", "Bulk wood pellets"
     DFMW = "DualFuelMineralWood", "Dual fuel mineral wood"
-    EC = "ElectricityCommunity", "Electricity community"
-    ENC = "ElectricityNotCommunity", "Electricity not community"
-    GBLPG = "GasBottledLPG", "Gas bottled LPG"
-    HCNC = "HouseCoalNotCommunity", "House coal not community"
-    LPGC = "LPGCommunity", "LPG community"
-    LPGNC = "LPGNotCommunity", "LPG not community"
-    LPGSC = "LPGSpecialCondition", "LPG special condition"
-    MGC = "MainsGasCommunity", "Mains gas community"
-    MGNC = "MainsGasNotCommunity", "Mains gas not community"
-    OC = "OilCommunity", "Oil community"
-    ONC = "OilNotCommunity", "Oil not community"
+    EC = "ElectricityCommunity", "Electricity - community"
+    ENC = "ElectricityNotCommunity", "Electricity - not community"
+    GBLPG = "GasBottledLPG", "Bottled gas (LPG)"
+    HCNC = "HouseCoalNotCommunity", "Coal - not community"
+    LPGC = "LPGCommunity", "LPG - community"
+    LPGNC = "LPGNotCommunity", "LPG - not community"
+    LPGSC = "LPGSpecialCondition", "LPG - special condition"
+    MGC = "MainsGasCommunity", "Mains gas - community"
+    MGNC = "MainsGasNotCommunity", "Mains gas - not community"
+    OC = "OilCommunity", "Oil - community"
+    ONC = "OilNotCommunity", "Oil - not community"
     SC = "SmokelessCoal", "Smokeless coal"
     WC = "WoodChips", "Wood chips"
     WL = "WoodLogs", "Wood logs"

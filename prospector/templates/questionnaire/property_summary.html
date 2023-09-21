@@ -33,7 +33,17 @@
         </tr>
         <tr>
             <td>Wall insulation</td>
-            <td>{% if property_data.walls_insulation %}{{ property_data.walls_insulation }}{% else %}No data{% endif %}</td>
+            <td>
+                {% if property_data.walls_insulation %}
+                    {% if property_data.walls_insulation == "As built" %}
+                        {{ property_data.walls_insulation }} <sup>*</sup>
+                    {% else %}
+                        {{ property_data.walls_insulation }}
+                    {% endif %}
+                {% else %}
+                    No data
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <td>Roof construction</td>
@@ -80,6 +90,13 @@
             <td>{% if property_data.sap_band %}{{ property_data.sap_band }}{% else %}No data{% endif %}</td>
         </tr>
     </table>
+    {% if property_data.walls_insulation == "As built" %}
+        <div>
+            <p>
+                <sup>*</sup> As Built - For homes built before the 1990s this is likely to mean no insulation or a very small amount. Some homes built in the 90s may also need a top up.
+            </p>
+        </div>
+    {% endif %}
 {% endblock question_text %}
 {% block form_content %}
     <div>
