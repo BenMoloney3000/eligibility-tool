@@ -13,7 +13,6 @@
         Our database has provided us with the following predictions about your home. Please have a read and let us know if anything is inaccurate by typing in the comments box below.
     </p>
 
-
     <table>
         <tr>
             <td>Property type</td>
@@ -126,11 +125,11 @@
         </tr>
     </table>
 
-
     {% if property_data.walls_insulation == "As built" %}
         <div>
             <p>
-                <sup>*</sup> 1 For homes built before the 1990s this is likely to mean no insulation or a very small amount. Some homes built in the 90s may also need a top up.
+                <sup>* </sup>
+                For homes built before the 1990s this is likely to mean no insulation or a very small amount. Some homes built in the 90s may also need a top up.
             </p>
         </div>
     {% endif %}
@@ -143,7 +142,7 @@
                 {% else %}
                     <sup>** </sup>
                 {% endif %}
-                2 For homes built before the 1990s this is likely to mean a small amount of insulation. Some homes built even at the end of the 1990s may also need a top-up.
+                For homes built before the 1990s this is likely to mean a small amount of insulation. Some homes built even at the end of the 1990s may also need a top-up.
             </p>
         </div>
     {% endif %}
@@ -158,15 +157,10 @@
                 {% else %}
                     <sup>***</sup>
                 {% endif %}
-                3 For homes built before 2000 there is likely to be no, or very little, insulation in your floor.
+                For homes built before 2000 there is likely to be no, or very little, insulation in your floor.
             </p>
         </div>
     {% endif %}
-
-
-
-
-
 
 {% endblock question_text %}
 {% block form_content %}
@@ -179,8 +173,3 @@
         </p>
     </div>
 {% endblock form_content %}
-
-
-
-
-
