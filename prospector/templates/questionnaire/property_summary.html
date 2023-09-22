@@ -51,7 +51,22 @@
         </tr>
         <tr>
             <td>Roof insulation</td>
-            <td>{% if property_data.roof_insulation %}{{ property_data.roof_insulation }}{% else %}No data{% endif %}</td>
+            <td>
+                {% if property_data.roof_insulation %}
+                    {% if property_data.roof_insulation == "As built" %}
+                        {{ property_data.roof_insulation }}
+                        {% if property_data.walls_insulation != "As built" %}
+                            <sup> *</sup>
+                        {% else %}
+                            <sup> **</sup>
+                        {% endif %}
+                    {% else %}
+                        {{ property_data.roof_insulation }}
+                    {% endif %}
+                {% else %}
+                    No data
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <td>Floor construction</td>
@@ -59,7 +74,27 @@
         </tr>
         <tr>
             <td>Floor insulation</td>
-            <td>{% if property_data.floor_insulation %}{{ property_data.floor_insulation }}{% else %}No data{% endif %}</td>
+            <td>
+                {% if property_data.floor_insulation %}
+
+
+
+                    {% if property_data.floor_insulation == "As built" %}
+                        {{ property_data.floor_insulation }}
+                        {% if property_data.walls_insulation != "As built" and property_data.roof_insulation != "As built" %}
+                            <sup>* </sup>
+                        {% elif property_data.walls_insulation == "As built" and property_data.roof_insulation != "As built" or property_data.walls_insulation != "As built" and property_data.roof_insulation == "As built" %}
+                            <sup>** </sup>
+                        {% else %}
+                            <sup>*** </sup>
+                        {% endif %}
+                    {% else %}
+                        {{ property_data.roof_insulation }}
+                    {% endif %}
+                {% else %}
+                    No data
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <td>Glazing</td>
@@ -90,13 +125,49 @@
             <td>{% if property_data.sap_band %}{{ property_data.sap_band }}{% else %}No data{% endif %}</td>
         </tr>
     </table>
+
+
     {% if property_data.walls_insulation == "As built" %}
         <div>
             <p>
-                <sup>*</sup> As Built - For homes built before the 1990s this is likely to mean no insulation or a very small amount. Some homes built in the 90s may also need a top up.
+                <sup>*</sup> 1 For homes built before the 1990s this is likely to mean no insulation or a very small amount. Some homes built in the 90s may also need a top up.
             </p>
         </div>
     {% endif %}
+
+    {% if property_data.roof_insulation == "As built" %}
+        <div>
+            <p>
+                {% if property_data.walls_insulation != "As built" %}
+                    <sup>* </sup>
+                {% else %}
+                    <sup>** </sup>
+                {% endif %}
+                2 For homes built before the 1990s this is likely to mean a small amount of insulation. Some homes built even at the end of the 1990s may also need a top-up.
+            </p>
+        </div>
+    {% endif %}
+
+    {% if property_data.floor_insulation == "As built" %}
+        <div>
+            <p>
+                {% if property_data.walls_insulation != "As built" and property_data.roof_insulation != "As built" %}
+                    <sup>*</sup>
+                {% elif property_data.walls_insulation == "As built" and property_data.roof_insulation != "As built" or property_data.walls_insulation != "As built" and property_data.roof_insulation == "As built" %}
+                    <sup>**</sup>
+                {% else %}
+                    <sup>***</sup>
+                {% endif %}
+                3 For homes built before 2000 there is likely to be no, or very little, insulation in your floor.
+            </p>
+        </div>
+    {% endif %}
+
+
+
+
+
+
 {% endblock question_text %}
 {% block form_content %}
     <div>

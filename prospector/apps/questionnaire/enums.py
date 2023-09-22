@@ -93,7 +93,7 @@ class RoofConstruction(models.TextChoices):
 
 class RoofInsulation(models.TextChoices):
     ADB = "Another Dwelling Above", "Another dwelling above"
-    AS_BUILD = "AsBuilt", "As build"
+    AS_BUILD = "AsBuilt", "As built"
     MM_100 = "mm100", "100 mm"
     MM_12 = "mm12", "12 mm"
     MM_150 = "mm150", "150 mm"
