@@ -730,25 +730,6 @@ class StateOfRepair(abstract_views.SingleQuestion):
             return enums.StateOfRepair.choices
 
 
-class Motivations(abstract_views.Question):
-    title = "Motivations"
-    template_name = "questionnaire/motivations.html"
-    form_class = questionnaire_forms.Motivations
-    next = "ContributionCapacity"
-
-    def get_context_data(self):
-        data = super().get_context_data()
-        data["is_owner"] = self.answers.is_owner
-
-        return data
-
-    def pre_save(self):
-        if self.answers.motivation_unknown:
-            self.answers.motivation_better_comfort = None
-            self.answers.motivation_lower_bills = None
-            self.answers.motivation_environment = None
-
-
 class ContributionCapacity(abstract_views.SingleQuestion):
     title = "Your ability to contribute"
     type_ = abstract_views.QuestionType.Choices
@@ -969,21 +950,6 @@ class EligibilitySummary(abstract_views.Question):
 
     def pre_save(self):
         services.close_questionnaire(self.answers)
-
-
-class NothingAtThisTime(abstract_views.Question):
-    template_name = "questionnaire/nothing_at_this_time.html"
-    form_class = questionnaire_forms.NothingAtThisTime
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["future_schemes_consent_given"] = self.answers.consented_future_schemes
-        context["rating"] = utils.get_overall_rating(self.answers)
-        return context
-
-    def get_next(self):
-        services.close_questionnaire(self.answers)
-        return "Completed"
 
 
 class Completed(TemplateView):

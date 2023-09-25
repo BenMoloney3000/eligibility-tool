@@ -470,30 +470,6 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
         }
 
 
-class Motivations(AnswerFormMixin, forms.ModelForm):
-    class Meta:
-        model = models.Answers
-        fields = [
-            "motivation_better_comfort",
-            "motivation_lower_bills",
-            "motivation_unknown",
-            "motivation_environment",
-        ]
-        optional_fields = fields
-        widgets = {
-            "motivation_better_comfort": forms.CheckboxInput(),
-            "motivation_lower_bills": forms.CheckboxInput(),
-            "motivation_unknown": forms.CheckboxInput(),
-            "motivation_environment": forms.CheckboxInput(),
-        }
-        labels = {
-            "motivation_better_comfort": "A more comfortable property",
-            "motivation_lower_bills": "Reducing energy and heating bills",
-            "motivation_unknown": "I don't know",
-            "motivation_environment": "A greener property - doing your bit to tackle climate change",
-        }
-
-
 """
 # Forms for each adult in the household, for respondents that need to answer this.
 """
@@ -867,16 +843,6 @@ class HouseholdSummary(AnswerFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         if utils.calculate_household_income(self.answers) > 31000:
             self.fields["take_home_lt_31k_confirmation"].required = True
-
-
-class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):
-    class Meta:
-        model = models.Answers
-        fields = ["consented_future_schemes"]
-        optional_fields = fields
-        widgets = {
-            "consented_future_schemes": forms.CheckboxInput(),
-        }
 
 
 class ChildBenefitSummary(AnswerFormMixin, forms.ModelForm):

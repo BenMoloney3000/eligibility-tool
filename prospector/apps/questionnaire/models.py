@@ -84,7 +84,12 @@ class Answers(models.Model):
     )
     lower_super_output_area_code = models.CharField(max_length=50, blank=True)
 
-    tenure = models.CharField(max_length=128, choices=enums.Tenure.choices, blank=True)
+    tenure = models.CharField(
+        max_length=128,
+        choices=enums.Tenure.choices,
+        blank=True,
+        verbose_name="Property ownership",
+    )
     # UPRN is 12 digits, too big for a PositiveIntegerField
     uprn = models.CharField(max_length=120, blank=True, null=True)
     respondent_has_permission = models.BooleanField(null=True, blank=True)
@@ -109,22 +114,15 @@ class Answers(models.Model):
     # If the user agrees with the presented data, the _orig field is left empty
 
     property_type = models.CharField(
-        max_length=128, choices=enums.PropertyType.choices, blank=True
-    )
-    property_type_orig = models.CharField(
         max_length=128,
         choices=enums.PropertyType.choices,
         blank=True,
-        verbose_name="Property type according to property data source before correction",
     )
+
     property_attachment = models.CharField(
-        max_length=128, choices=enums.PropertyAttachment.choices, blank=True
-    )
-    property_attachment_orig = models.CharField(
         max_length=128,
         choices=enums.PropertyAttachment.choices,
         blank=True,
-        verbose_name="Property form according to property data source before correction",
     )
 
     property_construction_years = models.CharField(
@@ -133,180 +131,65 @@ class Answers(models.Model):
         blank=True,
         null=True,
     )
-    property_construction_years_orig = models.CharField(
-        max_length=12,
-        choices=enums.PropertyConstructionYears.choices,
-        blank=True,
-        null=True,
-        verbose_name="Property age band according to property data source before correction",
-    )
 
     wall_construction = models.CharField(
-        max_length=128, choices=enums.WallConstruction.choices, blank=True
-    )
-    wall_construction_orig = models.CharField(
         max_length=128,
         choices=enums.WallConstruction.choices,
         blank=True,
-        verbose_name="Wall type according to property data source before correction",
     )
+
     walls_insulation = models.CharField(
-        max_length=128,
-        choices=enums.WallInsulation.choices,
-        blank=True,
-    )
-    walls_insulation_orig = models.CharField(
         max_length=128,
         choices=enums.WallInsulation.choices,
         blank=True,
     )
 
     roof_construction = models.CharField(
-        max_length=128, choices=enums.RoofConstruction.choices, blank=True
-    )
-
-    roof_construction_orig = models.CharField(
-        max_length=128, choices=enums.RoofConstruction.choices, blank=True
+        max_length=128,
+        choices=enums.RoofConstruction.choices,
+        blank=True,
     )
 
     roof_insulation = models.CharField(
-        max_length=128, choices=enums.RoofInsulation.choices, blank=True
+        max_length=128,
+        choices=enums.RoofInsulation.choices,
+        blank=True,
     )
 
-    roof_insulation_orig = models.CharField(
-        max_length=128, choices=enums.RoofInsulation.choices, blank=True
-    )
     floor_construction = models.CharField(
         max_length=128, choices=enums.FloorConstruction.choices, blank=True
     )
-    floor_construction_orig = models.CharField(
-        max_length=128, choices=enums.FloorConstruction.choices, blank=True
-    )
+
     floor_insulation = models.CharField(
         max_length=128, choices=enums.FloorInsulation.choices, blank=True
     )
-    floor_insulation_orig = models.CharField(
-        max_length=128, choices=enums.FloorInsulation.choices, blank=True
-    )
+
     glazing = models.CharField(
         max_length=128, choices=enums.Glazing.choices, blank=True
     )
-    glazing_orig = models.CharField(
-        max_length=128, choices=enums.Glazing.choices, blank=True
-    )
+
     heating = models.CharField(
         max_length=128, choices=enums.Heating.choices, blank=True
     )
-    heating_orig = models.CharField(
-        max_length=128, choices=enums.Heating.choices, blank=True
-    )
+
     main_fuel = models.CharField(
         max_length=128, choices=enums.MainFuel.choices, blank=True
     )
-    main_fuel_orig = models.CharField(
-        max_length=128, choices=enums.MainFuel.choices, blank=True
-    )
+
     boiler_efficiency = models.CharField(
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True
     )
-    boiler_efficiency_orig = models.CharField(
-        max_length=1, choices=enums.EfficiencyBand.choices, blank=True
-    )
+
     controls_adequacy = models.CharField(
         max_length=128, choices=enums.ControlsAdequacy.choices, blank=True
     )
-    controls_adequacy_orig = models.CharField(
-        max_length=128, choices=enums.ControlsAdequacy.choices, blank=True
-    )
+
     heated_rooms = models.IntegerField(blank=True, null=True)
-    heated_rooms_orig = models.IntegerField(blank=True, null=True)
     t_co2_current = models.DecimalField(
         max_digits=3, decimal_places=1, blank=True, null=True
     )
-    t_co2_current_orig = models.DecimalField(
-        max_digits=3, decimal_places=1, blank=True, null=True
-    )
+
     realistic_fuel_bill = models.CharField(max_length=9, blank=True, null=True)
-    realistic_fuel_bill_orig = models.CharField(max_length=9, blank=True, null=True)
-
-    """
-    # Store whether the user wishes to correct the inferred data.
-    # We need this to know whether to jump ahead at the end of each section.
-    """
-    will_correct_type = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct property type or age fields",
-    )
-    will_correct_walls = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct walls characteristics",
-    )
-    will_correct_roof = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct roof characteristics",
-    )
-    will_correct_floor = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct floor characteristics",
-    )
-    will_correct_heating = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct heating system fields",
-    )
-
-    """
-    # CONSTRAINTS: planning area and owner preferences
-    """
-
-    tolerated_disruption = models.CharField(
-        max_length=20,
-        choices=enums.ToleratedDisruption.choices,
-        blank=True,
-        verbose_name="Maximum length of disruption tolerated",
-    )
-    state_of_repair = models.CharField(
-        choices=enums.StateOfRepair.choices, blank=True, max_length=9
-    )
-    motivation_better_comfort = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Motivated by improving comfort",
-    )
-    motivation_lower_bills = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Motivated by reducing bills",
-    )
-    motivation_environment = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Motivated to make the home more environmentally friendly",
-    )
-    motivation_unknown = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent cannot give motivations of the homeowner",
-    )
-    contribution_capacity = models.CharField(
-        choices=enums.ContributionCapacity.choices,
-        max_length=9,
-        blank=True,
-    )
-    consented_callback = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent consented to being called / emailed back to provide advice",
-    )
-    consented_future_schemes = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent consented to being contacted regarding relevant schemes in future.",
-    )
 
     """
     # Top level household income assessment

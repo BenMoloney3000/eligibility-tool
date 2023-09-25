@@ -71,13 +71,6 @@ urlpatterns = [
         "disruption", views.ToleratedDisruption.as_view(), name="tolerated-disruption"
     ),
     path("state-of-repair", views.StateOfRepair.as_view(), name="state-of-repair"),
-    path("motivations", views.Motivations.as_view(), name="motivations"),
-    path(
-        "owner-contributions",
-        views.ContributionCapacity.as_view(),
-        name="contribution-capacity",
-    ),
-    path("no-funding", views.NothingAtThisTime.as_view(), name="nothing-at-this-time"),
     path("adult-1-name", views.Adult1Name.as_view(), name="adult1-name"),
     path(
         "adult-1-employment", views.Adult1Employment.as_view(), name="adult1-employment"
