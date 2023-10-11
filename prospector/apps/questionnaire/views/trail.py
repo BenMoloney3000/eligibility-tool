@@ -281,7 +281,6 @@ class PropertyAddress(abstract_views.Question):
     title = "Address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
-    next = "Tenure"
     percent_complete = COMPLETE_TRAIL + 50
     prefilled_addresses = {}
 
@@ -335,13 +334,40 @@ class PropertyAddress(abstract_views.Question):
         if self.answers.property_address_1 and self.answers.property_address_2:
             try:
                 self.answers = services.prepopulate_from_parity(self.answers)
+                self.answers.save()
             except Exception as e:
                 logging.error("prepopulate_from_parity failed", e)
 
-            self.answers.save()
+    def get_next(self):
+        if self.answers.sap_score:
+            return "Tenure"
         else:
-            # Make sure it's been deselected
-            self.answers = services.depopulate_orig_fields(self.answers)
+            return "AddressUnknown"
+
+
+class AddressUnknown(abstract_views.Question):
+    icon = "house"
+    title = "We do not have data about your property"
+    answer_field = "respondent_comments"
+    form_class = questionnaire_forms.PropertyMeasuresSummary
+    template_name = "questionnaire/address_unknown.html"
+    percent_complete = COMPLETE_TRAIL + 75
+
+    next = "ThankYou"
+
+
+class ThankYou(abstract_views.NoQuestion):
+    icon = "house"
+    template_name = "questionnaire/thank_you.html"
+    percent_complete = COMPLETE_TRAIL + 100
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        services.close_questionnaire(self.answers)
+        return context
+
+    def get_prev_url(self):
+        return None
 
 
 class Tenure(abstract_views.SingleQuestion):

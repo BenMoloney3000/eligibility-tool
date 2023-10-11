@@ -1,0 +1,26 @@
+{% extends "questionnaire/base_question.html" %}
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block question_text %}
+
+
+    <h2>
+        We do not have a valid data about your property
+    </h2>
+
+    <p>We do not have any valid data in our database about the property under address you gave us. If you think there is a chance to obtain funds for its retrofit, please leave your comments below and then click "Next" to submit them.
+    </p>
+{% endblock question_text %}
+
+{% block form_content %}
+    <div>
+        <p>
+            <label for="id_respondent_comments">
+                Your comments:
+            </label><br>
+            {{ form.respondent_comments }}
+        </p>
+    </div>
+{% endblock form_content %}

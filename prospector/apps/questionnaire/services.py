@@ -52,6 +52,9 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
 
         return answers
 
+    else:
+        return answers
+
 
 def depopulate_orig_fields(answers: models.Answers) -> models.Answers:
     """Clear all the inferred data fields."""
