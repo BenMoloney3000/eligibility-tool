@@ -642,7 +642,10 @@ class Vulnerabilities(abstract_views.Question):
     form_class = questionnaire_forms.Vulnerabilities
 
 
-class AnswersSummary(abstract_views.NoQuestion):
+class AnswersSummary(abstract_views.Question):
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.HowDidYouHearAboutPEC.choices
+    form_class = questionnaire_forms.AnswersSummary
     title = "Summary of your answers"
     percent_complete = COMPLETE_TRAIL + 98
     template_name = "questionnaire/answers_summary.html"
@@ -689,6 +692,9 @@ class AnswersSummary(abstract_views.NoQuestion):
             ] = f"{a.occupant_first_name} {a.occupant_last_name}"
 
         return context
+
+    def get_prev_url(self):
+        return None
 
     def get_next(self):
         return "RecommendedMeasures"

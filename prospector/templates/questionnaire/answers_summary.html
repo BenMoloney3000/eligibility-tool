@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "questionnaire/base_question.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 
@@ -149,13 +149,24 @@
         We will check both the schemes we deliver and the other offers available in the
         city, and we will keep in touch with you and send an update from time to time.
     </p>
-    <p>
-        To see our recommendations please submit your details using the button below.
-    </p>
 
 
     <form method="POST">
         {% csrf_token %}
+        {% block form_content %}
+            <h4>How did you hear about PEC?</h4>
+            <p>
+                <label for="id_source_of_info_about_pec">
+                    Before submitting your details, can you let us know how did you hear about us? Please choose your answer from the drop-down list below:
+                </label>
+                <div>
+                    {{ form.source_of_info_about_pec }}
+                </div>
+            </p>
+            <p>
+                To see our recommendations please submit your details using the button below.
+            </p>
+        {% endblock form_content %}
         {% block nav_form %}
             <div class="nav-form">
                 <button class="button" name="finish_now" value="True">

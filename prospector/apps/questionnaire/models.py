@@ -65,6 +65,13 @@ class Answers(models.Model):
 
     respondent_comments = models.TextField(blank=True, null=True)
 
+    source_of_info_about_pec = models.CharField(
+        max_length=128,
+        choices=enums.HowDidYouHearAboutPEC.choices,
+        default=enums.HowDidYouHearAboutPEC.NOT_SPECIFIED,
+        blank=True,
+    )
+
     """
     # PROPERTY DETAILS
     """

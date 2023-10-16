@@ -4,10 +4,33 @@ from django.db import models
 
 
 class Tenure(models.TextChoices):
-    OWNER_OCCUPIED = "OwnerOccupied", "The property is occupied by its owner"
+    OWNER_OCCUPIED = "OwnerOccupied", "Owner-occupied"
     RENTED_PRIVATE = "RentedPrivate", "Rented - private"
     RENTED_SOCIAL = "RentedSocial", "Rented - social"
     UNKNOWN = "Unknown", "Unknown"
+
+
+class HowDidYouHearAboutPEC(models.TextChoices):
+    DOOR_KNOCKING = "Door knocking", "Door knocking"
+    FACEBOOK = "Facebook", "Facebook"
+    FLYER = "Flyer/poster", "Flyer or poster"
+    INSTAGRAM = "Instagram", "Instagram"
+    LETTER = "Letter in the post", "Letter in the post"
+    LINKEDIN = "LinkedIn", "LinkedIn"
+    PRINT_MEDIA = "Print media", "Newspaper or magazine"
+    PRIOR_RELATIONSHIP = "Prior relationship with PEC", "Prior relationship with PEC"
+    RADIO = "Radio", "Radio"
+    SIGNPOST_CO = (
+        "Signpost - Community organisation",
+        "Referred by community organisation",
+    )
+    SIGNPOST_CHARITY = "Signpost - Charity", "Referred by charity"
+    SIGNPOST_COUNCIL = "Signpost - Council", "Referred by council"
+    SIGNPOST_LB = "Signpost - Local business", "Referred by local business"
+    TWITTER = "Twitter", "X, formerly known as Twitter"
+    WEB_SEARCH = "Web search", "Web search"
+    WORD_OF_MOUTH = "Word of mouth", "Word of mouth"
+    NOT_SPECIFIED = "Not Yet Specified", "Other"
 
 
 class RespondentRole(models.TextChoices):

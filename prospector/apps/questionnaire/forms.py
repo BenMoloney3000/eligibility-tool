@@ -222,6 +222,19 @@ class OccupantName(AnswerFormMixin, forms.ModelForm):
         ]
 
 
+class AnswersSummary(AnswerFormMixin, forms.ModelForm):
+    source_of_info_about_pec = forms.ChoiceField(
+        required=False,
+        choices=enums.HowDidYouHearAboutPEC.choices,
+    )
+
+    class Meta:
+        model = models.Answers
+        fields = [
+            "source_of_info_about_pec",
+        ]
+
+
 class PropertyAddress(AnswerFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # Get the prefilled addresses to populate the select field
