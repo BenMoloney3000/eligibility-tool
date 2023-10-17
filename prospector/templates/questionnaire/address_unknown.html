@@ -19,8 +19,10 @@
         <p>
             <label for="id_respondent_comments">
                 Your comments:
-            </label><br>
-            {{ form.respondent_comments }}
+            </label>
+            <div class="comments-form-container">
+                {{ form.respondent_comments }}
+            </div>
         </p>
     </div>
 {% endblock form_content %}
