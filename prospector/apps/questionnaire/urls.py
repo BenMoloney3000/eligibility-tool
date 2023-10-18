@@ -10,11 +10,10 @@ urlpatterns = [
     path("name", views.RespondentName.as_view(), name="respondent-name"),
     path("role", views.RespondentRole.as_view(), name="respondent-role"),
     path(
-        "permission",
+        "consent",
         views.RespondentHasPermission.as_view(),
         name="respondent-has-permission",
     ),
-    path("need-permission", views.NeedPermission.as_view(), name="need-permission"),
     path(
         "your-postcode", views.RespondentPostcode.as_view(), name="respondent-postcode"
     ),

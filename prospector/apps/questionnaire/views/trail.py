@@ -69,58 +69,35 @@ class RespondentRole(abstract_views.Question):
             self.answers.respondent_has_permission = None
 
     def get_next(self):
-        if self.answers.respondent_role != enums.RespondentRole.OWNER_OCCUPIER.value:
+        if (
+            self.answers.respondent_role != enums.RespondentRole.OWNER_OCCUPIER.value
+            and self.answers.respondent_role != enums.RespondentRole.OTHER.value
+        ):
             return "RespondentHasPermission"
         else:
             return "Email"
 
 
 class RespondentHasPermission(abstract_views.SingleQuestion):
-    title = "Householder permission"
+    title = "Householder consent"
     type_ = abstract_views.QuestionType.YesNo
+    template_name = "questionnaire/consent_to_proceed.html"
     percent_complete = COMPLETE_TRAIL + 15
 
     def get_question(self):
-        # Wording of question depends on role:
+        # Wording of information depends on role:
         if self.answers.respondent_role == enums.RespondentRole.TENANT:
-            return (
-                "Do you have permission from the owner to contact us on their behalf?"
-            )
+            return """You will need your landlord's consent to proceed with any retrofit works
+                and your landlord may be required to contribute some of the cost of the work
+                if you are eligible for funding."""
         elif self.answers.respondent_role == enums.RespondentRole.LANDLORD:
-            return (
-                "Do you have permission from the tenants to contact us on their behalf?"
-            )
-        else:
-            # Other
-            return "Do you have permission from the owner and occupants to contact us on their behalf?"
-
-    def get_initial(self):
-        data = super().get_initial()
-
-        # Specific case here - initial data from DB can only be true or null, otherwise
-        # the whole Answers object gets deleted.
-        if data.get("respondent_has_permission"):
-            data["respondent_has_permission"] = "True"
-
-        return data
+            return "You will need your tenant's consent to proceed with any retrofit works."
 
     def get_next(self):
-        if not self.answers.respondent_has_permission:
-            return "NeedPermission"
-        elif self.answers.is_occupant:
-            return "Email"
-        else:
+        if self.answers.respondent_role == enums.RespondentRole.LANDLORD:
             return "RespondentPostcode"
-
-
-class NeedPermission(abstract_views.Question):
-    title = "Sorry, we can't help you."
-    template_name = "questionnaire/need_permission.html"
-    percent_complete = COMPLETE_TRAIL
-
-    def get_initial(self):
-        # If we don't have permission, we need to delete everything entered so far
-        self.answers.delete()
+        else:
+            return "Email"
 
 
 class RespondentPostcode(abstract_views.SingleQuestion):
