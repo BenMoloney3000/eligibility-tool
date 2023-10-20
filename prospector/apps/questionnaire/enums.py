@@ -31,6 +31,7 @@ class HowDidYouHearAboutPEC(models.TextChoices):
     WEB_SEARCH = "Web search", "Web search"
     WORD_OF_MOUTH = "Word of mouth", "Word of mouth"
     NOT_SPECIFIED = "Not Yet Specified", "Other"
+    LABEL = "Input label", "Please choose option"
 
 
 class RespondentRole(models.TextChoices):

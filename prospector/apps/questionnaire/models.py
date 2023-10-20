@@ -68,7 +68,7 @@ class Answers(models.Model):
     source_of_info_about_pec = models.CharField(
         max_length=128,
         choices=enums.HowDidYouHearAboutPEC.choices,
-        default=enums.HowDidYouHearAboutPEC.NOT_SPECIFIED,
+        default=enums.HowDidYouHearAboutPEC.LABEL,
         blank=True,
     )
 

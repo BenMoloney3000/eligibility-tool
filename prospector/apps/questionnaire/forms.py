@@ -224,9 +224,15 @@ class OccupantName(AnswerFormMixin, forms.ModelForm):
 
 class AnswersSummary(AnswerFormMixin, forms.ModelForm):
     source_of_info_about_pec = forms.ChoiceField(
-        required=False,
+        required=True,
         choices=enums.HowDidYouHearAboutPEC.choices,
     )
+
+    def clean_source_of_info_about_pec(self):
+        data = self.cleaned_data.get("source_of_info_about_pec")
+        if data == enums.HowDidYouHearAboutPEC.LABEL:
+            raise forms.ValidationError("This field is required")
+        return data
 
     class Meta:
         model = models.Answers
