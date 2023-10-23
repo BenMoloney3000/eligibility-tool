@@ -141,10 +141,13 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
             (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
             for udprn, house in prefilled_addresses.items()
         ]
-        udprn_choices.append((None, "Address not in list"))
+        udprn_choices.append((None, "Address not in the list"))
+        udprn_choices.insert(0, (None, "Click here to choose the address"))
         self.fields["respondent_udprn"] = forms.ChoiceField(
             required=False, choices=udprn_choices
         )
+
+        self.initial["respondent_udprn"] = udprn_choices[0][0]
 
     class Meta:
         model = models.Answers
@@ -253,11 +256,14 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
             (id, f"{house.address_1}, {house.address_2}".strip(", "))
             for id, house in prefilled_addresses.items()
         ]
-        udprn_choices.append((None, "Address not in list"))
+        udprn_choices.append((None, "Address not in the list"))
+        udprn_choices.insert(0, (None, "Click here to choose the address"))
 
         self.fields["property_udprn"] = forms.ChoiceField(
-            required=False, choices=udprn_choices
+            required=False,
+            choices=udprn_choices,
         )
+        self.initial["property_udprn"] = udprn_choices[0][0]
 
     class Meta:
         model = models.Answers
