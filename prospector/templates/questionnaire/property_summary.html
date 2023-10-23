@@ -55,9 +55,9 @@
                     {% if property_data.roof_insulation == "As built" %}
                         {{ property_data.roof_insulation }}
                         {% if property_data.walls_insulation != "As built" %}
-                            <sup> *</sup>
+                            <sup>*</sup>
                         {% else %}
-                            <sup> **</sup>
+                            <sup>**</sup>
                         {% endif %}
                     {% else %}
                         {{ property_data.roof_insulation }}
@@ -81,11 +81,11 @@
                     {% if property_data.floor_insulation == "As built" %}
                         {{ property_data.floor_insulation }}
                         {% if property_data.walls_insulation != "As built" and property_data.roof_insulation != "As built" %}
-                            <sup>* </sup>
+                            <sup>*</sup>
                         {% elif property_data.walls_insulation == "As built" and property_data.roof_insulation != "As built" or property_data.walls_insulation != "As built" and property_data.roof_insulation == "As built" %}
-                            <sup>** </sup>
+                            <sup>**</sup>
                         {% else %}
-                            <sup>*** </sup>
+                            <sup>***</sup>
                         {% endif %}
                     {% else %}
                         {{ property_data.roof_insulation }}
