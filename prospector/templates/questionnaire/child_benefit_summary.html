@@ -12,7 +12,7 @@
 {% block form_content %}
     <ul>
         <li>The person receiving Child Benefit is a
-            {% if answers.child_benefit_single_claimant %}
+            {% if answers.child_benefit_claimant_type == "SINGLE" %}
                 <b>single claimant</b>
             {% else %}
                 <b>member of a couple</b>
