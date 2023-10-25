@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def generate_id():
     """
-    Generate string to be utilised as the "uuid" value.
+    Generate string to be utilised as the short UUID-like value.
 
     Composed from 5 uppercase letters and 5 numbers.
     """
@@ -321,79 +321,3 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
             return property_rating
         else:
             return income_rating
-
-
-def calculate_household_income(answers: models.Answers) -> int:
-    """Calculate the annual income for all adults in the household."""
-
-    total_income = 0
-
-    for adult in answers.householdadult_set.all():
-        total_income += calculate_adult_income(adult)
-
-    return total_income
-
-
-def calculate_adult_income(adult: models.HouseholdAdult) -> int:
-    income = (
-        _annualise_income(adult, "employed_income")
-        + _annualise_income(adult, "self_employed_income")
-        + _annualise_income(adult, "business_income")
-        + _annualise_income(adult, "private_pension_income")
-        + _annualise_income(adult, "state_pension_income")
-        + _annualise_income(adult, "saving_investment_income")
-    )
-
-    # Add in any benefits
-    benefit_income = sum(
-        [
-            _annualise_benefit_income(benefit)
-            for benefit in adult.welfarebenefit_set.all()
-        ]
-    )
-
-    return income + benefit_income
-
-
-def _annualise_income(adult: models.HouseholdAdult, income_name: str) -> int:
-    freq_name = f"{income_name}_frequency"
-    income = getattr(adult, income_name, 0)
-    if not income:
-        # (zero or null, in either case don't case about frequency
-        return 0
-    elif getattr(adult, freq_name) == enums.PaymentFrequency.ANNUALLY:
-        return income
-    else:
-        return income * 12
-
-
-def _annualise_benefit_income(benefit: models.WelfareBenefit):
-    income = benefit.amount
-    if not income:
-        # (zero or null, in either case don't case about frequency
-        return 0
-    elif benefit.frequency == enums.BenefitPaymentFrequency.WEEKLY:
-        return round(income * 52.2)
-    elif benefit.frequency == enums.BenefitPaymentFrequency.TWO_WEEKLY:
-        return round(income * (52.2 / 2))
-    elif benefit.frequency == enums.BenefitPaymentFrequency.FOUR_WEEKLY:
-        return round(income * (52.2 / 4))
-    elif benefit.frequency == enums.BenefitPaymentFrequency.MONTHLY:
-        return income * 12
-    else:
-        return income
-
-
-def get_financial_eligibility(answers: models.Answers) -> enums.FinancialEligibility:
-    total_household_income = calculate_household_income(answers)
-
-    if total_household_income < 31000:
-        return enums.FinancialEligibility.ALL
-    else:
-        benefit_present = models.WelfareBenefit.objects.filter(
-            recipient__answers=answers
-        ).exists()
-        if answers.take_home_lt_31k_confirmation or benefit_present:
-            return enums.FinancialEligibility.SOME
-        else:
-            return enums.FinancialEligibility.NONE

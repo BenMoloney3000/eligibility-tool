@@ -22,7 +22,6 @@ def migrate_trvs_present(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("questionnaire", "0035_answers_trvs_present_answers_trvs_present_orig"),
     ]

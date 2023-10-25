@@ -457,27 +457,6 @@ class PossibleMeasures(models.TextChoices):
     HEAT_PUMP_INSTALLATION = "HEAT_PUMP_INSTALLATION", "Installation of a heat pump"
 
 
-class EmploymentStatus(models.TextChoices):
-    EMPLOYED = "EMPLOYED", "Employed"
-    SELF_EMPLOYED = "SELF_EMPLOYED", "Self Employed"
-    UNEMPLOYED = "UNEMPLOYED", "Unemployed"
-    RETIRED = "RETIRED", "Retired"
-    OTHER = "OTHER", "Other"
-
-
-class PaymentFrequency(models.TextChoices):
-    ANNUALLY = "ANNUALLY", "annually"
-    MONTHLY = "MONTHLY", "monthly"
-
-
-class BenefitPaymentFrequency(models.TextChoices):
-    WEEKLY = "WEEKLY", "weekly"
-    TWO_WEEKLY = "TWO_WEEKLY", "two weekly"
-    FOUR_WEEKLY = "FOUR_WEEKLY", "four weekly"
-    ANNUALLY = "ANNUALLY", "annually"
-    MONTHLY = "MONTHLY", "monthly"
-
-
 class BenefitType(models.TextChoices):
     UC = "UC", "Universal Credit"
     JSA = "JSA", "Job Seekers Allowance (JSA)"
@@ -507,12 +486,7 @@ class RAYG(models.TextChoices):
     GREEN = auto()
 
 
-class FinancialEligibility(models.TextChoices):
-    ALL = "ALL", "Financial circumstances eligible for all schemes"
-    SOME = "SOME", "Financial circumstances eligible for some schemes"
-    NONE = "NONE", "Financial circumstances eligible for no schemes"
-
-
+# Deprecated, used in migrations/0036_data_migration_trvs_present.py
 class TRVsPresent(models.TextChoices):
     ALL = "ALL", "All radiators have TRVs"
     SOME = "SOME", "Some radiators have TRVs"
