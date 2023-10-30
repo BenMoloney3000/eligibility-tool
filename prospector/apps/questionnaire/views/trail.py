@@ -267,8 +267,8 @@ class PropertyAddress(abstract_views.Question):
 
         try:
             self.prefilled_addresses = {
-                address.id: address
-                for address in get_addresses_for_postcode(
+                property_object.id: property_object
+                for property_object in get_addresses_for_postcode(
                     self.answers.property_postcode
                 )
             }
@@ -283,31 +283,15 @@ class PropertyAddress(abstract_views.Question):
         context["property_postcode"] = self.answers.property_postcode
         context["all_postcode_addresses"] = {
             key: {
-                "address1": address.address_1,
-                "address2": address.address_2,
-                "address3": address.address_3,
+                "address1": property_object.address_1,
+                "address2": property_object.address_2,
+                "address3": property_object.address_3,
             }
-            for key, address in self.prefilled_addresses.items()
+            for key, property_object in self.prefilled_addresses.items()
         }
         return context
 
     def pre_save(self):
-        if (
-            self.answers.property_udprn
-            and int(self.answers.property_udprn) in self.prefilled_addresses
-        ):
-            selected_address = self.prefilled_addresses[
-                int(self.answers.property_udprn)
-            ]
-            self.answers.uprn = selected_address.uprn or None
-            if not self.answers.property_address_1:
-                # Populate fields if it wasn't already done by JS
-                self.answers.property_address_1 = selected_address.line_1
-                self.answers.property_address_2 = selected_address.line_2
-                self.answers.property_address_3 = selected_address.line_3
-
-        # TODO (maybe) same edge case as with RespondentAddress above.
-
         if self.answers.property_address_1 and self.answers.property_address_2:
             try:
                 self.answers = services.prepopulate_from_parity(self.answers)

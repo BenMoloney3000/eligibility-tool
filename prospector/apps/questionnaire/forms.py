@@ -249,18 +249,18 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
 
         self.prefilled_addresses = prefilled_addresses
 
-        udprn_choices = [
+        address_choices = [
             (id, f"{house.address_1}, {house.address_2}".strip(", "))
             for id, house in prefilled_addresses.items()
         ]
-        udprn_choices.append((None, "Address not in the list"))
-        udprn_choices.insert(0, (None, "Click here to choose the address"))
+        address_choices.append((None, "Address not in the list"))
+        address_choices.insert(0, (None, "Click here to choose the address"))
 
-        self.fields["property_udprn"] = forms.ChoiceField(
+        self.fields["chosen_address"] = forms.ChoiceField(
             required=False,
-            choices=udprn_choices,
+            choices=address_choices,
         )
-        self.initial["property_udprn"] = udprn_choices[0][0]
+        self.initial["chosen_address"] = address_choices[0][0]
 
     class Meta:
         model = models.Answers
@@ -268,31 +268,12 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
             "property_address_1",
             "property_address_2",
             "property_address_3",
-            "property_udprn",
         ]
         fields = [
             "property_address_1",
             "property_address_2",
             "property_address_3",
-            "property_udprn",
         ]
-
-    def clean_udprn(self):
-        udprn = self.cleaned_data["property_udprn"]
-        if udprn not in self.prefilled_addresses:
-            self.add_error("property_udprn", "Invalid value selected")
-        else:
-            # Ideal Postcodes and Data8 report the administrative district differently
-            # and we want it to work with either, including old cached values
-            if self.prefilled_addresses[udprn].district not in [
-                "City of Plymouth",
-                "Plymouth",
-            ]:
-                self.add_error(
-                    "property_udprn",
-                    "This property is not within the Plymouth Council area.",
-                )
-        return udprn
 
     def clean(self):
         """Check we got enough data, since no field is actually required."""
@@ -301,7 +282,7 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         if not data.get("property_udprn") and not data.get("property_address_1"):
             self.add_error(
                 "property_address_1",
-                "Please enter the first line of an address or select an address from the list",
+                "Please enter the first line of an address or select an address from the drop-down list above",
             )
 
         return data

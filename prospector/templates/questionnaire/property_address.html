@@ -13,13 +13,13 @@
 
 {% block form_content %}
     {{ all_postcode_addresses|json_script:"allPostcodes" }}
-    {% if form.property_udprn.field.widget.choices %}
+    {% if form.chosen_address.field.widget.choices %}
         <p class="postcode-populator">
             <label for="id_udprn">
                 Choose the address from the drop-down list:
             </label>
-            {{ form.property_udprn }}
-            {{ form.property_udprn.errors }}
+            {{ form.chosen_address }}
+            {{ form.chosen_address.errors }}
         </p>
         <p>
             If your address is not in the list, please check that you entered the correct postcode ({{ property_postcode }}) and if necessary
