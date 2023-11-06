@@ -21,14 +21,22 @@
 
     <p>
         <label for="id_children">
-            How many children live in the property?
+            How many children live in the property?<sup>*</sup>
         </label>
         {{ form.children }}
         {{ form.children.errors }}
     </p>
 
     <p>
-        <em>This means children under the age of 16, or under the age of 20 in
+        <label for="id_over_60s">
+            How many seniors (over 60 years old) live in the property?
+        </label>
+        {{ form.over_60s }}
+        {{ form.over_60s.errors }}
+    </p>
+
+    <p>
+        <sup>*</sup><em>This means children under the age of 16, or under the age of 20 in
             approved education or training, and living in the property for at
             least 50% of the time. If child benefit is being claimed then
             an adult living in the home must receive at least half of the child

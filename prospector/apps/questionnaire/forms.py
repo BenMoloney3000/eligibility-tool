@@ -344,12 +344,14 @@ class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
 class Occupants(AnswerFormMixin, forms.ModelForm):
     adults = forms.ChoiceField(required=True, choices=enums.OneToFourOrMore.choices)
     children = forms.ChoiceField(required=True, choices=enums.UpToFourOrMore.choices)
+    over_60s = forms.ChoiceField(required=True, choices=enums.UpToFourOrMore.choices)
 
     class Meta:
         model = models.Answers
         fields = [
             "adults",
             "children",
+            "over_60s",
         ]
 
 
