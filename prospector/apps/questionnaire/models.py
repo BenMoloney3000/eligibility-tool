@@ -215,6 +215,13 @@ class Answers(models.Model):
         choices=enums.UpToFourOrMore.choices,
     )
 
+    over_60s = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Number of seniors (over 60 years old) living in the property",
+        choices=enums.UpToFourOrMore.choices,
+    )
+
     total_income = models.CharField(
         choices=enums.IncomeIsUnderThreshold.choices,
         max_length=7,
