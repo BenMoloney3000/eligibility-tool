@@ -234,6 +234,17 @@ class Answers(models.Model):
         max_length=7,
         verbose_name="Total household take home pay is under £31,000 pa",
     )
+
+    means_tested_benefits = disability_benefits = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent receives means tested benefits",
+    )
+    past_means_tested_benefits = disability_benefits = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent received means tested benefits in the past 18 months",
+    )
     disability_benefits = models.BooleanField(
         null=True,
         blank=True,

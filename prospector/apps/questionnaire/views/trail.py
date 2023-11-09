@@ -386,9 +386,30 @@ class PropertyMeasuresSummary(abstract_views.Question):
 class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
     title = "The Household"
-    next = "HousingCosts"
+    next = "MeansTestedBenefits"
     percent_complete = COMPLETE_TRAIL + 65
     form_class = questionnaire_forms.Occupants
+
+
+class MeansTestedBenefits(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Means tested benefits"
+    question = "Do you receive means tested benefits?"
+    percent_complete = COMPLETE_TRAIL + 70
+
+    def get_next(self):
+        if self.answers.means_tested_benefits:
+            return "HousingCosts"
+        else:
+            return "PastMeansTestedBenefits"
+
+
+class PastMeansTestedBenefits(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Means tested benefits in the past"
+    question = "Were you receiving means tested benefits in the last 18 months?"
+    percent_complete = COMPLETE_TRAIL + 73
+    next = "HousingCosts"
 
 
 class HousingCosts(abstract_views.SingleQuestion):
