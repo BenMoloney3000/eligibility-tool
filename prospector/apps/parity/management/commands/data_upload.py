@@ -59,6 +59,7 @@ class Command(BaseCommand):
                     csv_data.lat_coordinate = row[34] or None
                     csv_data.long_coordinate = row[35] or None
                     csv_data.lower_super_output_area_code = row[36]
+                    csv_data.multiple_deprivation_index = 0
 
                     temp_data.append(csv_data)
 
