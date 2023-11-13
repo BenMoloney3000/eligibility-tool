@@ -293,11 +293,6 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is vulnerable due to a mental health condition",
     )
-    vulnerable_cns = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Anyone in the house is vulnerable due to central nervous system condition",
-    )
     vulnerable_disability = models.BooleanField(
         null=True,
         blank=True,
@@ -308,10 +303,15 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is vulnerable due to being aged over 65",
     )
-    vulnerable_child_pregnancy = models.BooleanField(
+    vulnerable_children = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Anyone in the house is under five years old or pregnant",
+        verbose_name="Anyone in the house is with young children (from  new-born to school age)",
+    )
+    vulnerable_pregnancy = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is pregnant",
     )
     incomes_complete = models.BooleanField(
         blank=True, null=True, verbose_name="This is a full account of household income"

@@ -374,39 +374,39 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_cariovascular",
             "vulnerable_respiratory",
             "vulnerable_mental_health",
-            "vulnerable_cns",
             "vulnerable_disability",
             "vulnerable_age",
-            "vulnerable_child_pregnancy",
+            "vulnerable_children",
+            "vulnerable_pregnancy",
         ]
         optional_fields = fields
         widgets = {
             "vulnerable_cariovascular": forms.CheckboxInput(),
             "vulnerable_respiratory": forms.CheckboxInput(),
             "vulnerable_mental_health": forms.CheckboxInput(),
-            "vulnerable_cns": forms.CheckboxInput(),
             "vulnerable_disability": forms.CheckboxInput(),
             "vulnerable_age": forms.CheckboxInput(),
-            "vulnerable_child_pregnancy": forms.CheckboxInput(),
+            "vulnerable_children": forms.CheckboxInput(),
+            "vulnerable_pregnancy": forms.CheckboxInput(),
         }
         labels = {
             "vulnerable_cariovascular": (
-                "A cardiovascular condition (for example: heart condition, risk "
-                "of stroke, high blood pressure etc.)"
+                "Household living with cardiovascular conditions"
             ),
             "vulnerable_respiratory": (
-                "A respiratory condition (for example COPD or asthma)"
+                "Household living with respiratory conditions, "
+                "in particular, chronic obstructive pulmonary disease "
+                "(COPD) and childhood asthma."
             ),
-            "vulnerable_mental_health": ("A mental health condition"),
-            "vulnerable_cns": (
-                "A central nervous system condition (for example dementia, "
-                "Alzheimer's or fibromyalgia)"
+            "vulnerable_mental_health": (
+                "Household living with mental health conditions"
             ),
-            "vulnerable_disability": ("Disability"),
-            "vulnerable_age": ("Being over 65 years old"),
-            "vulnerable_child_pregnancy": (
-                "Being a child under the age of five, or being pregnant"
+            "vulnerable_disability": ("Household living with disabilities"),
+            "vulnerable_age": ("Household with an older person (65 and older)"),
+            "vulnerable_children": (
+                "Household with young children (from new-born to school age)"
             ),
+            "vulnerable_pregnancy": ("Household with a pregnant woman"),
         }
 
 

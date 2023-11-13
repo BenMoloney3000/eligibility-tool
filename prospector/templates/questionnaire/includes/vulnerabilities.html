@@ -17,11 +17,6 @@
         <td></td>
     </tr>
     <tr>
-        <td>A central nervous system condition (for example dementia, Alzheimer's or fibromyalgia)</td>
-        <td>{{ user_data.vulnerable_cns|yesno|capfirst }}</td>
-        <td><a href='{% url "questionnaire:vulnerabilities" %}'>CHANGE</a></td>
-    </tr>
-    <tr>
         <td>Disability</td>
         <td>{{ user_data.vulnerable_disability|yesno|capfirst }}</td>
         <td></td>
@@ -32,8 +27,13 @@
         <td></td>
     </tr>
     <tr>
-        <td>Being a child under the age of five, or being pregnant</td>
-        <td>{{ user_data.vulnerable_child_pregnancy|yesno|capfirst }}</td>
+        <td>Being a young child (from new-born to school age)</td>
+        <td>{{ user_data.vulnerable_children|yesno|capfirst }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Being a pregnant</td>
+        <td>{{ user_data.vulnerable_pregnancy|yesno|capfirst }}</td>
         <td></td>
     </tr>
 </table>
