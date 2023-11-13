@@ -347,6 +347,12 @@ class Answers(models.Model):
         verbose_name="Property rating (computed field)",
     )
 
+    council_tax_reduction = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Is the household entitled to a Council Tax reduction",
+    )
+
     def save(self, *args, **kwargs):
         from prospector.apps.questionnaire import utils
 

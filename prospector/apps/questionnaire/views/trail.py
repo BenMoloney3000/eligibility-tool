@@ -633,9 +633,17 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
 class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
     title = "Specific vulnerabilities of household members"
-    next = "AnswersSummary"
+    next = "CouncilTaxReduction"
     percent_complete = COMPLETE_TRAIL + 95
     form_class = questionnaire_forms.Vulnerabilities
+
+
+class CouncilTaxReduction(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Council Tax Reduction"
+    question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
+    next = "AnswersSummary"
+    percent_complete = COMPLETE_TRAIL + 97
 
 
 class AnswersSummary(abstract_views.Question):
