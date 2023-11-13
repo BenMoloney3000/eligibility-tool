@@ -36,6 +36,7 @@ urlpatterns = [
     ),
     path("occupants", views.Occupants.as_view(), name="occupants"),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
+    path("housing-costs", views.HousingCosts.as_view(), name="housing-costs"),
     path(
         "take-home-pay",
         views.HouseholdTakeHomeIncome.as_view(),

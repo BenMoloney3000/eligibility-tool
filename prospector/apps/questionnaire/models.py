@@ -325,6 +325,12 @@ class Answers(models.Model):
         ),
     )
 
+    housing_costs = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Housing costs",
+    )
+
     # Computed Fields
     income_rating = models.CharField(
         choices=enums.RAYG.choices,

@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -385,9 +386,44 @@ class PropertyMeasuresSummary(abstract_views.Question):
 class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
     title = "The Household"
-    next = "HouseholdIncome"
+    next = "HousingCosts"
     percent_complete = COMPLETE_TRAIL + 65
     form_class = questionnaire_forms.Occupants
+
+
+class HousingCosts(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.Text
+    question = "What are your housing costs?"
+    supplementary = (
+        "Enter the total amount of your monthly housing costs (without penses)"
+    )
+    title = "Housing costs"
+    icon = "house"
+    next = "HouseholdIncome"
+    percent_complete = COMPLETE_TRAIL + 77
+
+    def sanitise_answer(self, data):
+        data = re.sub(",", "", data)
+        data = re.sub("£", "", data)
+        return data
+
+    @staticmethod
+    def validate_answer(data):
+        for character in data:
+            if character not in "£," and not character.isdigit():
+                raise ValidationError(
+                    "It seems that you used one or more invalid characters."
+                    " Please enter a value represented by an integer number."
+                )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(
+            {
+                "answers": self.answers,
+            }
+        )
+        return context
 
 
 class HouseholdIncome(abstract_views.SingleQuestion):
