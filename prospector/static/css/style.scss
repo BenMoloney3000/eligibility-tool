@@ -12,6 +12,7 @@ $pv_purple: #1e0f2c;
 $fb_white: #ffffff;
 $body_grey: #fcfcfc;
 $body_black: #4a4a4a;
+$body_light: #707070;
 
 $govuk-font-family: $prospector_font_family;
 $govuk-focus-colour: $orange_warm;
@@ -23,6 +24,12 @@ $govuk-focus-colour: $orange_warm;
 
 * {
     box-sizing: border-box;
+}
+
+.below_button_line {
+    color: $body_light;
+    font-size: 0.9em;
+    margin-top: 1.5em;
 }
 
 .centered {
@@ -437,6 +444,8 @@ summary:before {
 }
 
 section.ticked-list {
+    margin-bottom: 0.5em;
+
     p {
         margin: 0;
     }
