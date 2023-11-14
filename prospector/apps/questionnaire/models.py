@@ -306,7 +306,7 @@ class Answers(models.Model):
     vulnerable_children = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Anyone in the house is with young children (from  new-born to school age)",
+        verbose_name="Anyone in the house is with young children (from new-born to school age)",
     )
     vulnerable_pregnancy = models.BooleanField(
         null=True,
