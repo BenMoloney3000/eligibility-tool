@@ -448,7 +448,7 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.total_income == enums.IncomeIsUnderThreshold.YES.value:
-            return "Vulnerabilities"
+            return "VulnerabilitiesGeneral"
         else:
             return "HouseholdTakeHomeIncome"
 
@@ -494,7 +494,7 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.disability_benefits:
-            return "Vulnerabilities"
+            return "VulnerabilitiesGeneral"
         else:
             return "ChildBenefit"
 
@@ -516,7 +516,7 @@ class ChildBenefit(abstract_views.SingleQuestion):
         if self.answers.child_benefit:
             return "ChildBenefitNumber"
         else:
-            return "Vulnerabilities"
+            return "VulnerabilitiesGeneral"
 
 
 class ChildBenefitNumber(abstract_views.SingleQuestion):
@@ -628,6 +628,34 @@ class IncomeLtChildBenefitThreshold(abstract_views.SingleQuestion):
         self.answers.child_benefit_threshold = utils.get_child_benefit_threshold(
             self.answers
         )
+
+
+class VulnerabilitiesGeneral(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Vulnerability to the cold"
+    question = "Vulnerability to the cold"
+    supplementary = (
+        "Does your household fall under any of the following categories?"
+        "<ul><li>Household living with cardiovascular conditions</li>"
+        "<li> Household living with respiratory conditions, "
+        "in particular, chronic obstructive pulmonary disease "
+        "(COPD) and childhood asthma</li>"
+        "<li>Household living with mental health conditions</li>"
+        "<li>Household living with disabilities or limited mobility</li>"
+        "<li>Household with an older person (65 and older)</li>"
+        "<li>Household with young children (from  new-born to school age)</li>"
+        "<li>Household living with immunosuppression</li>"
+        "<li>Household with a pregnant woman</li>"
+        "<li>Household living with any other conditions "
+        "causing medical vulnerability to the cold</li></ul>"
+    )
+    percent_complete = COMPLETE_TRAIL + 95
+
+    def get_next(self):
+        if self.answers.vulnerabilities_general:
+            return "Vulnerabilities"
+        else:
+            return "CouncilTaxReduction"
 
 
 class Vulnerabilities(abstract_views.Question):

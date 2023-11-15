@@ -278,6 +278,11 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Total household income is under the relevant child benefit threshold",
     )
+    vulnerabilities_general = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable",
+    )
     vulnerable_cariovascular = models.BooleanField(
         null=True,
         blank=True,
@@ -312,6 +317,17 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="Anyone in the house is pregnant",
+    )
+    vulnerable_immunosuppression = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to immunosuppression",
+    )
+    vulnerable_comments = models.CharField(
+        max_length=400,
+        null=True,
+        blank=True,
+        verbose_name="User's input on other vulnerabilities",
     )
     incomes_complete = models.BooleanField(
         blank=True, null=True, verbose_name="This is a full account of household income"

@@ -68,6 +68,11 @@ urlpatterns = [
         views.IncomeLtChildBenefitThreshold.as_view(),
         name="income-lt-child-benefit-threshold",
     ),
+    path(
+        "vulnerabilities-general",
+        views.VulnerabilitiesGeneral.as_view(),
+        name="vulnerabilities-general",
+    ),
     path("vulnerabilities", views.Vulnerabilities.as_view(), name="vulnerabilities"),
     path(
         "council-tax-reduction",
