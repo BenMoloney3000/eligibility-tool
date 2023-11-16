@@ -399,7 +399,7 @@ class MeansTestedBenefits(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.means_tested_benefits:
-            return "HousingCosts"
+            return "HouseholdIncome"
         else:
             return "PastMeansTestedBenefits"
 
@@ -409,18 +409,19 @@ class PastMeansTestedBenefits(abstract_views.SingleQuestion):
     title = "Means tested benefits in the past"
     question = "Were you receiving means tested benefits in the last 18 months?"
     percent_complete = COMPLETE_TRAIL + 73
-    next = "HousingCosts"
-
-
-class HousingCosts(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.Text
-    question = "What are your housing costs?"
-    supplementary = (
-        "Enter the total amount of your monthly housing costs (without penses)"
-    )
-    title = "Housing costs"
-    icon = "house"
     next = "HouseholdIncome"
+
+
+class HouseholdIncome(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.Text
+    question = "Total household income"
+    supplementary = (
+        "What is your total household income before tax "
+        "including any means tested benefits?"
+    )
+    title = "Household income"
+    icon = "house"
+    next = "HousingCosts"
     percent_complete = COMPLETE_TRAIL + 77
 
     def sanitise_answer(self, data):
@@ -447,47 +448,39 @@ class HousingCosts(abstract_views.SingleQuestion):
         return context
 
 
-class HouseholdIncome(abstract_views.SingleQuestion):
-    answer_field = "total_income"
-    question = "Is the household income less than £31,000 before tax?"
-    note = (
-        "Household income means the combined income of everyone living in the property."
+class HousingCosts(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.Text
+    question = "What are your housing costs?"
+    supplementary = (
+        "Enter the total amount of your monthly housing costs (without penses)"
     )
-    title = "Gross household income"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.IncomeIsUnderThreshold.choices
-    percent_complete = COMPLETE_TRAIL + 70
-
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.total_income == enums.IncomeIsUnderThreshold.YES.value:
-            self.answers.take_home = enums.IncomeIsUnderThreshold.YES.value
-            self.answers.disability_benefits = None
-            self.answers.child_benefit = None
-            self.answers.child_benefit_threshold = None
-            self.answers.income_lt_child_benefit_threshold = None
-
-    def get_next(self):
-        if self.answers.total_income == enums.IncomeIsUnderThreshold.YES.value:
-            return "VulnerabilitiesGeneral"
-        else:
-            return "HouseholdTakeHomeIncome"
-
-
-class HouseholdTakeHomeIncome(abstract_views.SingleQuestion):
-    answer_field = "take_home"
-    question = (
-        "Is the household income less than £31,000 after tax, mortgage/rent, "
-        " and energy bills?"
-    )
-    note = (
-        "Household income means the combined income of everyone living in the property."
-    )
-    title = "Total household pay after costs"
+    title = "Housing costs"
+    icon = "house"
     next = "DisabilityBenefits"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.IncomeIsUnderThreshold.choices
-    percent_complete = COMPLETE_TRAIL + 75
+    percent_complete = COMPLETE_TRAIL + 77
+
+    def sanitise_answer(self, data):
+        data = re.sub(",", "", data)
+        data = re.sub("£", "", data)
+        return data
+
+    @staticmethod
+    def validate_answer(data):
+        for character in data:
+            if character not in "£," and not character.isdigit():
+                raise ValidationError(
+                    "It seems that you used one or more invalid characters."
+                    " Please enter a value represented by an integer number."
+                )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(
+            {
+                "answers": self.answers,
+            }
+        )
+        return context
 
 
 class DisabilityBenefits(abstract_views.SingleQuestion):
@@ -719,14 +712,14 @@ class AnswersSummary(abstract_views.Question):
             {a.property_postcode}",
             "adults": a.adults,
             "children": a.children,
-            "total_income": a.get_total_income_display(),
-            "take_home_lt_31k_confirmation": a.take_home_lt_31k_confirmation,
+            "household_income": a.household_income,
             "vulnerable_cariovascular": a.vulnerable_cariovascular,
             "vulnerable_respiratory": a.vulnerable_respiratory,
             "vulnerable_mental_health": a.vulnerable_mental_health,
             "vulnerable_disability": a.vulnerable_disability,
             "vulnerable_age": a.vulnerable_age,
             "vulnerable_children": a.vulnerable_children,
+            "vulnerable_immunosuppression": a.vulnerable_immunosuppression,
             "vulnerable_pregnancy": a.vulnerable_pregnancy,
             "disability_benefits": a.disability_benefits,
             "child_benefit": a.child_benefit,

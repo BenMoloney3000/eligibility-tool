@@ -248,26 +248,27 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
 
 def get_income_rating(answers: models.Answers) -> enums.RAYG:
     # Household income rating
-    if answers.total_income == enums.IncomeIsUnderThreshold.YES:
-        # Gross household income below £31k therefore the Household is eligible
-        # for free or discounted schemes (based on info given).
-        income_rating = enums.RAYG.GREEN
-    else:
-        # Gross household income more than £31k, but may still be eligible for
-        # some free or discounted schemes (based on info given)
-        benefit_qualifies = answers.disability_benefits or (
-            answers.child_benefit and answers.income_lt_child_benefit_threshold
-        )
-        if benefit_qualifies:
-            income_rating = enums.RAYG.YELLOW
+    if answers.household_income:
+        if int(answers.household_income) <= 31000 or None:
+            # Gross household income below £31k therefore the Household is eligible
+            # for free or discounted schemes (based on info given).
+            income_rating = enums.RAYG.GREEN
         else:
-            if answers.take_home == enums.IncomeIsUnderThreshold.NO:
-                income_rating = enums.RAYG.RED
+            # Gross household income more than £31k, but may still be eligible for
+            # some free or discounted schemes (based on info given)
+            benefit_qualifies = answers.disability_benefits or (
+                answers.child_benefit and answers.income_lt_child_benefit_threshold
+            )
+            if benefit_qualifies:
+                income_rating = enums.RAYG.YELLOW
             else:
-                # Household take home pay below £31k.
-                income_rating = enums.RAYG.AMBER
+                if answers.take_home == enums.IncomeIsUnderThreshold.NO:
+                    income_rating = enums.RAYG.RED
+                else:
+                    # Household take home pay below £31k.
+                    income_rating = enums.RAYG.AMBER
 
-    return income_rating
+        return income_rating
 
 
 def get_overall_rating(answers: models.Answers) -> enums.RAYG:

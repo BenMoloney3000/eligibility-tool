@@ -81,59 +81,44 @@
             <td>{{ user_data.children }}</td>
             <td><a href='{% url "questionnaire:occupants" %}'>CHANGE</a></td>
         </tr>
+
         <tr>
-            <td>Is the household income less than £31,000 before tax?</td>
-            <td>{{ user_data.total_income }}</td>
-            <td><a href='{% url "questionnaire:household-income" %}'>CHANGE</a></td>
-        </tr>
-        {% if "Yes" in user_data.total_income %}
-            {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
+            <td>Does anybody living in the home receive any disability related benefits?</td>
+            <td>{{ user_data.disability_benefits|yesno|capfirst }}</td>
+            <td><a href='{% url "questionnaire:disability-benefits" %}'>CHANGE</a></td>
 
-        {% else %}
+            {% if user_data.disability_benefits %}
+                {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
 
-            <tr>
-                <td>Is the household income less than £31,000 after tax, mortgage/rent, and energy bills?</td>
-                <td>{{ user_data.take_home_lt_31k_confirmation|yesno:"Yes&#44; it's under that figure,No&#44; it's over that figure,I don't know"|safe }}</td>
-                <td><a href='{% url "questionnaire:household-take-home-income" %}'>CHANGE</a></td>
-            </tr>
-            <tr>
-                <td>Does anybody living in the home receive any disability related benefits?</td>
-                <td>{{ user_data.disability_benefits|yesno|capfirst }}</td>
-                <td><a href='{% url "questionnaire:disability-benefits" %}'>CHANGE</a></td>
+            {% else %}
 
-                {% if user_data.disability_benefits %}
+                <tr>
+                    <td>Does anybody living in the home receive Child Benefit?</td>
+                    <td>{{ user_data.child_benefit|yesno:"Yes,No" }}</td>
+                    <td><a href='{% url "questionnaire:child-benefit" %}'>CHANGE</a></td>
+                </tr>
+
+                {% if user_data.child_benefit %}
+
+                    <tr>
+                        <td>How many children do you claim child benefit for (whether living in the house or elsewhere) or pay at least £21.80 per week of maintenance payments towards?</td>
+                        <td>{{ user_data.child_benefit_number }}</td>
+                        <td><a href='{% url "questionnaire:child-benefit-number" %}'>CHANGE</a></td>
+                    </tr>
+                    <tr>
+                        <td>Is the adult that receives Child Benefit single and living with other adults or living with a partner (ie. someone they are married to, civil partnered with or cohabitating as a couple)?</td>
+                        <td>{{ user_data.child_benefit_claimant_type }}</td>
+                        <td><a href='{% url "questionnaire:child-benefit-claimant-type" %}'>CHANGE</a></td>
+                    </tr>
                     {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
 
                 {% else %}
 
-                    <tr>
-                        <td>Does anybody living in the home receive Child Benefit?</td>
-                        <td>{{ user_data.child_benefit|yesno:"Yes,No" }}</td>
-                        <td><a href='{% url "questionnaire:child-benefit" %}'>CHANGE</a></td>
-                    </tr>
+                    {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
 
-                    {% if user_data.child_benefit %}
-
-                        <tr>
-                            <td>How many children do you claim child benefit for (whether living in the house or elsewhere) or pay at least £21.80 per week of maintenance payments towards?</td>
-                            <td>{{ user_data.child_benefit_number }}</td>
-                            <td><a href='{% url "questionnaire:child-benefit-number" %}'>CHANGE</a></td>
-                        </tr>
-                        <tr>
-                            <td>Is the adult that receives Child Benefit single and living with other adults or living with a partner (ie. someone they are married to, civil partnered with or cohabitating as a couple)?</td>
-                            <td>{{ user_data.child_benefit_claimant_type }}</td>
-                            <td><a href='{% url "questionnaire:child-benefit-claimant-type" %}'>CHANGE</a></td>
-                        </tr>
-                        {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
-
-                    {% else %}
-
-                        {% include "questionnaire/includes/vulnerabilities.html" with user_data=user_data %}
-
-                    {% endif %}
                 {% endif %}
-            </tr>
-        {% endif %}
+            {% endif %}
+        </tr>
     </table>
 
     <h2>
