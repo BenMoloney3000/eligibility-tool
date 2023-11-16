@@ -35,6 +35,16 @@ urlpatterns = [
         name="property-measures-summary",
     ),
     path("occupants", views.Occupants.as_view(), name="occupants"),
+    path(
+        "means-tested-benefits",
+        views.MeansTestedBenefits.as_view(),
+        name="means-tested-benefits",
+    ),
+    path(
+        "past-means-tested-benefits",
+        views.PastMeansTestedBenefits.as_view(),
+        name="past-means-tested-benefits",
+    ),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
     path("housing-costs", views.HousingCosts.as_view(), name="housing-costs"),
     path(

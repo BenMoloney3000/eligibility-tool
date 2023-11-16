@@ -458,20 +458,15 @@ class PossibleMeasures(models.TextChoices):
 
 
 class BenefitType(models.TextChoices):
-    UC = "UC", "Universal Credit"
-    JSA = "JSA", "Job Seekers Allowance (JSA)"
-    ESA = "ESA", "Employment and Support Allowance (ESA)"
-    INCOME_SUPPORT = "INCOME_SUPPORT", "Income Support"
-    CHILD_TAX_CREDIT = "CHILD_TAX_CREDIT", "Child Tax Credit"
-    WORKING_TAX_CREDIT = "WORKING_TAX_CREDIT", "Working Tax Credit"
-    CHILD_BENEFIT = "CHILD_BENEFIT", "Child Benefit"
+    UC = "UC", "Universal Credit (UC)"
+    JSA = "JSA", "Income Based Job Seekers Allowance (JSA)"
+    ESA = "ESA", "Income Related Employment & Support Allowance (ESA)"
+    INCOME_SUPPORT = "INCOME_SUPPORT", "Income Support (IS)"
+    CHILD_TAX_CREDIT = "CHILD_TAX_CREDIT", "Child Tax Credit (CTC)"
+    WORKING_TAX_CREDIT = "WORKING_TAX_CREDIT", "Working Tax Credit (WTC)"
     HOUSING_BENEFIT = "HOUSING_BENEFIT", "Housing Benefit"
-    ATTENDANCE_ALLOWANCE = "ATTENDANCE_ALLOWANCE", "Attendance Allowance"
-    CARERS_ALLOWANCE = "CARERS_ALLOWANCE", "Carers Allowance"
-    DLA = "DLA", "Disability Living Allowance (DLA)"
-    PIP = "PIP", "Personal Independence Payment (PIP)"
-    PENSION_CREDIT = "PENSION_CREDIT", "Pension Credit"
-    OTHER = "OTHER", "Other"
+    PCG = "PENSION_CREDIT_GUARANTEE", "Pension Credit Guarantee"
+    PCS = "PENSION_CREDIT_SAVINGS", "Pension Credit Savings"
 
 
 class ChildBenefitClaimantType(models.TextChoices):
