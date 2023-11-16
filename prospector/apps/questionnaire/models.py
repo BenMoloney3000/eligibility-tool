@@ -222,17 +222,10 @@ class Answers(models.Model):
         choices=enums.UpToFourOrMore.choices,
     )
 
-    total_income = models.CharField(
-        choices=enums.IncomeIsUnderThreshold.choices,
-        max_length=7,
+    household_income = models.IntegerField(
+        null=True,
         blank=True,
-        verbose_name="Total gross household income is under £31,000 pa",
-    )
-    take_home = models.CharField(
-        choices=enums.IncomeIsUnderThreshold.choices,
-        blank=True,
-        max_length=7,
-        verbose_name="Total household take home pay is under £31,000 pa",
+        verbose_name="Total gross household income before tax",
     )
 
     means_tested_benefits = disability_benefits = models.BooleanField(
@@ -339,17 +332,6 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="User's input on other vulnerabilities",
-    )
-    incomes_complete = models.BooleanField(
-        blank=True, null=True, verbose_name="This is a full account of household income"
-    )
-    take_home_lt_31k_confirmation = models.BooleanField(
-        blank=True,
-        null=True,
-        verbose_name=(
-            "Household take home pay after tax, national insurance, energy bills "
-            "and housing costs is less than £31k"
-        ),
     )
 
     housing_costs = models.IntegerField(
