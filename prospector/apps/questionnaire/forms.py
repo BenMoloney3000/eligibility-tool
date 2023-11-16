@@ -1,6 +1,7 @@
 import logging
 
 from crispy_forms_gds.helper import FormHelper
+from crispy_forms_gds.layout import Div
 from crispy_forms_gds.layout import Field
 from crispy_forms_gds.layout import Layout
 from django import forms
@@ -366,7 +367,12 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             name,
             field,
         ) in self.fields.items():
-            self.helper.layout.append(Field(name))
+            if name != "vulnerable_comments":
+                self.helper.layout.append(Field(name))
+            else:
+                self.helper.layout.append(
+                    Div(name, css_class="comments-form-container"),
+                )
 
     class Meta:
         model = models.Answers
@@ -377,7 +383,9 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_disability",
             "vulnerable_age",
             "vulnerable_children",
+            "vulnerable_immunosuppression",
             "vulnerable_pregnancy",
+            "vulnerable_comments",
         ]
         optional_fields = fields
         widgets = {
@@ -387,7 +395,9 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_disability": forms.CheckboxInput(),
             "vulnerable_age": forms.CheckboxInput(),
             "vulnerable_children": forms.CheckboxInput(),
+            "vulnerable_immunosuppression": forms.CheckboxInput(),
             "vulnerable_pregnancy": forms.CheckboxInput(),
+            "vulnerable_comments": forms.Textarea(),
         }
         labels = {
             "vulnerable_cariovascular": (
@@ -396,17 +406,24 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_respiratory": (
                 "Household living with respiratory conditions, "
                 "in particular, chronic obstructive pulmonary disease "
-                "(COPD) and childhood asthma."
+                "(COPD) and childhood asthma"
             ),
             "vulnerable_mental_health": (
                 "Household living with mental health conditions"
             ),
-            "vulnerable_disability": ("Household living with disabilities"),
+            "vulnerable_disability": (
+                "Household living with disabilities or limited mobility"
+            ),
             "vulnerable_age": ("Household with an older person (65 and older)"),
             "vulnerable_children": (
                 "Household with young children (from new-born to school age)"
             ),
+            "vulnerable_immunosuppression": ("Household living with immunosuppression"),
             "vulnerable_pregnancy": ("Household with a pregnant woman"),
+            "vulnerable_comments": (
+                "Household living with any other conditions causing medical "
+                "vulnerability to the cold<br />Enter details in the box below:"
+            ),
         }
 
 
