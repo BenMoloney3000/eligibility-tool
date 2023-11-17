@@ -64,16 +64,6 @@ urlpatterns = [
         name="child-benefit-claimant-type",
     ),
     path(
-        "child-benefit-summary",
-        views.ChildBenefitSummary.as_view(),
-        name="child-benefit-summary",
-    ),
-    path(
-        "qualifying-income",
-        views.IncomeLtChildBenefitThreshold.as_view(),
-        name="income-lt-child-benefit-threshold",
-    ),
-    path(
         "vulnerabilities-general",
         views.VulnerabilitiesGeneral.as_view(),
         name="vulnerabilities-general",
