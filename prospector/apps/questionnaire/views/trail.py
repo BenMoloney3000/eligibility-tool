@@ -516,7 +516,7 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
 class ChildBenefit(abstract_views.SingleQuestion):
     title = "Child benefit"
     type_ = abstract_views.QuestionType.YesNo
-    question = "Does anybody living in the home receive Child Benefit?"
+    question = "Do you receive child benefit?"
     percent_complete = COMPLETE_TRAIL + 83
 
     def pre_save(self):
@@ -528,40 +528,33 @@ class ChildBenefit(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.child_benefit:
-            return "ChildBenefitNumber"
+            return "ChildBenefitClaimantType"
         else:
             return "VulnerabilitiesGeneral"
 
 
-class ChildBenefitNumber(abstract_views.SingleQuestion):
-    title = "Child Benefit number"
-    next = "ChildBenefitClaimantType"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.UpToFourOrMore.choices
-    question = (
-        "How many children do you claim child benefit for "
-        "(whether living in the house or elsewhere) "
-        "or pay at least £21.80 per week of maintenance payments towards?"
-    )
-    percent_complete = COMPLETE_TRAIL + 85
-
-
 class ChildBenefitClaimantType(abstract_views.SingleQuestion):
     title = "Type of Child Benefit claimant"
-    next = "ChildBenefitSummary"
+    next = "ChildBenefitNumber"
     type_ = abstract_views.QuestionType.Choices
     choices = enums.ChildBenefitClaimantType.choices
-    question = (
-        "Thinking of the adult that receives Child Benefit and lives within "
-        "the house.<br>"
-        "Is the adult single and living with other adults or living with a "
-        "partner (ie. someone they are married to, civil partnered with or "
-        "cohabitating as a couple)?"
-    )
+    question = "Are you a single claimant or member of a couple?"
     note = (
         "Is the adult single and living with other adults, or living with a " "partner?"
     )
     percent_complete = COMPLETE_TRAIL + 87
+
+
+class ChildBenefitNumber(abstract_views.SingleQuestion):
+    title = "Child Benefit number"
+    next = "VulnerabilitiesGeneral"
+    type_ = abstract_views.QuestionType.Choices
+    choices = enums.UpToFourOrMore.choices
+    question = (
+        "How many children or qualifying young "
+        "people do you receive child benefit for?"
+    )
+    percent_complete = COMPLETE_TRAIL + 85
 
 
 class VulnerabilitiesGeneral(abstract_views.SingleQuestion):
@@ -604,8 +597,19 @@ class CouncilTaxReduction(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.YesNo
     title = "Council Tax Reduction"
     question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
-    next = "AnswersSummary"
+    next = "FreeSchoolMealsEligibility"
     percent_complete = COMPLETE_TRAIL + 97
+
+
+class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Free school meals"
+    question = (
+        "Are any children living in the household eligible "
+        "for free school meals due to low income?"
+    )
+    next = "AnswersSummary"
+    percent_complete = COMPLETE_TRAIL + 98
 
 
 class AnswersSummary(abstract_views.Question):
