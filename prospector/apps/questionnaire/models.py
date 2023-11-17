@@ -267,20 +267,10 @@ class Answers(models.Model):
         ),
         choices=enums.ChildBenefitClaimantType.choices,
     )
-    child_benefit_eligibility_complete = models.BooleanField(
-        blank=True,
-        null=True,
-        verbose_name="This is a full account of child benefit eligibility",
-    )
-    child_benefit_threshold = models.PositiveIntegerField(
+    free_school_meals_eligibility = models.PositiveIntegerField(
         null=True,
         blank=True,
-        verbose_name="Relevant income threshold for child benefit recipient(s)",
-    )
-    income_lt_child_benefit_threshold = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Total household income is under the relevant child benefit threshold",
+        verbose_name="Children living in household eligible for free school meals",
     )
     vulnerabilities_general = models.BooleanField(
         null=True,

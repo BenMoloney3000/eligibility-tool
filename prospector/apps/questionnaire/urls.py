@@ -64,6 +64,11 @@ urlpatterns = [
         name="child-benefit-claimant-type",
     ),
     path(
+        "free-school-meals-eligibility",
+        views.FreeSchoolMealsEligibility.as_view(),
+        name="free-school-meals-eligibility",
+    ),
+    path(
         "vulnerabilities-general",
         views.VulnerabilitiesGeneral.as_view(),
         name="vulnerabilities-general",

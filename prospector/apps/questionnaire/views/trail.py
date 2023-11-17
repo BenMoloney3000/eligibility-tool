@@ -597,8 +597,19 @@ class CouncilTaxReduction(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.YesNo
     title = "Council Tax Reduction"
     question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
-    next = "AnswersSummary"
+    next = "FreeSchoolMealsEligibility"
     percent_complete = COMPLETE_TRAIL + 97
+
+
+class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Free school meals"
+    question = (
+        "Are any children living in the household eligible "
+        "for free school meals due to low income?"
+    )
+    next = "AnswersSummary"
+    percent_complete = COMPLETE_TRAIL + 98
 
 
 class AnswersSummary(abstract_views.Question):
