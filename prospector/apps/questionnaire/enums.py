@@ -470,8 +470,8 @@ class BenefitType(models.TextChoices):
 
 
 class ChildBenefitClaimantType(models.TextChoices):
-    SINGLE = "SINGLE", "Single Claimant"
-    JOINT = "JOINT", "Joint Claimant"
+    SINGLE = "SINGLE", "Single claimant"
+    JOINT = "JOINT", "Member of a couple"
 
 
 class RAYG(models.TextChoices):
