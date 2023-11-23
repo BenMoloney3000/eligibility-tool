@@ -608,8 +608,40 @@ class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
         "Are any children living in the household eligible "
         "for free school meals due to low income?"
     )
-    next = "AnswersSummary"
+    next = "Savings"
     percent_complete = COMPLETE_TRAIL + 98
+
+
+class Savings(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.Text
+    question = "How much money do you have in savings?"
+    supplementary = "Enter amount of your savings (without penses)"
+    title = "Savings"
+    next = "AnswersSummary"
+    percent_complete = COMPLETE_TRAIL + 77
+
+    def sanitise_answer(self, data):
+        data = re.sub(",", "", data)
+        data = re.sub("£", "", data)
+        return data
+
+    @staticmethod
+    def validate_answer(data):
+        for character in data:
+            if character not in "£," and not character.isdigit():
+                raise ValidationError(
+                    "It seems that you used one or more invalid characters."
+                    " Please enter a value represented by an integer number."
+                )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(
+            {
+                "answers": self.answers,
+            }
+        )
+        return context
 
 
 class AnswersSummary(abstract_views.Question):

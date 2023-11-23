@@ -323,11 +323,25 @@ class Answers(models.Model):
         blank=True,
         verbose_name="User's input on other vulnerabilities",
     )
-
     housing_costs = models.IntegerField(
         blank=True,
         null=True,
         verbose_name="Housing costs",
+    )
+    savings = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Amount of savings",
+    )
+    nmt4properties = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="No more than 4 properties in landlord's portfolio",
+    )
+    willing_to_contribute = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Landlord be willing to contribute 33% of all spending",
     )
 
     # Computed Fields
