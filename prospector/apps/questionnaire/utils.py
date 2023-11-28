@@ -262,7 +262,7 @@ def get_income_rating(answers: models.Answers) -> enums.RAYG:
             if benefit_qualifies:
                 income_rating = enums.RAYG.YELLOW
             else:
-                if answers.take_home == enums.IncomeIsUnderThreshold.NO:
+                if int(answers.household_income) > 31000:
                     income_rating = enums.RAYG.RED
                 else:
                     # Household take home pay below £31k.
