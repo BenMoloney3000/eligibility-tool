@@ -50,6 +50,12 @@ class Answers(models.Model):
         verbose_name="Relationship of respondent to occupant",
     )
 
+    company_name = models.CharField(
+        max_length=128,
+        blank=True,
+        verbose_name="Landlord company name (if applicable)",
+    )
+
     # Repondent address details are not used if respondent lives in the property
     respondent_address_1 = models.CharField(max_length=128, blank=True)
     respondent_address_2 = models.CharField(max_length=128, blank=True)

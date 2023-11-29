@@ -14,6 +14,7 @@ urlpatterns = [
         views.RespondentHasPermission.as_view(),
         name="respondent-has-permission",
     ),
+    path("company-name", views.CompanyName.as_view(), name="company-name"),
     path(
         "your-postcode", views.RespondentPostcode.as_view(), name="respondent-postcode"
     ),
