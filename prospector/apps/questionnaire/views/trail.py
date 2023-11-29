@@ -452,7 +452,8 @@ class HousingCosts(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
     question = "What are your housing costs?"
     supplementary = (
-        "Enter the total amount of your monthly housing costs (without penses)"
+        "Please include what you pay in either "
+        "rent or mortgage repayments. This does not include bills."
     )
     title = "Housing costs"
     icon = "house"
