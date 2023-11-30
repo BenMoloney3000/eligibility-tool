@@ -96,9 +96,17 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.respondent_role == enums.RespondentRole.LANDLORD:
-            return "RespondentPostcode"
+            return "CompanyName"
         else:
             return "Email"
+
+
+class CompanyName(abstract_views.SingleQuestion):
+    title = "Landlord company name"
+    type_ = abstract_views.QuestionType.Text
+    question = "What is your company name?"
+    percent_complete = COMPLETE_TRAIL + 17
+    next = "RespondentPostcode"
 
 
 class RespondentPostcode(abstract_views.SingleQuestion):
