@@ -234,12 +234,12 @@ class Answers(models.Model):
         verbose_name="Total gross household income before tax",
     )
 
-    means_tested_benefits = disability_benefits = models.BooleanField(
+    means_tested_benefits = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="Respondent receives means tested benefits",
     )
-    past_means_tested_benefits = disability_benefits = models.BooleanField(
+    past_means_tested_benefits = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="Respondent received means tested benefits in the past 18 months",
@@ -334,6 +334,11 @@ class Answers(models.Model):
         null=True,
         verbose_name="Housing costs",
     )
+    council_tax_reduction = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Is the household entitled to a Council Tax reduction",
+    )
     savings = models.IntegerField(
         blank=True,
         null=True,
@@ -364,12 +369,6 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="Property rating (computed field)",
-    )
-
-    council_tax_reduction = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Is the household entitled to a Council Tax reduction",
     )
 
     def save(self, *args, **kwargs):

@@ -96,16 +96,34 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.respondent_role == enums.RespondentRole.LANDLORD:
-            return "CompanyName"
+            return "PropertiesLimit"
         else:
             return "Email"
+
+
+class PropertiesLimit(abstract_views.SingleQuestion):
+    title = "Properties limit"
+    answer_field = "nmt4properties"
+    type_ = abstract_views.QuestionType.YesNo
+    question = "Do you confirm that you own no more than 4 properties?"
+    percent_complete = COMPLETE_TRAIL + 16
+    next = "WillToContribute"
+
+
+class WillToContribute(abstract_views.SingleQuestion):
+    title = "Householder consent"
+    answer_field = "willing_to_contribute"
+    type_ = abstract_views.QuestionType.YesNo
+    question = "Are you willing to contribute 33% of all spending in case your application succeed?"
+    percent_complete = COMPLETE_TRAIL + 17
+    next = "CompanyName"
 
 
 class CompanyName(abstract_views.SingleQuestion):
     title = "Landlord company name"
     type_ = abstract_views.QuestionType.Text
     question = "What is your company name?"
-    percent_complete = COMPLETE_TRAIL + 17
+    percent_complete = COMPLETE_TRAIL + 18
     next = "RespondentPostcode"
 
 
