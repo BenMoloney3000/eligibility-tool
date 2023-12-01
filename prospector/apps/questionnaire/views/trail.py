@@ -477,14 +477,21 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 class HousingCosts(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
     question = "What are your housing costs?"
-    supplementary = (
-        "Please include what you pay in either "
-        "rent or mortgage repayments. This does not include bills."
-    )
     title = "Housing costs"
     icon = "house"
     next = "DisabilityBenefits"
     percent_complete = COMPLETE_TRAIL + 77
+
+    def get_supplementary(self):
+        if self.answers.respondent_role in [
+            enums.RespondentRole.OTHER.value,
+            enums.RespondentRole.LANDLORD.value,
+        ]:
+            return "Please tell us how much the household pays in rent each month."
+        else:
+            return (
+                "Please tell us how much you pay each month for your rent or mortgage."
+            )
 
     def sanitise_answer(self, data):
         data = re.sub(",", "", data)
@@ -642,7 +649,7 @@ class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
 class Savings(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
     question = "How much money do you have in savings?"
-    supplementary = "Enter amount of your savings (without penses)"
+    supplementary = "Enter amount of your savings"
     title = "Savings"
     next = "AnswersSummary"
     percent_complete = COMPLETE_TRAIL + 77
