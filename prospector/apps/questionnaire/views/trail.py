@@ -167,7 +167,7 @@ class RespondentAddress(abstract_views.Question):
                 address.udprn: address
                 for address in get_for_postcode(self.answers.respondent_postcode)
             }
-        except ValueError:
+        except Exception:
             pass
 
         kwargs["prefilled_addresses"] = self.prefilled_addresses
