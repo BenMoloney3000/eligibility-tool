@@ -120,6 +120,7 @@ class Answers(models.Model):
     lodged_epc_band = models.CharField(
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True, null=True
     )
+    multiple_deprivation_index = models.SmallIntegerField(blank=True, null=True)
 
     # PROPERTY ENERGY PERFORMANCE DETAILS
 
@@ -407,3 +408,53 @@ class Answers(models.Model):
             enums.RespondentRole.LANDLORD.value,
             enums.RespondentRole.OWNER_OCCUPIER.value,
         ]
+
+    @property
+    def is_property_in_lower_sap_band(self) -> Optional[bool]:
+        if self.sap_band is None:
+            return None
+
+        return self.sap_band in [
+            enums.EfficiencyBand.D.value,
+            enums.EfficiencyBand.E.value,
+            enums.EfficiencyBand.F.value,
+            enums.EfficiencyBand.G.value,
+        ]
+
+    @property
+    def is_property_not_heated_by_main_gas(self) -> Optional[bool]:
+        if self.main_fuel is None:
+            return None
+
+        return self.main_fuel not in [
+            enums.MainFuel.MGC.value,
+            enums.MainFuel.MGNC.value,
+        ]
+
+    @property
+    def is_property_privately_owned(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
+
+        return self.tenure == enums.Tenure.OWNER_OCCUPIED.value
+
+    @property
+    def is_property_privately_rented(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
+
+        return self.tenure == enums.Tenure.RENTED_PRIVATE.value
+
+    @property
+    # Returns True even if value of nmt4properties is None
+    # because while respond by tenant we do not ask this straightforward
+    # rather assuming landlord's positive answer
+    def does_landlord_own_no_more_than_4_properties(self) -> bool:
+        return self.nmt4properties in [None, True]
+
+    @property
+    # Returns True even if value of willing_to_contribute is None
+    # because when respond by tenant we do not ask this straightforward
+    # rather assuming landlord's positive answer
+    def will_landlord_contribute(self) -> bool:
+        return self.willing_to_contribute in [None, True]
