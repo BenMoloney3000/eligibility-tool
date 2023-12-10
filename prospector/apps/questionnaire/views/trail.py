@@ -756,6 +756,7 @@ class RecommendedMeasures(abstract_views.Question):
         context["sap_rating"] = self.answers.sap_score
         context["property_rating"] = utils.get_property_rating(self.answers)
         context["income_rating"] = utils.get_income_rating(self.answers)
+        context["hug2_eligibility"] = self.answers.is_hug2_eligible
         return context
 
     # Due to closing questionnaire we also remove "Back to previous question" link

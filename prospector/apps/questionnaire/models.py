@@ -458,3 +458,73 @@ class Answers(models.Model):
     # rather assuming landlord's positive answer
     def will_landlord_contribute(self) -> bool:
         return self.willing_to_contribute in [None, True]
+
+    @property
+    def is_deprivation_index_upto_3(self) -> Optional[bool]:
+        if self.multiple_deprivation_index is None:
+            return None
+
+        return self.multiple_deprivation_index in [1, 2, 3]
+
+    @property
+    def is_income_less_than_31K(self) -> Optional[bool]:
+        if self.household_income is None:
+            return None
+        return self.household_income < 31000
+
+    @property
+    def is_income_under_max_based_on_occupants(self) -> Optional[bool]:
+        if self.children is not None and self.seniors is None:
+            dependents = self.children
+        elif self.seniors is not None and self.children is None:
+            dependents = self.seniors
+        elif self.children is None and self.seniors is None:
+            dependents = None
+        else:
+            dependents = self.children + self.seniors
+
+        if self.household_income is None:
+            return None
+        elif self.adults is None:
+            return None
+        elif self.adults == 2:
+            if dependents in [None, 0]:
+                return self.household_income <= 20000
+            elif dependents == 1:
+                return self.household_income <= 24000
+            elif dependents == 2:
+                return self.household_income <= 28000
+            elif dependents == 3:
+                return self.household_income <= 32000
+            elif dependents == 4:
+                return self.household_income <= 36000
+            elif dependents == 5:
+                return self.household_income <= 40000
+        elif self.adults == 1:
+            if dependents in [None, 0]:
+                return self.household_income <= 20000
+            elif dependents == 1:
+                return self.household_income <= 20000
+            elif dependents == 2:
+                return self.household_income <= 20000
+            elif dependents == 3:
+                return self.household_income <= 23000
+            elif dependents == 4:
+                return self.household_income <= 27600
+            elif dependents == 5:
+                return self.household_income <= 31600
+
+        return None
+
+    @property
+    def is_hug2_eligible(self) -> Optional[bool]:
+        return (
+            self.is_property_in_lower_sap_band
+            and self.is_property_not_heated_by_main_gas
+            and (self.is_property_privately_owned or self.is_property_privately_rented)
+            and (
+                self.is_deprivation_index_upto_3
+                or self.is_income_less_than_31K
+                or self.is_income_under_max_based_on_occupants
+            )
+        )
