@@ -343,9 +343,9 @@ class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
 
 
 class Occupants(AnswerFormMixin, forms.ModelForm):
-    adults = forms.ChoiceField(required=True, choices=enums.OneToFourOrMore.choices)
-    children = forms.ChoiceField(required=True, choices=enums.UpToFourOrMore.choices)
-    seniors = forms.ChoiceField(required=True, choices=enums.UpToFourOrMore.choices)
+    adults = forms.ChoiceField(required=True, choices=enums.OneToTen.choices)
+    children = forms.ChoiceField(required=True, choices=enums.OneToTenOrNone.choices)
+    seniors = forms.ChoiceField(required=True, choices=enums.OneToTenOrNone.choices)
 
     class Meta:
         model = models.Answers
