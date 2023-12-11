@@ -7,10 +7,11 @@
 {% endblock question_text %}
 
 {% block form_content %}
-    {% if rating == "RED" %}
+
+    {# This setup is for testing purposes only; copy is outdated and will be changed #}
+
+    {% if hug2_eligibility == False %}
         {% include 'questionnaire/snippets/recommended_measures__red.html' %}
-    {% elif rating == "AMBER" or rating == "YELLOW" %}
-        {% include 'questionnaire/snippets/recommended_measures__amber.html' %}
     {% else %}
         {% include 'questionnaire/snippets/recommended_measures__green.html' %}
     {% endif %}
