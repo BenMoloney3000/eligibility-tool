@@ -518,13 +518,25 @@ class Answers(models.Model):
 
     @property
     def is_hug2_eligible(self) -> Optional[bool]:
-        return (
-            self.is_property_in_lower_sap_band
-            and self.is_property_not_heated_by_main_gas
-            and (self.is_property_privately_owned or self.is_property_privately_rented)
-            and (
-                self.is_deprivation_index_upto_3
-                or self.is_income_less_than_31K
-                or self.is_income_under_max_based_on_occupants
+        if self.tenure == enums.Tenure.OWNER_OCCUPIED.value:
+            return (
+                self.is_property_in_lower_sap_band
+                and self.is_property_not_heated_by_main_gas
+                and (
+                    self.is_deprivation_index_upto_3
+                    or self.is_income_less_than_31K
+                    or self.is_income_under_max_based_on_occupants
+                )
             )
-        )
+        elif self.tenure == enums.Tenure.RENTED_PRIVATE.value:
+            return (
+                self.is_property_in_lower_sap_band
+                and self.is_property_not_heated_by_main_gas
+                and self.does_landlord_own_no_more_than_4_properties
+                and self.will_landlord_contribute
+                and (
+                    self.is_deprivation_index_upto_3
+                    or self.is_income_less_than_31K
+                    or self.is_income_under_max_based_on_occupants
+                )
+            )

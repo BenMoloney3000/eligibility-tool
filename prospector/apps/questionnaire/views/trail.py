@@ -114,7 +114,10 @@ class WillToContribute(abstract_views.SingleQuestion):
     title = "Householder consent"
     answer_field = "willing_to_contribute"
     type_ = abstract_views.QuestionType.YesNo
-    question = "Are you willing to contribute 33% of all spending in case your application succeed?"
+    question = (
+        "Would you be willing to contribute 33% of the cost toward retrofitting "
+        "the home if your application to a grant scheme is successful?"
+    )
     percent_complete = COMPLETE_TRAIL + 17
     next = "CompanyName"
 
