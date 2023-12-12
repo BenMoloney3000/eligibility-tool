@@ -213,20 +213,20 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="Number of adults living in the property",
-        choices=enums.OneToFourOrMore.choices,
+        choices=enums.OneToTen.choices,
     )
     children = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         verbose_name="Number of children living in the property",
-        choices=enums.UpToFourOrMore.choices,
+        choices=enums.OneToTenOrNone.choices,
     )
 
     seniors = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         verbose_name="Number of seniors (over 60 years old) living in the property",
-        choices=enums.UpToFourOrMore.choices,
+        choices=enums.OneToTenOrNone.choices,
     )
 
     household_income = models.IntegerField(
@@ -262,7 +262,7 @@ class Answers(models.Model):
             "How many children child benefit is claimed for, or for which "
             "at least £21.80 per week of maintenance payments are made?"
         ),
-        choices=enums.UpToFourOrMore.choices,
+        choices=enums.OneToFiveOrMore.choices,
     )
     child_benefit_claimant_type = models.CharField(
         max_length=10,
@@ -487,7 +487,7 @@ class Answers(models.Model):
             return None
         elif self.adults is None:
             return None
-        elif self.adults == 2:
+        elif self.adults >= 2:
             if dependents in [None, 0]:
                 return self.household_income <= 20000
             elif dependents == 1:
@@ -498,7 +498,7 @@ class Answers(models.Model):
                 return self.household_income <= 32000
             elif dependents == 4:
                 return self.household_income <= 36000
-            elif dependents == 5:
+            elif dependents >= 5:
                 return self.household_income <= 40000
         elif self.adults == 1:
             if dependents in [None, 0]:
@@ -511,7 +511,7 @@ class Answers(models.Model):
                 return self.household_income <= 23000
             elif dependents == 4:
                 return self.household_income <= 27600
-            elif dependents == 5:
+            elif dependents >= 5:
                 return self.household_income <= 31600
 
         return None

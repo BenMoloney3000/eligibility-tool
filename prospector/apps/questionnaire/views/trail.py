@@ -529,6 +529,7 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
         "Industrial Injuries Disablement Benefit, Mobility Supplement or Severe Disablement Allowance."
     )
     percent_complete = COMPLETE_TRAIL + 80
+    next = "ChildBenefit"
 
     def pre_save(self):
         # Obliterate values from the path never taken (in case of reversing)
@@ -539,12 +540,6 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
             self.answers.child_benefit_summary = None
             self.answers.child_benefit_threshold = None
             self.answers.income_lt_child_benefit_threshold = None
-
-    def get_next(self):
-        if self.answers.disability_benefits:
-            return "VulnerabilitiesGeneral"
-        else:
-            return "ChildBenefit"
 
 
 class ChildBenefit(abstract_views.SingleQuestion):
@@ -583,7 +578,7 @@ class ChildBenefitNumber(abstract_views.SingleQuestion):
     title = "Child Benefit number"
     next = "VulnerabilitiesGeneral"
     type_ = abstract_views.QuestionType.Choices
-    choices = enums.UpToFourOrMore.choices
+    choices = enums.OneToFiveOrMore.choices
     question = (
         "How many children or qualifying young "
         "people do you receive child benefit for?"
