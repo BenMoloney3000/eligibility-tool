@@ -340,11 +340,6 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Is the household entitled to a Council Tax reduction",
     )
-    savings = models.IntegerField(
-        blank=True,
-        null=True,
-        verbose_name="Amount of savings",
-    )
     nmt4properties = models.BooleanField(
         null=True,
         blank=True,
