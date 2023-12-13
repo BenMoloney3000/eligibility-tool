@@ -1,69 +1,16 @@
-<h2>
-    We’re sorry, {{ full_name }}.
-</h2>
 <p>
-    Unfortunately, from the information you've provided, it doesn't look like you meet the criteria for any of our current funding schemes.
-</p>
-<p>
-    We understand that this may be disappointing. However, it does not mean that your property could not be improved.
+    Unfortunately, from the information you've provided, it doesn't look
+    like you meet the criteria for any of the current grant schemes.
 </p>
 
-{% include 'questionnaire/snippets/recommended_measures.html' %}
 
-{% comment %}
-Overall rating texts are the same for SAP rating and not:
-    Red (Ir,Pr)
-    Red (Ir,Pa|g)
-    Red (Ia|g,Pr)
-{% endcomment %}
+<h3>What next?</h3>
 
-{% if income_rating == "RED" %}
-    {% if property_rating == "AMBER" or property_rating == "GREEN" %}
-        {# Red (Ir,Pa|g) #}
-        <p>
-            Funding is targeted towards households with low incomes that are
-            living in less energy efficient homes. While it looks like you
-            would be eligible for schemes based on the energy efficiency of
-            your home, however your income would be too high.
-        </p>
-        <p>
-            We understand this can be disappointing and there are plenty of
-            people outside the income thresholds that need support.
-        </p>
-    {% elif property_rating == "RED" %}
-        {# Red (Ir,Pr) #}
-        <p>
-            Funding is targeted towards households with low incomes that are
-            living in less energy efficient homes.
-            It looks like both your income and home energy efficiency would be too high
-            to qualify.
-        </p>
-    {% endif %}
-{% elif income_rating == "AMBER" or income_rating == "YELLOW" or income_rating == "GREEN" %}
-    {# Red (Ia|g,Pr) #}
-    <p>
-        Funding is targeted towards households with low incomes that are
-        living in less energy efficient homes. While it looks like you
-        would be eligible for schemes based on your income, your property
-        would be deemed too energy efficient.
-    </p>
-    <p>
-        We understand this can be disappointing and it does not mean your
-        property couldn’t be improved, just that it hasn’t been prioritised
-        for funding yet.
-    </p>
-{% endif %}
-<h2>
-    What next?
-</h2>
 <p>
-    This is a fast-moving industry and new schemes can become available at any
-    time.
-    If you would like to submit the details you have provided to us, we can
-    continue to assess your eligibility and let you know if an opportunity arises.
+    We have recorded your details so that we can get in touch with you if
+    it looks like you might be eligible for grants in the future.
+    If you would like to speak to one of our advisors at any point you can call
+    the Future Fit team on
+    <a href="tel:+441752 477990">01752 477990</a> or email
+    <a href="mailto:futurefit@plymouthenergycommunity.com">futurefit@plymouthenergycommunity.com</a>.
 </p>
-<p>
-    We will check both the schemes we deliver and the other offers available in the
-    city, and we will keep in touch with you and send an update from time to time.
-</p>
-

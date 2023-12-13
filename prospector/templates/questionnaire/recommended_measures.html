@@ -10,25 +10,24 @@
 
     {# This setup is for testing purposes only; copy is outdated and will be changed #}
 
-    {% if hug2_eligibility == False %}
-        {% include 'questionnaire/snippets/recommended_measures__red.html' %}
-    {% else %}
-        {% include 'questionnaire/snippets/recommended_measures__green.html' %}
-    {% endif %}
-    <p>
-        We will not come back to you straight away if there isn’t a suitable scheme
-        available right now, but we will keep you updated from time to time.
-        If you would like to speak to one of our advisors at any point you can call
-        <a href="tel:+441752 477990">01752 477990</a>
-        or email
-        <a href="mailto:futurefit@plymouthenergycommunity.com">futurefit@plymouthenergycommunity.com</a>.
-    </p>
-    {% comment %}
-    Copy below copied/pasted from "completed.html"
-    {% endcomment %}
-    <h2>Thank you for completing this tool</h2>
+    <h2>Thank you, {{ full_name }}, for completing our eligibility tool.</h2>
 
-    <p>You have completed all the questions and your answers have been saved. An email has been sent to you for your records.</p>
+    <p>
+        You have completed all the questions and your answers have been recorded. An email has been sent to you for your records.
+    </p>
+
+    {% if measures %}
+
+        {% include 'questionnaire/snippets/recommended_measures.html' %}
+
+    {% endif %}
+
+    {% if hug2_eligibility == True %}
+        {% include 'questionnaire/snippets/recommended_measures__green.html' %}
+    {% else %}
+        {% include 'questionnaire/snippets/recommended_measures__red.html' %}
+    {% endif %}
+
 
     <p>Read more about this project and how else we might be able to help you on the
         <a href="https://plymouthenergycommunity.com/residents/private-tenants">Plymouth Energy Community website</a>.
