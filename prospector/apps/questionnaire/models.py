@@ -32,6 +32,20 @@ class Answers(models.Model):
 
     terms_accepted_at = models.DateTimeField(blank=True, null=True)
 
+    consented_callback = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="Respondent consent to call or email them to offer advice and help",
+    )
+
+    consented_future_schemes = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name=(
+            "Respondent consent to contact them in the future when there are relevant grants or programmes"
+        ),
+    )
+
     email = models.CharField(max_length=128, blank=True)
 
     first_name = models.CharField(verbose_name="First name", max_length=64, blank=True)
@@ -349,6 +363,30 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="Landlord be willing to contribute 33% of all spending",
+    )
+
+    advice_needed_warm = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed: respondent struggles to keep their home warm or damp free",
+    )
+
+    advice_needed_bills = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed: respondent's energy bills make them feel anxious",
+    )
+
+    advice_needed_supplier = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed: issues with supplier, meter or energy debt",
+    )
+
+    advice_needed_from_team = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed from Energy Advice Team",
     )
 
     # Computed Fields

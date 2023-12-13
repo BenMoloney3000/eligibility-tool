@@ -643,8 +643,16 @@ class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
         "Are any children living in the household eligible "
         "for free school meals due to low income?"
     )
-    next = "AnswersSummary"
+    next = "EnergyAdvices"
     percent_complete = COMPLETE_TRAIL + 98
+
+
+class EnergyAdvices(abstract_views.Question):
+    title = "Energy advice"
+    template_name = "questionnaire/energy_advice.html"
+    form_class = questionnaire_forms.EnergyAdvices
+    next = "AnswersSummary"
+    percent_complete = COMPLETE_TRAIL + 55
 
 
 class AnswersSummary(abstract_views.Question):

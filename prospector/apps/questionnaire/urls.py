@@ -87,6 +87,7 @@ urlpatterns = [
         name="council-tax-reduction",
     ),
     path("answers-summary", views.AnswersSummary.as_view(), name="answers-summary"),
+    path("energy-advices", views.EnergyAdvices.as_view(), name="energy-advices"),
     path(
         "recommended-measures",
         views.RecommendedMeasures.as_view(),
