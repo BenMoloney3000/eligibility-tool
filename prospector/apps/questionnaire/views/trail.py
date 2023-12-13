@@ -679,7 +679,10 @@ class AnswersSummary(abstract_views.Question):
             {a.property_postcode}",
             "adults": a.adults,
             "children": a.children,
+            "seniors": a.seniors,
             "household_income": a.household_income,
+            "housing_costs": a.housing_costs,
+            "council_tax_reduction": a.council_tax_reduction,
             "vulnerable_cariovascular": a.vulnerable_cariovascular,
             "vulnerable_respiratory": a.vulnerable_respiratory,
             "vulnerable_mental_health": a.vulnerable_mental_health,
@@ -688,10 +691,14 @@ class AnswersSummary(abstract_views.Question):
             "vulnerable_children": a.vulnerable_children,
             "vulnerable_immunosuppression": a.vulnerable_immunosuppression,
             "vulnerable_pregnancy": a.vulnerable_pregnancy,
+            "vulnerable_comments": a.vulnerable_comments or None,
+            "means_tested_benefits": a.means_tested_benefits,
+            "past_means_tested_benefits": a.past_means_tested_benefits,
             "disability_benefits": a.disability_benefits,
             "child_benefit": a.child_benefit,
             "child_benefit_number": a.get_child_benefit_number_display(),
             "child_benefit_claimant_type": a.get_child_benefit_claimant_type_display(),
+            "free_school_meals_eligibility": a.free_school_meals_eligibility,
         }
 
         if a.respondent_address_1 or a.respondent_address_2 or a.respondent_address_3:
