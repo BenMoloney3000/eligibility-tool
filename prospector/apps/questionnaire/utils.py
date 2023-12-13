@@ -165,7 +165,10 @@ def determine_recommended_measures(
 def get_child_benefit_threshold(answers: models.Answers) -> int:
     total_qualifying = answers.child_benefit_number
 
-    if answers.child_benefit_claimant_type == enums.ChildBenefitClaimantType.SINGLE:
+    if (
+        answers.child_benefit_claimant_type
+        == enums.ChildBenefitClaimantType.SINGLE.value
+    ):
         if total_qualifying < 2:
             return 18500
         elif total_qualifying == 2:
@@ -174,7 +177,10 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
             return 27500
         else:
             return 32000
-    elif answers.child_benefit_claimant_type == enums.ChildBenefitClaimantType.JOINT:
+    elif (
+        answers.child_benefit_claimant_type
+        == enums.ChildBenefitClaimantType.JOINT.value
+    ):
         if total_qualifying < 2:
             return 25500
         elif total_qualifying == 2:

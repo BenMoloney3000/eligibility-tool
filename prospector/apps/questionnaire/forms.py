@@ -318,6 +318,34 @@ class Consents(AnswerFormMixin, forms.ModelForm):
         return data
 
 
+class EnergyAdvices(AnswerFormMixin, forms.ModelForm):
+    advice_needed_warm = forms.BooleanField(
+        required=False, label="Do you struggle to keep your home warm or damp free?"
+    )
+    advice_needed_bills = forms.BooleanField(
+        required=False,
+        label="Does meeting your energy bills make you feel anxious?",
+    )
+    advice_needed_supplier = forms.BooleanField(
+        required=False,
+        label="Are you having issues with your supplier, meter or energy debt?",
+    )
+    advice_needed_from_team = forms.BooleanField(
+        required=False,
+        label="Would you like any advice from our Energy Advice Team?",
+    )
+
+    class Meta:
+        model = models.Answers
+        fields = [
+            "advice_needed_warm",
+            "advice_needed_bills",
+            "advice_needed_supplier",
+            "advice_needed_from_team",
+        ]
+        optional_fields = fields
+
+
 class PropertyMeasuresSummary(AnswerFormMixin, forms.ModelForm):
     respondent_comments = forms.CharField(
         widget=forms.Textarea,

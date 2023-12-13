@@ -33,19 +33,47 @@ class Start(abstract_views.SingleQuestion):
     title = "About this tool"
     answer_field = "terms_accepted_at"
     question = "Please confirm that you have read and accept our data privacy policy."
-    next = "RespondentName"
+    next = "Consents"
     percent_complete = COMPLETE_TRAIL
 
     def pre_save(self):
         self.answers.terms_accepted_at = timezone.now()
 
 
+class Consents(abstract_views.Question):
+    title = "Your consent to our use of your data"
+    template_name = "questionnaire/consents.html"
+    form_class = questionnaire_forms.Consents
+    next = "RespondentName"
+    percent_complete = COMPLETE_TRAIL + 55
+
+
 class RespondentName(abstract_views.Question):
     title = "Your name"
     template_name = "questionnaire/respondent_name.html"
-    next = "RespondentRole"
+    next = "Email"
     percent_complete = COMPLETE_TRAIL + 5
     form_class = questionnaire_forms.RespondentName
+
+
+class Email(abstract_views.SingleQuestion):
+    title = "Your email address"
+    type_ = abstract_views.QuestionType.Text
+    question = "Enter your email address"
+    next = "ContactPhone"
+    percent_complete = COMPLETE_TRAIL + 30
+
+    @staticmethod
+    def validate_answer(field):
+        validate_email(field)
+
+
+class ContactPhone(abstract_views.Question):
+    title = "Your phone number"
+    form_class = questionnaire_forms.RespondentPhone
+    template_name = "questionnaire/respondent_phone.html"
+    percent_complete = COMPLETE_TRAIL + 35
+    next = "RespondentRole"
 
 
 class RespondentRole(abstract_views.Question):
@@ -70,13 +98,13 @@ class RespondentRole(abstract_views.Question):
             self.answers.respondent_has_permission = None
 
     def get_next(self):
-        if (
-            self.answers.respondent_role != enums.RespondentRole.OWNER_OCCUPIER.value
-            and self.answers.respondent_role != enums.RespondentRole.OTHER.value
-        ):
+        if self.answers.respondent_role in [
+            enums.RespondentRole.TENANT.value,
+            enums.RespondentRole.LANDLORD.value,
+        ]:
             return "RespondentHasPermission"
         else:
-            return "Email"
+            return "PropertyPostcode"
 
 
 class RespondentHasPermission(abstract_views.SingleQuestion):
@@ -96,7 +124,7 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.respondent_role == enums.RespondentRole.LANDLORD:
-            return "PropertiesLimit"
+            return "CompanyName"
         else:
             return "Email"
 
@@ -119,7 +147,7 @@ class WillToContribute(abstract_views.SingleQuestion):
         "the home if your application to a grant scheme is successful?"
     )
     percent_complete = COMPLETE_TRAIL + 17
-    next = "CompanyName"
+    next = "PropertyPostcode"
 
 
 class CompanyName(abstract_views.SingleQuestion):
@@ -157,7 +185,7 @@ class RespondentAddress(abstract_views.Question):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
-    next = "Email"
+    next = "PropertiesLimit"
     percent_complete = COMPLETE_TRAIL + 25
     prefilled_addresses = {}
 
@@ -223,39 +251,6 @@ class RespondentAddress(abstract_views.Question):
           (would still have to check for a change in UDPRN before overwriting address?)
         - hide address selector if address fields are populated
         """
-
-
-class Email(abstract_views.SingleQuestion):
-    title = "Your email address"
-    type_ = abstract_views.QuestionType.Text
-    question = "Enter your email address"
-    next = "ContactPhone"
-    percent_complete = COMPLETE_TRAIL + 30
-
-    @staticmethod
-    def validate_answer(field):
-        validate_email(field)
-
-
-class ContactPhone(abstract_views.Question):
-    title = "Your phone number"
-    form_class = questionnaire_forms.RespondentPhone
-    template_name = "questionnaire/respondent_phone.html"
-    percent_complete = COMPLETE_TRAIL + 35
-
-    def get_next(self):
-        if self.answers.is_occupant:
-            return "PropertyPostcode"
-        else:
-            return "OccupantName"
-
-
-class OccupantName(abstract_views.Question):
-    title = "Occupant name"
-    template_name = "questionnaire/occupant_name.html"
-    form_class = questionnaire_forms.OccupantName
-    next = "PropertyPostcode"
-    percent_complete = COMPLETE_TRAIL + 40
 
 
 class PropertyPostcode(abstract_views.SingleQuestion):
@@ -367,15 +362,7 @@ class Tenure(abstract_views.SingleQuestion):
     choices = enums.Tenure.choices
     icon = "house"
     percent_complete = COMPLETE_TRAIL + 53
-    next = "Consents"
-
-
-class Consents(abstract_views.Question):
-    title = "Your consent to our use of your data"
-    template_name = "questionnaire/consents.html"
-    form_class = questionnaire_forms.Consents
     next = "PropertyMeasuresSummary"
-    percent_complete = COMPLETE_TRAIL + 55
 
 
 class PropertyMeasuresSummary(abstract_views.Question):
@@ -383,7 +370,6 @@ class PropertyMeasuresSummary(abstract_views.Question):
     form_class = questionnaire_forms.PropertyMeasuresSummary
     answer_field = "respondent_comments"
     template_name = "questionnaire/property_summary.html"
-    next = "Occupants"
     percent_complete = COMPLETE_TRAIL + 60
 
     def get_context_data(self, *args, **kwargs):
@@ -411,6 +397,23 @@ class PropertyMeasuresSummary(abstract_views.Question):
 
         return context
 
+    def get_next(self):
+        if self.answers.respondent_role in [
+            enums.RespondentRole.LANDLORD.value,
+            enums.RespondentRole.OTHER.value,
+        ]:
+            return "OccupantName"
+        else:
+            return "Occupants"
+
+
+class OccupantName(abstract_views.Question):
+    title = "Occupant name"
+    template_name = "questionnaire/occupant_name.html"
+    form_class = questionnaire_forms.OccupantName
+    next = "Occupants"
+    percent_complete = COMPLETE_TRAIL + 40
+
 
 class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
@@ -428,7 +431,7 @@ class MeansTestedBenefits(abstract_views.SingleQuestion):
 
     def get_next(self):
         if self.answers.means_tested_benefits:
-            return "HouseholdIncome"
+            return "DisabilityBenefits"
         else:
             return "PastMeansTestedBenefits"
 
@@ -438,86 +441,7 @@ class PastMeansTestedBenefits(abstract_views.SingleQuestion):
     title = "Means tested benefits in the past"
     question = "Were you receiving means tested benefits in the last 18 months?"
     percent_complete = COMPLETE_TRAIL + 73
-    next = "HouseholdIncome"
-
-
-class HouseholdIncome(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.Text
-    question = "Total household income"
-    supplementary = (
-        "What is your total household income before tax "
-        "including any means tested benefits?"
-    )
-    title = "Household income"
-    icon = "house"
-    next = "HousingCosts"
-    percent_complete = COMPLETE_TRAIL + 77
-
-    def sanitise_answer(self, data):
-        data = re.sub(",", "", data)
-        data = re.sub("£", "", data)
-        return data
-
-    @staticmethod
-    def validate_answer(data):
-        for character in data:
-            if character not in "£," and not character.isdigit():
-                raise ValidationError(
-                    "It seems that you used one or more invalid characters."
-                    " Please enter a value represented by an integer number."
-                )
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context.update(
-            {
-                "answers": self.answers,
-            }
-        )
-        return context
-
-
-class HousingCosts(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.Text
-    question = "What are your housing costs?"
-    title = "Housing costs"
-    icon = "house"
     next = "DisabilityBenefits"
-    percent_complete = COMPLETE_TRAIL + 77
-
-    def get_supplementary(self):
-        if self.answers.respondent_role in [
-            enums.RespondentRole.OTHER.value,
-            enums.RespondentRole.LANDLORD.value,
-        ]:
-            return "Please tell us how much the household pays in rent each month."
-        else:
-            return (
-                "Please tell us how much you pay each month for your rent or mortgage."
-            )
-
-    def sanitise_answer(self, data):
-        data = re.sub(",", "", data)
-        data = re.sub("£", "", data)
-        return data
-
-    @staticmethod
-    def validate_answer(data):
-        for character in data:
-            if character not in "£," and not character.isdigit():
-                raise ValidationError(
-                    "It seems that you used one or more invalid characters."
-                    " Please enter a value represented by an integer number."
-                )
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context.update(
-            {
-                "answers": self.answers,
-            }
-        )
-        return context
 
 
 class DisabilityBenefits(abstract_views.SingleQuestion):
@@ -614,42 +538,27 @@ class VulnerabilitiesGeneral(abstract_views.SingleQuestion):
         if self.answers.vulnerabilities_general:
             return "Vulnerabilities"
         else:
-            return "CouncilTaxReduction"
+            return "HouseholdIncome"
 
 
 class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
     title = "Specific vulnerabilities of household members"
-    next = "CouncilTaxReduction"
+    next = "HouseholdIncome"
     percent_complete = COMPLETE_TRAIL + 95
     form_class = questionnaire_forms.Vulnerabilities
 
 
-class CouncilTaxReduction(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.YesNo
-    title = "Council Tax Reduction"
-    question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
-    next = "FreeSchoolMealsEligibility"
-    percent_complete = COMPLETE_TRAIL + 97
-
-
-class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.YesNo
-    title = "Free school meals"
-    question = (
-        "Are any children living in the household eligible "
-        "for free school meals due to low income?"
-    )
-    next = "Savings"
-    percent_complete = COMPLETE_TRAIL + 98
-
-
-class Savings(abstract_views.SingleQuestion):
+class HouseholdIncome(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
-    question = "How much money do you have in savings?"
-    supplementary = "Enter amount of your savings"
-    title = "Savings"
-    next = "AnswersSummary"
+    question = "Total household income"
+    supplementary = (
+        "What is your total household income before tax "
+        "including any means tested benefits?"
+    )
+    title = "Household income"
+    icon = "house"
+    next = "HousingCosts"
     percent_complete = COMPLETE_TRAIL + 77
 
     def sanitise_answer(self, data):
@@ -674,6 +583,76 @@ class Savings(abstract_views.SingleQuestion):
             }
         )
         return context
+
+
+class HousingCosts(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.Text
+    question = "What are your housing costs?"
+    title = "Housing costs"
+    icon = "house"
+    next = "CouncilTaxReduction"
+    percent_complete = COMPLETE_TRAIL + 77
+
+    def get_supplementary(self):
+        if self.answers.respondent_role in [
+            enums.RespondentRole.OTHER.value,
+            enums.RespondentRole.LANDLORD.value,
+        ]:
+            return "Please tell us how much the household pays in rent each month."
+        else:
+            return (
+                "Please tell us how much you pay each month for your rent or mortgage."
+            )
+
+    def sanitise_answer(self, data):
+        data = re.sub(",", "", data)
+        data = re.sub("£", "", data)
+        return data
+
+    @staticmethod
+    def validate_answer(data):
+        for character in data:
+            if character not in "£," and not character.isdigit():
+                raise ValidationError(
+                    "It seems that you used one or more invalid characters."
+                    " Please enter a value represented by an integer number."
+                )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(
+            {
+                "answers": self.answers,
+            }
+        )
+        return context
+
+
+class CouncilTaxReduction(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Council Tax Reduction"
+    question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
+    next = "FreeSchoolMealsEligibility"
+    percent_complete = COMPLETE_TRAIL + 97
+
+
+class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.YesNo
+    title = "Free school meals"
+    question = (
+        "Are any children living in the household eligible "
+        "for free school meals due to low income?"
+    )
+    next = "EnergyAdvices"
+    percent_complete = COMPLETE_TRAIL + 98
+
+
+class EnergyAdvices(abstract_views.Question):
+    title = "Energy advice"
+    template_name = "questionnaire/energy_advice.html"
+    form_class = questionnaire_forms.EnergyAdvices
+    next = "AnswersSummary"
+    percent_complete = COMPLETE_TRAIL + 55
 
 
 class AnswersSummary(abstract_views.Question):
