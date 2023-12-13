@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 
 SESSION_ANSWERS_ID = "questionnaire:answer_id"
 SESSION_TRAIL_ID = "questionnaire:trail_id"
-COMPLETE_TRAIL = 0
 
 
 class Home(TemplateView):
@@ -34,7 +33,7 @@ class Start(abstract_views.SingleQuestion):
     answer_field = "terms_accepted_at"
     question = "Please confirm that you have read and accept our data privacy policy."
     next = "Consents"
-    percent_complete = COMPLETE_TRAIL
+    percent_complete = 0
 
     def pre_save(self):
         self.answers.terms_accepted_at = timezone.now()
@@ -45,14 +44,14 @@ class Consents(abstract_views.Question):
     template_name = "questionnaire/consents.html"
     form_class = questionnaire_forms.Consents
     next = "RespondentName"
-    percent_complete = COMPLETE_TRAIL + 55
+    percent_complete = 3
 
 
 class RespondentName(abstract_views.Question):
     title = "Your name"
     template_name = "questionnaire/respondent_name.html"
     next = "Email"
-    percent_complete = COMPLETE_TRAIL + 5
+    percent_complete = 6
     form_class = questionnaire_forms.RespondentName
 
 
@@ -61,7 +60,7 @@ class Email(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
     question = "Enter your email address"
     next = "ContactPhone"
-    percent_complete = COMPLETE_TRAIL + 30
+    percent_complete = 9
 
     @staticmethod
     def validate_answer(field):
@@ -72,7 +71,7 @@ class ContactPhone(abstract_views.Question):
     title = "Your phone number"
     form_class = questionnaire_forms.RespondentPhone
     template_name = "questionnaire/respondent_phone.html"
-    percent_complete = COMPLETE_TRAIL + 35
+    percent_complete = 12
     next = "RespondentRole"
 
 
@@ -80,7 +79,7 @@ class RespondentRole(abstract_views.Question):
     title = "Your role"
     form_class = questionnaire_forms.RespondentRole
     template_name = "questionnaire/respondent_role.html"
-    percent_complete = COMPLETE_TRAIL + 10
+    percent_complete = 15
 
     def pre_save(self):
         if self.answers.is_occupant:
@@ -111,7 +110,7 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
     title = "Householder consent"
     type_ = abstract_views.QuestionType.YesNo
     template_name = "questionnaire/consent_to_proceed.html"
-    percent_complete = COMPLETE_TRAIL + 15
+    percent_complete = 18
 
     def get_question(self):
         # Wording of information depends on role:
@@ -129,32 +128,11 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
             return "Email"
 
 
-class PropertiesLimit(abstract_views.SingleQuestion):
-    title = "Properties limit"
-    answer_field = "nmt4properties"
-    type_ = abstract_views.QuestionType.YesNo
-    question = "Do you confirm that you own no more than 4 properties?"
-    percent_complete = COMPLETE_TRAIL + 16
-    next = "WillToContribute"
-
-
-class WillToContribute(abstract_views.SingleQuestion):
-    title = "Householder consent"
-    answer_field = "willing_to_contribute"
-    type_ = abstract_views.QuestionType.YesNo
-    question = (
-        "Would you be willing to contribute 33% of the cost toward retrofitting "
-        "the home if your application to a grant scheme is successful?"
-    )
-    percent_complete = COMPLETE_TRAIL + 17
-    next = "PropertyPostcode"
-
-
 class CompanyName(abstract_views.SingleQuestion):
     title = "Landlord company name"
     type_ = abstract_views.QuestionType.Text
     question = "What is your company name?"
-    percent_complete = COMPLETE_TRAIL + 18
+    percent_complete = 21
     next = "RespondentPostcode"
 
 
@@ -167,7 +145,7 @@ class RespondentPostcode(abstract_views.SingleQuestion):
         "about which you're enquiring."
     )
     next = "RespondentAddress"
-    percent_complete = COMPLETE_TRAIL + 20
+    percent_complete = 24
 
     def sanitise_answer(self, data):
         data = postcodes.normalise(data)
@@ -186,7 +164,7 @@ class RespondentAddress(abstract_views.Question):
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
     next = "PropertiesLimit"
-    percent_complete = COMPLETE_TRAIL + 25
+    percent_complete = 27
     prefilled_addresses = {}
 
     # Perform the API call to provide the choices for the address
@@ -253,6 +231,27 @@ class RespondentAddress(abstract_views.Question):
         """
 
 
+class PropertiesLimit(abstract_views.SingleQuestion):
+    title = "Properties limit"
+    answer_field = "nmt4properties"
+    type_ = abstract_views.QuestionType.YesNo
+    question = "Do you confirm that you own no more than 4 properties?"
+    percent_complete = 30
+    next = "WillToContribute"
+
+
+class WillToContribute(abstract_views.SingleQuestion):
+    title = "Householder consent"
+    answer_field = "willing_to_contribute"
+    type_ = abstract_views.QuestionType.YesNo
+    question = (
+        "Would you be willing to contribute 33% of the cost toward retrofitting "
+        "the home if your application to a grant scheme is successful?"
+    )
+    percent_complete = 33
+    next = "PropertyPostcode"
+
+
 class PropertyPostcode(abstract_views.SingleQuestion):
     title = "Property postcode"
     type_ = abstract_views.QuestionType.Text
@@ -260,7 +259,7 @@ class PropertyPostcode(abstract_views.SingleQuestion):
     supplementary = "This is the postcode for the property."
     icon = "house"
     next = "PropertyAddress"
-    percent_complete = COMPLETE_TRAIL + 45
+    percent_complete = 36
 
     def sanitise_answer(self, data):
         data = postcodes.normalise(data)
@@ -283,7 +282,7 @@ class PropertyAddress(abstract_views.Question):
     title = "Address"
     form_class = questionnaire_forms.PropertyAddress
     template_name = "questionnaire/property_address.html"
-    percent_complete = COMPLETE_TRAIL + 50
+    percent_complete = 39
     prefilled_addresses = {}
 
     # Perform the API call to provide the choices for the address
@@ -337,14 +336,14 @@ class AddressUnknown(abstract_views.Question):
     answer_field = "respondent_comments"
     form_class = questionnaire_forms.PropertyMeasuresSummary
     template_name = "questionnaire/address_unknown.html"
-    percent_complete = COMPLETE_TRAIL + 75
+    percent_complete = 75
     next = "ThankYou"
 
 
 class ThankYou(abstract_views.NoQuestion):
     icon = "house"
     template_name = "questionnaire/thank_you.html"
-    percent_complete = COMPLETE_TRAIL + 100
+    percent_complete = 100
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -361,7 +360,7 @@ class Tenure(abstract_views.SingleQuestion):
     question = "What is the tenure of the property - how is it occupied?"
     choices = enums.Tenure.choices
     icon = "house"
-    percent_complete = COMPLETE_TRAIL + 53
+    percent_complete = 42
     next = "PropertyMeasuresSummary"
 
 
@@ -370,7 +369,7 @@ class PropertyMeasuresSummary(abstract_views.Question):
     form_class = questionnaire_forms.PropertyMeasuresSummary
     answer_field = "respondent_comments"
     template_name = "questionnaire/property_summary.html"
-    percent_complete = COMPLETE_TRAIL + 60
+    percent_complete = 45
 
     def get_context_data(self, *args, **kwargs):
         a = self.answers
@@ -412,14 +411,14 @@ class OccupantName(abstract_views.Question):
     template_name = "questionnaire/occupant_name.html"
     form_class = questionnaire_forms.OccupantName
     next = "Occupants"
-    percent_complete = COMPLETE_TRAIL + 40
+    percent_complete = 48
 
 
 class Occupants(abstract_views.Question):
     template_name = "questionnaire/occupants.html"
     title = "The Household"
     next = "MeansTestedBenefits"
-    percent_complete = COMPLETE_TRAIL + 65
+    percent_complete = 51
     form_class = questionnaire_forms.Occupants
 
 
@@ -427,7 +426,7 @@ class MeansTestedBenefits(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.YesNo
     title = "Means tested benefits"
     question = "Do you receive means tested benefits?"
-    percent_complete = COMPLETE_TRAIL + 70
+    percent_complete = 54
 
     def get_next(self):
         if self.answers.means_tested_benefits:
@@ -440,7 +439,7 @@ class PastMeansTestedBenefits(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.YesNo
     title = "Means tested benefits in the past"
     question = "Were you receiving means tested benefits in the last 18 months?"
-    percent_complete = COMPLETE_TRAIL + 73
+    percent_complete = 57
     next = "DisabilityBenefits"
 
 
@@ -455,7 +454,7 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
         "Income Related ESA, Personal Independence Payment, Armed Forces Independence Payment, "
         "Industrial Injuries Disablement Benefit, Mobility Supplement or Severe Disablement Allowance."
     )
-    percent_complete = COMPLETE_TRAIL + 80
+    percent_complete = 60
     next = "ChildBenefit"
 
     def pre_save(self):
@@ -473,7 +472,7 @@ class ChildBenefit(abstract_views.SingleQuestion):
     title = "Child benefit"
     type_ = abstract_views.QuestionType.YesNo
     question = "Do you receive child benefit?"
-    percent_complete = COMPLETE_TRAIL + 83
+    percent_complete = 63
 
     def pre_save(self):
         # Set the benefit threshold dependent on the household composition
@@ -498,7 +497,7 @@ class ChildBenefitClaimantType(abstract_views.SingleQuestion):
     note = (
         "Is the adult single and living with other adults, or living with a " "partner?"
     )
-    percent_complete = COMPLETE_TRAIL + 87
+    percent_complete = 66
 
 
 class ChildBenefitNumber(abstract_views.SingleQuestion):
@@ -510,7 +509,7 @@ class ChildBenefitNumber(abstract_views.SingleQuestion):
         "How many children or qualifying young "
         "people do you receive child benefit for?"
     )
-    percent_complete = COMPLETE_TRAIL + 85
+    percent_complete = 69
 
 
 class VulnerabilitiesGeneral(abstract_views.SingleQuestion):
@@ -532,7 +531,7 @@ class VulnerabilitiesGeneral(abstract_views.SingleQuestion):
         "<li>Household living with any other conditions "
         "causing medical vulnerability to the cold</li></ul>"
     )
-    percent_complete = COMPLETE_TRAIL + 95
+    percent_complete = 72
 
     def get_next(self):
         if self.answers.vulnerabilities_general:
@@ -545,7 +544,7 @@ class Vulnerabilities(abstract_views.Question):
     template_name = "questionnaire/vulnerabilities.html"
     title = "Specific vulnerabilities of household members"
     next = "HouseholdIncome"
-    percent_complete = COMPLETE_TRAIL + 95
+    percent_complete = 75
     form_class = questionnaire_forms.Vulnerabilities
 
 
@@ -559,7 +558,7 @@ class HouseholdIncome(abstract_views.SingleQuestion):
     title = "Household income"
     icon = "house"
     next = "HousingCosts"
-    percent_complete = COMPLETE_TRAIL + 77
+    percent_complete = 78
 
     def sanitise_answer(self, data):
         data = re.sub(",", "", data)
@@ -591,7 +590,7 @@ class HousingCosts(abstract_views.SingleQuestion):
     title = "Housing costs"
     icon = "house"
     next = "CouncilTaxReduction"
-    percent_complete = COMPLETE_TRAIL + 77
+    percent_complete = 81
 
     def get_supplementary(self):
         if self.answers.respondent_role in [
@@ -633,7 +632,7 @@ class CouncilTaxReduction(abstract_views.SingleQuestion):
     title = "Council Tax Reduction"
     question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
     next = "FreeSchoolMealsEligibility"
-    percent_complete = COMPLETE_TRAIL + 97
+    percent_complete = 86
 
 
 class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
@@ -644,7 +643,7 @@ class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
         "for free school meals due to low income?"
     )
     next = "EnergyAdvices"
-    percent_complete = COMPLETE_TRAIL + 98
+    percent_complete = 90
 
 
 class EnergyAdvices(abstract_views.Question):
@@ -652,7 +651,7 @@ class EnergyAdvices(abstract_views.Question):
     template_name = "questionnaire/energy_advice.html"
     form_class = questionnaire_forms.EnergyAdvices
     next = "AnswersSummary"
-    percent_complete = COMPLETE_TRAIL + 55
+    percent_complete = 93
 
 
 class AnswersSummary(abstract_views.Question):
@@ -660,7 +659,7 @@ class AnswersSummary(abstract_views.Question):
     choices = enums.HowDidYouHearAboutPEC.choices
     form_class = questionnaire_forms.AnswersSummary
     title = "Summary of your answers"
-    percent_complete = COMPLETE_TRAIL + 98
+    percent_complete = 96
     template_name = "questionnaire/answers_summary.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -723,7 +722,7 @@ class AnswersSummary(abstract_views.Question):
 class RecommendedMeasures(abstract_views.Question):
     template_name = "questionnaire/recommended_measures.html"
     title = "Recommendations for this property"
-    percent_complete = COMPLETE_TRAIL + 100
+    percent_complete = 100
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
