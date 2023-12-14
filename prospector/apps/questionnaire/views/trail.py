@@ -125,7 +125,7 @@ class RespondentHasPermission(abstract_views.SingleQuestion):
         if self.answers.respondent_role == enums.RespondentRole.LANDLORD:
             return "CompanyName"
         else:
-            return "Email"
+            return "PropertyPostcode"
 
 
 class CompanyName(abstract_views.SingleQuestion):
