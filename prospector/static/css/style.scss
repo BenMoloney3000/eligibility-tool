@@ -12,6 +12,7 @@ $pv_purple: #1e0f2c;
 $fb_white: #ffffff;
 $body_grey: #fcfcfc;
 $body_black: #4a4a4a;
+$body_light: #707070;
 
 $govuk-font-family: $prospector_font_family;
 $govuk-focus-colour: $orange_warm;
@@ -25,11 +26,18 @@ $govuk-focus-colour: $orange_warm;
     box-sizing: border-box;
 }
 
+.below_button_line {
+    color: $body_light;
+    font-size: 0.9em;
+    margin-top: 1.5em;
+}
+
 .centered {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .column {
     flex-direction: column;
 }
@@ -41,25 +49,30 @@ header {
     text-align: center;
     flex-basis: fit-content;
     width: 100%;
+
     h1.logo {
         color: $orange_warm;
         transform: skewX(-10deg);
         text-transform: none;
         margin-bottom: 0;
+
         img {
             object-fit: contain;
             width: 60%;
             height: 100%;
         }
     }
+
     h2 {
         margin: 0;
         transform: skewX(-10deg);
         text-transform: none;
     }
+
     .home {
         height: 13em;
         margin-top: 2em;
+
         .logo-home {
             background: url('/static/images/FF_LOGO_Primary_orange.png') no-repeat top
                 center;
@@ -67,6 +80,7 @@ header {
             height: 100%;
             width: 100%;
         }
+
         h2 {
             transform: skewX(-10deg);
             text-transform: none;
@@ -86,6 +100,7 @@ body {
     flex-direction: column;
     flex-wrap: nowrap;
 }
+
 .content {
     flex: 1 0 auto;
     min-height: 100%;
@@ -94,6 +109,7 @@ body {
     flex-direction: column;
     flex-wrap: nowrap;
 }
+
 footer {
     flex-shrink: 0;
     bottom: 0;
@@ -105,6 +121,7 @@ footer {
     align-items: center;
     justify-content: flex-start;
     padding: 1em;
+
     div.wrapper {
         display: flex;
         width: 100%;
@@ -112,15 +129,19 @@ footer {
         justify-content: flex-start;
         align-items: center;
     }
+
     .footer-left {
         width: 40%;
     }
+
     .footer-right {
         width: 60%;
+
         h2 {
             margin-bottom: 0;
             font-size: 125%;
         }
+
         div {
             display: flex;
             flex-wrap: nowrap;
@@ -128,6 +149,7 @@ footer {
             justify-content: space-around;
             align-items: center;
             height: 4em;
+
             img {
                 object-fit: contain;
                 width: 60%;
@@ -147,6 +169,7 @@ h1 {
     text-transform: uppercase;
     padding: 0 0.25em;
 }
+
 h1 svg {
     width: 250px;
     fill: #005fa7;
@@ -154,6 +177,7 @@ h1 svg {
     vertical-align: text-top;
     max-width: 30%;
 }
+
 h1 span:after {
     content: '';
     width: 100%;
@@ -163,17 +187,21 @@ h1 span:after {
     display: block;
     margin: 0.25rem 0;
 }
+
 h1 span {
     display: inline-block;
 }
+
 @media (max-width: 1000px) {
     h1 {
         line-height: 1;
         font-size: 2rem;
     }
+
     h1 span {
         max-width: 50%;
     }
+
     h1 svg {
         max-width: 40%;
         padding-right: 2rem;
@@ -181,11 +209,13 @@ h1 span {
         vertical-align: top;
     }
 }
+
 @media (max-width: 430px) {
     h1 span {
         display: block;
         max-width: 100%;
     }
+
     h1 svg {
         max-width: 60%;
         display: block;
@@ -198,23 +228,28 @@ h2 {
     font-family: $prospector_font_family;
     font-size: 1.375rem;
 }
+
 h3 {
     font-family: $prospector_font_family;
     font-size: 1.375rem;
     font-weight: 400;
     text-transform: uppercase;
 }
+
 p,
 label {
     margin: 0 0 1rem;
 }
+
 p a,
 ul a {
     color: #ee3d8a;
 }
+
 form input[type='radio'] {
     @extend .govuk-radios__input;
 }
+
 form input[type='text'],
 form select {
     border-radius: 14px;
@@ -225,25 +260,32 @@ form select {
     background: #fff;
     font-size: 1rem;
 }
+
 form input[type='text'] {
     @extend .govuk-input;
 }
+
 form select {
     @extend .govuk-select;
 }
+
 form input:focus {
     outline: 3px solid $orange_warm;
     outline-offset: 0;
 }
+
 form select {
     display: block;
 }
+
 form .currency {
     position: relative;
 }
+
 form .currency input {
     padding-left: 1.5rem;
 }
+
 form .currency span.symbol {
     font-size: 1.1rem;
     position: absolute;
@@ -251,18 +293,22 @@ form .currency span.symbol {
     left: 0.5rem;
     top: 0;
 }
+
 form .fieldset_row {
     display: flex;
     flex-direction: row;
     gap: 1em;
 }
+
 details {
     margin-bottom: 1rem;
 }
+
 .input-error {
     color: #d45352;
     display: block;
 }
+
 .input-error:before {
     content: '!';
     display: inline-block;
@@ -276,6 +322,7 @@ details {
     font-weight: bold;
     margin: 0 0.5rem 0 0.2rem;
 }
+
 .button {
     color: #3a2a2a;
     border: 2px solid currentColor;
@@ -291,27 +338,32 @@ details {
     z-index: 1;
     margin-bottom: 1px;
 }
+
 .button:hover,
 .button:focus {
     color: lighten(#3a2a2a, 20%);
     background-color: $orange_light;
 }
+
 .button:active {
     top: 1px;
     margin-bottom: 0;
 }
+
 .wrapper {
     max-width: 40em;
     margin: 0 auto;
     position: relative;
     overflow: hidden;
 }
+
 .progress {
     display: inline-flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     margin-bottom: 1em;
+
     progress {
         width: 80%;
         height: 1.5em;
@@ -334,6 +386,7 @@ details {
         border-radius: 10px;
         box-shadow: inset 0 0 0 2px $orange_warm !important;
     }
+
     progress::-moz-progress-bar {
         background: $orange_warm;
         border-radius: 10px;
@@ -353,25 +406,29 @@ details {
         top: 1.35em;
     }
 }
+
 .panel {
     background-color: white;
     padding: 1em;
     border-radius: 14px;
 }
+
 form {
     align-items: center;
 }
+
 .nav-form {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 1em;
 }
+
 .question-supplement {
     padding: 0.5em;
-    background-color: $body_grey;
     border-radius: 10px;
 }
+
 ul.ticked li::marker,
 summary:before {
     content: '✓';
@@ -380,14 +437,19 @@ summary:before {
     padding-right: 0.25em;
     color: $orange_warm;
 }
+
 .note {
     margin-top: 1em;
     font-style: italic;
 }
+
 section.ticked-list {
+    margin-bottom: 0.5em;
+
     p {
         margin: 0;
     }
+
     ul {
         margin: 0;
     }
@@ -432,4 +494,29 @@ td {
 
 .govuk-label {
     color: inherit;
+}
+
+.comments-form-container textarea {
+    background: #fff;
+    border-radius: 14px;
+    border: 2px solid rgba(74, 74, 74, 0.2);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    outline: 0;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    font-family: inherit;
+    letter-spacing: 1px;
+    color: rgba(0, 0, 0, 0.666);
+
+    &:focus {
+        outline: 3px solid #f7941d;
+        outline-offset: 0;
+        box-shadow: inset 0 0 0 2px;
+        color: #000;
+    }
+}
+
+sup {
+    font-size: 1.25em;
 }

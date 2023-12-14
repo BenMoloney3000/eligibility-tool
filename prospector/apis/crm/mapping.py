@@ -7,7 +7,6 @@ from typing import Union
 from prospector.apis.crm import crm
 from prospector.apps.questionnaire import enums
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -142,7 +141,7 @@ def infer_pcc_heatingcontrols(
 @map_pcc_values("pcc_propertytype")
 def infer_pcc_propertytype(
     property_type: Union[enums.PropertyType, Literal[""]] = "",
-    property_form: Union[enums.PropertyForm, Literal[""]] = "",
+    property_form: Union[enums.PropertyAttachment, Literal[""]] = "",
 ) -> int:
     if property_type == enums.PropertyType.BUNGALOW:
         if property_form == enums.PropertyForm.DETACHED:
@@ -197,7 +196,7 @@ def infer_pcc_rooftype(
 
 @map_pcc_values("pcc_walltype")
 def infer_pcc_walltype(
-    wall_type: Union[enums.WallType, Literal[""]] = "",
+    wall_type: Union[enums.WallConstruction, Literal[""]] = "",
     walls_insulated: Optional[bool] = None,
 ) -> int:
     if wall_type == enums.WallType.CAVITY:

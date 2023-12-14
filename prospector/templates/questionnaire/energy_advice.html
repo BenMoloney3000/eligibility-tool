@@ -1,0 +1,22 @@
+{% extends "questionnaire/base_question.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block question_text %}
+    <h2 class="question-heading">
+        {% include "./includes/icon_agree.html" %}
+        Let us know if you need energy-related advice in addition to retrofit advice
+    </h2>
+    <p>Please tick the relevant boxes below:</p>
+{% endblock question_text %}
+
+{% block form_content %}
+    {{ form.advice_needed_warm|as_crispy_field }}
+    {{ form.advice_needed_bills|as_crispy_field }}
+    {{ form.advice_needed_supplier|as_crispy_field }}
+    <br>
+    <br>
+    {{ form.advice_needed_from_team|as_crispy_field }}
+{% endblock form_content %}

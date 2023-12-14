@@ -14,7 +14,7 @@
 {% block form_content %}
     {% if form.data_correct %}
         <p>From the publicly available data on your property we think that this property is a
-            <strong>{{ initial_form }} {{ initial_type|lower }}</strong>
+            <strong>{{ initial_attachment }} {{ initial_type|lower }}</strong>
         </p>
 
         {{ form.data_correct|as_crispy_field }}
@@ -22,8 +22,8 @@
         <div id="correction"{% if form.initial.data_correct != False %} style="display: none"{% endif %} class="govuk-form-group">
             <p> If not please select the correct option below:</p>
             <p>
-                {{ form.property_form }}
-                {{ form.property_form.errors }}
+                {{ form.property_attachment }}
+                {{ form.property_attachment.errors }}
             </p>
             <p>
                 {{ form.property_type }}
@@ -37,8 +37,8 @@
         </p>
 
         <p>
-            {{ form.property_form }}
-            {{ form.property_form.errors }}
+            {{ form.property_attachment }}
+            {{ form.property_attachment.errors }}
         </p>
         <p>
             {{ form.property_type }}

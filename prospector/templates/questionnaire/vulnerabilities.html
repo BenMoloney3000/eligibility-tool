@@ -7,17 +7,18 @@
 {% block question_text %}
     <h2 class="question-heading">
         {% include "./includes/icon_person.html" %}
-        Vulnerable occupants
+        Vulnerability to the cold
     </h2>
+    <p>
+        We ask for specific information about health conditions
+        to help us to understand your eligibility for schemes.
+        If you consent to us storing this information, please
+        tick the boxes that applies below.
+    </p>
 {% endblock question_text %}
 
 {% block form_content %}
-    <p>Is anybody living in the property vulnerable to living in a cold home through one of the following? (select all that apply)</p>
 
     {% crispy form %}
 
-    <p class="note">
-        <strong>Why are we asking this?</strong><br>
-        This can impact on the eligibility for some routes but will also be used to prioritise when support is limited to ensure those most in need are able to access it.
-    </p>
 {% endblock form_content %}

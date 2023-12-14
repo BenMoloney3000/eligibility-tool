@@ -1,4 +1,5 @@
 import logging
+import random
 from typing import List
 
 from . import enums
@@ -7,59 +8,156 @@ from . import models
 logger = logging.getLogger(__name__)
 
 
+def generate_id():
+    """
+    Generate string to be utilised as the short UUID-like value.
+
+    Composed from 5 uppercase letters and 5 numbers.
+    """
+
+    id_string = ""
+    chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
+    for i in range(10):
+        if i < 5:
+            index = random.randint(0, 25)
+            id_string += chars[index]
+        else:
+            index = random.randint(25, len(chars) - 1)
+            id_string += chars[index]
+
+    return "".join(random.sample(id_string, len(id_string)))
+
+
 def determine_recommended_measures(
     answers: models.Answers,
 ) -> List[enums.PossibleMeasures]:
-    # From logic by JB in "Copy of SWEH Tool Rag Rating.xlsx" supplied 2022-03-03
     measures = []
 
-    if answers.wall_type == enums.WallType.CAVITY and answers.walls_insulated is False:
+    if (
+        answers.wall_construction == enums.WallConstruction.CAVITY
+        and answers.walls_insulation == enums.WallInsulation.AS_BUILT
+    ):
         measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
 
-    if answers.unheated_loft is True and answers.roof_space_insulated is False:
-        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
-
-    party_walled_forms = [
-        enums.PropertyForm.SEMI_DETACHED,
-        enums.PropertyForm.MID_TERRACE,
-        enums.PropertyForm.END_TERRACE,
+    solid_walls = [
+        enums.WallConstruction.GRANITE,
+        enums.WallConstruction.SANDSTONE,
+        enums.WallConstruction.SOLID_BRICK,
+        enums.WallConstruction.SYSTEM,
     ]
+
     if (
-        answers.wall_type == enums.WallType.CAVITY
-        and answers.property_form in party_walled_forms
+        answers.floor_construction in solid_walls
+        and answers.walls_insulation == enums.WallInsulation.AS_BUILT
     ):
-        measures.append(enums.PossibleMeasures.PARTY_WALL_INSULATION)
-
-    if answers.suspended_floor is True and answers.suspended_floor_insulated is False:
-        measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
-
-    if answers.wall_type == enums.WallType.SOLID and answers.walls_insulated is False:
         measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
 
-    if answers.room_in_roof is True and answers.rir_insulated is False:
-        measures.append(enums.PossibleMeasures.RIR_INSULATION)
-
-    if answers.flat_roof is True and answers.flat_roof_insulated in [
-        enums.InsulationConfidence.PROBABLY_NOT.value,
-        enums.InsulationConfidence.DEFINITELY_NOT.value,
-    ]:
-        measures.append(enums.PossibleMeasures.FLAT_ROOF_INSULATION)
+    floor_insulation_options = [
+        enums.FloorInsulation.AS_BUILT,
+        enums.FloorInsulation.UNKNOWN,
+    ]
 
     if (
-        answers.gas_boiler_present is True
-        and answers.gas_boiler_age == enums.BoilerAgeBand.BEFORE_2004
+        answers.floor_construction == enums.FloorConstruction.ST
+        and answers.floor_insulation in floor_insulation_options
+    ):
+        measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
+
+    roof_construction_for_ri = [
+        enums.RoofConstruction.PNLA,
+        enums.RoofConstruction.PNNLA,
+    ]
+
+    roof_insulation_for_ri = [
+        enums.RoofInsulation.MM_100,
+        enums.RoofInsulation.MM_12,
+        enums.RoofInsulation.MM_150,
+        enums.RoofInsulation.MM_25,
+        enums.RoofInsulation.MM_50,
+        enums.RoofInsulation.MM_75,
+        enums.RoofInsulation.NO_INSULATION,
+    ]
+
+    if (
+        answers.roof_construction in roof_construction_for_ri
+        and answers.roof_insulation in roof_insulation_for_ri
+    ):
+        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
+
+    roof_insulation_for_rir = [
+        enums.RoofInsulation.AS_BUILD,
+        enums.RoofInsulation.MM_12,
+        enums.RoofInsulation.MM_25,
+        enums.RoofInsulation.MM_50,
+        enums.RoofInsulation.MM_75,
+        enums.RoofInsulation.NO_INSULATION,
+    ]
+
+    if (
+        answers.roof_insulation in roof_insulation_for_rir
+        and answers.roof_construction == enums.RoofConstruction.PWSC
+    ):
+        measures.append(enums.PossibleMeasures.RIR_INSULATION)
+
+    main_fuel_for_bu = [
+        enums.MainFuel.MGC,
+        enums.MainFuel.MGNC,
+    ]
+
+    boiler_efficiency_for_bu = [
+        enums.EfficiencyBand.C,
+        enums.EfficiencyBand.D,
+        enums.EfficiencyBand.E,
+        enums.EfficiencyBand.F,
+        enums.EfficiencyBand.G,
+    ]
+
+    if (
+        answers.main_fuel in main_fuel_for_bu
+        and answers.boiler_efficiency in boiler_efficiency_for_bu
+        and answers.heating == enums.Heating.BOILERS
     ):
         measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
 
-    if answers.gas_boiler_present and answers.gas_boiler_broken:
-        measures.append(enums.PossibleMeasures.BROKEN_BOILER_UPGRADE)
+    fuel_1_for_hpi = [
+        enums.MainFuel.ANTHRACITE,
+        enums.MainFuel.GBLPG,
+        enums.MainFuel.HCNC,
+        enums.MainFuel.LPGC,
+        enums.MainFuel.LPGNC,
+        enums.MainFuel.LPGSC,
+        enums.MainFuel.OC,
+        enums.MainFuel.ONC,
+        enums.MainFuel.SC,
+    ]
 
-    if answers.storage_heaters_present is True and answers.hhrshs_present is False:
-        measures.append(enums.PossibleMeasures.STORAGE_HEATER_UPGRADE)
+    fuel_2_for_hpi = [
+        enums.MainFuel.EC,
+        enums.MainFuel.ENC,
+    ]
 
-    if answers.gas_boiler_present is False and answers.other_heating_present is False:
-        measures.append(enums.PossibleMeasures.CENTRAL_HEATING_INSTALL)
-        measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALL)
+    heating_for_hpi = [
+        enums.Heating.BOILERS,
+        enums.Heating.EUF,
+        enums.Heating.OTHER,
+        enums.Heating.RH,
+        enums.Heating.SH,
+        enums.Heating.AIR,
+    ]
+
+    if answers.main_fuel in fuel_1_for_hpi or (
+        answers.main_fuel in fuel_2_for_hpi and answers.heating in heating_for_hpi
+    ):
+        measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
+
+    roof_for_PV = [
+        enums.RoofConstruction.PNLA,
+        enums.RoofConstruction.PNNLA,
+        enums.RoofConstruction.PWSC,
+    ]
+
+    if answers.floor_construction in roof_for_PV:
+        measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
 
     return measures
 
@@ -67,7 +165,10 @@ def determine_recommended_measures(
 def get_child_benefit_threshold(answers: models.Answers) -> int:
     total_qualifying = answers.child_benefit_number
 
-    if answers.child_benefit_claimant_type == enums.ChildBenefitClaimantType.SINGLE:
+    if (
+        answers.child_benefit_claimant_type
+        == enums.ChildBenefitClaimantType.SINGLE.value
+    ):
         if total_qualifying < 2:
             return 18500
         elif total_qualifying == 2:
@@ -76,7 +177,10 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
             return 27500
         else:
             return 32000
-    elif answers.child_benefit_claimant_type == enums.ChildBenefitClaimantType.JOINT:
+    elif (
+        answers.child_benefit_claimant_type
+        == enums.ChildBenefitClaimantType.JOINT.value
+    ):
         if total_qualifying < 2:
             return 25500
         elif total_qualifying == 2:
@@ -89,15 +193,14 @@ def get_child_benefit_threshold(answers: models.Answers) -> int:
 
 def get_disruption(measure: enums.PossibleMeasures) -> str:
     if measure in [
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.FLAT_ROOF_INSULATION,
     ]:
         return "High"
     elif measure in [
         enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.CENTRAL_HEATING_INSTALL,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALL,
+        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.BOILER_UPGRADE,
     ]:
         return "Medium"
     else:
@@ -107,16 +210,14 @@ def get_disruption(measure: enums.PossibleMeasures) -> str:
 def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
     if measure in [
         enums.PossibleMeasures.CAVITY_WALL_INSULATION,
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
         enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.BROKEN_BOILER_UPGRADE,
+        enums.PossibleMeasures.RIR_INSULATION,
+        enums.PossibleMeasures.LOFT_INSULATION,
     ]:
         return "High"
     elif measure in [
-        enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.PARTY_WALL_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.FLAT_ROOF_INSULATION,
+        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
     ]:
         return "Medium"
     else:
@@ -125,39 +226,11 @@ def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
 
 def get_bill_impact(measure: enums.PossibleMeasures) -> str:
     if measure in [
-        enums.PossibleMeasures.PARTY_WALL_INSULATION,
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.BROKEN_BOILER_UPGRADE,
-    ]:
-        return "Low"
-    elif measure in [
-        enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.FLAT_ROOF_INSULATION,
     ]:
         return "Medium"
     else:
         return "High"
-
-
-def get_funding_likelihood(measure: enums.PossibleMeasures) -> str:
-    if measure in [
-        enums.PossibleMeasures.CAVITY_WALL_INSULATION,
-        enums.PossibleMeasures.LOFT_INSULATION,
-        enums.PossibleMeasures.PARTY_WALL_INSULATION,
-    ]:
-        return "High"
-    elif measure in [
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.BROKEN_BOILER_UPGRADE,
-        enums.PossibleMeasures.STORAGE_HEATER_UPGRADE,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALL,
-    ]:
-        return "Medium"
-    else:
-        return "Low"
 
 
 def get_property_rating(answers: models.Answers) -> enums.RAYG:
@@ -166,79 +239,42 @@ def get_property_rating(answers: models.Answers) -> enums.RAYG:
     Can only be RED / AMBER / GREEN.
     """
 
-    if answers.sap_rating:
+    if answers.sap_score:
         # Based on having an EPC result
-        if answers.sap_rating >= 65:
+        if answers.sap_score >= 65:
             # Property unlikely to be eligible for free or discounted schemes
             return enums.RAYG.RED
-        elif answers.sap_rating >= 50:
+        elif answers.sap_score >= 50:
             # Property eligible for some free or discounted schemes
             return enums.RAYG.AMBER
         else:
             # Property eligible for free or discounted schemes
             return enums.RAYG.GREEN
-    else:
-        """
-        Without an EPC construct the property RAG rating as follows:
-
-        G: Heating is Gas (gas_boiler_present)
-        I: Walls are insulated (walls_insulated)
-        S: Has Solar PV (has_solar_pv)
-
-            G I S  Interpretation:
-        G   N N N  - Large potential for improvement.
-        Y   Y N N
-        Y   N Y N
-        Y   N N Y
-        R   Y Y N
-        R   Y N Y
-        R   N Y Y
-        R   Y Y Y  - Little potential for improvement.
-        """
-
-        RAG_LOOKUP = {
-            #  (G, I, S) -> RAG value
-            (False, False, False): enums.RAYG.GREEN,
-            (True, False, False): enums.RAYG.AMBER,
-            (False, True, False): enums.RAYG.AMBER,
-            (False, False, True): enums.RAYG.AMBER,
-            (True, True, False): enums.RAYG.RED,
-            (True, False, True): enums.RAYG.RED,
-            (False, True, True): enums.RAYG.RED,
-            (True, True, True): enums.RAYG.RED,
-        }
-
-        return RAG_LOOKUP.get(
-            (
-                answers.gas_boiler_present,
-                answers.walls_insulated,
-                answers.has_solar_pv,
-            )
-        )
 
 
 def get_income_rating(answers: models.Answers) -> enums.RAYG:
     # Household income rating
-    if answers.total_income_lt_30k == enums.IncomeIsUnderThreshold.YES:
-        # Gross household income below £31k therefore the Household is eligible
-        # for free or discounted schemes (based on info given).
-        income_rating = enums.RAYG.GREEN
-    else:
-        # Gross household income more than £31k, but may still be eligible for
-        # some free or discounted schemes (based on info given)
-        benefit_qualifies = answers.disability_benefits or (
-            answers.child_benefit and answers.income_lt_child_benefit_threshold
-        )
-        if benefit_qualifies:
-            income_rating = enums.RAYG.YELLOW
+    if answers.household_income:
+        if int(answers.household_income) <= 31000 or None:
+            # Gross household income below £31k therefore the Household is eligible
+            # for free or discounted schemes (based on info given).
+            income_rating = enums.RAYG.GREEN
         else:
-            if answers.take_home_lt_31k == enums.IncomeIsUnderThreshold.NO:
-                income_rating = enums.RAYG.RED
+            # Gross household income more than £31k, but may still be eligible for
+            # some free or discounted schemes (based on info given)
+            benefit_qualifies = answers.disability_benefits or (
+                answers.child_benefit and answers.income_lt_child_benefit_threshold
+            )
+            if benefit_qualifies:
+                income_rating = enums.RAYG.YELLOW
             else:
-                # Household take home pay below £31k.
-                income_rating = enums.RAYG.AMBER
+                if int(answers.household_income) > 31000:
+                    income_rating = enums.RAYG.RED
+                else:
+                    # Household take home pay below £31k.
+                    income_rating = enums.RAYG.AMBER
 
-    return income_rating
+        return income_rating
 
 
 def get_overall_rating(answers: models.Answers) -> enums.RAYG:
@@ -292,79 +328,3 @@ def get_overall_rating(answers: models.Answers) -> enums.RAYG:
             return property_rating
         else:
             return income_rating
-
-
-def calculate_household_income(answers: models.Answers) -> int:
-    """Calculate the annual income for all adults in the household."""
-
-    total_income = 0
-
-    for adult in answers.householdadult_set.all():
-        total_income += calculate_adult_income(adult)
-
-    return total_income
-
-
-def calculate_adult_income(adult: models.HouseholdAdult) -> int:
-    income = (
-        _annualise_income(adult, "employed_income")
-        + _annualise_income(adult, "self_employed_income")
-        + _annualise_income(adult, "business_income")
-        + _annualise_income(adult, "private_pension_income")
-        + _annualise_income(adult, "state_pension_income")
-        + _annualise_income(adult, "saving_investment_income")
-    )
-
-    # Add in any benefits
-    benefit_income = sum(
-        [
-            _annualise_benefit_income(benefit)
-            for benefit in adult.welfarebenefit_set.all()
-        ]
-    )
-
-    return income + benefit_income
-
-
-def _annualise_income(adult: models.HouseholdAdult, income_name: str) -> int:
-    freq_name = f"{income_name}_frequency"
-    income = getattr(adult, income_name, 0)
-    if not income:
-        # (zero or null, in either case don't case about frequency
-        return 0
-    elif getattr(adult, freq_name) == enums.PaymentFrequency.ANNUALLY:
-        return income
-    else:
-        return income * 12
-
-
-def _annualise_benefit_income(benefit: models.WelfareBenefit):
-    income = benefit.amount
-    if not income:
-        # (zero or null, in either case don't case about frequency
-        return 0
-    elif benefit.frequency == enums.BenefitPaymentFrequency.WEEKLY:
-        return round(income * 52.2)
-    elif benefit.frequency == enums.BenefitPaymentFrequency.TWO_WEEKLY:
-        return round(income * (52.2 / 2))
-    elif benefit.frequency == enums.BenefitPaymentFrequency.FOUR_WEEKLY:
-        return round(income * (52.2 / 4))
-    elif benefit.frequency == enums.BenefitPaymentFrequency.MONTHLY:
-        return income * 12
-    else:
-        return income
-
-
-def get_financial_eligibility(answers: models.Answers) -> enums.FinancialEligibility:
-    total_household_income = calculate_household_income(answers)
-
-    if total_household_income < 31000:
-        return enums.FinancialEligibility.ALL
-    else:
-        benefit_present = models.WelfareBenefit.objects.filter(
-            recipient__answers=answers
-        ).exists()
-        if answers.take_home_lt_31k_confirmation or benefit_present:
-            return enums.FinancialEligibility.SOME
-        else:
-            return enums.FinancialEligibility.NONE

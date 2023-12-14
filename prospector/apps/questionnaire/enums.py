@@ -3,16 +3,35 @@ from enum import auto
 from django.db import models
 
 
-class PropertyOwnership(models.TextChoices):
-    OWNED = "OWNED", "The property is in private ownership"
-    PRIVATE_TENANCY = "RENTAL", "The property is rented from a private landlord"
-    SOCIAL_TENANCY = (
-        "SOCIAL",
-        (
-            "The property is rented from a social landlord (eg. a housing "
-            "association) or local authority"
-        ),
+class Tenure(models.TextChoices):
+    OWNER_OCCUPIED = "OwnerOccupied", "Owner-occupied"
+    RENTED_PRIVATE = "RentedPrivate", "Rented - private"
+    RENTED_SOCIAL = "RentedSocial", "Rented - social"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class HowDidYouHearAboutPEC(models.TextChoices):
+    DOOR_KNOCKING = "Door knocking", "Door knocking"
+    FACEBOOK = "Facebook", "Facebook"
+    FLYER = "Flyer/poster", "Flyer or poster"
+    INSTAGRAM = "Instagram", "Instagram"
+    LETTER = "Letter in the post", "Letter in the post"
+    LINKEDIN = "LinkedIn", "LinkedIn"
+    PRINT_MEDIA = "Print media", "Newspaper or magazine"
+    PRIOR_RELATIONSHIP = "Prior relationship with PEC", "Prior relationship with PEC"
+    RADIO = "Radio", "Radio"
+    SIGNPOST_CO = (
+        "Signpost - Community organisation",
+        "Referred by community organisation",
     )
+    SIGNPOST_CHARITY = "Signpost - Charity", "Referred by charity"
+    SIGNPOST_COUNCIL = "Signpost - Council", "Referred by council"
+    SIGNPOST_LB = "Signpost - Local business", "Referred by local business"
+    TWITTER = "Twitter", "X, formerly known as Twitter"
+    WEB_SEARCH = "Web search", "Web search"
+    WORD_OF_MOUTH = "Word of mouth", "Word of mouth"
+    NOT_SPECIFIED = "Not Yet Specified", "Other"
+    LABEL = "Input label", "Please choose option"
 
 
 class RespondentRole(models.TextChoices):
@@ -32,44 +51,158 @@ class PropertyDataSource(models.TextChoices):
     # in future.
     EPC = "EPC", "EPC"
     HA = "HA", "Home Analytics"
+    PDB = "PDB", "Parity Database"
 
 
 class PropertyType(models.TextChoices):
-    FLAT = "FLAT", "Flat or maisonette"
-    HOUSE = "HOUSE", "House"
-    BUNGALOW = "BUNGALOW", "Bungalow"
-    PARK_HOME = "PARK_HOME", "Park Home"
+    FLAT = "Flat", "Flat"
+    HOUSE = "House", "House"
+    BUNGALOW = "Bungalow", "Bungalow"
+    PARK_HOME = "ParkHome", "Park home"
+    MAISONNETTE = "Maisonette", "Maisonette"
 
 
-class PropertyForm(models.TextChoices):
-    DETACHED = "DETACHED", "Detached"
-    SEMI_DETACHED = "SEMI_DETACHED", "Semi-detached"
-    MID_TERRACE = "MID_TERRACE", "Mid-terrace"
-    END_TERRACE = "END_TERRACE", "End-terrace"
-    MAISONNETTE = "MAISONNETTE", "Maisonette"
-    FLAT_SMALL = "FLAT_CONVERSION", "Flat (converted house or block of 5 or less flats)"
-    FLAT_BLOCK = (
-        "FLAT_BLOCK",
-        "Flat (block of 5 or more flats or flat in mixed use building)",
-    )
+class PropertyAttachment(models.TextChoices):
+    DETACHED = "Detached", "Detached"
+    SEMI_DETACHED = "SemiDetached", "Semi detached"
+    MID_TERRACE = "MidTerrace", "Mid terrace"
+    END_TERRACE = "EndTerrace", "End terrace"
+    ENCLOSED_END_TERRACE = "EnclosedEndTerrace", "Enclosed end terrace"
+    ENCLOSED_MID_TERRACE = "EnclosedMidTerrace", "Enclosed mid terrace"
 
 
-class PropertyAgeBand(models.TextChoices):
-    # We can use an integer field to parse numerical values into bands
-    BEFORE_1900 = 0, "Before 1900"
-    FROM_1900 = 1900, "1900-1929"
-    FROM_1930 = 1930, "1930-1949"
-    FROM_1950 = 1950, "1950-1966"
-    FROM_1967 = 1967, "1967-1975"
-    FROM_1976 = 1976, "1976-1990"
-    FROM_1991 = 1991, "1991-2002"
-    SINCE_2003 = 2003, "Since 2003"
-    UNKNOWN = "UNKNOWN", "I don't know"
+class PropertyConstructionYears(models.TextChoices):
+    BEFORE_1900 = "Before 1900", "Before 1900"
+    FROM_1900 = "1900-1929", "1900-1929"
+    FROM_1930 = "1930-1949", "1930-1949"
+    FROM_1950 = "1950-1966", "1950-1966"
+    FROM_1967 = "1967-1975", "1967-1975"
+    FROM_1976 = "1976-1982", "1976-1982"
+    FROM_1983 = "1983-1990", "1983-1990"
+    FROM_1991 = "1991-1995", "1991-1995"
+    FROM_1996 = "1996-2002", "1996-2002"
+    FROM_2003 = "2003-2006", "2003-2006"
+    FROM_2007 = "2007-2011", "2007-2011"
+    FROM_2012 = "2012 onwards", "2012 onwards"
 
 
-class WallType(models.TextChoices):
-    SOLID = "SOLID", "Solid walls"
-    CAVITY = "CAVITY", "Cavity walls"
+class WallConstruction(models.TextChoices):
+    CAVITY = "Cavity", "Cavity"
+    COB = "Cob", "Cob"
+    GRANITE = "Granite", "Granite"
+    PARK_HOME = "Park Home", "Park home"
+    SANDSTONE = "Sandstone", "Sandstone"
+    SOLID_BRICK = "Solid Brick", "Solid brick"
+    SYSTEM = "System", "System"
+    TIMBER_FRAME = "Timber Frame", "Timber frame"
+
+
+class WallInsulation(models.TextChoices):
+    AS_BUILT = "AsBuilt", "As built"
+    EXTERNAL = "External", "External wall insulation"
+    FC = "FilledCavity", "Filled cavity"
+    FCE = "FilledCavityPlusExternal", "Filled cavity plus external wall insulation"
+    FCI = "FilledCavityPlusInternal", "Filled cavity plus internal wall insulation"
+    INTERNAL = "Internal", "Internal wall insulation"
+
+
+class RoofConstruction(models.TextChoices):
+    ADB = "AnotherDwellingAbove", "Another dwelling above"
+    FLAT = "Flat", "Flat"
+    PNLA = "PitchedNormalLoftAccess", "Pitched - loft access"
+    PNNLA = "PitchedNormalNoLoftAccess", "Pitched - no loft access"
+    PT = "PitchedThatched", "Pitched thatched"
+    PWSC = "PitchedWithSlopingCeiling", "Pitched with sloping ceiling"
+
+
+class RoofInsulation(models.TextChoices):
+    ADB = "Another Dwelling Above", "Another dwelling above"
+    AS_BUILD = "AsBuilt", "As built"
+    MM_100 = "mm100", "100 mm"
+    MM_12 = "mm12", "12 mm"
+    MM_150 = "mm150", "150 mm"
+    MM_200 = "mm200", "200 mm"
+    MM_25 = "mm25", "25 mm"
+    MM_250 = "mm250", "250 mm"
+    MM_270 = "mm270", "270 mm"
+    MM_300 = "mm300", "300 mm"
+    MM_350 = "mm350", "350 mm"
+    MM_400 = "mm400", "400 mm"
+    MM_50 = "mm50", "50 mm"
+    MM_75 = "mm75", "75 mm"
+    NO_INSULATION = "None", "None"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class FloorConstruction(models.TextChoices):
+    SOLID = "Solid", "Solid"
+    SNT = "SuspendedNotTimber", "Suspended - not timber"
+    ST = "SuspendedTimber", "Suspended - timber"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class FloorInsulation(models.TextChoices):
+    AS_BUILT = "AsBuilt", "As built"
+    RETRO_FITTED = "RetroFitted", "Retrofitted"
+    UNKNOWN = "Unknown", "Unknown"
+
+
+class Glazing(models.TextChoices):
+    DOUBLE_2002_PLUS = "Double 2002 or later", "Double 2002 or later"
+    DOUBLE_BEFORE_2002 = "Double before 2002", "Double before 2002"
+    DOUBLE_UNKNOWN = "Double but age unknown", "Double but age unknown"
+    NOT_DEFINED = "NotDefined", "Not Defined"
+    SECONDARY = "Secondary", "Secondary"
+    SINGLE = "Single", "Single"
+    TRIPLE = "Triple", "Triple"
+
+
+class Heating(models.TextChoices):
+    BOILERS = "Boilers", "Boilers"
+    COMMUNITY = "Community", "Community"
+    EUF = "Electric underfloor", "Electric under floor"
+    HP_WARM = "Heat pumps (warm air)", "Heat pumps (warm air)"
+    HP_WET = "Heat pumps (wet)", "Heat pumps (wet)"
+    OTHER = "Other systems", "Other systems"
+    RH = "Room heaters", "Room heaters"
+    SH = "Storage heaters", "Storage heaters"
+    AIR = "Warm Air (not heat pump)", "Warm air (not heat pump)"
+
+
+class MainFuel(models.TextChoices):
+    ANTHRACITE = "Anthracite", "Anthracite"
+    BWP = "BulkWoodPellets", "Bulk wood pellets"
+    DFMW = "DualFuelMineralWood", "Dual fuel mineral wood"
+    EC = "ElectricityCommunity", "Electricity - community"
+    ENC = "ElectricityNotCommunity", "Electricity - not community"
+    GBLPG = "GasBottledLPG", "Bottled gas (LPG)"
+    HCNC = "HouseCoalNotCommunity", "Coal - not community"
+    LPGC = "LPGCommunity", "LPG - community"
+    LPGNC = "LPGNotCommunity", "LPG - not community"
+    LPGSC = "LPGSpecialCondition", "LPG - special condition"
+    MGC = "MainsGasCommunity", "Mains gas - community"
+    MGNC = "MainsGasNotCommunity", "Mains gas - not community"
+    OC = "OilCommunity", "Oil - community"
+    ONC = "OilNotCommunity", "Oil - not community"
+    SC = "SmokelessCoal", "Smokeless coal"
+    WC = "WoodChips", "Wood chips"
+    WL = "WoodLogs", "Wood logs"
+
+
+class EfficiencyBand(models.TextChoices):
+    A = "A", "A"
+    B = "B", "B"
+    C = "C", "C"
+    D = "D", "D"
+    E = "E", "E"
+    F = "F", "F"
+    G = "G", "G"
+
+
+class ControlsAdequacy(models.TextChoices):
+    OPTIMAL = "Optimal", "Optimal"
+    SUB_OPTIMAL = "Sub Optimal", "Sub optimal"
+    TOP_SPEC = "Top Spec", "Top spec"
 
 
 class InsulationConfidence(models.TextChoices):
@@ -286,19 +419,39 @@ class StateOfRepair(models.TextChoices):
     UNKNOWN = "UNKNOWN", "I don't know the state of repair of the property."
 
 
-class OneToFourOrMore(models.IntegerChoices):
+class OneToFiveOrMore(models.IntegerChoices):
     ONE = 1, "1"
     TWO = 2, "2"
     THREE = 3, "3"
-    FOUR = 4, "4 or more"
+    FOUR = 4, "4"
+    FIVE = 5, "5 or more"
 
 
-class UpToFourOrMore(models.IntegerChoices):
+class OneToTenOrNone(models.IntegerChoices):
     NONE = 0, "None"
     ONE = 1, "1"
     TWO = 2, "2"
     THREE = 3, "3"
-    FOUR = 4, "4 or more"
+    FOUR = 4, "4"
+    FIVE = 5, "5"
+    SIX = 6, "6"
+    SEVEN = 7, "7"
+    EIGHT = 8, "8"
+    NINE = 9, "9"
+    TEN = 10, "10"
+
+
+class OneToTen(models.IntegerChoices):
+    ONE = 1, "1"
+    TWO = 2, "2"
+    THREE = 3, "3"
+    FOUR = 4, "4"
+    FIVE = 5, "5"
+    SIX = 6, "6"
+    SEVEN = 7, "7"
+    EIGHT = 8, "8"
+    NINE = 9, "9"
+    TEN = 10, "10"
 
 
 class IncomeIsUnderThreshold(models.TextChoices):
@@ -315,63 +468,30 @@ class PossibleMeasures(models.TextChoices):
         "Underfloor insulation for suspended floors",
     )
     RIR_INSULATION = "RIR_INSULATION", "Room-in-roof insulation"
-    FLAT_ROOF_INSULATION = "FLAT_ROOF_INSULATION", "Flat roof insulation"
     BOILER_UPGRADE = "BOILER_UPGRADE", "A low carbon heating upgrade"
-    STORAGE_HEATER_UPGRADE = (
-        "STORAGE_HEATER_UPGRADE",
-        "Replacement or upgrade or night storage heaters",
+    SOLAR_PV_INSTALLATION = (
+        "SOLAR_PV_INSTALLATION",
+        "Installation of a solar electricity panels",
     )
-    CENTRAL_HEATING_INSTALL = (
-        "CENTRAL_HEATING_INSTALL",
-        "Installation of a central heating system",
-    )
-    BROKEN_BOILER_UPGRADE = "BROKEN_BOILER_UPGRADE", "A low carbon heating upgrade"
-    PARTY_WALL_INSULATION = "PARTY_WALL_INSULATION", "Party wall insulation"
     LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"
-    HEAT_PUMP_INSTALL = "HEAT_PUMP_INSTALL", "Installation of a heat pump"
-
-
-class EmploymentStatus(models.TextChoices):
-    EMPLOYED = "EMPLOYED", "Employed"
-    SELF_EMPLOYED = "SELF_EMPLOYED", "Self Employed"
-    UNEMPLOYED = "UNEMPLOYED", "Unemployed"
-    RETIRED = "RETIRED", "Retired"
-    OTHER = "OTHER", "Other"
-
-
-class PaymentFrequency(models.TextChoices):
-    ANNUALLY = "ANNUALLY", "annually"
-    MONTHLY = "MONTHLY", "monthly"
-
-
-class BenefitPaymentFrequency(models.TextChoices):
-    WEEKLY = "WEEKLY", "weekly"
-    TWO_WEEKLY = "TWO_WEEKLY", "two weekly"
-    FOUR_WEEKLY = "FOUR_WEEKLY", "four weekly"
-    ANNUALLY = "ANNUALLY", "annually"
-    MONTHLY = "MONTHLY", "monthly"
+    HEAT_PUMP_INSTALLATION = "HEAT_PUMP_INSTALLATION", "Installation of a heat pump"
 
 
 class BenefitType(models.TextChoices):
-    UC = "UC", "Universal Credit"
-    JSA = "JSA", "Job Seekers Allowance (JSA)"
-    ESA = "ESA", "Employment and Support Allowance (ESA)"
-    INCOME_SUPPORT = "INCOME_SUPPORT", "Income Support"
-    CHILD_TAX_CREDIT = "CHILD_TAX_CREDIT", "Child Tax Credit"
-    WORKING_TAX_CREDIT = "WORKING_TAX_CREDIT", "Working Tax Credit"
-    CHILD_BENEFIT = "CHILD_BENEFIT", "Child Benefit"
+    UC = "UC", "Universal Credit (UC)"
+    JSA = "JSA", "Income Based Job Seekers Allowance (JSA)"
+    ESA = "ESA", "Income Related Employment & Support Allowance (ESA)"
+    INCOME_SUPPORT = "INCOME_SUPPORT", "Income Support (IS)"
+    CHILD_TAX_CREDIT = "CHILD_TAX_CREDIT", "Child Tax Credit (CTC)"
+    WORKING_TAX_CREDIT = "WORKING_TAX_CREDIT", "Working Tax Credit (WTC)"
     HOUSING_BENEFIT = "HOUSING_BENEFIT", "Housing Benefit"
-    ATTENDANCE_ALLOWANCE = "ATTENDANCE_ALLOWANCE", "Attendance Allowance"
-    CARERS_ALLOWANCE = "CARERS_ALLOWANCE", "Carers Allowance"
-    DLA = "DLA", "Disability Living Allowance (DLA)"
-    PIP = "PIP", "Personal Independence Payment (PIP)"
-    PENSION_CREDIT = "PENSION_CREDIT", "Pension Credit"
-    OTHER = "OTHER", "Other"
+    PCG = "PENSION_CREDIT_GUARANTEE", "Pension Credit Guarantee"
+    PCS = "PENSION_CREDIT_SAVINGS", "Pension Credit Savings"
 
 
 class ChildBenefitClaimantType(models.TextChoices):
-    SINGLE = "SINGLE", "Single Claimant"
-    JOINT = "JOINT", "Joint Claimant"
+    SINGLE = "SINGLE", "Single claimant"
+    JOINT = "JOINT", "Member of a couple"
 
 
 class RAYG(models.TextChoices):
@@ -381,12 +501,7 @@ class RAYG(models.TextChoices):
     GREEN = auto()
 
 
-class FinancialEligibility(models.TextChoices):
-    ALL = "ALL", "Financial circumstances eligible for all schemes"
-    SOME = "SOME", "Financial circumstances eligible for some schemes"
-    NONE = "NONE", "Financial circumstances eligible for no schemes"
-
-
+# Deprecated, used in migrations/0036_data_migration_trvs_present.py
 class TRVsPresent(models.TextChoices):
     ALL = "ALL", "All radiators have TRVs"
     SOME = "SOME", "Some radiators have TRVs"

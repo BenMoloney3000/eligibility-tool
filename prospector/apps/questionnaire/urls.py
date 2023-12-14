@@ -10,11 +10,17 @@ urlpatterns = [
     path("name", views.RespondentName.as_view(), name="respondent-name"),
     path("role", views.RespondentRole.as_view(), name="respondent-role"),
     path(
-        "permission",
+        "consent",
         views.RespondentHasPermission.as_view(),
         name="respondent-has-permission",
     ),
-    path("need-permission", views.NeedPermission.as_view(), name="need-permission"),
+    path("properties-limit", views.PropertiesLimit.as_view(), name="properties-limit"),
+    path(
+        "will-to-contribute",
+        views.WillToContribute.as_view(),
+        name="will-to-contribute",
+    ),
+    path("company-name", views.CompanyName.as_view(), name="company-name"),
     path(
         "your-postcode", views.RespondentPostcode.as_view(), name="respondent-postcode"
     ),
@@ -26,85 +32,28 @@ urlpatterns = [
         "property-postcode", views.PropertyPostcode.as_view(), name="property-postcode"
     ),
     path("property-address", views.PropertyAddress.as_view(), name="property-address"),
-    path(
-        "property-ownership",
-        views.PropertyOwnership.as_view(),
-        name="property-ownership",
-    ),
+    path("address-unknown", views.AddressUnknown.as_view(), name="address-unknown"),
+    path("thank-you", views.ThankYou.as_view(), name="thank-you"),
+    path("property-tenure", views.Tenure.as_view(), name="tenure"),
     path("consents", views.Consents.as_view(), name="consents"),
-    path("epc", views.SelectEPC.as_view(), name="select-e-p-c"),
-    path("type", views.PropertyType.as_view(), name="property-type"),
-    path("age", views.PropertyAgeBand.as_view(), name="property-age-band"),
-    path("wall-type", views.WallType.as_view(), name="wall-type"),
-    path("wall-insulation", views.WallsInsulated.as_view(), name="walls-insulated"),
-    path("floor-type", views.SuspendedFloor.as_view(), name="suspended-floor"),
     path(
-        "floor-insulation",
-        views.SuspendedFloorInsulated.as_view(),
-        name="suspended-floor-insulated",
-    ),
-    path("unheated-loft", views.UnheatedLoft.as_view(), name="unheated-loft"),
-    path("loft-conversion", views.RoomInRoof.as_view(), name="room-in-roof"),
-    path(
-        "loft-conversion-insulated", views.RirInsulated.as_view(), name="rir-insulated"
-    ),
-    path(
-        "loft-insulation",
-        views.RoofSpaceInsulated.as_view(),
-        name="roof-space-insulated",
-    ),
-    path("flat-roof", views.FlatRoof.as_view(), name="flat-roof"),
-    path(
-        "flat-roof-insulated",
-        views.FlatRoofInsulated.as_view(),
-        name="flat-roof-insulated",
-    ),
-    path("gas-boiler", views.GasBoilerPresent.as_view(), name="gas-boiler-present"),
-    path("hot-water-tank", views.HwtPresent.as_view(), name="hwt-present"),
-    path("mains-gas", views.OnMainsGas.as_view(), name="on-mains-gas"),
-    path(
-        "other-heating-system",
-        views.OtherHeatingPresent.as_view(),
-        name="other-heating-present",
-    ),
-    path("heat-pump", views.HeatPumpPresent.as_view(), name="heat-pump-present"),
-    path("heating-fuel", views.OtherHeatingFuel.as_view(), name="other-heating-fuel"),
-    path("boiler-age", views.GasBoilerAge.as_view(), name="gas-boiler-age"),
-    path("boiler-condition", views.GasBoilerBroken.as_view(), name="gas-boiler-broken"),
-    path("heating-controls", views.HeatingControls.as_view(), name="heating-controls"),
-    path(
-        "storage-heaters",
-        views.StorageHeatersPresent.as_view(),
-        name="storage-heaters-present",
-    ),
-    path(
-        "electric-radiators",
-        views.ElectricRadiatorsPresent.as_view(),
-        name="electric-radiators-present",
-    ),
-    path(
-        "storage-heater-performance",
-        views.HhrshsPresent.as_view(),
-        name="hhrshs-present",
-    ),
-    path(
-        "has-solar-pv",
-        views.HasSolarPv.as_view(),
-        name="has-solar-pv",
-    ),
-    path("accuracy-warning", views.AccuracyWarning.as_view(), name="accuracy-warning"),
-    path(
-        "recommendations",
-        views.RecommendedMeasures.as_view(),
-        name="recommended-measures",
+        "property-summary",
+        views.PropertyMeasuresSummary.as_view(),
+        name="property-measures-summary",
     ),
     path("occupants", views.Occupants.as_view(), name="occupants"),
-    path("income", views.HouseholdIncome.as_view(), name="household-income"),
     path(
-        "take-home-pay",
-        views.HouseholdTakeHomeIncome.as_view(),
-        name="household-take-home-income",
+        "means-tested-benefits",
+        views.MeansTestedBenefits.as_view(),
+        name="means-tested-benefits",
     ),
+    path(
+        "past-means-tested-benefits",
+        views.PastMeansTestedBenefits.as_view(),
+        name="past-means-tested-benefits",
+    ),
+    path("income", views.HouseholdIncome.as_view(), name="household-income"),
+    path("housing-costs", views.HousingCosts.as_view(), name="housing-costs"),
     path(
         "disability-benefits",
         views.DisabilityBenefits.as_view(),
@@ -122,165 +71,26 @@ urlpatterns = [
         name="child-benefit-claimant-type",
     ),
     path(
-        "child-benefit-summary",
-        views.ChildBenefitSummary.as_view(),
-        name="child-benefit-summary",
+        "free-school-meals-eligibility",
+        views.FreeSchoolMealsEligibility.as_view(),
+        name="free-school-meals-eligibility",
     ),
     path(
-        "qualifying-income",
-        views.IncomeLtChildBenefitThreshold.as_view(),
-        name="income-lt-child-benefit-threshold",
+        "vulnerabilities-general",
+        views.VulnerabilitiesGeneral.as_view(),
+        name="vulnerabilities-general",
     ),
     path("vulnerabilities", views.Vulnerabilities.as_view(), name="vulnerabilities"),
     path(
-        "disruption", views.ToleratedDisruption.as_view(), name="tolerated-disruption"
+        "council-tax-reduction",
+        views.CouncilTaxReduction.as_view(),
+        name="council-tax-reduction",
     ),
-    path("state-of-repair", views.StateOfRepair.as_view(), name="state-of-repair"),
-    path("motivations", views.Motivations.as_view(), name="motivations"),
-    path(
-        "owner-contributions",
-        views.ContributionCapacity.as_view(),
-        name="contribution-capacity",
-    ),
-    path("no-funding", views.NothingAtThisTime.as_view(), name="nothing-at-this-time"),
-    path("adult-1-name", views.Adult1Name.as_view(), name="adult1-name"),
-    path(
-        "adult-1-employment", views.Adult1Employment.as_view(), name="adult1-employment"
-    ),
-    path(
-        "adult-1-employment-income",
-        views.Adult1EmploymentIncome.as_view(),
-        name="adult1-employment-income",
-    ),
-    path(
-        "adult-1-self-employment-income",
-        views.Adult1SelfEmploymentIncome.as_view(),
-        name="adult1-self-employment-income",
-    ),
-    path(
-        "adult-1-welfare-benefits",
-        views.Adult1WelfareBenefits.as_view(),
-        name="adult1-welfare-benefits",
-    ),
-    path(
-        "adult-1-welfare-benefit-amounts",
-        views.Adult1WelfareBenefitAmounts.as_view(),
-        name="adult1-welfare-benefit-amounts",
-    ),
-    path(
-        "adult-1-pension-income",
-        views.Adult1PensionIncome.as_view(),
-        name="adult1-pension-income",
-    ),
-    path(
-        "adult-1-savings-income",
-        views.Adult1SavingsIncome.as_view(),
-        name="adult1-savings-income",
-    ),
-    path("adult-2-name", views.Adult2Name.as_view(), name="adult2-name"),
-    path(
-        "adult-2-employment", views.Adult2Employment.as_view(), name="adult2-employment"
-    ),
-    path(
-        "adult-2-employment-income",
-        views.Adult2EmploymentIncome.as_view(),
-        name="adult2-employment-income",
-    ),
-    path(
-        "adult-2-self-employment-income",
-        views.Adult2SelfEmploymentIncome.as_view(),
-        name="adult2-self-employment-income",
-    ),
-    path(
-        "adult-2-welfare-benefits",
-        views.Adult2WelfareBenefits.as_view(),
-        name="adult2-welfare-benefits",
-    ),
-    path(
-        "adult-2-welfare-benefit-amounts",
-        views.Adult2WelfareBenefitAmounts.as_view(),
-        name="adult2-welfare-benefit-amounts",
-    ),
-    path(
-        "adult-2-pension-income",
-        views.Adult2PensionIncome.as_view(),
-        name="adult2-pension-income",
-    ),
-    path(
-        "adult-2-savings-income",
-        views.Adult2SavingsIncome.as_view(),
-        name="adult2-savings-income",
-    ),
-    path("adult-3-name", views.Adult3Name.as_view(), name="adult3-name"),
-    path(
-        "adult-3-employment", views.Adult3Employment.as_view(), name="adult3-employment"
-    ),
-    path(
-        "adult-3-employment-income",
-        views.Adult3EmploymentIncome.as_view(),
-        name="adult3-employment-income",
-    ),
-    path(
-        "adult-3-self-employment-income",
-        views.Adult3SelfEmploymentIncome.as_view(),
-        name="adult3-self-employment-income",
-    ),
-    path(
-        "adult-3-welfare-benefits",
-        views.Adult3WelfareBenefits.as_view(),
-        name="adult3-welfare-benefits",
-    ),
-    path(
-        "adult-3-welfare-benefit-amounts",
-        views.Adult3WelfareBenefitAmounts.as_view(),
-        name="adult3-welfare-benefit-amounts",
-    ),
-    path(
-        "adult-3-pension-income",
-        views.Adult3PensionIncome.as_view(),
-        name="adult3-pension-income",
-    ),
-    path(
-        "adult-3-savings-income",
-        views.Adult3SavingsIncome.as_view(),
-        name="adult3-savings-income",
-    ),
-    path("adult-4-name", views.Adult4Name.as_view(), name="adult4-name"),
-    path(
-        "adult-4-employment", views.Adult4Employment.as_view(), name="adult4-employment"
-    ),
-    path(
-        "adult-4-employment-income",
-        views.Adult4EmploymentIncome.as_view(),
-        name="adult4-employment-income",
-    ),
-    path(
-        "adult-4-self-employment-income",
-        views.Adult4SelfEmploymentIncome.as_view(),
-        name="adult4-self-employment-income",
-    ),
-    path(
-        "adult-4-welfare-benefits",
-        views.Adult4WelfareBenefits.as_view(),
-        name="adult4-welfare-benefits",
-    ),
-    path(
-        "adult-4-welfare-benefit-amounts",
-        views.Adult4WelfareBenefitAmounts.as_view(),
-        name="adult4-welfare-benefit-amounts",
-    ),
-    path(
-        "adult-4-pension-income",
-        views.Adult4PensionIncome.as_view(),
-        name="adult4-pension-income",
-    ),
-    path(
-        "adult-4-savings-income",
-        views.Adult4SavingsIncome.as_view(),
-        name="adult4-savings-income",
-    ),
-    path("summary", views.HouseholdSummary.as_view(), name="household-summary"),
     path("answers-summary", views.AnswersSummary.as_view(), name="answers-summary"),
-    path("eligibility", views.EligibilitySummary.as_view(), name="eligibility-summary"),
-    path("complete", views.Completed.as_view(), name="completed"),
+    path("energy-advices", views.EnergyAdvices.as_view(), name="energy-advices"),
+    path(
+        "recommended-measures",
+        views.RecommendedMeasures.as_view(),
+        name="recommended-measures",
+    ),
 ]

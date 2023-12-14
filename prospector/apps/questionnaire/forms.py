@@ -3,14 +3,12 @@ import logging
 from crispy_forms_gds.helper import FormHelper
 from crispy_forms_gds.layout import Div
 from crispy_forms_gds.layout import Field
-from crispy_forms_gds.layout import Fieldset
 from crispy_forms_gds.layout import Layout
 from django import forms
 from django.utils.safestring import mark_safe
 
 from . import enums
 from . import models
-from . import utils
 from prospector.dataformats import phone_numbers
 
 logger = logging.getLogger(__name__)
@@ -141,10 +139,13 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
             (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
             for udprn, house in prefilled_addresses.items()
         ]
-        udprn_choices.append((None, "Address not in list"))
+        udprn_choices.append((None, "Address not in the list"))
+        udprn_choices.insert(0, (None, "Click here to choose the address"))
         self.fields["respondent_udprn"] = forms.ChoiceField(
             required=False, choices=udprn_choices
         )
+
+        self.initial["respondent_udprn"] = udprn_choices[0][0]
 
     class Meta:
         model = models.Answers
@@ -222,6 +223,25 @@ class OccupantName(AnswerFormMixin, forms.ModelForm):
         ]
 
 
+class AnswersSummary(AnswerFormMixin, forms.ModelForm):
+    source_of_info_about_pec = forms.ChoiceField(
+        required=True,
+        choices=enums.HowDidYouHearAboutPEC.choices,
+    )
+
+    def clean_source_of_info_about_pec(self):
+        data = self.cleaned_data.get("source_of_info_about_pec")
+        if data == enums.HowDidYouHearAboutPEC.LABEL:
+            raise forms.ValidationError("This field is required")
+        return data
+
+    class Meta:
+        model = models.Answers
+        fields = [
+            "source_of_info_about_pec",
+        ]
+
+
 class PropertyAddress(AnswerFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # Get the prefilled addresses to populate the select field
@@ -230,15 +250,18 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
 
         self.prefilled_addresses = prefilled_addresses
 
-        udprn_choices = [
-            (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
-            for udprn, house in prefilled_addresses.items()
+        address_choices = [
+            (id, f"{house.address_1}, {house.address_2}".strip(", "))
+            for id, house in prefilled_addresses.items()
         ]
-        udprn_choices.append((None, "Address not in list"))
+        address_choices.append((None, "Address not in the list"))
+        address_choices.insert(0, (None, "Click here to choose the address"))
 
-        self.fields["property_udprn"] = forms.ChoiceField(
-            required=False, choices=udprn_choices
+        self.fields["chosen_address"] = forms.ChoiceField(
+            required=False,
+            choices=address_choices,
         )
+        self.initial["chosen_address"] = address_choices[0][0]
 
     class Meta:
         model = models.Answers
@@ -246,31 +269,12 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
             "property_address_1",
             "property_address_2",
             "property_address_3",
-            "property_udprn",
         ]
         fields = [
             "property_address_1",
             "property_address_2",
             "property_address_3",
-            "property_udprn",
         ]
-
-    def clean_udprn(self):
-        udprn = self.cleaned_data["property_udprn"]
-        if udprn not in self.prefilled_addresses:
-            self.add_error("property_udprn", "Invalid value selected")
-        else:
-            # Ideal Postcodes and Data8 report the administrative district differently
-            # and we want it to work with either, including old cached values
-            if self.prefilled_addresses[udprn].district not in [
-                "City of Plymouth",
-                "Plymouth",
-            ]:
-                self.add_error(
-                    "property_udprn",
-                    "This property is not within the Plymouth Council area.",
-                )
-        return udprn
 
     def clean(self):
         """Check we got enough data, since no field is actually required."""
@@ -279,7 +283,7 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         if not data.get("property_udprn") and not data.get("property_address_1"):
             self.add_error(
                 "property_address_1",
-                "Please enter the first line of an address or select an address from the list",
+                "Please enter the first line of an address or select an address from the drop-down list above",
             )
 
         return data
@@ -314,25 +318,44 @@ class Consents(AnswerFormMixin, forms.ModelForm):
         return data
 
 
-class SelectEPC(AnswerFormMixin, forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        # Get the candidate EPCs to populate the select field
-        candidate_epcs = kwargs.pop("candidate_epcs")
-        super().__init__(*args, **kwargs)
-
-        self.candidate_epcs = candidate_epcs
-
-        epc_choices = [(lmk_id, str(epc)) for lmk_id, epc in candidate_epcs.items()]
-        epc_choices.append((None, "No valid EPC"))
-        self.fields["selected_epc"] = forms.ChoiceField(
-            required=False, choices=epc_choices, initial=epc_choices[0][0]
-        )
+class EnergyAdvices(AnswerFormMixin, forms.ModelForm):
+    advice_needed_warm = forms.BooleanField(
+        required=False, label="Do you struggle to keep your home warm or damp free?"
+    )
+    advice_needed_bills = forms.BooleanField(
+        required=False,
+        label="Does meeting your energy bills make you feel anxious?",
+    )
+    advice_needed_supplier = forms.BooleanField(
+        required=False,
+        label="Are you having issues with your supplier, meter or energy debt?",
+    )
+    advice_needed_from_team = forms.BooleanField(
+        required=False,
+        label="Would you like any advice from our Energy Advice Team?",
+    )
 
     class Meta:
         model = models.Answers
         fields = [
-            "selected_epc",
+            "advice_needed_warm",
+            "advice_needed_bills",
+            "advice_needed_supplier",
+            "advice_needed_from_team",
         ]
+        optional_fields = fields
+
+
+class PropertyMeasuresSummary(AnswerFormMixin, forms.ModelForm):
+    respondent_comments = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+    )
+
+    class Meta:
+        model = models.Answers
+        optional_fields = ["respondent_comments"]
+        fields = ["respondent_comments"]
 
 
 class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
@@ -343,84 +366,21 @@ class PropertyType(AnswerFormMixin, PrePoppedMixin, forms.ModelForm):
         model = models.Answers
         fields = [
             "property_type",
-            "property_form",
-        ]
-
-
-class HeatingControls(AnswerFormMixin, forms.ModelForm):
-    trvs_present = forms.ChoiceField(
-        choices=enums.TRVsPresent.choices,
-        widget=forms.RadioSelect,
-        required=True,
-        label=(
-            "Adjustable TRV controls on your radiators (Thermostatically "
-            "Radiator Valves - turn valves that are positioned at one end of a "
-            "radiator)"
-        ),
-    )
-    room_thermostat = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=((True, "Yes"), (False, "No")),
-        widget=forms.RadioSelect,
-        required=True,
-        label=(
-            "One or more room thermostats (set the desired temperature in "
-            "the room they are positioned in)."
-        ),
-    )
-    ch_timer = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=((True, "Yes"), (False, "No")),
-        widget=forms.RadioSelect,
-        required=True,
-        label=(
-            "A central heating timer (a timer or programmer allows you to "
-            "control when your heating and hot water comes on and when it goes "
-            "off)."
-        ),
-    )
-    programmable_thermostat = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=((True, "Yes"), (False, "No")),
-        widget=forms.RadioSelect,
-        required=True,
-        label=(
-            "A programmable central heating thermostat (combines time and "
-            "temperature controls in a single unit)."
-        ),
-    )
-    smart_thermostat = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=((True, "Yes"), (False, "No")),
-        widget=forms.RadioSelect,
-        required=True,
-        label=(
-            "A smart thermostat system (more advanced control systems for "
-            "central heating that set temperature and timing and are connected "
-            "to the internet)."
-        ),
-    )
-
-    class Meta:
-        model = models.Answers
-        fields = [
-            "trvs_present",
-            "room_thermostat",
-            "ch_timer",
-            "programmable_thermostat",
-            "smart_thermostat",
+            "property_attachment",
         ]
 
 
 class Occupants(AnswerFormMixin, forms.ModelForm):
-    adults = forms.ChoiceField(required=True, choices=enums.OneToFourOrMore.choices)
-    children = forms.ChoiceField(required=True, choices=enums.UpToFourOrMore.choices)
+    adults = forms.ChoiceField(required=True, choices=enums.OneToTen.choices)
+    children = forms.ChoiceField(required=True, choices=enums.OneToTenOrNone.choices)
+    seniors = forms.ChoiceField(required=True, choices=enums.OneToTenOrNone.choices)
 
     class Meta:
         model = models.Answers
         fields = [
             "adults",
             "children",
+            "seniors",
         ]
 
 
@@ -435,7 +395,12 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             name,
             field,
         ) in self.fields.items():
-            self.helper.layout.append(Field(name))
+            if name != "vulnerable_comments":
+                self.helper.layout.append(Field(name))
+            else:
+                self.helper.layout.append(
+                    Div(name, css_class="comments-form-container"),
+                )
 
     class Meta:
         model = models.Answers
@@ -443,448 +408,50 @@ class Vulnerabilities(AnswerFormMixin, forms.ModelForm):
             "vulnerable_cariovascular",
             "vulnerable_respiratory",
             "vulnerable_mental_health",
-            "vulnerable_cns",
             "vulnerable_disability",
             "vulnerable_age",
-            "vulnerable_child_pregnancy",
+            "vulnerable_children",
+            "vulnerable_immunosuppression",
+            "vulnerable_pregnancy",
+            "vulnerable_comments",
         ]
         optional_fields = fields
         widgets = {
             "vulnerable_cariovascular": forms.CheckboxInput(),
             "vulnerable_respiratory": forms.CheckboxInput(),
             "vulnerable_mental_health": forms.CheckboxInput(),
-            "vulnerable_cns": forms.CheckboxInput(),
             "vulnerable_disability": forms.CheckboxInput(),
             "vulnerable_age": forms.CheckboxInput(),
-            "vulnerable_child_pregnancy": forms.CheckboxInput(),
+            "vulnerable_children": forms.CheckboxInput(),
+            "vulnerable_immunosuppression": forms.CheckboxInput(),
+            "vulnerable_pregnancy": forms.CheckboxInput(),
+            "vulnerable_comments": forms.Textarea(),
         }
         labels = {
             "vulnerable_cariovascular": (
-                "A cardiovascular condition (for example: heart condition, risk "
-                "of stroke, high blood pressure etc.)"
+                "Household living with cardiovascular conditions"
             ),
             "vulnerable_respiratory": (
-                "A respiratory condition (for example COPD or asthma)"
+                "Household living with respiratory conditions, "
+                "in particular, chronic obstructive pulmonary disease "
+                "(COPD) and childhood asthma"
             ),
-            "vulnerable_mental_health": ("A mental health condition"),
-            "vulnerable_cns": (
-                "A central nervous system condition (for example dementia, "
-                "Alzheimer's or fibromyalgia)"
+            "vulnerable_mental_health": (
+                "Household living with mental health conditions"
             ),
-            "vulnerable_disability": ("Disability"),
-            "vulnerable_age": ("Being over 65 years old"),
-            "vulnerable_child_pregnancy": (
-                "Being a child under the age of five, or being pregnant"
+            "vulnerable_disability": (
+                "Household living with disabilities or limited mobility"
             ),
-        }
-
-
-class Motivations(AnswerFormMixin, forms.ModelForm):
-    class Meta:
-        model = models.Answers
-        fields = [
-            "motivation_better_comfort",
-            "motivation_lower_bills",
-            "motivation_unknown",
-            "motivation_environment",
-        ]
-        optional_fields = fields
-        widgets = {
-            "motivation_better_comfort": forms.CheckboxInput(),
-            "motivation_lower_bills": forms.CheckboxInput(),
-            "motivation_unknown": forms.CheckboxInput(),
-            "motivation_environment": forms.CheckboxInput(),
-        }
-        labels = {
-            "motivation_better_comfort": "A more comfortable property",
-            "motivation_lower_bills": "Reducing energy and heating bills",
-            "motivation_unknown": "I don't know",
-            "motivation_environment": "A greener property - doing your bit to tackle climate change",
-        }
-
-
-"""
-# Forms for each adult in the household, for respondents that need to answer this.
-"""
-
-
-class HouseholdAdultName(AnswerFormMixin, forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-
-    class Meta:
-        model = models.HouseholdAdult
-        fields = ["first_name", "last_name"]
-
-
-class HouseholdAdultEmployment(AnswerFormMixin, forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-
-    class Meta:
-        model = models.HouseholdAdult
-        fields = [
-            "employment_status",
-        ]
-        labels = {
-            "employment_status": "",
-        }
-
-
-class HouseholdAdultEmploymentIncome(AnswerFormMixin, forms.ModelForm):
-    employed_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-        self.helper.layout.append(
-            Fieldset(
-                Div(
-                    Field(
-                        "employed_income",
-                        spellcheck="false",
-                        template="questionnaire/fields/money_field.html",
-                    ),
-                    Field("employed_income_frequency"),
-                    css_class="fieldset_row",
-                ),
-                legend="",
-            )
-        )
-
-    class Meta:
-        model = models.HouseholdAdult
-        fields = ["employed_income", "employed_income_frequency"]
-
-
-class HouseholdAdultSelfEmploymentIncome(AnswerFormMixin, forms.ModelForm):
-    self_employed_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
-    )
-    business_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-        self.helper.layout.append(
-            Fieldset(
-                Div(
-                    Field(
-                        "self_employed_income",
-                        spellcheck="false",
-                        template="questionnaire/fields/money_field.html",
-                    ),
-                    Field("self_employed_income_frequency"),
-                    css_class="fieldset_row",
-                ),
-                legend="Income from any self employment",
-            )
-        )
-        self.helper.layout.append(
-            Fieldset(
-                Div(
-                    Field(
-                        "business_income",
-                        spellcheck="false",
-                        template="questionnaire/fields/money_field.html",
-                    ),
-                    Field("business_income_frequency"),
-                    css_class="fieldset_row",
-                ),
-                legend=(
-                    "<p>Income received from profits from any business venture "
-                    "(including as a landlord)</p>"
-                    "<p>(If different from Self Employment income)</p>"
-                ),
-            )
-        )
-
-    class Meta:
-        model = models.HouseholdAdult
-        optional_fields = ["business_income", "business_income_frequency"]
-        fields = [
-            "self_employed_income",
-            "self_employed_income_frequency",
-            "business_income",
-            "business_income_frequency",
-        ]
-        labels = {
-            "self_employed_income": "Income",
-            "business_income": "Income",
-        }
-
-
-class HouseholdAdultWelfareBenefits(AnswerFormMixin, forms.Form):
-    field_labels = {
-        "uc": "Universal Credit",
-        "jsa": "Job Seekers Allowance (JSA)",
-        "esa": "Employment and Support Allowance (ESA)",
-        "income_support": "Income Support",
-        "child_tax_credit": "Child Tax Credit",
-        "working_tax_credit": "Working Tax Credit",
-        "child_benefit": "Child Benefit",
-        "housing_benefit": "Housing Benefit",
-        "attendance_allowance": "Attendance Allowance",
-        "carers_allowance": "Carers Allowance",
-        "dla": "Disability Living Allowance (DLA)",
-        "pip": "Personal Independence Payment (PIP)",
-        "pension_credit": "Pension Credit",
-        "other": "Other",
-    }
-
-    uc = forms.BooleanField(required=False)
-    jsa = forms.BooleanField(required=False)
-    esa = forms.BooleanField(required=False)
-    income_support = forms.BooleanField(required=False)
-    child_tax_credit = forms.BooleanField(required=False)
-    working_tax_credit = forms.BooleanField(required=False)
-    child_benefit = forms.BooleanField(required=False)
-    housing_benefit = forms.BooleanField(required=False)
-    attendance_allowance = forms.BooleanField(required=False)
-    carers_allowance = forms.BooleanField(required=False)
-    dla = forms.BooleanField(required=False)
-    pip = forms.BooleanField(required=False)
-    pension_credit = forms.BooleanField(required=False)
-    other = forms.BooleanField(required=False)
-
-    def __init__(self, *args, **kwargs):
-        self.household_adult = kwargs.pop("household_adult")
-        super().__init__(*args, **kwargs)
-
-        # Set initial values from related models the fields dynamically
-        self.benefits = models.WelfareBenefit.objects.filter(
-            recipient=self.household_adult
-        )
-
-        for benefit in self.benefits:
-            self.initial[benefit.benefit_type.lower()] = True
-
-        for name, field in self.fields.items():
-            field.label = self.field_labels[name]
-
-
-class HouseholdAdultWelfareBenefitAmounts(AnswerFormMixin, forms.Form):
-    def __init__(self, *args, **kwargs):
-        self.household_adult = kwargs.pop("household_adult")
-        super().__init__(*args, **kwargs)
-
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-
-        # Instantiate the fields dynamically
-        self.benefits = models.WelfareBenefit.objects.filter(
-            recipient=self.household_adult
-        )
-
-        for benefit in self.benefits:
-            field_prefix = benefit.benefit_type.lower()
-            self.fields[f"{field_prefix}_amount"] = forms.IntegerField(
-                required=True,
-                min_value=1,
-                max_value=32767,
-                label="",
-            )
-            self.initial[f"{field_prefix}_amount"] = benefit.amount
-            self.fields[f"{field_prefix}_frequency"] = forms.ChoiceField(
-                required=True, choices=enums.BenefitPaymentFrequency.choices, label=""
-            )
-            self.initial[f"{field_prefix}_frequency"] = benefit.frequency
-
-            self.helper.layout.append(
-                Fieldset(
-                    Div(
-                        Field(
-                            f"{field_prefix}_amount",
-                            spellcheck="false",
-                            template="questionnaire/fields/money_field.html",
-                        ),
-                        Field(f"{field_prefix}_frequency"),
-                        css_class="fieldset_row",
-                    ),
-                    legend=enums.BenefitType(benefit.benefit_type).label,
-                )
-            )
-
-
-class HouseholdAdultPensionIncome(AnswerFormMixin, forms.ModelForm):
-    private_pension_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
-    )
-    state_pension_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-        self.helper.layout.append(
-            Fieldset(
-                Div(
-                    Field(
-                        "private_pension_income",
-                        spellcheck="false",
-                        template="questionnaire/fields/money_field.html",
-                    ),
-                    Field(
-                        "private_pension_income_frequency",
-                    ),
-                    css_class="fieldset_row",
-                ),
-                legend="Private Pension(s)",
+            "vulnerable_age": ("Household with an older person (65 and older)"),
+            "vulnerable_children": (
+                "Household with young children (from new-born to school age)"
             ),
-        )
-        self.helper.layout.append(
-            Fieldset(
-                Div(
-                    Field(
-                        "state_pension_income",
-                        spellcheck="false",
-                        template="questionnaire/fields/money_field.html",
-                    ),
-                    Field("state_pension_income_frequency"),
-                    css_class="fieldset_row",
-                ),
-                legend="State Pension",
-            )
-        )
-
-    class Meta:
-        model = models.HouseholdAdult
-        fields = [
-            "private_pension_income",
-            "private_pension_income_frequency",
-            "state_pension_income",
-            "state_pension_income_frequency",
-        ]
-        labels = {
-            "private_pension_income": "Income",
-            "state_pension_income": "Income",
-        }
-
-
-class HouseholdAdultSavingsIncome(AnswerFormMixin, forms.ModelForm):
-    saving_investment_income_frequency = forms.ChoiceField(
-        choices=enums.PaymentFrequency.choices, required=True, label="Frequency"
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = Layout()
-        self.helper.layout.append(
-            Fieldset(
-                Div(
-                    Field(
-                        "saving_investment_income",
-                        spellcheck="false",
-                        template="questionnaire/fields/money_field.html",
-                    ),
-                    Field(
-                        "saving_investment_income_frequency",
-                    ),
-                    css_class="fieldset_row",
-                ),
-                legend="",
+            "vulnerable_immunosuppression": ("Household living with immunosuppression"),
+            "vulnerable_pregnancy": ("Household with a pregnant woman"),
+            "vulnerable_comments": (
+                "Household living with any other conditions causing medical "
+                "vulnerability to the cold<br />Enter details in the box below:"
             ),
-        )
-
-    class Meta:
-        model = models.HouseholdAdult
-        fields = ["saving_investment_income", "saving_investment_income_frequency"]
-        labels = {
-            "saving_investment_income": "Income",
-        }
-
-    def clean(self):
-        data = super().clean()
-
-        income = data.get("saving_investment_income")
-        freq = data.get("saving_investment_income_frequency")
-        try:
-            amt = int(income)
-
-            if amt != 0 and (
-                (amt < 200 and freq == enums.PaymentFrequency.ANNUALLY)
-                or (amt < 17 and freq == enums.PaymentFrequency.MONTHLY)
-            ):
-                self.add_error(
-                    "saving_investment_income",
-                    "If the amount is under £200pa please enter a zero amount.",
-                )
-        except ValueError:
-            self.add_error(
-                "saving_investment_income", "Please enter a whole number of pounds."
-            )
-
-        return data
-
-
-class HouseholdSummary(AnswerFormMixin, forms.ModelForm):
-    # Allow the user to select 'AMEND', which will not get stored in the DB
-    confirm_or_amend_income = forms.ChoiceField(
-        choices=[
-            ("YES", "Yes"),
-            ("AMEND", "No - I need to amend the information I have given"),
-            (
-                "NO",
-                (
-                    "No - I didn't have all the information to hand so I have "
-                    "only filled this in for some income sources"
-                ),
-            ),
-        ],
-        widget=forms.RadioSelect,
-        required=True,
-    )
-    take_home_lt_31k_confirmation = forms.TypedChoiceField(
-        coerce=lambda x: x == "True",
-        choices=((True, "Yes"), (False, "No")),
-        widget=forms.RadioSelect,
-        required=False,
-    )
-
-    class Meta:
-        model = models.Answers
-        fields = ["take_home_lt_31k_confirmation"]
-        optional_fields = ["take_home_lt_31k_confirmation"]
-
-    def __init__(self, *args, **kwargs):
-        """Dynamically whether take_home_lt_31k_confirmation is required.
-
-        (only required if total income > £31k)
-        """
-
-        # get self.answers populated:
-        super().__init__(*args, **kwargs)
-        if utils.calculate_household_income(self.answers) > 31000:
-            self.fields["take_home_lt_31k_confirmation"].required = True
-
-
-class NothingAtThisTime(AnswerFormMixin, forms.ModelForm):
-    class Meta:
-        model = models.Answers
-        fields = ["consented_future_schemes"]
-        optional_fields = fields
-        widgets = {
-            "consented_future_schemes": forms.CheckboxInput(),
         }
 
 

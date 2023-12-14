@@ -17,12 +17,34 @@ class Answers(models.Model):
     uuid = models.UUIDField(
         db_index=True, default=uuid_lib.uuid4, editable=False, unique=True
     )
+    short_uid = models.CharField(
+        db_index=True,
+        max_length=10,
+        default=None,
+        editable=False,
+        unique=True,
+        verbose_name="Client's unique reference number to be passed in email for reference purpose",
+    )
 
     """
     # "YOUR DETAILS"
     """
 
     terms_accepted_at = models.DateTimeField(blank=True, null=True)
+
+    consented_callback = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="Respondent consent to call or email them to offer advice and help",
+    )
+
+    consented_future_schemes = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name=(
+            "Respondent consent to contact them in the future when there are relevant grants or programmes"
+        ),
+    )
 
     email = models.CharField(max_length=128, blank=True)
 
@@ -42,6 +64,12 @@ class Answers(models.Model):
         verbose_name="Relationship of respondent to occupant",
     )
 
+    company_name = models.CharField(
+        max_length=128,
+        blank=True,
+        verbose_name="Landlord company name (if applicable)",
+    )
+
     # Repondent address details are not used if respondent lives in the property
     respondent_address_1 = models.CharField(max_length=128, blank=True)
     respondent_address_2 = models.CharField(max_length=128, blank=True)
@@ -54,6 +82,15 @@ class Answers(models.Model):
     respondent_postcode = models.CharField(max_length=16, blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)
     contact_mobile = models.CharField(max_length=20, blank=True)
+
+    respondent_comments = models.TextField(blank=True, null=True)
+
+    source_of_info_about_pec = models.CharField(
+        max_length=128,
+        choices=enums.HowDidYouHearAboutPEC.choices,
+        default=enums.HowDidYouHearAboutPEC.LABEL,
+        blank=True,
+    )
 
     """
     # PROPERTY DETAILS
@@ -72,28 +109,32 @@ class Answers(models.Model):
     property_udprn = models.CharField(
         max_length=10, blank=True, verbose_name="Property UDPRN from API"
     )
+    lower_super_output_area_code = models.CharField(max_length=50, blank=True)
 
-    property_ownership = models.CharField(
-        max_length=10, choices=enums.PropertyOwnership.choices, blank=True
+    tenure = models.CharField(
+        max_length=128,
+        choices=enums.Tenure.choices,
+        blank=True,
+        verbose_name="Property ownership",
     )
     # UPRN is 12 digits, too big for a PositiveIntegerField
-    uprn = models.PositiveBigIntegerField(null=True, blank=True)
-
+    uprn = models.CharField(max_length=120, blank=True, null=True)
     respondent_has_permission = models.BooleanField(null=True, blank=True)
 
     """
     # DATA SOURCE DETAILS
     """
-    selected_epc = models.CharField(max_length=100, blank=True)
+    # selected_epc = models.CharField(max_length=100, blank=True)
 
-    sap_rating = models.PositiveSmallIntegerField(blank=True, null=True)
-
-    data_source = models.CharField(
-        max_length=10,
-        choices=enums.PropertyDataSource.choices,
-        blank=True,
-        verbose_name="Initial property data source",
+    sap_score = models.PositiveSmallIntegerField(blank=True, null=True)
+    sap_band = models.CharField(
+        max_length=1, choices=enums.EfficiencyBand.choices, blank=True, null=True
     )
+    lodged_epc_score = models.PositiveSmallIntegerField(blank=True, null=True)
+    lodged_epc_band = models.CharField(
+        max_length=1, choices=enums.EfficiencyBand.choices, blank=True, null=True
+    )
+    multiple_deprivation_index = models.SmallIntegerField(blank=True, null=True)
 
     # PROPERTY ENERGY PERFORMANCE DETAILS
 
@@ -101,375 +142,82 @@ class Answers(models.Model):
     # If the user agrees with the presented data, the _orig field is left empty
 
     property_type = models.CharField(
-        max_length=10, choices=enums.PropertyType.choices, blank=True
-    )
-    property_type_orig = models.CharField(
-        max_length=10,
+        max_length=128,
         choices=enums.PropertyType.choices,
         blank=True,
-        verbose_name="Property type according to property data source before correction",
-    )
-    property_form = models.CharField(
-        max_length=15, choices=enums.PropertyForm.choices, blank=True
-    )
-    property_form_orig = models.CharField(
-        max_length=15,
-        choices=enums.PropertyForm.choices,
-        blank=True,
-        verbose_name="Property form according to property data source before correction",
     )
 
-    property_age_band = models.CharField(
-        max_length=10, choices=enums.PropertyAgeBand.choices, blank=True, null=True
-    )
-    property_age_band_orig = models.CharField(
-        max_length=10,
-        choices=enums.PropertyAgeBand.choices,
+    property_attachment = models.CharField(
+        max_length=128,
+        choices=enums.PropertyAttachment.choices,
         blank=True,
-        null=True,
-        verbose_name="Property age band according to property data source before correction",
     )
 
-    wall_type = models.CharField(
-        max_length=10, choices=enums.WallType.choices, blank=True
-    )
-    wall_type_orig = models.CharField(
-        max_length=10,
-        choices=enums.WallType.choices,
+    property_construction_years = models.CharField(
+        max_length=12,
+        choices=enums.PropertyConstructionYears.choices,
         blank=True,
-        verbose_name="Wall type according to property data source before correction",
-    )
-    walls_insulated = models.BooleanField(
         null=True,
-        blank=True,
-        verbose_name="Walls are predominantly insulated",
-    )
-    walls_insulated_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Walls are predominantly insulated, according to property data source before correction",
     )
 
-    suspended_floor = models.BooleanField(
-        null=True, blank=True, verbose_name="Property has a suspended timber floor"
-    )
-    suspended_floor_orig = models.BooleanField(
-        null=True,
+    wall_construction = models.CharField(
+        max_length=128,
+        choices=enums.WallConstruction.choices,
         blank=True,
-        verbose_name="Property has a suspended timber floor, according to property data source before correction",
     )
 
-    suspended_floor_insulated = models.BooleanField(
-        null=True,
+    walls_insulation = models.CharField(
+        max_length=128,
+        choices=enums.WallInsulation.choices,
         blank=True,
-        verbose_name="Property has an insulated suspended timber floor",
-    )
-    suspended_floor_insulated_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has an insulated suspended floor, according to property data source before correction",
     )
 
-    unheated_loft = models.BooleanField(
-        null=True,
+    roof_construction = models.CharField(
+        max_length=128,
+        choices=enums.RoofConstruction.choices,
         blank=True,
-        verbose_name="Property has an unheated loft space with exposed rafters and joists",
-    )
-    unheated_loft_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has an unheated loft space, according to property data source before correction",
     )
 
-    room_in_roof = models.BooleanField(
-        null=True,
+    roof_insulation = models.CharField(
+        max_length=128,
+        choices=enums.RoofInsulation.choices,
         blank=True,
-        verbose_name="Property has a room in the roof space",
-    )
-    room_in_roof_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a room in the roof space, according to property data source before correction",
     )
 
-    rir_insulated = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Room-in-roof is insulated",
-    )
-    rir_insulated_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Room-in-roof is insulated, according to property data source before correction",
+    floor_construction = models.CharField(
+        max_length=128, choices=enums.FloorConstruction.choices, blank=True
     )
 
-    roof_space_insulated = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Roof space is insulated",
-    )
-    roof_space_insulated_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Roof space is insulated, according to property data source before correction",
+    floor_insulation = models.CharField(
+        max_length=128, choices=enums.FloorInsulation.choices, blank=True
     )
 
-    flat_roof = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Main part of property has a flat roof",
-    )
-    flat_roof_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Main part of property has a flat roof, according to property data source before correction",
-    )
-    flat_roof_insulated = models.CharField(
-        max_length=14,
-        choices=enums.InsulationConfidence.choices,
-        blank=True,
-        verbose_name="The property's flat roof is well insulated",
-    )
-    gas_boiler_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a mains gas central heating boiler",
-    )
-    gas_boiler_present_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a mains gas central heating boiler according to property data before correction",
-    )
-    gas_boiler_age = models.CharField(
-        max_length=11, choices=enums.BoilerAgeBand.choices, blank=True
-    )
-    gas_boiler_broken = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property's mains gas central heating boiler is currently not working",
-    )
-    on_mains_gas = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property is connected to the mains gas network",
-    )
-    on_mains_gas_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property is connected to the mains gas network according to property data before correction",
-    )
-    other_heating_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a non-gas-powered central heating system",
-    )
-    other_heating_present_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has non-gas-powered central heating according to property data before correction",
-    )
-    heat_pump_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a heat pump",
-    )
-    heat_pump_present_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a heat pump, according to property data before correction",
-    )
-    other_heating_fuel = models.CharField(
-        max_length=11,
-        choices=enums.NonGasFuel.choices,
-        blank=True,
-        verbose_name="Non-gas central heating fuel used in property",
-    )
-    other_heating_fuel_orig = models.CharField(
-        max_length=11,
-        choices=enums.NonGasFuel.choices,
-        blank=True,
-    )
-    storage_heaters_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has electric storage heaters",
-    )
-    storage_heaters_present_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has electric storage heaters according to property data before correction",
-    )
-    hhrshs_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has high heat retention storage heaters",
-    )
-    hhrshs_present_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has high heat retention storage heaters according to property data before correction",
-    )
-    electric_radiators_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has instantaneous electric heaters",
-    )
-    electric_radiators_present_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has instantaneous electric heaters according to property data before correction",
-    )
-    hwt_present = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a hot water tank",
-    )
-    trvs_present_old = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has themostatic radiator valves",
-    )
-    trvs_present_orig_old = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has thermostatic radiator valves according to property data before correction",
-    )
-    trvs_present = models.CharField(
-        max_length=8,
-        null=True,
-        blank=True,
-        verbose_name="Property has themostatic radiator valves",
-    )
-    trvs_present_orig = models.CharField(
-        max_length=8,
-        null=True,
-        blank=True,
-        verbose_name="Property has thermostatic radiator valves according to property data before correction",
-    )
-    room_thermostat = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a room thermostat",
-    )
-    room_thermostat_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a room thermostat according to property data before correction",
-    )
-    ch_timer = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a heating timer control",
-    )
-    ch_timer_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a heating timer control according to property data before correction",
-    )
-    programmable_thermostat = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a programmable thermostat control",
-    )
-    programmable_thermostat_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a programmable thermostat control according to property data before correction",
-    )
-    smart_thermostat = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has a smart thermostat control",
-    )
-    has_solar_pv = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has solar PV",
-    )
-    has_solar_pv_orig = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Property has solar PV before correction",
+    glazing = models.CharField(
+        max_length=128, choices=enums.Glazing.choices, blank=True
     )
 
-    """
-    # Store whether the user wishes to correct the inferred data.
-    # We need this to know whether to jump ahead at the end of each section.
-    """
-    will_correct_type = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct property type or age fields",
-    )
-    will_correct_walls = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct walls characteristics",
-    )
-    will_correct_roof = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct roof characteristics",
-    )
-    will_correct_floor = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct floor characteristics",
-    )
-    will_correct_heating = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent chose to correct heating system fields",
+    heating = models.CharField(
+        max_length=128, choices=enums.Heating.choices, blank=True
     )
 
-    """
-    # CONSTRAINTS: planning area and owner preferences
-    """
+    main_fuel = models.CharField(
+        max_length=128, choices=enums.MainFuel.choices, blank=True
+    )
 
-    tolerated_disruption = models.CharField(
-        max_length=20,
-        choices=enums.ToleratedDisruption.choices,
-        blank=True,
-        verbose_name="Maximum length of disruption tolerated",
+    boiler_efficiency = models.CharField(
+        max_length=1, choices=enums.EfficiencyBand.choices, blank=True
     )
-    state_of_repair = models.CharField(
-        choices=enums.StateOfRepair.choices, blank=True, max_length=9
+
+    controls_adequacy = models.CharField(
+        max_length=128, choices=enums.ControlsAdequacy.choices, blank=True
     )
-    motivation_better_comfort = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Motivated by improving comfort",
+
+    heated_rooms = models.IntegerField(blank=True, null=True)
+    t_co2_current = models.DecimalField(
+        max_digits=3, decimal_places=1, blank=True, null=True
     )
-    motivation_lower_bills = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Motivated by reducing bills",
-    )
-    motivation_environment = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Motivated to make the home more environmentally friendly",
-    )
-    motivation_unknown = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent cannot give motivations of the homeowner",
-    )
-    contribution_capacity = models.CharField(
-        choices=enums.ContributionCapacity.choices,
-        max_length=9,
-        blank=True,
-    )
-    consented_callback = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent consented to being called / emailed back to provide advice",
-    )
-    consented_future_schemes = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent consented to being contacted regarding relevant schemes in future.",
-    )
+
+    realistic_fuel_bill = models.CharField(max_length=9, blank=True, null=True)
 
     """
     # Top level household income assessment
@@ -479,26 +227,37 @@ class Answers(models.Model):
         null=True,
         blank=True,
         verbose_name="Number of adults living in the property",
-        choices=enums.OneToFourOrMore.choices,
+        choices=enums.OneToTen.choices,
     )
     children = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         verbose_name="Number of children living in the property",
-        choices=enums.UpToFourOrMore.choices,
+        choices=enums.OneToTenOrNone.choices,
     )
 
-    total_income_lt_30k = models.CharField(
-        choices=enums.IncomeIsUnderThreshold.choices,
-        max_length=7,
+    seniors = models.PositiveSmallIntegerField(
+        null=True,
         blank=True,
-        verbose_name="Total gross household income is under £31,000 pa",
+        verbose_name="Number of seniors (over 60 years old) living in the property",
+        choices=enums.OneToTenOrNone.choices,
     )
-    take_home_lt_31k = models.CharField(
-        choices=enums.IncomeIsUnderThreshold.choices,
+
+    household_income = models.IntegerField(
+        null=True,
         blank=True,
-        max_length=7,
-        verbose_name="Total household take home pay is under £31,000 pa",
+        verbose_name="Total gross household income before tax",
+    )
+
+    means_tested_benefits = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent receives means tested benefits",
+    )
+    past_means_tested_benefits = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Respondent received means tested benefits in the past 18 months",
     )
     disability_benefits = models.BooleanField(
         null=True,
@@ -517,7 +276,7 @@ class Answers(models.Model):
             "How many children child benefit is claimed for, or for which "
             "at least £21.80 per week of maintenance payments are made?"
         ),
-        choices=enums.UpToFourOrMore.choices,
+        choices=enums.OneToFiveOrMore.choices,
     )
     child_benefit_claimant_type = models.CharField(
         max_length=10,
@@ -529,20 +288,15 @@ class Answers(models.Model):
         ),
         choices=enums.ChildBenefitClaimantType.choices,
     )
-    child_benefit_eligibility_complete = models.BooleanField(
-        blank=True,
+    free_school_meals_eligibility = models.PositiveIntegerField(
         null=True,
-        verbose_name="This is a full account of child benefit eligibility",
+        blank=True,
+        verbose_name="Children living in household eligible for free school meals",
     )
-    child_benefit_threshold = models.PositiveIntegerField(
+    vulnerabilities_general = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Relevant income threshold for child benefit recipient(s)",
-    )
-    income_lt_child_benefit_threshold = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Total household income is under the relevant child benefit threshold",
+        verbose_name="Anyone in the house is vulnerable",
     )
     vulnerable_cariovascular = models.BooleanField(
         null=True,
@@ -559,11 +313,6 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is vulnerable due to a mental health condition",
     )
-    vulnerable_cns = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Anyone in the house is vulnerable due to central nervous system condition",
-    )
     vulnerable_disability = models.BooleanField(
         null=True,
         blank=True,
@@ -574,21 +323,70 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Anyone in the house is vulnerable due to being aged over 65",
     )
-    vulnerable_child_pregnancy = models.BooleanField(
+    vulnerable_children = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name="Anyone in the house is under five years old or pregnant",
+        verbose_name="Anyone in the house is with young children (from new-born to school age)",
     )
-    incomes_complete = models.BooleanField(
-        blank=True, null=True, verbose_name="This is a full account of household income"
+    vulnerable_pregnancy = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is pregnant",
     )
-    take_home_lt_31k_confirmation = models.BooleanField(
+    vulnerable_immunosuppression = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Anyone in the house is vulnerable due to immunosuppression",
+    )
+    vulnerable_comments = models.CharField(
+        max_length=400,
+        null=True,
+        blank=True,
+        verbose_name="User's input on other vulnerabilities",
+    )
+    housing_costs = models.IntegerField(
         blank=True,
         null=True,
-        verbose_name=(
-            "Household take home pay after tax, national insurance, energy bills "
-            "and housing costs is less than £31k"
-        ),
+        verbose_name="Housing costs",
+    )
+    council_tax_reduction = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Is the household entitled to a Council Tax reduction",
+    )
+    nmt4properties = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="No more than 4 properties in landlord's portfolio",
+    )
+    willing_to_contribute = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Landlord be willing to contribute 33% of all spending",
+    )
+
+    advice_needed_warm = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed: respondent struggles to keep their home warm or damp free",
+    )
+
+    advice_needed_bills = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed: respondent's energy bills make them feel anxious",
+    )
+
+    advice_needed_supplier = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed: issues with supplier, meter or energy debt",
+    )
+
+    advice_needed_from_team = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Advice needed from Energy Advice Team",
     )
 
     # Computed Fields
@@ -612,6 +410,12 @@ class Answers(models.Model):
 
         self.income_rating = utils.get_income_rating(self)
         self.property_rating = utils.get_property_rating(self)
+        if not self.short_uid:
+            # Generate short_uid value once, then check the db. If already exists, keep trying.
+            self.short_uid = utils.generate_id()  # noqa
+            while Answers.objects.filter(short_uid=self.short_uid).exists():
+                self.short_uid = utils.generate_id()  # noqa
+        self.full_clean()
         super().save(*args, **kwargs)
 
     @property
@@ -638,128 +442,134 @@ class Answers(models.Model):
             enums.RespondentRole.OWNER_OCCUPIER.value,
         ]
 
-    # The following logic is used to determine if the user can skip sections
-    # of the questionnaire.
+    @property
+    def is_property_in_lower_sap_band(self) -> Optional[bool]:
+        if self.sap_band is None:
+            return None
 
-    def type_inferences_complete(self):
-        # Includes age
-        return (
-            self.property_type_orig is not None
-            and self.property_form_orig is not None
-            and self.property_age_band_orig is not None
-        )
-
-    def wall_inferences_complete(self):
-        return self.wall_type_orig is not None and self.walls_insulated_orig is not None
-
-    def floor_inferences_complete(self):
-        # Bit more complicated.
-        return self.suspended_floor_orig is False or (
-            self.suspended_floor_orig is True
-            and self.suspended_floor_insulated_orig is not None
-        )
-
-    def roof_inferences_complete(self):
-        # Yet more complicated.
-        if self.unheated_loft_orig is None:
-            return False
-        elif self.unheated_loft_orig is True:
-            return self.roof_space_insulated_orig is not None
-        else:
-            # We think there's no loft
-            if self.room_in_roof_orig is None:
-                return False
-            elif self.room_in_roof_orig is True:
-                return self.rir_insulated_orig is not None
-            else:
-                # No room in roof
-                if self.flat_roof_orig is None:
-                    return False
-                elif self.flat_roof_orig is True:
-                    # can't infer certainty on insulation
-                    return False
-                else:
-                    return True
-
-    def heating_inferences_complete(self):
-        # More complicated still
-        if self.gas_boiler_present_orig is None:
-            return False
-        elif self.gas_boiler_present_orig is True:
-            # Can't infer presence of HWT, boiler age or state.
-            return False
-        else:
-            # No gas boiler then.
-            if self.on_mains_gas_orig is None:
-                return False
-            elif self.other_heating_present_orig is False:
-                if self.storage_heaters_present_orig is False:
-                    # A very narrow window of possibility!
-                    return self.electric_radiators_present_orig is not None
-                else:
-                    return self.hhrshs_present_orig is not None
-            else:
-                # Either couldn't tell if there is another CH system, or we think
-                # there is, in which case we can't infer presence of HWT.
-                return False
-
-
-class HouseholdAdult(models.Model):
-    answers = models.ForeignKey(
-        Answers, on_delete=models.CASCADE, blank=False, null=False
-    )
-    adult_number = models.PositiveSmallIntegerField(blank=False, null=False)
-    first_name = models.CharField(verbose_name="First name", max_length=64, blank=True)
-    last_name = models.CharField(verbose_name="Last name", max_length=64, blank=True)
-    employment_status = models.CharField(
-        choices=enums.EmploymentStatus.choices, max_length=13, blank=True
-    )
-    employed_income = models.PositiveIntegerField(blank=True, null=True)
-    employed_income_frequency = models.CharField(
-        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
-    )
-    self_employed_income = models.PositiveIntegerField(blank=True, null=True)
-    self_employed_income_frequency = models.CharField(
-        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
-    )
-    business_income = models.PositiveIntegerField(blank=True, null=True)
-    business_income_frequency = models.CharField(
-        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
-    )
-    private_pension_income = models.PositiveIntegerField(blank=True, null=True)
-    private_pension_income_frequency = models.CharField(
-        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
-    )
-    state_pension_income = models.PositiveIntegerField(blank=True, null=True)
-    state_pension_income_frequency = models.CharField(
-        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
-    )
-    saving_investment_income = models.PositiveIntegerField(blank=True, null=True)
-    saving_investment_income_frequency = models.CharField(
-        choices=enums.PaymentFrequency.choices, max_length=8, blank=True
-    )
+        return self.sap_band in [
+            enums.EfficiencyBand.D.value,
+            enums.EfficiencyBand.E.value,
+            enums.EfficiencyBand.F.value,
+            enums.EfficiencyBand.G.value,
+        ]
 
     @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+    def is_property_not_heated_by_main_gas(self) -> Optional[bool]:
+        if self.main_fuel is None:
+            return None
 
-
-class WelfareBenefit(models.Model):
-    recipient = models.ForeignKey(
-        HouseholdAdult, on_delete=models.CASCADE, blank=False, null=False
-    )
-    benefit_type = models.CharField(
-        choices=enums.BenefitType.choices, max_length=20, blank=False
-    )
-    frequency = models.CharField(
-        choices=enums.BenefitPaymentFrequency.choices, max_length=12, blank=True
-    )
-    amount = models.PositiveSmallIntegerField(blank=True, null=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["recipient", "benefit_type"],
-                name="no_duplicated_benefits_per_recipient",
-            )
+        return self.main_fuel not in [
+            enums.MainFuel.MGC.value,
+            enums.MainFuel.MGNC.value,
         ]
+
+    @property
+    def is_property_privately_owned(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
+
+        return self.tenure == enums.Tenure.OWNER_OCCUPIED.value
+
+    @property
+    def is_property_privately_rented(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
+
+        return self.tenure == enums.Tenure.RENTED_PRIVATE.value
+
+    @property
+    # Returns True even if value of nmt4properties is None
+    # because while respond by tenant we do not ask this straightforward
+    # rather assuming landlord's positive answer
+    def does_landlord_own_no_more_than_4_properties(self) -> bool:
+        return self.nmt4properties in [None, True]
+
+    @property
+    # Returns True even if value of willing_to_contribute is None
+    # because when respond by tenant we do not ask this straightforward
+    # rather assuming landlord's positive answer
+    def will_landlord_contribute(self) -> bool:
+        return self.willing_to_contribute in [None, True]
+
+    @property
+    def is_deprivation_index_upto_3(self) -> Optional[bool]:
+        if self.multiple_deprivation_index is None:
+            return None
+
+        return self.multiple_deprivation_index in [1, 2, 3]
+
+    @property
+    def is_income_less_than_31K(self) -> Optional[bool]:
+        if self.household_income is None:
+            return None
+        return self.household_income < 31000
+
+    @property
+    def is_income_under_max_based_on_occupants(self) -> Optional[bool]:
+        if self.children is not None and self.seniors is None:
+            dependents = self.children
+        elif self.seniors is not None and self.children is None:
+            dependents = self.seniors
+        elif self.children is None and self.seniors is None:
+            dependents = None
+        else:
+            dependents = self.children + self.seniors
+
+        if self.household_income is None:
+            return None
+        elif self.adults is None:
+            return None
+        elif self.adults >= 2:
+            if dependents in [None, 0]:
+                return self.household_income <= 20000
+            elif dependents == 1:
+                return self.household_income <= 24000
+            elif dependents == 2:
+                return self.household_income <= 28000
+            elif dependents == 3:
+                return self.household_income <= 32000
+            elif dependents == 4:
+                return self.household_income <= 36000
+            elif dependents >= 5:
+                return self.household_income <= 40000
+        elif self.adults == 1:
+            if dependents in [None, 0]:
+                return self.household_income <= 20000
+            elif dependents == 1:
+                return self.household_income <= 20000
+            elif dependents == 2:
+                return self.household_income <= 20000
+            elif dependents == 3:
+                return self.household_income <= 23000
+            elif dependents == 4:
+                return self.household_income <= 27600
+            elif dependents >= 5:
+                return self.household_income <= 31600
+
+        return None
+
+    @property
+    def is_hug2_eligible(self) -> Optional[bool]:
+        if self.tenure == enums.Tenure.OWNER_OCCUPIED.value:
+            return (
+                self.is_property_in_lower_sap_band
+                and self.is_property_not_heated_by_main_gas
+                and (
+                    self.is_deprivation_index_upto_3
+                    or self.is_income_less_than_31K
+                    or self.is_income_under_max_based_on_occupants
+                )
+            )
+        elif self.tenure == enums.Tenure.RENTED_PRIVATE.value:
+            return (
+                self.is_property_in_lower_sap_band
+                and self.is_property_not_heated_by_main_gas
+                and self.does_landlord_own_no_more_than_4_properties
+                and self.will_landlord_contribute
+                and (
+                    self.is_deprivation_index_upto_3
+                    or self.is_income_less_than_31K
+                    or self.is_income_under_max_based_on_occupants
+                )
+            )

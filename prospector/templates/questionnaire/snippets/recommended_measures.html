@@ -1,14 +1,13 @@
-{% if measures %}
-    <p>Based on what you’ve told us, we think you and your home would benefit from:</p>
-    {% for measure in measures %}
-        <details>
-            <summary class="ticked">{{ measure.label }}</summary>
-            <ul>
-                <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
-                <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
-                <li><strong>Impact on energy bills:</strong> {{ measure.bill_impact }}</li>
-                <li><strong>Likelihood of receiving funding:</strong> {{ measure.funding_likelihood }}</li>
-            </dl>
-        </details>
-    {% endfor %}
-{% endif %}
+<p>
+    Based on the information we have about your home, we believe your home could benefit from the following upgrades:
+</p>
+{% for measure in measures %}
+    <details>
+        <summary class="ticked">{{ measure.label }}</summary>
+        <ul>
+            <li><strong>Disruption:</strong> {{ measure.disruption }}</li>
+            <li><strong>Comfort benefit:</strong> {{ measure.comfort_benefit }}</li>
+            <li><strong>Impact on energy bills:</strong> {{ measure.bill_impact }}</li>
+        </ul>
+    </details>
+{% endfor %}

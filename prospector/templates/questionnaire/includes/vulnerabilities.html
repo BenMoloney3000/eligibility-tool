@@ -3,38 +3,48 @@
 <table>
     <tr>
         <td>A cardiovascular condition (for example: heart condition, risk of stroke, high blood pressure etc.)</td>
-        <td>{{ user_data.vulnerable_cariovascular|yesno|capfirst }}</td>
-        <td></td>
+        <td>{{ user_data.vulnerable_cariovascular|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
     </tr>
     <tr>
         <td>A respiratory condition (for example COPD or asthma)</td>
-        <td>{{ user_data.vulnerable_respiratory|yesno|capfirst }}</td>
-        <td></td>
+        <td>{{ user_data.vulnerable_respiratory|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
     </tr>
     <tr>
         <td>A mental health condition</td>
-        <td>{{ user_data.vulnerable_mental_health|yesno|capfirst }}</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>A central nervous system condition (for example dementia, Alzheimer's or fibromyalgia)</td>
-        <td>{{ user_data.vulnerable_cns|yesno|capfirst }}</td>
-        <td><a href='{% url "questionnaire:vulnerabilities" %}'>CHANGE</a></td>
+        <td>{{ user_data.vulnerable_mental_health|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
     </tr>
     <tr>
         <td>Disability</td>
-        <td>{{ user_data.vulnerable_disability|yesno|capfirst }}</td>
-        <td></td>
+        <td>{{ user_data.vulnerable_disability|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
     </tr>
     <tr>
         <td>Being over 65 years old</td>
-        <td>{{ user_data.vulnerable_age|yesno|capfirst }}</td>
-        <td></td>
+        <td>{{ user_data.vulnerable_age|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
     </tr>
     <tr>
-        <td>Being a child under the age of five, or being pregnant</td>
-        <td>{{ user_data.vulnerable_child_pregnancy|yesno|capfirst }}</td>
-        <td></td>
+        <td>Being a young child (from new-born to school age)</td>
+        <td>{{ user_data.vulnerable_children|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>Immunosuppression</td>
+        <td>{{ user_data.vulnerable_immunosuppression|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>Being a pregnant</td>
+        <td>{{ user_data.vulnerable_pregnancy|yesno:"Yes,No"|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
+    </tr>
+    <tr>
+        <td>Any other conditions</td>
+        <td>{{ user_data.vulnerable_comments|capfirst }}</td>
+        <td><a href='{% url "questionnaire:vulnerabilities-general" %}'>CHANGE</a></td>
     </tr>
 </table>
 <table>

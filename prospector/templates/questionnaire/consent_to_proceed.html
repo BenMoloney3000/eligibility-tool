@@ -1,0 +1,32 @@
+{% extends "questionnaire/base_question.html" %}
+
+{% load static %}
+
+{% block title %}Home upgrade eligibility: {{ title }} | Plymouth Energy Community{% endblock %}
+
+{% block question_text %}
+    <h2>{{ question_text }}</h2>
+{% endblock question_text %}
+
+{% block form_content %}
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+            <input
+                type="checkbox"
+                class="govuk-checkboxes__input"
+                id="{{ form.field.auto_id }}_{{ value }}"
+                name="{{ form.field.html_name }}"
+                value="True"
+                required
+            >
+            <label
+                class="govuk-label govuk-checkboxes__label"
+                for="{{ form.field.auto_id }}_{{ value }}">
+                Accept
+            </label>
+            {% for error in form.field.errors %}
+                <span class="input-error">Please accept to continue.</span>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock form_content %}
