@@ -1,5 +1,3 @@
-from enum import auto
-
 from django.db import models
 
 
@@ -492,13 +490,6 @@ class BenefitType(models.TextChoices):
 class ChildBenefitClaimantType(models.TextChoices):
     SINGLE = "SINGLE", "Single claimant"
     JOINT = "JOINT", "Member of a couple"
-
-
-class RAYG(models.TextChoices):
-    RED = auto()
-    AMBER = auto()
-    YELLOW = auto()
-    GREEN = auto()
 
 
 # Deprecated, used in migrations/0036_data_migration_trvs_present.py

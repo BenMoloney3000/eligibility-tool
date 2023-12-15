@@ -389,27 +389,9 @@ class Answers(models.Model):
         verbose_name="Advice needed from Energy Advice Team",
     )
 
-    # Computed Fields
-    income_rating = models.CharField(
-        choices=enums.RAYG.choices,
-        max_length=8,
-        null=True,
-        blank=True,
-        verbose_name="Income rating (computed field)",
-    )
-    property_rating = models.CharField(
-        choices=enums.RAYG.choices,
-        max_length=8,
-        null=True,
-        blank=True,
-        verbose_name="Property rating (computed field)",
-    )
-
     def save(self, *args, **kwargs):
         from prospector.apps.questionnaire import utils
 
-        self.income_rating = utils.get_income_rating(self)
-        self.property_rating = utils.get_property_rating(self)
         if not self.short_uid:
             # Generate short_uid value once, then check the db. If already exists, keep trying.
             self.short_uid = utils.generate_id()  # noqa
