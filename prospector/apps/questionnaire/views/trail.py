@@ -457,29 +457,12 @@ class DisabilityBenefits(abstract_views.SingleQuestion):
     percent_complete = 60
     next = "ChildBenefit"
 
-    def pre_save(self):
-        # Obliterate values from the path never taken (in case of reversing)
-        if self.answers.disability_benefits:
-            self.answers.child_benefit = None
-            self.answers.child_benefit_number_elsewhere = None
-            self.answers.child_benefit_claimant_type = None
-            self.answers.child_benefit_summary = None
-            self.answers.child_benefit_threshold = None
-            self.answers.income_lt_child_benefit_threshold = None
-
 
 class ChildBenefit(abstract_views.SingleQuestion):
     title = "Child benefit"
     type_ = abstract_views.QuestionType.YesNo
     question = "Do you receive child benefit?"
     percent_complete = 63
-
-    def pre_save(self):
-        # Set the benefit threshold dependent on the household composition
-        if not self.answers.child_benefit:
-            # Obliterate values from the etc.
-            self.answers.child_benefit_threshold = None
-            self.answers.income_lt_child_benefit_threshold = None
 
     def get_next(self):
         if self.answers.child_benefit:
@@ -735,10 +718,6 @@ class RecommendedMeasures(abstract_views.Question):
 
         context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
-        context["rating"] = utils.get_overall_rating(self.answers)
-        context["sap_rating"] = self.answers.sap_score
-        context["property_rating"] = utils.get_property_rating(self.answers)
-        context["income_rating"] = utils.get_income_rating(self.answers)
         context["hug2_eligibility"] = self.answers.is_hug2_eligible
         return context
 
