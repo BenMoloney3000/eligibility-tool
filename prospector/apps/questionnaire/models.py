@@ -288,7 +288,7 @@ class Answers(models.Model):
         ),
         choices=enums.ChildBenefitClaimantType.choices,
     )
-    free_school_meals_eligibility = models.PositiveIntegerField(
+    free_school_meals_eligibility = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="Children living in household eligible for free school meals",
