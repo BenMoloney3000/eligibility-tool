@@ -4,6 +4,8 @@ from . import factories
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import utils
 
+# TODO utils tests to be rewritten
+
 
 @pytest.mark.django_db
 def test_get_income_rating():

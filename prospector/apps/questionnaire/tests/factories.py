@@ -1,10 +1,8 @@
-import datetime
-
 from django.utils import timezone
 from factory import Faker
 from factory.django import DjangoModelFactory
 
-from prospector.apis import epc
+from prospector.apis import parity
 from prospector.apps.questionnaire import models
 
 
@@ -17,34 +15,44 @@ class AnswersFactory(DjangoModelFactory):
     property_postcode = Faker("postcode", locale="en-GB")
 
 
-class HouseholdAdultFactory(DjangoModelFactory):
-    class Meta:
-        model = models.HouseholdAdult
-
-    first_name = Faker("first_name")
-    last_name = Faker("last_name")
-    adult_number = 1
-
-
-FAKE_EPC = epc.EPCData(
+FAKE_PARITY = parity.ParityData(
     "19747490192737",  # id
-    datetime.date(2020, 10, 10),  # date
+    "39771676",  # org_ref
+    "https://crohm.parityprojects.com/Address/Details/12345678",  # address_link
+    "https://maps.google.com/maps?q=9 LYNX LANE PL9 8FF",  # googlemaps
     "20 Testington Pastures",  # address_1
     "Eggborough",  # address_2
     "Royal Leamington Spa",  # address_3
-    "1234",  # uprn
-    "Bungalow",  # property_type
-    "Semi-Detached",  # built_form
-    "England and Wales: 1976-1982",  # construction_age_band
-    "Cavity wall, filled cavity",  # walls_description
-    4,  # walls_rating
-    "To unheated space, limited insulation (assumed)",  # floor_description
-    3,  # floor rating
-    "Flat, no insulation (assumed)",  # roof_description
-    2,  # roof rating
-    "Boiler and radiators, electric",  # mainheat_description
-    "From main system",  # hotwater_description
-    2302,  # main_heating_controls  (DHS_FLAT_RATE_PROGRAMMER)
-    66,  # current_energy_rating
-    30,  # photo_supply
+    "PL9 8FF",  # postcode
+    81.20,  # sap_score
+    "B",  # sap_band
+    84,  # lodged_epc_score
+    "B",  # lodged_epc_band
+    2.5,  # tco2_current
+    "£622",  # realistic_fuel_bill
+    "House",  # type
+    "Detached",  # attachement
+    "2012 onwards",  # construction_years
+    6,  # heated_rooms
+    "Cavity",  # wall_construction
+    "As built",  # wall_insulation
+    "Solid",  # floor_construction
+    "As built",  # floor_insulation
+    "Pitched - loft access",  # roof_construction
+    "Unknown",  # roof_insulation
+    "Triple",  # glazing
+    "Boilers",  # heating
+    "C",  # boiler_efficiency
+    "Mains gas - not community",  # main_fuel
+    "Top spec",  # control_adequacy
+    "Plymouth",  # local_authority
+    "Plymstock Dunstone",  # ward
+    "E14000950",  # parliamentary_constituency
+    "South West",  # region_name
+    "Unknown",  # tenure
+    "10093900740",  # uprn
+    50.36647797,  # lat_coordinate
+    -4.05325174,  # long_coordinate
+    "E01015131",  # lower_super_output_area_code
+    10,  # multiple_deprivation_index
 )
