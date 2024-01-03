@@ -13,7 +13,6 @@ from prospector.apis.crm import mapping
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import models
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -219,26 +218,47 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_udprn": answers.property_udprn,
         "pcc_likelihoodofprivatelyrented": option_value_mapping(
             "pcc_likelihoodofprivatelyrented",
-            answers.property_ownership,
+            answers.tenure,
             {
-                enums.PropertyOwnership.PRIVATE_TENANCY: "High",
+                enums.Tenure.RENTED_PRIVATE: "High",
             },
             default_mapping="Low",
         ),
         "pcc_inscopeformees": None,  # Leave blank
-        "pcc_primaryheatingfuel": mapping.infer_pcc_primaryheatingfuel(
-            on_mains_gas=answers.on_mains_gas,
-            storage_heaters_present=answers.storage_heaters_present,
-            other_heating_fuel=answers.other_heating_fuel,
-        )[1],
+        "pcc_primaryheatingfuel": (
+            option_value_mapping(
+                "pcc_primaryheatingfuel",
+                answers.main_fuel,
+                {
+                    enums.MainFuel.ANTHRACITE: "Anthracite",
+                    enums.MainFuel.BWP: "Bulk wood pellets",
+                    enums.MainFuel.DFMW: "Dual fuel mineral wood",
+                    enums.MainFuel.EC: "Electricity - community",
+                    enums.MainFuel.ENC: "Electricity - not community",
+                    enums.MainFuel.GBLPG: "Bottled gas (LPG)",
+                    enums.MainFuel.HCNC: "Coal - not community",
+                    enums.MainFuel.LPGC: "LPG - community",
+                    enums.MainFuel.LPGNC: "LPG - not community",
+                    enums.MainFuel.LPGSC: "LPG - special condition",
+                    enums.MainFuel.MGC: "Mains gas - community",
+                    enums.MainFuel.MGNC: "Mains gas - not community",
+                    enums.MainFuel.OC: "Oil - community",
+                    enums.MainFuel.ONC: "Oil - not community",
+                    enums.MainFuel.SC: "Smokeless coal",
+                    enums.MainFuel.WC: "Wood chips",
+                    enums.MainFuel.WL: "Wood logs",
+                },
+                default_mapping="Unknown",
+            )
+        ),
         "pcc_primaryheatingdeliverymethod": (
-            mapping.infer_pcc_primaryheatingdeliverymethod(
-                gas_boiler_present=answers.gas_boiler_present,
-                heat_pump_present=answers.heat_pump_present,
-                storage_heaters_present=answers.storage_heaters_present,
-                hhrshs_present=answers.hhrshs_present,
-                electric_radiators_present=answers.electric_radiators_present,
-            )[1]
+            option_value_mapping(
+                "pcc_primaryheatingdeliverymethod",
+                answers.heating,
+                {
+                    enums.Heating.BOILERS: "Boilers",
+                },
+            )
         ),
         "pcc_secondaryheatingfuel": None,  # Leave blank
         "pcc_secondaryheatingdeliverymethod": None,  # Leave blank
@@ -263,7 +283,6 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_propertytype": (
             mapping.infer_pcc_propertytype(
                 property_type=answers.property_type,
-                property_form=answers.property_form,
             )[1]
         ),
         "pcc_bedrooms": None,  # Leave blank
