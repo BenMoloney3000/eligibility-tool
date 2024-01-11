@@ -2,15 +2,25 @@
 {% load sass_tags %}
 <!DOCTYPE html>
 <html lang="en">
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Home upgrade eligibility{% endblock title %}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&amp;display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}">
-    <link href="{% sass_src 'css/style.scss' %}" rel="stylesheet" type="text/css" />
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ME98R60LBL"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ME98R60LBL');
+        </script>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Home upgrade eligibility{% endblock title %}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&amp;display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}">
+        <link href="{% sass_src 'css/style.scss' %}" rel="stylesheet" type="text/css" />
+    </head>
 
     <body>
         <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
