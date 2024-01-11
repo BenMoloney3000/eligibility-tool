@@ -9,7 +9,6 @@ from django.core.exceptions import ImproperlyConfigured
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 
-from prospector.apis.crm import mapping
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import models
 
@@ -216,13 +215,15 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_county": None,  # Leave blank
         "pcc_postcode": answers.property_postcode,
         "pcc_udprn": answers.property_udprn,
-        "pcc_likelihoodofprivatelyrented": option_value_mapping(
-            "pcc_likelihoodofprivatelyrented",
-            answers.tenure,
-            {
-                enums.Tenure.RENTED_PRIVATE: "High",
-            },
-            default_mapping="Low",
+        "pcc_likelihoodofprivatelyrented": (
+            option_value_mapping(
+                "pcc_likelihoodofprivatelyrented",
+                answers.tenure,
+                {
+                    enums.Tenure.RENTED_PRIVATE: "High",
+                },
+                default_mapping="Low",
+            )
         ),
         "pcc_inscopeformees": None,  # Leave blank
         "pcc_primaryheatingfuel": (
@@ -248,7 +249,6 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.MainFuel.WC: "Wood chips",
                     enums.MainFuel.WL: "Wood logs",
                 },
-                default_mapping="Unknown",
             )
         ),
         "pcc_primaryheatingdeliverymethod": (
@@ -257,135 +257,181 @@ def map_crm(answers: models.Answers) -> dict:
                 answers.heating,
                 {
                     enums.Heating.BOILERS: "Boilers",
+                    enums.Heating.COMMUNITY: "Community",
+                    enums.Heating.EUF: "Electric underfloor",
+                    enums.Heating.HP_WARM: "Heat pumps (warm air)",
+                    enums.Heating.HP_WET: "Heat pumps (wet)",
+                    enums.Heating.OTHER: "Other systems",
+                    enums.Heating.RH: "Room heaters",
+                    enums.Heating.SH: "Storage heaters",
+                    enums.Heating.AIR: "Warm Air (not heat pump)",
                 },
             )
         ),
         "pcc_secondaryheatingfuel": None,  # Leave blank
         "pcc_secondaryheatingdeliverymethod": None,  # Leave blank
-        "pcc_boilertype": mapping.infer_pcc_boilertype(
-            gas_boiler_present=answers.gas_boiler_present,
-            gas_boiler_age=answers.gas_boiler_age,
-        )[1],
-        "pcc_heatingcontrols": mapping.infer_pcc_heatingcontrols(
-            gas_boiler_present=answers.gas_boiler_present,
-            smart_thermostat=answers.smart_thermostat,
-            room_thermostat=answers.room_thermostat,
-            programmable_thermostat=answers.programmable_thermostat,
-            heat_pump_present=answers.heat_pump_present,
-            ch_timer=answers.ch_timer,
-        )[1],
-        "pcc_solarpanels": (
-            mapping.infer_pcc_solarpanels(
-                has_solar_pv=answers.has_solar_pv,
-            )[1]
-        ),
+        "pcc_boilertype": None,
+        "pcc_heatingcontrols": None,
+        "pcc_solarpanels": None,
         "pcc_solarthermal": None,  # Leave blank
         "pcc_propertytype": (
-            mapping.infer_pcc_propertytype(
-                property_type=answers.property_type,
-            )[1]
+            option_value_mapping(
+                "pcc_propertytype",
+                answers.property_type,
+                {
+                    enums.PropertyType.FLAT: "Flat",
+                    enums.PropertyType.HOUSE: "House",
+                    enums.PropertyType.BUNGALOW: "Bungalow",
+                    enums.PropertyType.PARK_HOME: "Park home",
+                    enums.PropertyType.MAISONNETTE: "Maisonette",
+                },
+            )
         ),
         "pcc_bedrooms": None,  # Leave blank
         "pcc_propertyage": (
             option_value_mapping(
                 "pcc_propertyage",
-                answers.property_age_band,
+                answers.property_construction_years,
                 {
-                    enums.PropertyAgeBand.BEFORE_1900: "Pre 1900",
-                    enums.PropertyAgeBand.FROM_1900: "1900 to 1929",
-                    enums.PropertyAgeBand.FROM_1930: "1930 to 1949",
-                    enums.PropertyAgeBand.FROM_1950: "1950 to 1966",
-                    enums.PropertyAgeBand.FROM_1967: "1967 to 1975",
-                    enums.PropertyAgeBand.FROM_1976: "1976 to 1990",
-                    enums.PropertyAgeBand.FROM_1991: "1991 to 2002",
-                    enums.PropertyAgeBand.SINCE_2003: "Since 2003",
-                    enums.PropertyAgeBand.UNKNOWN: "Unknown",
+                    enums.PropertyConstructionYears.BEFORE_1900: "Before 1900",
+                    enums.PropertyConstructionYears.FROM_1900: "1900-1929",
+                    enums.PropertyConstructionYears.FROM_1930: "1930-1949",
+                    enums.PropertyConstructionYears.FROM_1950: "1950-1966",
+                    enums.PropertyConstructionYears.FROM_1967: "1967-1975",
+                    enums.PropertyConstructionYears.FROM_1976: "1976-1982",
+                    enums.PropertyConstructionYears.FROM_1983: "1983-1990",
+                    enums.PropertyConstructionYears.FROM_1991: "1991-1995",
+                    enums.PropertyConstructionYears.FROM_1996: "1996-2002",
+                    enums.PropertyConstructionYears.FROM_2003: "2003-2006",
+                    enums.PropertyConstructionYears.FROM_2007: "2007-2011",
+                    enums.PropertyConstructionYears.FROM_2012: "2012 onwards",
                 },
-                default_mapping="Unknown",
             )
         ),
         "pcc_listedproperty": None,  # Leave blank
         "pcc_rooftype": (
-            mapping.infer_pcc_rooftype(
-                unheated_loft=answers.unheated_loft,
-                room_in_roof=answers.room_in_roof,
-                flat_roof=answers.flat_roof,
-            )[1]
+            option_value_mapping(
+                "pcc_rooftype",
+                answers.roof_construction,
+                {
+                    enums.RoofConstruction.ADB: "Another dwelling above",
+                    enums.RoofConstruction.FLAT: "Flat",
+                    enums.RoofConstruction.PNLA: "Pitched - loft access",
+                    enums.RoofConstruction.PNNLA: "Pitched - no loft access",
+                    enums.RoofConstruction.PT: "Thatched",
+                    enums.RoofConstruction.PWSC: "Pitched with sloping ceiling",
+                },
+            )
         ),
-        "pcc_roofinsulation": None,  # Leave blank
+        "pcc_roofinsulation": (
+            option_value_mapping(
+                "pcc_roofinsulation",
+                answers.roof_insulation,
+                {
+                    enums.RoofInsulation.ADB: "Another dwelling above",
+                    enums.RoofInsulation.AS_BUILD: "AsBuilt",
+                    enums.RoofInsulation.MM_100: "mm 100",
+                    enums.RoofInsulation.MM_12: "mm 12",
+                    enums.RoofInsulation.MM_150: "mm 150",
+                    enums.RoofInsulation.MM_200: "mm 200",
+                    enums.RoofInsulation.MM_25: "mm 25",
+                    enums.RoofInsulation.MM_250: "mm 250",
+                    enums.RoofInsulation.MM_270: "mm 270",
+                    enums.RoofInsulation.MM_300: "mm 300",
+                    enums.RoofInsulation.MM_350: "mm 350",
+                    enums.RoofInsulation.MM_400: "mm 400",
+                    enums.RoofInsulation.MM_50: "mm 50",
+                    enums.RoofInsulation.MM_75: "mm 75",
+                    enums.RoofInsulation.NO_INSULATION: "None",
+                    enums.RoofInsulation.UNKNOWN: "Unknown",
+                },
+            )
+        ),
         "pcc_floortype": (
-            mapping.infer_pcc_floortype(
-                answers.suspended_floor,
-            )[1]
+            option_value_mapping(
+                "pcc_floortype",
+                answers.floor_construction,
+                {
+                    enums.FloorConstruction.SOLID: "Solid",
+                    enums.FloorConstruction.SNT: "Suspended - not timber",
+                    enums.FloorConstruction.ST: "Suspended - timber",
+                    enums.FloorConstruction.UNKNOWN: "Unknown",
+                },
+            )
         ),
         "pcc_floorinsulation": (
             option_value_mapping(
                 "pcc_floorinsulation",
-                answers.suspended_floor_insulated,
-                {True: "Insulated", False: "Uninsulated"},
-                default_mapping="Unknown",
+                answers.floor_insulation,
+                {
+                    enums.FloorInsulation.AS_BUILT: "As built",
+                    enums.FloorInsulation.RETRO_FITTED: "Retrofitted",
+                    enums.FloorInsulation.UNKNOWN: "Unknown",
+                },
             )
         ),
         "pcc_walltype": (
-            mapping.infer_pcc_walltype(
-                wall_type=answers.wall_type,
-                walls_insulated=answers.walls_insulated,
-            )[1]
+            option_value_mapping(
+                "pcc_walltype",
+                answers.wall_construction,
+                {
+                    enums.WallConstruction.CAVITY: "Cavity",
+                    enums.WallConstruction.COB: "Cob",
+                    enums.WallConstruction.GRANITE: "Granite",
+                    enums.WallConstruction.PARK_HOME: "Park home",
+                    enums.WallConstruction.SANDSTONE: "Sandstone",
+                    enums.WallConstruction.SOLID_BRICK: "Solid brick",
+                    enums.WallConstruction.SYSTEM: "System",
+                    enums.WallConstruction.TIMBER_FRAME: "Timber frame",
+                },
+            )
         ),
         "pcc_wallinsulation": (
             option_value_mapping(
                 "pcc_wallinsulation",
-                answers.walls_insulated,
-                {True: "Insulated", False: "Uninsulated"},
-                default_mapping="Unknown",
-            )
-        ),
-        "pcc_glazing": None,  # Leave blank
-        "pcc_propertyprofilecomments": None,  # Leave blank
-        "pcc_epctype": (
-            option_value_mapping(
-                "pcc_epctype",
-                answers.selected_epc,
+                answers.walls_insulation,
                 {
-                    True: "Acutal",
-                    False: "Unknown",
+                    enums.WallInsulation.AS_BUILT: "As built",
+                    enums.WallInsulation.EXTERNAL: "External wall insulation",
+                    enums.WallInsulation.FC: "Filled cavity",
+                    enums.WallInsulation.FCE: "Filled cavity plus external wall insulation",
+                    enums.WallInsulation.FC: "Filled cavity plus internal wall insulation",
+                    enums.WallInsulation.INTERNAL: "Internal wall insulation",
                 },
-                default_mapping="Unknown",
             )
         ),
+        "pcc_glazing": (
+            option_value_mapping(
+                "pcc_glazing",
+                answers.glazing,
+                {
+                    enums.Glazing.DOUBLE_2002_PLUS: "Double - 2002 or later",
+                    enums.Glazing.DOUBLE_BEFORE_2002: "Double before 2002",
+                    enums.Glazing.DOUBLE_UNKNOWN: "Double but age unknown",
+                    enums.Glazing.NOT_DEFINED: "NotDefined",
+                    enums.Glazing.SECONDARY: "Secondary",
+                    enums.Glazing.SINGLE: "Single",
+                    enums.Glazing.TRIPLE: "Triple",
+                },
+            )
+        ),
+        "pcc_propertyprofilecomments": None,  # Leave blank
+        "pcc_epctype": None,  # Leave blank after Phase 3 changes
         "pcc_dateofmostrecentepc": None,  # leave blank
         "pcc_gradeofmostrecentepc": None,  # leave blank
-        "pcc_scoreofmostrecentepc": (answers.sap_rating),
+        "pcc_scoreofmostrecentepc": None,  # Leave blank after Phase 3 changes
         "pcc_hasapgrade": None,
         "pcc_hasapscore": None,
         "pcc_mouldgrowth": None,
         "pcc_condensation": None,
         "pcc_structuraldamp": None,
         "pcc_commentsondamp": None,
-        "pcc_occupanteligibilityscore": option_value_mapping(
-            "pcc_occupanteligibilityscore",
-            answers.income_rating,
-            {
-                enums.RAYG.RED: "\U0001f7e5 Red",
-                enums.RAYG.AMBER: "\U0001f7e7 Amber",
-                enums.RAYG.YELLOW: "\U0001f7e8 Yellow",
-                enums.RAYG.GREEN: "\U0001f7e9 Green",
-            },
-        ),
-        "pcc_propertyeligibilityscore": option_value_mapping(
-            "pcc_occupanteligibilityscore",
-            answers.property_rating,
-            {
-                enums.RAYG.RED: "\U0001f7e5 Red",
-                enums.RAYG.AMBER: "\U0001f7e7 Amber",
-                enums.RAYG.YELLOW: "\U0001f7e8 Yellow",
-                enums.RAYG.GREEN: "\U0001f7e9 Green",
-            },
-        ),
+        "pcc_occupanteligibilityscore": None,  # Leave blank after Phase 3 changes
+        "pcc_propertyeligibilityscore": None,  # Leave blank after Phase 3 changes
         # Contact
         "pcc_salutation": None,
-        "pcc_firstname": answers.first_name,
-        "pcc_lastname": answers.last_name,
+        "pcc_firstname": answers.occupant_first_name,
+        "pcc_lastname": answers.occupant_last_name,
         "pcc_homephone": answers.contact_phone,
         "pcc_mobile": answers.contact_mobile,
         "pcc_email": answers.email,
@@ -399,17 +445,9 @@ def map_crm(answers: models.Answers) -> dict:
         # Occupier
         "pcc_occupiedfrom": None,
         "pcc_occupiedto": None,
-        "pcc_occupierrole": (
-            mapping.infer_pcc_occupierrole(
-                respondent_role=answers.respondent_role,
-            )[1]
-        ),
+        "pcc_occupierrole": None,  # Leave blank after Phase 3 changes
         # Landlord
-        "pcc_accountname": (
-            "{} {}".format(answers.first_name, answers.last_name)
-            if answers.respondent_role == enums.RespondentRole.LANDLORD
-            else None
-        ),
+        "pcc_accountname": answers.company_name,
         "pcc_lladdress1street1": None,
         "pcc_lladdress1street2": None,
         "pcc_lladdress1street3": None,
@@ -418,6 +456,205 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_lladdress1zippostalcode": None,
         "pcc_llmainphone": None,
         "pcc_website": None,
+        "pcc_howdidyouhearaboutpec2": (
+            option_value_mapping(
+                "pcc_howdidyouhearaboutpec2",
+                answers.source_of_info_about_pec,
+                {
+                    enums.HowDidYouHearAboutPEC.DOOR_KNOCKING: "Door knocking",
+                    enums.HowDidYouHearAboutPEC.FACEBOOK: "Facebook",
+                    enums.HowDidYouHearAboutPEC.FLYER: "Flyer/poster",
+                    enums.HowDidYouHearAboutPEC.INSTAGRAM: "Instagram",
+                    enums.HowDidYouHearAboutPEC.LETTER: "Letter in the post",
+                    enums.HowDidYouHearAboutPEC.LINKEDIN: "LinkedIn",
+                    enums.HowDidYouHearAboutPEC.PRINT_MEDIA: "Print media",
+                    enums.HowDidYouHearAboutPEC.PRIOR_RELATIONSHIP: "Prior relationship with PEC",
+                    enums.HowDidYouHearAboutPEC.RADIO: "Radio",
+                    enums.HowDidYouHearAboutPEC.SIGNPOST_CO: "Signpost - Community organisation",
+                    enums.HowDidYouHearAboutPEC.SIGNPOST_CHARITY: "Signpost – Charity",
+                    enums.HowDidYouHearAboutPEC.SIGNPOST_COUNCIL: "Signpost – Council",
+                    enums.HowDidYouHearAboutPEC.SIGNPOST_LB: "Signpost – Local business",
+                    enums.HowDidYouHearAboutPEC.TWITTER: "Twitter",
+                    enums.HowDidYouHearAboutPEC.WEB_SEARCH: "Web search",
+                    enums.HowDidYouHearAboutPEC.WORD_OF_MOUTH: "Word of mouth",
+                },
+            )
+        ),
+        "cr51a_childbenefitclaimantsingleorcouple": (
+            option_value_mapping(
+                "cr51a_childbenefitclaimantsingleorcouple",
+                answers.child_benefit_claimant_type,
+                {
+                    enums.ChildBenefitClaimantType.SINGLE: "Single",
+                    enums.ChildBenefitClaimantType.JOINT: "Couple",
+                },
+            )
+        ),
+        "cr51a_counciltaxbracket": None,  # Leave blank until council tax data issue will be sorted
+        "cr51a_propertyattachment": (
+            option_value_mapping(
+                "cr51a_propertyattachment",
+                answers.property_attachment,
+                {
+                    enums.PropertyAttachment.DETACHED: "Detached",
+                    enums.PropertyAttachment.SEMI_DETACHED: "Semi detached",
+                    enums.PropertyAttachment.MID_TERRACE: "Mid terrace",
+                    enums.PropertyAttachment.END_TERRACE: "End terrace",
+                    enums.PropertyAttachment.ENCLOSED_END_TERRACE: "Enclosed end terrace",
+                    enums.PropertyAttachment.ENCLOSED_MID_TERRACE: "Enclosed mid terrace",
+                },
+            )
+        ),
+        "cr51a_boilerefficiency": (
+            option_value_mapping(
+                "cr51a_boilerefficiency",
+                answers.boiler_efficiency,
+                {
+                    enums.EfficiencyBand.A: "A",
+                    enums.EfficiencyBand.B: "B",
+                    enums.EfficiencyBand.C: "C",
+                    enums.EfficiencyBand.D: "D",
+                    enums.EfficiencyBand.E: "E",
+                    enums.EfficiencyBand.F: "F",
+                    enums.EfficiencyBand.G: "G",
+                },
+            )
+        ),
+        "cr51a_lodgedepcband": (
+            option_value_mapping(
+                "cr51a_lodgedepcband",
+                answers.lodged_epc_band,
+                {
+                    enums.EfficiencyBand.A: "A",
+                    enums.EfficiencyBand.B: "B",
+                    enums.EfficiencyBand.C: "C",
+                    enums.EfficiencyBand.D: "D",
+                    enums.EfficiencyBand.E: "E",
+                    enums.EfficiencyBand.F: "F",
+                    enums.EfficiencyBand.G: "G",
+                },
+            )
+        ),
+        "cr51a_sapband": (
+            option_value_mapping(
+                "cr51a_sapband",
+                answers.sap_band,
+                {
+                    enums.EfficiencyBand.A: "A",
+                    enums.EfficiencyBand.B: "B",
+                    enums.EfficiencyBand.C: "C",
+                    enums.EfficiencyBand.D: "D",
+                    enums.EfficiencyBand.E: "E",
+                    enums.EfficiencyBand.F: "F",
+                    enums.EfficiencyBand.G: "G",
+                },
+            )
+        ),
+        "cr51a_65andover": answers.seniors,
+        "cr51a_adults": answers.adults,
+        "cr51a_childbenefitqualifyingchildren": answers.child_benefit_number,
+        "cr51a_children": answers.children,
+        "cr51a_childreneligibleforfreeschoolmeals": answers.free_school_meals_eligibility,
+        "cr51a_counciltaxreductionentitlement": answers.council_tax_reduction,
+        "cr51a_consented_callback": answers.consented_callback,
+        "cr51a_consented_future_schemes": answers.consented_future_schemes,
+        "cr51a_heatedrooms": answers.heated_rooms,
+        "cr51a_heatingcontrolsadequacy": (
+            option_value_mapping(
+                "cr51a_heatingcontrolsadequacy",
+                answers.controls_adequacy,
+                {
+                    enums.ControlsAdequacy.OPTIMAL: "Optimal",
+                    enums.ControlsAdequacy.SUB_OPTIMAL: "Suboptimal",
+                    enums.ControlsAdequacy.TOP_SPEC: "Top-spec",
+                },
+            )
+        ),
+        "cr51a_householdincome": answers.household_income,
+        "cr51a_householdincome_base": None,
+        "cr51a_householdsavings": None,
+        "cr51a_householdsavings_base": None,
+        "cr51a_housingcosts": answers.housing_costs,
+        "cr51a_housingcosts_base": None,
+        "cr51a_imd_decile": answers.multiple_deprivation_index,
+        "cr51a_incomeafterhousingcosts": answers.income_after_housing_costs,
+        "cr51a_incomeafterhousingcosts_base": None,
+        "cr51a_lodgedepcscore": answers.lodged_epc_score,
+        "cr51a_lowersuperoutputareacode": answers.lower_super_output_area_code,
+        "cr51a_othervulnerabilitytothecold": answers.vulnerable_comments,
+        "cr51a_paritysapscore": answers.sap_score,
+        "cr51a_potentialmeasures": None,
+        "cr51a_potentialschemeeligibility": None,
+        "cr51a_realisticfuelbill": answers.realistic_fuel_bill,
+        "cr51a_receiveschildbenefit": answers.child_benefit,
+        "cr51a_receivesmeanstestedbenefits": answers.means_tested_benefits,
+        "cr51a_respondent_comments": answers.respondent_comments,
+        "cr51a_respondent_relationship_to_property": (
+            option_value_mapping(
+                "cr51a_respondent_relationship_to_property",
+                answers.respondent_role,
+                {
+                    enums.RespondentRole.OWNER_OCCUPIER: "Owner-Occupier",
+                    enums.RespondentRole.TENANT: "Tenant",
+                    enums.RespondentRole.LANDLORD: "Landlord",
+                    enums.RespondentRole.OTHER: "Other",
+                },
+            )
+        ),
+        "cr51a_respondentemailadress": answers.email,
+        "cr51a_respondentfirstname": answers.first_name,
+        "cr51a_respondentlastname": answers.last_name,
+        "cr51a_respondentmobile": answers.contact_mobile,
+        "cr51a_respondentphonenumber": answers.contact_phone,
+        "cr51a_respondentrelationshiptooccupier": answers.respondent_role_other,
+        "cr51a_shortid": answers.short_uid,
+        "cr51a_tco2current": answers.t_co2_current,
+        "cr51a_tenure": (
+            option_value_mapping(
+                "cr51a_tenure",
+                answers.tenure,
+                {
+                    enums.Tenure.RENTED_SOCIAL: "Social Rented",
+                    enums.Tenure.RENTED_PRIVATE: "Private Rented",
+                    enums.Tenure.OWNER_OCCUPIED: "Owner Occupied",
+                    enums.Tenure.UNKNOWN: "Not Yet Specified",
+                },
+                default_mapping="Not Yet Specified",
+            )
+        ),
+        "cr51a_uprn": answers.uprn,
+        "cr51a_vulnerabilitytocoldconditions": None,
+        "cr51a_vulnerabilitytothecold": answers.vulnerabilities_general,
+        "cr51a_vulnerabilitytothecold_cardiovascular": answers.vulnerable_cariovascular,
+        "cr51a_vulnerabilitytothecold_respiratory": answers.vulnerable_respiratory,
+        "cr51a_vulnerabilitytothecold_mentalhealth": answers.vulnerable_mental_health,
+        "cr51a_vulnerabilitytothecold_disabledltdmob": answers.vulnerable_disability,
+        "cr51a_vulnerabilitytothecold_65plus": answers.vulnerable_age,
+        "cr51a_vulnerabilitytothecold_youngchildren": answers.vulnerable_children,
+        "cr51a_vulnerabilitytothecold_pregnancy": answers.vulnerable_pregnancy,
+        "cr51a_vulnerabilitytothecold_immunosuppression": answers.vulnerable_immunosuppression,
+        "cr51a_nmt4properties": answers.nmt4properties,
+        "cr51a_advice_needed_warm": answers.advice_needed_warm,
+        "cr51a_advice_needed_bills": answers.advice_needed_bills,
+        "cr51a_advice_needed_supplier": answers.advice_needed_supplier,
+        "cr51a_advice_needed_from_team": answers.advice_needed_from_team,
+        "cr51a_past_means_tested_benefits": answers.past_means_tested_benefits,
+        # Potential schemes eligibility fields:
+        "cr51a_bus": None,  # TODO Waiting for criteria from PEC to determine values of these
+        "cr51a_connectedforwarmth": None,
+        "cr51a_eco4": None,
+        "cr51a_eco4flex": None,
+        "cr51a_gbis": None,
+        "cr51a_hug2": answers.is_hug2_eligible,
+        # Potential measures' fields:
+        "cr51a_cavity_wall_insulation": None,  # TODO Logic to be written for this and all below
+        "cr51a_heat_pump": None,
+        "cr51a_loft_insulation": None,
+        "cr51a_low_carbon_heating_upgrade": None,
+        "cr51a_rir_insulation": None,
+        "cr51a_solarpv": None,
+        "cr51a_solid_wall_insulation": None,
+        "cr51a_underfloor_insulation": None,
     }
     return crm_data
 
