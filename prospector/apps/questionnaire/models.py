@@ -401,6 +401,10 @@ class Answers(models.Model):
         super().save(*args, **kwargs)
 
     @property
+    def income_after_housing_costs(self):
+        return self.household_income - self.housing_costs
+
+    @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -555,3 +559,4 @@ class Answers(models.Model):
                     or self.is_income_under_max_based_on_occupants
                 )
             )
+        return False

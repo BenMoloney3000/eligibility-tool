@@ -1,0 +1,301 @@
+LogicalName,Label,Value
+cr51a_boilerefficiency,A,106870000
+cr51a_boilerefficiency,B,106870001
+cr51a_boilerefficiency,C,106870002
+cr51a_boilerefficiency,D,106870003
+cr51a_boilerefficiency,E,106870004
+cr51a_boilerefficiency,F,106870005
+cr51a_boilerefficiency,G,106870006
+cr51a_childbenefitclaimantsingleorcouple,Single,106870000
+cr51a_childbenefitclaimantsingleorcouple,Couple,106870001
+cr51a_counciltaxbracket,A,106870000
+cr51a_counciltaxbracket,B,106870001
+cr51a_counciltaxbracket,C,106870002
+cr51a_counciltaxbracket,D,106870003
+cr51a_counciltaxbracket,E,106870004
+cr51a_counciltaxbracket,F,106870005
+cr51a_counciltaxbracket,G,106870006
+cr51a_heatingcontrolsadequacy,Top-spec,106870000
+cr51a_heatingcontrolsadequacy,Optimal,106870001
+cr51a_heatingcontrolsadequacy,Suboptimal,106870002
+cr51a_lodgedepcband,A,106870000
+cr51a_lodgedepcband,B,106870001
+cr51a_lodgedepcband,C,106870002
+cr51a_lodgedepcband,D,106870003
+cr51a_lodgedepcband,E,106870004
+cr51a_lodgedepcband,F,106870005
+cr51a_lodgedepcband,G,106870006
+cr51a_propertyattachment,Detached,106870000
+cr51a_propertyattachment,Semi detached,106870005
+cr51a_propertyattachment,End terrace,106870003
+cr51a_propertyattachment,Mid terrace,106870004
+cr51a_propertyattachment,Enclosed end terrace,106870001
+cr51a_propertyattachment,Enclosed mid terrace,106870002
+cr51a_respondent_relationship_to_property,Owner-Occupier,106870000
+cr51a_respondent_relationship_to_property,Tenant,106870001
+cr51a_respondent_relationship_to_property,Landlord,106870002
+cr51a_respondent_relationship_to_property,Other,106870003
+cr51a_sapband,A,106870000
+cr51a_sapband,B,106870001
+cr51a_sapband,C,106870002
+cr51a_sapband,D,106870003
+cr51a_sapband,E,106870004
+cr51a_sapband,F,106870005
+cr51a_sapband,G,106870006
+cr51a_tenure,Social Rented,798360000
+cr51a_tenure,Private Rented,798360001
+cr51a_tenure,Owner Occupied,798360002
+cr51a_tenure,Not Yet Specified,798360003
+pcc_bedrooms,1,798360001
+pcc_bedrooms,2,798360002
+pcc_bedrooms,3,798360003
+pcc_bedrooms,4,798360004
+pcc_bedrooms,5,798360005
+pcc_bedrooms,6,798360006
+pcc_bedrooms,7 Plus,798360007
+pcc_bedrooms,Unknown,798360000
+pcc_boilertype,Condensing,798360001
+pcc_boilertype,No Boiler,798360003
+pcc_boilertype,Standard,798360002
+pcc_boilertype,Not Applicable,798360004
+pcc_boilertype,Unknown,798360000
+pcc_condensation,No,798360002
+pcc_condensation,Yes,798360001
+pcc_condensation,Unknown,798360000
+pcc_epctype,Actual,798360001
+pcc_epctype,Assumed,798360002
+pcc_epctype,Unknown,798360000
+pcc_floorinsulation,As built,106870001
+pcc_floorinsulation,Retrofitted,106870002
+pcc_floorinsulation,Unknown,798360000
+pcc_floorinsulation,Insulated,798360002
+pcc_floorinsulation,Not applicable,798360003
+pcc_floorinsulation,Uninsulated,798360001
+pcc_floortype,Solid,798360001
+pcc_floortype,Suspended - not timber,106870001
+pcc_floortype,Suspended - timber,106870002
+pcc_floortype,Unknown,798360000
+pcc_floortype,Unheated space/other premise below,798360002
+pcc_glazing,Single,106870006
+pcc_glazing,Double before 2002,106870002
+pcc_glazing,Double - 2002 or later,106870001
+pcc_glazing,Double but age unknown,106870003
+pcc_glazing,Triple,106870007
+pcc_glazing,Secondary,106870005
+pcc_glazing,NotDefined,106870004
+pcc_gradeofmostrecentepc,A,798360001
+pcc_gradeofmostrecentepc,B,798360002
+pcc_gradeofmostrecentepc,C,798360003
+pcc_gradeofmostrecentepc,D,798360004
+pcc_gradeofmostrecentepc,E,798360005
+pcc_gradeofmostrecentepc,F,798360006
+pcc_gradeofmostrecentepc,G,798360007
+pcc_gradeofmostrecentepc,No EPC,798360008
+pcc_gradeofmostrecentepc,Unknown,798360000
+pcc_hasapgrade,F-G,798360001
+pcc_hasapgrade,Not Applicable,798360003
+pcc_hasapgrade,Unknown,798360000
+pcc_heatingcontrols,No Heating Control,798360001
+pcc_heatingcontrols,Programmer and thermostat,798360003
+pcc_heatingcontrols,Programmer only,798360002
+pcc_heatingcontrols,Smart Thermostat,798360006
+pcc_heatingcontrols,Thermostat Only,798360004
+pcc_heatingcontrols,Not applicable,798360005
+pcc_heatingcontrols,Unknown,798360000
+pcc_howdidyouhearaboutpec2,Door knocking,798360000
+pcc_howdidyouhearaboutpec2,Facebook,798360001
+pcc_howdidyouhearaboutpec2,Flyer/poster,798360002
+pcc_howdidyouhearaboutpec2,Instagram,798360003
+pcc_howdidyouhearaboutpec2,Letter in the post,798360016
+pcc_howdidyouhearaboutpec2,LinkedIn,798360004
+pcc_howdidyouhearaboutpec2,Print Media,798360005
+pcc_howdidyouhearaboutpec2,Prior relationship with PEC,798360006
+pcc_howdidyouhearaboutpec2,Radio,798360007
+pcc_howdidyouhearaboutpec2,Signpost - Community organisation,798360008
+pcc_howdidyouhearaboutpec2,Signpost – Charity,798360009
+pcc_howdidyouhearaboutpec2,Signpost – Council,798360010
+pcc_howdidyouhearaboutpec2,Signpost – Local business,798360011
+pcc_howdidyouhearaboutpec2,Twitter,798360012
+pcc_howdidyouhearaboutpec2,Web Search,798360013
+pcc_howdidyouhearaboutpec2,Word of mouth,798360014
+pcc_inscopeformees,No,798360001
+pcc_inscopeformees,Yes,798360002
+pcc_inscopeformees,Maybe,798360003
+pcc_inscopeformees,Unknown,798360000
+pcc_likelihoodofprivatelyrented,Low,798360003
+pcc_likelihoodofprivatelyrented,Medium,798360002
+pcc_likelihoodofprivatelyrented,High,798360001
+pcc_likelihoodofprivatelyrented,Unknown,798360000
+pcc_listedproperty,II,798360003
+pcc_listedproperty,II*,798360001
+pcc_listedproperty,Not Listed,798360002
+pcc_mouldgrowth,Yes,798360001
+pcc_mouldgrowth,No,798360002
+pcc_mouldgrowth,Unknown,798360000
+pcc_occupanteligibilityscore,🟥 Red,798360000
+pcc_occupanteligibilityscore,🟧 Amber,798360001
+pcc_occupanteligibilityscore,🟨 Yellow,798360002
+pcc_occupanteligibilityscore,🟩 Green,798360003
+pcc_occupierrole,Owner - Joint,798360001
+pcc_occupierrole,Owner - Sole,798360011
+pcc_occupierrole,Owner - Type Not Specified,798360010
+pcc_occupierrole,Tenant - Contract Holder HA,798360000
+pcc_occupierrole,Tenant - Contract Holder Private,798360003
+pcc_occupierrole,Tenant - Type Not Specified,798360002
+pcc_occupierrole,Residing Family Member,798360004
+pcc_occupierrole,Subletter,798360005
+pcc_occupierrole,Temporary Accommodation,798360008
+pcc_occupierrole,Temporary with Family/Friend,798360007
+pcc_occupierrole,Landlord,798360009
+pcc_occupierrole,Not Specified,798360006
+pcc_primaryheatingdeliverymethod,Boilers,106870001
+pcc_primaryheatingdeliverymethod,Community,106870002
+pcc_primaryheatingdeliverymethod,Electric underfloor,106870003
+pcc_primaryheatingdeliverymethod,Heat pumps (warm air),106870004
+pcc_primaryheatingdeliverymethod,Heat pumps (wet),106870005
+pcc_primaryheatingdeliverymethod,Room heaters,106870007
+pcc_primaryheatingdeliverymethod,Storage heaters,106870008
+pcc_primaryheatingdeliverymethod,Warm Air (not heat pump),106870009
+pcc_primaryheatingdeliverymethod,Stove - no back boiler,798360009
+pcc_primaryheatingdeliverymethod,Stove - back boiler,798360010
+pcc_primaryheatingdeliverymethod,Open Fire,798360006
+pcc_primaryheatingdeliverymethod,Room Heaters - fixed,798360007
+pcc_primaryheatingdeliverymethod,Room Heaters - portable,798360008
+pcc_primaryheatingdeliverymethod,Storage Heaters - manual control,798360005
+pcc_primaryheatingdeliverymethod,Storage Heaters - electronic control,798360004
+pcc_primaryheatingdeliverymethod,District Heating,798360002
+pcc_primaryheatingdeliverymethod,Other systems,106870006
+pcc_primaryheatingdeliverymethod,No Heating System Present,106870010
+pcc_primaryheatingfuel,Anthracite,106870001
+pcc_primaryheatingfuel,Bottled gas (LPG),106870006
+pcc_primaryheatingfuel,Bulk wood pellets,106870002
+pcc_primaryheatingfuel,Coal - not community,106870007
+pcc_primaryheatingfuel,Dual Fuel Mineral Wood,106870003
+pcc_primaryheatingfuel,Electricity - community,106870004
+pcc_primaryheatingfuel,Electricity - not community,106870005
+pcc_primaryheatingfuel,LPG - community,106870008
+pcc_primaryheatingfuel,LPG - not community,106870009
+pcc_primaryheatingfuel,LPG - special condition,106870010
+pcc_primaryheatingfuel,Mains gas - community,106870011
+pcc_primaryheatingfuel,Mains gas - not community,106870012
+pcc_primaryheatingfuel,Oil - community,106870013
+pcc_primaryheatingfuel,Oil - not community,106870014
+pcc_primaryheatingfuel,Smokeless coal,106870015
+pcc_primaryheatingfuel,Wood - chips,106870016
+pcc_primaryheatingfuel,Wood - logs,106870017
+pcc_primaryheatingfuel,No Heating System Present,798360007
+pcc_propertyage,Before 1900,798360001
+pcc_propertyage,1900-1929,798360003
+pcc_propertyage,1930-1949,798360002
+pcc_propertyage,1950-1966,798360004
+pcc_propertyage,1967-1975,798360005
+pcc_propertyage,1976-1982,106870001
+pcc_propertyage,1983-1990,106870002
+pcc_propertyage,1991-1995,106870003
+pcc_propertyage,1996-2002,106870004
+pcc_propertyage,2003-2006,106870005
+pcc_propertyage,2007-2011,106870006
+pcc_propertyage,2012 Onwards,106870007
+pcc_propertyeligibilityscore,🟥 Red,798360000
+pcc_propertyeligibilityscore,🟧 Amber,798360001
+pcc_propertyeligibilityscore,🟨 Yellow,798360002
+pcc_propertyeligibilityscore,🟩 Green,798360003
+pcc_propertytype,Bungalow,106870001
+pcc_propertytype,Flat,106870002
+pcc_propertytype,House,106870005
+pcc_propertytype,Maisonette,798360001
+pcc_propertytype,Park home,798360000
+pcc_propertytype,Unknown,798360010
+pcc_roofinsulation,Another dwelling above,106870001
+pcc_roofinsulation,AsBuilt,106870002
+pcc_roofinsulation,None,106870015
+pcc_roofinsulation,Unknown,798360000
+pcc_roofinsulation,mm 12,106870004
+pcc_roofinsulation,mm 25,106870007
+pcc_roofinsulation,mm 50,106870013
+pcc_roofinsulation,mm 75,106870014
+pcc_roofinsulation,mm 100,106870003
+pcc_roofinsulation,mm 150,106870005
+pcc_roofinsulation,mm 200,106870006
+pcc_roofinsulation,mm 250,106870008
+pcc_roofinsulation,mm2 70,106870009
+pcc_roofinsulation,mm 300,106870010
+pcc_roofinsulation,mm 350,106870011
+pcc_roofinsulation,mm 400,106870012
+pcc_roofinsulation,zz0 to 50mm,798360002
+pcc_roofinsulation,zz150mm plus,798360003
+pcc_roofinsulation,zz51 to 150mm,798360004
+pcc_roofinsulation,zzNo Loft,798360007
+pcc_roofinsulation,zzNo loft insulation,798360005
+pcc_rooftype,Another dwelling above,798360005
+pcc_rooftype,Flat,106870001
+pcc_rooftype,Pitched - loft access,106870002
+pcc_rooftype,Pitched - no loft access,106870003
+pcc_rooftype,Pitched with sloping ceiling,106870005
+pcc_rooftype,Thatched,106870004
+pcc_secondaryheatingdeliverymethod,Boilers,106870001
+pcc_secondaryheatingdeliverymethod,Community,106870002
+pcc_secondaryheatingdeliverymethod,Electric underfloor,106870003
+pcc_secondaryheatingdeliverymethod,Heat pumps (warm air),106870004
+pcc_secondaryheatingdeliverymethod,Heat pumps (wet),106870005
+pcc_secondaryheatingdeliverymethod,Room heaters,106870007
+pcc_secondaryheatingdeliverymethod,Storage heaters,106870008
+pcc_secondaryheatingdeliverymethod,Warm Air (not heat pump),106870009
+pcc_secondaryheatingdeliverymethod,Stove - no back boiler,798360009
+pcc_secondaryheatingdeliverymethod,Stove - back boiler,798360010
+pcc_secondaryheatingdeliverymethod,Open Fire,798360006
+pcc_secondaryheatingdeliverymethod,Room Heaters - fixed,798360007
+pcc_secondaryheatingdeliverymethod,Room Heaters - portable,798360008
+pcc_secondaryheatingdeliverymethod,Storage Heaters - manual control,798360005
+pcc_secondaryheatingdeliverymethod,Storage Heaters - electronic control,798360004
+pcc_secondaryheatingdeliverymethod,District Heating,798360002
+pcc_secondaryheatingdeliverymethod,Other systems,106870006
+pcc_secondaryheatingdeliverymethod,No Heating System Present,106870010
+pcc_secondaryheatingfuel,Anthracite,106870001
+pcc_secondaryheatingfuel,Bottled gas (LPG),106870006
+pcc_secondaryheatingfuel,Bulk wood pellets,106870002
+pcc_secondaryheatingfuel,Coal - not community,106870007
+pcc_secondaryheatingfuel,Dual Fuel Mineral Wood,106870003
+pcc_secondaryheatingfuel,Electricity - community,106870004
+pcc_secondaryheatingfuel,Electricity - not community,106870005
+pcc_secondaryheatingfuel,LPG - community,106870008
+pcc_secondaryheatingfuel,LPG - not community,106870009
+pcc_secondaryheatingfuel,LPG - special condition,106870010
+pcc_secondaryheatingfuel,Mains gas - community,106870011
+pcc_secondaryheatingfuel,Mains gas - not community,106870012
+pcc_secondaryheatingfuel,Oil - community,106870013
+pcc_secondaryheatingfuel,Oil - not community,106870014
+pcc_secondaryheatingfuel,Smokeless coal,106870015
+pcc_secondaryheatingfuel,Wood - chips,106870016
+pcc_secondaryheatingfuel,Wood - logs,106870017
+pcc_secondaryheatingfuel,No Heating System Present,798360007
+pcc_solarpanels,Roof Array,798360001
+pcc_solarpanels,None,798360002
+pcc_solarpanels,Unknown,798360000
+pcc_solarthermal,None,798360001
+pcc_solarthermal,Yes,798360002
+pcc_solarthermal,Unknown,798360000
+pcc_structuraldamp,No damp issues,798360001
+pcc_structuraldamp,Some damp severity not specified,798360004
+pcc_structuraldamp,Some minor damp patches,798360002
+pcc_structuraldamp,Severe Damp,798360003
+pcc_structuraldamp,Unknown,798360000
+pcc_updateoptions,Create a new Dom Prop record,798360000
+pcc_updateoptions,Update the linked Dom Prop record from this record,798360001
+pcc_updateoptions,Add a link to an existing Dom Prop record,798360002
+pcc_updateoptions,No Action,798360003
+pcc_wallinsulation,Uninsulated,798360001
+pcc_wallinsulation,As built,106870001
+pcc_wallinsulation,External wall insulation,106870002
+pcc_wallinsulation,Filled cavity,106870003
+pcc_wallinsulation,Filled cavity plus external wall insulation,106870004
+pcc_wallinsulation,Filled cavity plus internal wall insulation,106870005
+pcc_wallinsulation,Internal wall insulation,106870006
+pcc_walltype,Cavity,106870001
+pcc_walltype,Cob,106870002
+pcc_walltype,Granite,106870003
+pcc_walltype,Park home,106870004
+pcc_walltype,Sandstone,106870005
+pcc_walltype,Solid brick,106870006
+pcc_walltype,System ,798360011
+pcc_walltype,Timber frame,798360012
