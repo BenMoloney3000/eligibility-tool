@@ -560,3 +560,136 @@ class Answers(models.Model):
                 )
             )
         return False
+
+    @property
+    def is_cavity_wall_insulation_recommended(self) -> bool:
+        return (self.wall_construction == enums.WallConstruction.CAVITY) and (
+            self.walls_insulation == enums.WallInsulation.AS_BUILT
+        )
+
+    @property
+    def is_solid_wall_insulation_recommended(self) -> bool:
+        solid_walls = [
+            enums.WallConstruction.GRANITE,
+            enums.WallConstruction.SANDSTONE,
+            enums.WallConstruction.SOLID_BRICK,
+            enums.WallConstruction.SYSTEM,
+        ]
+
+        return (
+            self.floor_construction in solid_walls
+            and self.walls_insulation == enums.WallInsulation.AS_BUILT
+        )
+
+    @property
+    def is_underfloor_insulation_recommended(self) -> bool:
+        floor_insulation_options = [
+            enums.FloorInsulation.AS_BUILT,
+            enums.FloorInsulation.UNKNOWN,
+        ]
+
+        return (
+            self.floor_construction == enums.FloorConstruction.ST
+            and self.floor_insulation in floor_insulation_options
+        )
+
+    @property
+    def is_loft_insulation_recommended(self) -> bool:
+        roof_construction_for_ri = [
+            enums.RoofConstruction.PNLA,
+            enums.RoofConstruction.PNNLA,
+        ]
+
+        roof_insulation_for_ri = [
+            enums.RoofInsulation.MM_100,
+            enums.RoofInsulation.MM_12,
+            enums.RoofInsulation.MM_150,
+            enums.RoofInsulation.MM_25,
+            enums.RoofInsulation.MM_50,
+            enums.RoofInsulation.MM_75,
+            enums.RoofInsulation.NO_INSULATION,
+        ]
+
+        return (
+            self.roof_construction in roof_construction_for_ri
+            and self.roof_insulation in roof_insulation_for_ri
+        )
+
+    @property
+    def is_rir_insulation_recommended(self) -> bool:
+        roof_insulation_for_rir = [
+            enums.RoofInsulation.AS_BUILD,
+            enums.RoofInsulation.MM_12,
+            enums.RoofInsulation.MM_25,
+            enums.RoofInsulation.MM_50,
+            enums.RoofInsulation.MM_75,
+            enums.RoofInsulation.NO_INSULATION,
+        ]
+
+        return (
+            self.roof_insulation in roof_insulation_for_rir
+            and self.roof_construction == enums.RoofConstruction.PWSC
+        )
+
+    @property
+    def is_boiler_upgrade_recommended(self) -> bool:
+        main_fuel_for_bu = [
+            enums.MainFuel.MGC,
+            enums.MainFuel.MGNC,
+        ]
+
+        boiler_efficiency_for_bu = [
+            enums.EfficiencyBand.C,
+            enums.EfficiencyBand.D,
+            enums.EfficiencyBand.E,
+            enums.EfficiencyBand.F,
+            enums.EfficiencyBand.G,
+        ]
+
+        return (
+            self.main_fuel in main_fuel_for_bu
+            and self.boiler_efficiency in boiler_efficiency_for_bu
+            and self.heating == enums.Heating.BOILERS
+        )
+
+    @property
+    def is_heatpump_installation_recommended(self) -> bool:
+        fuel_1_for_hpi = [
+            enums.MainFuel.ANTHRACITE,
+            enums.MainFuel.GBLPG,
+            enums.MainFuel.HCNC,
+            enums.MainFuel.LPGC,
+            enums.MainFuel.LPGNC,
+            enums.MainFuel.LPGSC,
+            enums.MainFuel.OC,
+            enums.MainFuel.ONC,
+            enums.MainFuel.SC,
+        ]
+
+        fuel_2_for_hpi = [
+            enums.MainFuel.EC,
+            enums.MainFuel.ENC,
+        ]
+
+        heating_for_hpi = [
+            enums.Heating.BOILERS,
+            enums.Heating.EUF,
+            enums.Heating.OTHER,
+            enums.Heating.RH,
+            enums.Heating.SH,
+            enums.Heating.AIR,
+        ]
+
+        return self.main_fuel in fuel_1_for_hpi or (
+            self.main_fuel in fuel_2_for_hpi and self.heating in heating_for_hpi
+        )
+
+    @property
+    def is_solar_pv_installation_recommended(self) -> bool:
+        roof_for_PV = [
+            enums.RoofConstruction.PNLA,
+            enums.RoofConstruction.PNNLA,
+            enums.RoofConstruction.PWSC,
+        ]
+
+        return self.floor_construction in roof_for_PV

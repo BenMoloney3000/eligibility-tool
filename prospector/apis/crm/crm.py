@@ -467,7 +467,7 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.HowDidYouHearAboutPEC.INSTAGRAM: "Instagram",
                     enums.HowDidYouHearAboutPEC.LETTER: "Letter in the post",
                     enums.HowDidYouHearAboutPEC.LINKEDIN: "LinkedIn",
-                    enums.HowDidYouHearAboutPEC.PRINT_MEDIA: "Print media",
+                    enums.HowDidYouHearAboutPEC.PRINT_MEDIA: "Print Media",
                     enums.HowDidYouHearAboutPEC.PRIOR_RELATIONSHIP: "Prior relationship with PEC",
                     enums.HowDidYouHearAboutPEC.RADIO: "Radio",
                     enums.HowDidYouHearAboutPEC.SIGNPOST_CO: "Signpost - Community organisation",
@@ -475,7 +475,7 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.HowDidYouHearAboutPEC.SIGNPOST_COUNCIL: "Signpost – Council",
                     enums.HowDidYouHearAboutPEC.SIGNPOST_LB: "Signpost – Local business",
                     enums.HowDidYouHearAboutPEC.TWITTER: "Twitter",
-                    enums.HowDidYouHearAboutPEC.WEB_SEARCH: "Web search",
+                    enums.HowDidYouHearAboutPEC.WEB_SEARCH: "Web Search",
                     enums.HowDidYouHearAboutPEC.WORD_OF_MOUTH: "Word of mouth",
                 },
             )
@@ -608,7 +608,7 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_respondentphonenumber": answers.contact_phone,
         "cr51a_respondentrelationshiptooccupier": answers.respondent_role_other,
         "cr51a_shortid": answers.short_uid,
-        "cr51a_tco2current": answers.t_co2_current,
+        "cr51a_tco2current": float(answers.t_co2_current),
         "cr51a_tenure": (
             option_value_mapping(
                 "cr51a_tenure",
@@ -623,7 +623,6 @@ def map_crm(answers: models.Answers) -> dict:
             )
         ),
         "cr51a_uprn": answers.uprn,
-        "cr51a_vulnerabilitytocoldconditions": None,
         "cr51a_vulnerabilitytothecold": answers.vulnerabilities_general,
         "cr51a_vulnerabilitytothecold_cardiovascular": answers.vulnerable_cariovascular,
         "cr51a_vulnerabilitytothecold_respiratory": answers.vulnerable_respiratory,
@@ -647,14 +646,14 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_gbis": None,
         "cr51a_hug2": answers.is_hug2_eligible,
         # Potential measures' fields:
-        "cr51a_cavity_wall_insulation": None,  # TODO Logic to be written for this and all below
-        "cr51a_heat_pump": None,
-        "cr51a_loft_insulation": None,
-        "cr51a_low_carbon_heating_upgrade": None,
-        "cr51a_rir_insulation": None,
-        "cr51a_solarpv": None,
-        "cr51a_solid_wall_insulation": None,
-        "cr51a_underfloor_insulation": None,
+        "cr51a_cavity_wall_insulation": answers.is_cavity_wall_insulation_recommended,
+        "cr51a_heat_pump": answers.is_heatpump_installation_recommended,
+        "cr51a_loft_insulation": answers.is_loft_insulation_recommended,
+        "cr51a_low_carbon_heating_upgrade": answers.is_boiler_upgrade_recommended,
+        "cr51a_rir_insulation": answers.is_rir_insulation_recommended,
+        "cr51a_solarpv": answers.is_solar_pv_installation_recommended,
+        "cr51a_solid_wall_insulation": answers.is_solid_wall_insulation_recommended,
+        "cr51a_underfloor_insulation": answers.is_underfloor_insulation_recommended,
     }
     return crm_data
 

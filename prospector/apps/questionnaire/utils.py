@@ -33,130 +33,28 @@ def determine_recommended_measures(
 ) -> List[enums.PossibleMeasures]:
     measures = []
 
-    if (
-        answers.wall_construction == enums.WallConstruction.CAVITY
-        and answers.walls_insulation == enums.WallInsulation.AS_BUILT
-    ):
+    if answers.is_cavity_wall_insulation_recommended:
         measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
 
-    solid_walls = [
-        enums.WallConstruction.GRANITE,
-        enums.WallConstruction.SANDSTONE,
-        enums.WallConstruction.SOLID_BRICK,
-        enums.WallConstruction.SYSTEM,
-    ]
-
-    if (
-        answers.floor_construction in solid_walls
-        and answers.walls_insulation == enums.WallInsulation.AS_BUILT
-    ):
+    if answers.is_solid_wall_insulation_recommended:
         measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
 
-    floor_insulation_options = [
-        enums.FloorInsulation.AS_BUILT,
-        enums.FloorInsulation.UNKNOWN,
-    ]
-
-    if (
-        answers.floor_construction == enums.FloorConstruction.ST
-        and answers.floor_insulation in floor_insulation_options
-    ):
+    if answers.is_underfloor_insulation_recommended:
         measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
 
-    roof_construction_for_ri = [
-        enums.RoofConstruction.PNLA,
-        enums.RoofConstruction.PNNLA,
-    ]
-
-    roof_insulation_for_ri = [
-        enums.RoofInsulation.MM_100,
-        enums.RoofInsulation.MM_12,
-        enums.RoofInsulation.MM_150,
-        enums.RoofInsulation.MM_25,
-        enums.RoofInsulation.MM_50,
-        enums.RoofInsulation.MM_75,
-        enums.RoofInsulation.NO_INSULATION,
-    ]
-
-    if (
-        answers.roof_construction in roof_construction_for_ri
-        and answers.roof_insulation in roof_insulation_for_ri
-    ):
+    if answers.is_loft_insulation_recommended:
         measures.append(enums.PossibleMeasures.LOFT_INSULATION)
 
-    roof_insulation_for_rir = [
-        enums.RoofInsulation.AS_BUILD,
-        enums.RoofInsulation.MM_12,
-        enums.RoofInsulation.MM_25,
-        enums.RoofInsulation.MM_50,
-        enums.RoofInsulation.MM_75,
-        enums.RoofInsulation.NO_INSULATION,
-    ]
-
-    if (
-        answers.roof_insulation in roof_insulation_for_rir
-        and answers.roof_construction == enums.RoofConstruction.PWSC
-    ):
+    if answers.is_rir_insulation_recommended:
         measures.append(enums.PossibleMeasures.RIR_INSULATION)
 
-    main_fuel_for_bu = [
-        enums.MainFuel.MGC,
-        enums.MainFuel.MGNC,
-    ]
-
-    boiler_efficiency_for_bu = [
-        enums.EfficiencyBand.C,
-        enums.EfficiencyBand.D,
-        enums.EfficiencyBand.E,
-        enums.EfficiencyBand.F,
-        enums.EfficiencyBand.G,
-    ]
-
-    if (
-        answers.main_fuel in main_fuel_for_bu
-        and answers.boiler_efficiency in boiler_efficiency_for_bu
-        and answers.heating == enums.Heating.BOILERS
-    ):
+    if answers.is_boiler_upgrade_recommended:
         measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
 
-    fuel_1_for_hpi = [
-        enums.MainFuel.ANTHRACITE,
-        enums.MainFuel.GBLPG,
-        enums.MainFuel.HCNC,
-        enums.MainFuel.LPGC,
-        enums.MainFuel.LPGNC,
-        enums.MainFuel.LPGSC,
-        enums.MainFuel.OC,
-        enums.MainFuel.ONC,
-        enums.MainFuel.SC,
-    ]
-
-    fuel_2_for_hpi = [
-        enums.MainFuel.EC,
-        enums.MainFuel.ENC,
-    ]
-
-    heating_for_hpi = [
-        enums.Heating.BOILERS,
-        enums.Heating.EUF,
-        enums.Heating.OTHER,
-        enums.Heating.RH,
-        enums.Heating.SH,
-        enums.Heating.AIR,
-    ]
-
-    if answers.main_fuel in fuel_1_for_hpi or (
-        answers.main_fuel in fuel_2_for_hpi and answers.heating in heating_for_hpi
-    ):
+    if answers.is_heatpump_installation_recommended:
         measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
 
-    roof_for_PV = [
-        enums.RoofConstruction.PNLA,
-        enums.RoofConstruction.PNNLA,
-        enums.RoofConstruction.PWSC,
-    ]
-
-    if answers.floor_construction in roof_for_PV:
+    if answers.is_solar_pv_installation_recommended:
         measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
 
     return measures
