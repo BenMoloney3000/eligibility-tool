@@ -430,11 +430,11 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_propertyeligibilityscore": None,  # Leave blank after Phase 3 changes
         # Contact
         "pcc_salutation": None,
-        "pcc_firstname": answers.occupant_first_name,
-        "pcc_lastname": answers.occupant_last_name,
-        "pcc_homephone": answers.contact_phone,
-        "pcc_mobile": answers.contact_mobile,
-        "pcc_email": answers.email,
+        "pcc_firstname": answers.occupant_details["first_name"],
+        "pcc_lastname": answers.occupant_details["last_name"],
+        "pcc_homephone": answers.occupant_details["phone"],
+        "pcc_mobile": answers.occupant_details["mobile"],
+        "pcc_email": answers.occupant_details["email"],
         "pcc_address1street1": answers.respondent_address_1,
         "pcc_address1street2": answers.respondent_address_2,
         "pcc_address1street3": answers.respondent_address_3,

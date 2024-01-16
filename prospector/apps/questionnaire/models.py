@@ -693,3 +693,27 @@ class Answers(models.Model):
         ]
 
         return self.floor_construction in roof_for_PV
+
+    @property
+    def occupant_details(self) -> dict:
+        occupants = [
+            enums.RespondentRole.OWNER_OCCUPIER,
+            enums.RespondentRole.TENANT,
+        ]
+
+        if self.respondent_role in occupants:
+            return {
+                "first_name": self.first_name,
+                "last_name": self.last_name,
+                "email": self.email,
+                "phone": self.contact_phone,
+                "mobile": self.contact_mobile,
+            }
+        else:
+            return {
+                "first_name": self.occupant_first_name,
+                "last_name": self.occupant_last_name,
+                "email": None,
+                "phone": None,
+                "mobile": None,
+            }
