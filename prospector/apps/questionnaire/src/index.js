@@ -9,6 +9,8 @@ const address1Field = document.querySelector('.target-address_1 input')
 const address2Field = document.querySelector('.target-address_2 input')
 const address3Field = document.querySelector('.target-address_3 input')
 
+const READONLY = 'readonly'
+
 function setCorrectionVisibility() {
     if (document.querySelector('#id_data_correct_2').checked) {
         correctionInputTarget.style.display = 'block'
@@ -28,11 +30,21 @@ function setRoleVisibility() {
 function updateAddressFields(e) {
     const addresses = JSON.parse(document.getElementById('allPostcodes').textContent)
     if (e.target.value in addresses) {
-        let selectedAddress = addresses[e.target.value]
+        const selectedAddress = addresses[e.target.value]
 
         address1Field.value = selectedAddress.address1
+        address1Field.setAttribute(READONLY, READONLY)
         address2Field.value = selectedAddress.address2
+        address2Field.setAttribute(READONLY, READONLY)
         address3Field.value = selectedAddress.address3
+        address3Field.setAttribute(READONLY, READONLY)
+    } else {
+        address1Field.value = ''
+        address1Field.removeAttribute(READONLY)
+        address2Field.value = ''
+        address2Field.removeAttribute(READONLY)
+        address3Field.value = ''
+        address3Field.removeAttribute(READONLY)
     }
 }
 
@@ -53,7 +65,6 @@ function initHandler() {
 function init() {
     initAll()
     initHandler()
-    console.log('Init')
 }
 
 document.addEventListener('DOMContentLoaded', init, false)
