@@ -401,7 +401,9 @@ class Answers(models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def income_after_housing_costs(self):
+    def income_after_housing_costs(self) -> Optional[int]:
+        if self.household_income is None or self.housing_costs is None:
+            return None
         return self.household_income - self.housing_costs
 
     @property
