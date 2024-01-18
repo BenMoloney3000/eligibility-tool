@@ -201,6 +201,11 @@ def map_crm(answers: models.Answers) -> dict:
     STATUSCODE_SUBMITTED = "798360000"
     STATECODE_ACTIVE = "0"
 
+    def tco2current():
+        if answers.t_co2_current is None:
+            return None
+        return float(answers.t_co2_current)
+
     crm_data = {
         # Metadata
         "statuscode": STATUSCODE_SUBMITTED,
@@ -608,7 +613,7 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_respondentphonenumber": answers.contact_phone,
         "cr51a_respondentrelationshiptooccupier": answers.respondent_role_other,
         "cr51a_shortid": answers.short_uid,
-        "cr51a_tco2current": float(answers.t_co2_current),
+        "cr51a_tco2current": tco2current(),
         "cr51a_tenure": (
             option_value_mapping(
                 "cr51a_tenure",
