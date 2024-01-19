@@ -1,6 +1,5 @@
 import logging
 import random
-from typing import List
 
 from . import enums
 from . import models
@@ -26,38 +25,6 @@ def generate_id():
             id_string += chars[index]
 
     return "".join(random.sample(id_string, len(id_string)))
-
-
-def determine_recommended_measures(
-    answers: models.Answers,
-) -> List[enums.PossibleMeasures]:
-    measures = []
-
-    if answers.is_cavity_wall_insulation_recommended:
-        measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
-
-    if answers.is_solid_wall_insulation_recommended:
-        measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
-
-    if answers.is_underfloor_insulation_recommended:
-        measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
-
-    if answers.is_loft_insulation_recommended:
-        measures.append(enums.PossibleMeasures.LOFT_INSULATION)
-
-    if answers.is_rir_insulation_recommended:
-        measures.append(enums.PossibleMeasures.RIR_INSULATION)
-
-    if answers.is_boiler_upgrade_recommended:
-        measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
-
-    if answers.is_heatpump_installation_recommended:
-        measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
-
-    if answers.is_solar_pv_installation_recommended:
-        measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
-
-    return measures
 
 
 def get_child_benefit_threshold(answers: models.Answers) -> int:

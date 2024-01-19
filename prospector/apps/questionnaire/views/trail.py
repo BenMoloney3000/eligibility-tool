@@ -707,10 +707,30 @@ class RecommendedMeasures(abstract_views.Question):
     title = "Recommendations for this property"
     percent_complete = 100
 
+    def determine_recommended_measures(self):
+        measures = []
+        if self.answers.is_cavity_wall_insulation_recommended:
+            measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
+        if self.answers.is_solid_wall_insulation_recommended:
+            measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
+        if self.answers.is_underfloor_insulation_recommended:
+            measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
+        if self.answers.is_loft_insulation_recommended:
+            measures.append(enums.PossibleMeasures.LOFT_INSULATION)
+        if self.answers.is_rir_insulation_recommended:
+            measures.append(enums.PossibleMeasures.RIR_INSULATION)
+        if self.answers.is_boiler_upgrade_recommended:
+            measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
+        if self.answers.is_heatpump_installation_recommended:
+            measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
+        if self.answers.is_solar_pv_installation_recommended:
+            measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
+        return measures
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         services.close_questionnaire(self.answers)
-        measures = utils.determine_recommended_measures(self.answers)
+        measures = self.determine_recommended_measures()
         for measure in measures:
             measure.disruption = utils.get_disruption(measure)
             measure.comfort_benefit = utils.get_comfort_benefit(measure)
