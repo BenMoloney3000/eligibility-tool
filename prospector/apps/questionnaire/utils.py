@@ -2,7 +2,6 @@ import logging
 import random
 
 from . import enums
-from . import models
 
 logger = logging.getLogger(__name__)
 
@@ -18,42 +17,13 @@ def generate_id():
     chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
     for i in range(10):
         if i < 5:
-            index = random.randint(0, 25)
+            index = random.randint(0, 24)
             id_string += chars[index]
         else:
             index = random.randint(25, len(chars) - 1)
             id_string += chars[index]
 
     return "".join(random.sample(id_string, len(id_string)))
-
-
-def get_child_benefit_threshold(answers: models.Answers) -> int:
-    total_qualifying = answers.child_benefit_number
-
-    if (
-        answers.child_benefit_claimant_type
-        == enums.ChildBenefitClaimantType.SINGLE.value
-    ):
-        if total_qualifying < 2:
-            return 18500
-        elif total_qualifying == 2:
-            return 23000
-        elif total_qualifying == 3:
-            return 27500
-        else:
-            return 32000
-    elif (
-        answers.child_benefit_claimant_type
-        == enums.ChildBenefitClaimantType.JOINT.value
-    ):
-        if total_qualifying < 2:
-            return 25500
-        elif total_qualifying == 2:
-            return 30000
-        elif total_qualifying == 3:
-            return 34500
-        else:
-            return 39000
 
 
 def get_disruption(measure: enums.PossibleMeasures) -> str:
