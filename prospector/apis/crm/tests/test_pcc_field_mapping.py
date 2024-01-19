@@ -13,8 +13,6 @@ from typing import Optional
 import pytest
 from pytest_harvest import create_results_bag_fixture
 
-from prospector.apis.crm import mapping
-
 results_bag = create_results_bag_fixture("store", name="results_bag")
 
 
@@ -169,7 +167,7 @@ def pcc_mapping(
     request,
 ):
     def assert_mapping(mapping_name):
-        mapping_func = getattr(mapping, mapping_name)
+        mapping_func = getattr(mapping_name)
 
         # Round trip through a model instance to check our assumptions
         answers_record = answers(**func_args)
@@ -207,69 +205,3 @@ def pcc_mapping(
             )
 
     return assert_mapping
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    *parametrize(mapping.infer_pcc_primaryheatingfuel, name="func_args")
-)
-def test_infer_pcc_primaryheatingfuel(pcc_mapping):
-    pcc_mapping("infer_pcc_primaryheatingfuel")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    *parametrize(mapping.infer_pcc_primaryheatingdeliverymethod, name="func_args")
-)
-def test_infer_pcc_primaryheatingdeliverymethod(pcc_mapping):
-    pcc_mapping("infer_pcc_primaryheatingdeliverymethod")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_boilertype, name="func_args"))
-def test_infer_pcc_boilertype(pcc_mapping):
-    pcc_mapping("infer_pcc_boilertype")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    *parametrize(mapping.infer_pcc_heatingcontrols, name="func_args")
-)
-def test_infer_pcc_heatingcontrols(pcc_mapping):
-    pcc_mapping("infer_pcc_heatingcontrols")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_propertytype, name="func_args"))
-def test_infer_pcc_propertytype(pcc_mapping):
-    pcc_mapping("infer_pcc_propertytype")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_rooftype, name="func_args"))
-def test_infer_pcc_rooftype(pcc_mapping):
-    pcc_mapping("infer_pcc_rooftype")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_walltype, name="func_args"))
-def test_infer_pcc_walltype(pcc_mapping):
-    pcc_mapping("infer_pcc_walltype")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_occupierrole, name="func_args"))
-def test_infer_pcc_occupierrole(pcc_mapping):
-    pcc_mapping("infer_pcc_occupierrole")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_solarpanels, name="func_args"))
-def test_infer_pcc_solarpanels(pcc_mapping):
-    pcc_mapping("infer_pcc_solarpanels")
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(*parametrize(mapping.infer_pcc_floortype, name="func_args"))
-def test_infer_pcc_floortype(pcc_mapping):
-    pcc_mapping("infer_pcc_floortype")

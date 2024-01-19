@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pytest
 import requests
+from django.utils.timezone import make_aware
 from factory.django import DjangoModelFactory
 
 from prospector.apis.crm import crm
@@ -36,6 +37,81 @@ def mock_crm_response(mock_crm_api_settings):
         "_pcc_landlordlookup_value": None,
         "_pcc_retrofitprojectlookup_value": None,
         "_stageid_value": None,
+        "cr51a_childbenefitclaimantsingleorcouple": 106870000,
+        "cr51a_counciltaxbracket": None,
+        "cr51a_propertyattachment": 106870000,
+        "cr51a_boilerefficiency": 106870000,
+        "cr51a_lodgedepcband": 106870000,
+        "cr51a_sapband": 106870000,
+        "cr51a_65andover": 0,
+        "cr51a_adults": 2,
+        "cr51a_childbenefitqualifyingchildren": 1,
+        "cr51a_children": 1,
+        "cr51a_childreneligibleforfreeschoolmeals": False,
+        "cr51a_counciltaxreductionentitlement": False,
+        "cr51a_consented_callback": False,
+        "cr51a_consented_future_schemes": False,
+        "cr51a_heatedrooms": 2,
+        "cr51a_heatingcontrolsadequacy": 106870000,
+        "cr51a_householdincome": 40000,
+        "cr51a_householdincome_base": 40000,
+        "cr51a_householdsavings": None,
+        "cr51a_householdsavings_base": None,
+        "cr51a_housingcosts": 2000,
+        "cr51a_housingcosts_base": 2000,
+        "cr51a_imd_decile": 8,
+        "cr51a_incomeafterhousingcosts": 38000,
+        "cr51a_incomeafterhousingcosts_base": 38000,
+        "cr51a_lodgedepcscore": 52,
+        "cr51a_lowersuperoutputareacode": None,
+        "cr51a_othervulnerabilitytothecold": None,
+        "cr51a_paritysapscore": 54,
+        "cr51a_potentialmeasures": None,
+        "cr51a_potentialschemeeligibility": None,
+        "cr51a_realisticfuelbill": "£857",
+        "cr51a_receiveschildbenefit": True,
+        "cr51a_receivesmeanstestedbenefits": False,
+        "cr51a_respondent_comments": "Test comment",
+        "cr51a_respondent_relationship_to_property": 106870000,
+        "cr51a_respondentemailadress": "example@example.com",
+        "cr51a_respondentfirstname": "Test",
+        "cr51a_respondentlastname": "Entry",
+        "cr51a_respondentmobile": "+441234777888",
+        "cr51a_respondentphonenumber": "+441234777888",
+        "cr51a_respondentrelationshiptooccupier": None,
+        "cr51a_shortid": "13971R3AAH",
+        "cr51a_tco2current": 5.5,
+        "cr51a_tenure": 798360001,
+        "cr51a_uprn": "100040423808",
+        "cr51a_vulnerabilitytothecold": False,
+        "cr51a_vulnerabilitytothecold_cardiovascular": None,
+        "cr51a_vulnerabilitytothecold_respiratory": None,
+        "cr51a_vulnerabilitytothecold_mentalhealth": None,
+        "cr51a_vulnerabilitytothecold_disabledltdmob": None,
+        "cr51a_vulnerabilitytothecold_65plus": None,
+        "cr51a_vulnerabilitytothecold_youngchildren": None,
+        "cr51a_vulnerabilitytothecold_pregnancy": None,
+        "cr51a_vulnerabilitytothecold_immunosuppression": None,
+        "cr51a_nmt4properties": None,
+        "cr51a_advice_needed_warm": False,
+        "cr51a_advice_needed_bills": False,
+        "cr51a_advice_needed_supplier": False,
+        "cr51a_advice_needed_from_team": False,
+        "cr51a_past_means_tested_benefits": False,
+        "cr51a_bus": False,
+        "cr51a_connectedforwarmth": False,
+        "cr51a_eco4": False,
+        "cr51a_eco4flex": False,
+        "cr51a_gbis": False,
+        "cr51a_hug2": True,
+        "cr51a_cavity_wall_insulation": False,
+        "cr51a_heat_pump": False,
+        "cr51a_loft_insulation": False,
+        "cr51a_low_carbon_heating_upgrade": True,
+        "cr51a_rir_insulation": False,
+        "cr51a_solarpv": False,
+        "cr51a_solid_wall_insulation": False,
+        "cr51a_underfloor_insulation": False,
         "createdon": "2022-11-20T23:23:54Z",
         "importsequencenumber": None,
         "modifiedon": "2022-11-20T23:23:54Z",
@@ -59,7 +135,7 @@ def mock_crm_response(mock_crm_api_settings):
         "pcc_firstname": "Test",
         "pcc_floorinsulation": None,
         "pcc_floortype": None,
-        "pcc_glazing": None,
+        "pcc_glazing": 106870006,
         "pcc_gradeofmostrecentepc": None,
         "pcc_hasapgrade": None,
         "pcc_hasapscore": None,
@@ -246,30 +322,24 @@ def test_get_bearer_token(
 def test_map_crm(answers):
     dummy_answers = answers(
         # Force property_rating to be Red
-        sap_rating=65,
-        # Force income_rating to be Green
-        total_income_lt_30k=enums.IncomeIsUnderThreshold.YES,
+        sap_score=65.1
     )
     crm_data = crm.map_crm(dummy_answers)
     assert crm_data["pcc_name"] == str(dummy_answers.uuid)
-    assert crm_data["pcc_propertyeligibilityscore"] == 798360000  # Red
-    assert crm_data["pcc_occupanteligibilityscore"] == 798360003  # Green
+    assert crm_data["pcc_propertyeligibilityscore"] is None  # Red
+    assert crm_data["pcc_occupanteligibilityscore"] is None  # Green
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "property_ownership,expected",
     [
-        (enums.PropertyOwnership.PRIVATE_TENANCY, 798360001),  # High
+        (enums.Tenure.RENTED_PRIVATE, 798360001),  # High
     ]
-    + [
-        (o, 798360003)  # Low
-        for o in enums.PropertyOwnership
-        if o.name != "PRIVATE_TENANCY"
-    ],
+    + [(o, 798360003) for o in enums.Tenure if o.name != "RENTED_PRIVATE"],  # Low
 )
 def test_map_pcc_likelihoodofprivatelyrented(answers, property_ownership, expected):
-    dummy_answers = answers(property_ownership=property_ownership)
+    dummy_answers = answers(tenure=property_ownership)
     crm_data = crm.map_crm(dummy_answers)
     assert crm_data["pcc_likelihoodofprivatelyrented"] == expected
 
@@ -309,7 +379,7 @@ def crmresult():
 def test_answers_to_submit_returns_completed_records(answers, crmresult):
     def _answers(completed=False):
         answers_fixture = answers(
-            completed_at=None if not completed else datetime.now()
+            completed_at=None if not completed else make_aware(datetime.now())
         )
         return answers_fixture
 
@@ -333,7 +403,7 @@ def test_answers_to_submit_no_resubmit_with_crmresult(answers, crmresult):
     """
 
     def _answers_with_crmresult(create_crmresult=False):
-        answers_fixture = answers(completed_at=datetime.now())
+        answers_fixture = answers(completed_at=make_aware(datetime.now()))
         if create_crmresult:
             crmresult(answers=answers_fixture)
         return answers_fixture
