@@ -5,6 +5,25 @@ from django.db import models
 
 from . import enums
 
+SAP_BANDS = [
+    enums.EfficiencyBand.D,
+    enums.EfficiencyBand.E,
+    enums.EfficiencyBand.F,
+    enums.EfficiencyBand.G,
+]
+
+TAX_BANDS = [
+    enums.CouncilTaxBand.A,
+    enums.CouncilTaxBand.B,
+    enums.CouncilTaxBand.C,
+    enums.CouncilTaxBand.D,
+]
+
+TENURES = [
+    enums.Tenure.OWNER_OCCUPIED,
+    enums.Tenure.RENTED_PRIVATE,
+]
+
 
 class Answers(models.Model):
     class Meta:
@@ -124,8 +143,10 @@ class Answers(models.Model):
     """
     # DATA SOURCE DETAILS
     """
-    # selected_epc = models.CharField(max_length=100, blank=True)
 
+    council_tax_band = models.CharField(
+        max_length=1, choices=enums.CouncilTaxBand.choices, blank=True, null=True
+    )
     sap_score = models.PositiveSmallIntegerField(blank=True, null=True)
     sap_band = models.CharField(
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True, null=True
@@ -488,13 +509,40 @@ class Answers(models.Model):
         return self.multiple_deprivation_index in [1, 2, 3]
 
     @property
-    def is_income_less_than_31K(self) -> Optional[bool]:
+    def is_income_less_than_or_equal_to_31K(self) -> Optional[bool]:
         if self.household_income is None:
             return None
-        return self.household_income < 31000
+        return self.household_income <= 31000
 
     @property
-    def is_income_under_max_based_on_occupants(self) -> Optional[bool]:
+    def is_income_under_or_equal_to_max_for_eco4_flex(self) -> Optional[bool]:
+        if self.children is not None and self.seniors is None:
+            dependents = self.children
+        elif self.seniors is not None and self.children is None:
+            dependents = self.seniors
+        elif self.children is None and self.seniors is None:
+            dependents = None
+        else:
+            dependents = self.children + self.seniors
+
+        if self.household_income is None:
+            return None
+        elif self.adults is None:
+            return None
+        elif self.adults >= 2:
+            if dependents == 3:
+                return self.household_income <= 32000
+            elif dependents == 4:
+                return self.household_income <= 36000
+            elif dependents >= 5:
+                return self.household_income <= 40000
+        elif self.adults == 1:
+            if dependents >= 5:
+                return self.household_income <= 31600
+        return False
+
+    @property
+    def is_income_under_or_equal_to_max_for_hug2(self) -> Optional[bool]:
         if self.children is not None and self.seniors is None:
             dependents = self.children
         elif self.seniors is not None and self.children is None:
@@ -534,19 +582,182 @@ class Answers(models.Model):
                 return self.household_income <= 27600
             elif dependents >= 5:
                 return self.household_income <= 31600
+        return False
 
-        return None
+    """
+    # Funding schemes eligibility
+    """
+
+    @property
+    def is_bus_eligible(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
+        return self.tenure == enums.Tenure.OWNER_OCCUPIED.value
+
+    @property
+    def is_connected_for_warmth_eligible(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
+
+        return (
+            self.tenure in TENURES
+            and (
+                self.is_cavity_wall_insulation_recommended
+                or self.is_loft_insulation_recommended
+            )
+            and (self.council_tax_band is None or self.council_tax_band in TAX_BANDS)
+        )
+
+    @property
+    def is_eco4_eligible(self) -> Optional[bool]:
+        if (
+            self.means_tested_benefits is None
+            or self.past_means_tested_benefits is None
+            or self.sap_band is None
+            or self.tenure is None
+        ):
+            return None
+
+        return (
+            (self.means_tested_benefits or self.past_means_tested_benefits)
+            and self.sap_band in SAP_BANDS
+            and self.tenure in TENURES
+        )
+
+    @property
+    def is_eco4_flex_eligible_route_1(self) -> Optional[bool]:
+        if (
+            self.household_income is None
+            or self.child_benefit is None
+            or self.sap_band is None
+            or self.tenure is None
+        ):
+            return None
+
+        return (
+            (
+                self.household_income <= 31000
+                or (
+                    self.child_benefit
+                    and self.is_income_under_or_equal_to_max_for_eco4_flex
+                )
+            )
+            and self.sap_band in SAP_BANDS
+            and self.tenure in TENURES
+        )
+
+    @property
+    def is_eco4_flex_eligible_route_2_a(self) -> Optional[bool]:
+        if (
+            self.council_tax_reduction is None
+            or self.vulnerabilities_general is None
+            or self.multiple_deprivation_index is None
+            or self.sap_band is None
+            or self.tenure is None
+            or self.free_school_meals_eligibility is None
+        ):
+            return None
+
+        return (
+            self.council_tax_reduction
+            and (
+                self.vulnerabilities_general
+                or self.multiple_deprivation_index in [1, 2, 3]
+            )
+            and self.sap_band in SAP_BANDS
+            and self.tenure in TENURES
+        )
+
+    @property
+    def is_eco4_flex_eligible_route_2_b(self) -> Optional[bool]:
+        if (
+            self.free_school_meals_eligibility is None
+            or self.vulnerabilities_general is None
+            or self.multiple_deprivation_index is None
+            or self.sap_band is None
+            or self.tenure is None
+        ):
+            return None
+
+        return (
+            self.free_school_meals_eligibility
+            and (
+                self.vulnerabilities_general
+                or self.multiple_deprivation_index in [1, 2, 3]
+            )
+            and self.sap_band in SAP_BANDS
+            and self.tenure in TENURES
+        )
+
+    @property
+    def is_eco4_flex_eligible(self) -> Optional[bool]:
+        return (
+            self.is_eco4_flex_eligible_route_1
+            or self.is_eco4_flex_eligible_route_2_a
+            or self.is_eco4_flex_eligible_route_2_b
+        )
+
+    @property
+    def is_gbis_eligible__common_conditions(self) -> Optional[bool]:
+        return (
+            (
+                (
+                    self.tenure == enums.Tenure.OWNER_OCCUPIED.value
+                    and self.sap_band in SAP_BANDS
+                )
+                or (
+                    self.tenure == enums.Tenure.RENTED_PRIVATE.value
+                    and self.sap_band in SAP_BANDS[:2]  # D-E only
+                )
+                or (
+                    self.tenure == enums.Tenure.RENTED_SOCIAL.value
+                    and self.sap_band in SAP_BANDS[1:]  # E-G only
+                )
+            )
+            and (
+                self.is_cavity_wall_insulation_recommended
+                or self.is_loft_insulation_recommended
+            )
+            and self.property_type != enums.PropertyType.PARK_HOME.value
+        )
+
+    @property
+    def is_gbis_eligible_route_1(self) -> Optional[bool]:
+        if self.tenure is None or self.sap_band is None or self.property_type is None:
+            return None
+
+        return self.is_gbis_eligible__common_conditions and (
+            self.council_tax_band is None or self.council_tax_band in TAX_BANDS
+        )
+
+    @property
+    def is_gbis_eligible_route_2(self) -> Optional[bool]:
+        if (
+            self.tenure is None
+            or self.sap_band is None
+            or self.property_type is None
+            or self.means_tested_benefits is None
+        ):
+            return None
+
+        return self.is_gbis_eligible__common_conditions and self.means_tested_benefits
+
+    @property
+    def is_gbis_eligible(self) -> Optional[bool]:
+        return self.is_gbis_eligible_route_1 or self.is_gbis_eligible_route_2
 
     @property
     def is_hug2_eligible(self) -> Optional[bool]:
+        if self.tenure is None:
+            return None
         if self.tenure == enums.Tenure.OWNER_OCCUPIED.value:
             return (
                 self.is_property_in_lower_sap_band
                 and self.is_property_not_heated_by_main_gas
                 and (
                     self.is_deprivation_index_upto_3
-                    or self.is_income_less_than_31K
-                    or self.is_income_under_max_based_on_occupants
+                    or self.is_income_less_than_or_equal_to_31K
+                    or self.is_income_under_or_equal_to_max_for_hug2
                 )
             )
         elif self.tenure == enums.Tenure.RENTED_PRIVATE.value:
@@ -557,11 +768,15 @@ class Answers(models.Model):
                 and self.will_landlord_contribute
                 and (
                     self.is_deprivation_index_upto_3
-                    or self.is_income_less_than_31K
-                    or self.is_income_under_max_based_on_occupants
+                    or self.is_income_less_than_or_equal_to_31K
+                    or self.is_income_under_or_equal_to_max_for_hug2
                 )
             )
         return False
+
+    """
+    # Measure recommendations
+    """
 
     @property
     def is_cavity_wall_insulation_recommended(self) -> bool:
