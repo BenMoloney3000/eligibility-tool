@@ -644,11 +644,11 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_advice_needed_from_team": answers.advice_needed_from_team,
         "cr51a_past_means_tested_benefits": answers.past_means_tested_benefits,
         # Potential schemes eligibility fields:
-        "cr51a_bus": None,  # TODO Waiting for criteria from PEC to determine values of these
-        "cr51a_connectedforwarmth": None,
-        "cr51a_eco4": None,
-        "cr51a_eco4flex": None,
-        "cr51a_gbis": None,
+        "cr51a_bus": answers.is_bus_eligible,
+        "cr51a_connectedforwarmth": answers.is_connected_for_warmth_eligible,
+        "cr51a_eco4": answers.is_eco4_eligible,
+        "cr51a_eco4flex": answers.is_eco4_flex_eligible,
+        "cr51a_gbis": answers.is_gbis_eligible,
         "cr51a_hug2": answers.is_hug2_eligible,
         # Potential measures' fields:
         "cr51a_cavity_wall_insulation": answers.is_cavity_wall_insulation_recommended,

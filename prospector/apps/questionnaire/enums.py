@@ -12,6 +12,17 @@ class ControlsAdequacy(models.TextChoices):
     TOP_SPEC = "Top Spec", "Top spec"
 
 
+class CouncilTaxBand(models.TextChoices):
+    A = "A", "A"
+    B = "B", "B"
+    C = "C", "C"
+    D = "D", "D"
+    E = "E", "E"
+    F = "F", "F"
+    G = "G", "G"
+    H = "H", "H"
+
+
 class EfficiencyBand(models.TextChoices):
     A = "A", "A"
     B = "B", "B"
