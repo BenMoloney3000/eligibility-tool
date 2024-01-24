@@ -410,6 +410,8 @@ class Answers(models.Model):
         verbose_name="Advice needed from Energy Advice Team",
     )
 
+    advice_needed_details = models.TextField(blank=True, null=True)
+
     def save(self, *args, **kwargs):
         from prospector.apps.questionnaire import utils
 
