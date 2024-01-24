@@ -334,6 +334,10 @@ class EnergyAdvices(AnswerFormMixin, forms.ModelForm):
         required=False,
         label="Would you like any advice from our Energy Advice Team?",
     )
+    advice_needed_details = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+    )
 
     class Meta:
         model = models.Answers
@@ -342,6 +346,7 @@ class EnergyAdvices(AnswerFormMixin, forms.ModelForm):
             "advice_needed_bills",
             "advice_needed_supplier",
             "advice_needed_from_team",
+            "advice_needed_details",
         ]
         optional_fields = fields
 
