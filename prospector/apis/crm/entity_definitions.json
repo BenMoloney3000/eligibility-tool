@@ -1872,6 +1872,40 @@
             "SchemaName": "cr51a_ShortID"
         },
         {
+            "@odata.type": "#Microsoft.Dynamics.CRM.MemoAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Memo",
+            "AttributeTypeName": {
+                "Value": "MemoType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Situation",
+                        "LanguageCode": 1033,
+                        "MetadataId": "470f08f4-24c3-48ee-a5f0-c584bad28071"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Situation",
+                    "LanguageCode": 1033,
+                    "MetadataId": "470f08f4-24c3-48ee-a5f0-c584bad28071"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_situation",
+            "MetadataId": "6fb067da-d4b9-ee11-a569-000d3abd864b",
+            "SchemaName": "cr51a_Situation"
+        },
+        {
             "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Boolean",

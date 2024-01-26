@@ -482,6 +482,7 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.HowDidYouHearAboutPEC.TWITTER: "Twitter",
                     enums.HowDidYouHearAboutPEC.WEB_SEARCH: "Web Search",
                     enums.HowDidYouHearAboutPEC.WORD_OF_MOUTH: "Word of mouth",
+                    enums.HowDidYouHearAboutPEC.NOT_SPECIFIED: "Other",
                 },
             )
         ),
