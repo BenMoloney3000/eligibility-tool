@@ -1,0 +1,102 @@
+<p>
+    Congratulations! It looks like you might be eligible for the following grants:
+</p>
+
+{% if hug2_eligibility %}
+    <h4>HUG2</h4>
+    <p>
+        The Home Upgrade Grant: Phase 2 or "HUG2" is a government-funded grant scheme
+        that provides energy efficiency upgrades and low carbon heating to low-income
+        households living in off-gas grid homes in England.
+    </p>
+    <p>
+        PEC is delivering HUG2 in collaboration with Plymouth City Council. If you
+        gave us permission to contact you, you can expect us to get in touch with
+        you within the next couple of weeks to discuss the application process.
+        If you did not give us permission to contact you and you are interested in
+        finding out more, please get in touch with our team.
+    </p>
+{% endif %}
+
+{% if eco4_eligibility or eco4flex_eligibility %}
+    <h4>ECO4</h4>
+    <p>
+        ECO4 is funded by the government and the major energy suppliers in Great Britain.
+        The government requires the energy suppliers to contribute to the Energy Company
+        Obligation (ECO) scheme, which aims to improve the energy efficiency and heating
+        of low-income and fuel-poor households.
+    </p>
+
+    {% if eco4_condition_1 %}
+        <p>
+            We think this fund might help you with the upgrades your home would benefit
+            from. Contact us for more information.
+        </p>
+    {% elif eco4_condition_2 %}
+        <p>
+            It looks like you could be eligible for this scheme. However, we think it is
+            likely that the grant would not cover the full cost of the necessary works.
+            You may find it difficult to get help with this scheme. Contact your energy
+            supplier for more guidance.
+        </p>
+    {% endif %}
+{% endif %}
+
+{% if cfw_eligibility %}
+    <h4>Connected for Warmth</h4>
+    <p>
+        We think this fund might help you with the upgrades your home needs.
+        You should contact
+        <a href="https://www.evolvehes.co.uk/"
+            target="_blank"
+            rel="noopener norefferer">
+            Evolve Home Energy Solutions</a> who deliver this funding in the Southwest.
+    </p>
+{% endif %}
+
+{% if bus_eligibility %}
+    <h4>BUS</h4>
+    <p>
+        The Boiler Upgrade Scheme or "BUS", is a government initiative that offers grants to help
+        property owners replace their fossil fuel heating systems with heat pumps or biomass boilers.
+        The scheme aims to reduce carbon emissions, energy bills, and fuel poverty. The scheme is
+        funded by the government and the major energy suppliers, and administered by Ofgem.
+    </p>
+    <p>
+        We think this fund might help you with the upgrades your home needs. You should
+        <a href="https://mcscertified.com/find-an-installer/"
+            target="_blank"
+            rel="noopener norefferer">
+            contact some local MCS accredited heat pump installers</a>. We recommend getting three quotes.
+    </p>
+    {% if not_in_mains_gas %}
+        <p>
+            You are likely to be required to contribute toward the cost of a heat pump but replacing
+            your current system with an air source heat pump is likely to significantly reduce your
+            bills and carbon emissions.
+        </p>
+    {% else %}
+        <p>
+            The cost of installing a heat pump usually exceeds the value of the grant and may
+            cost you more than replacing a gas boiler. The bills are likely to remain similar,
+            but it would result in a significant reduction in carbon emissions.
+        </p>
+    {% endif %}
+{% endif %}
+{% if gbis_eligibility %}
+    <p>
+        The Great British Insulation Scheme or "GBIS", is a government initiative that offers
+        free or subsidised insulation to reduce the energy bills of low-income and fuel-poor
+        households in Great Britain. The scheme targets homes with low energy efficiency ratings
+        and certain council tax bands. The scheme is funded by the government and the major
+        energy suppliers and administered by Ofgem.
+    </p>
+    <p>
+        The grant funding is only likely to cover some of the cost of any work. Contact your
+        energy supplier for more guidance.
+    </p>
+{% endif %}
+<h3>What next?</h3>
+<p>
+    We will assess your submission and contact you in the coming weeks to discuss the next steps.
+</p>

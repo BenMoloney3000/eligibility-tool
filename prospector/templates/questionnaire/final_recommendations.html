@@ -22,10 +22,10 @@
 
     {% endif %}
 
-    {% if hug2_eligibility == True %}
-        {% include 'questionnaire/snippets/recommended_measures__green.html' %}
+    {% if any_scheme_eligible %}
+        {% include 'questionnaire/snippets/eligible_schemes.html' %}
     {% else %}
-        {% include 'questionnaire/snippets/recommended_measures__red.html' %}
+        {% include 'questionnaire/snippets/no_schemes_eligible.html' %}
     {% endif %}
 
 
