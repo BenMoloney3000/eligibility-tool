@@ -44,6 +44,7 @@ class ParityData(models.Model):
     )
     lower_super_output_area_code = models.CharField(max_length=50)
     multiple_deprivation_index = models.SmallIntegerField()
+    tax_band = models.CharField(max_length=1, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Parity data"
