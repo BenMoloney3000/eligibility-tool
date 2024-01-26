@@ -453,13 +453,13 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_occupierrole": None,  # Leave blank after Phase 3 changes
         # Landlord
         "pcc_accountname": answers.company_name,
-        "pcc_lladdress1street1": None,
-        "pcc_lladdress1street2": None,
+        "pcc_lladdress1street1": answers.landlord_details["address1"],
+        "pcc_lladdress1street2": answers.landlord_details["address2"],
         "pcc_lladdress1street3": None,
-        "pcc_lladdress1city": None,
+        "pcc_lladdress1city": answers.landlord_details["city"],
         "pcc_lladdress1county": None,
-        "pcc_lladdress1zippostalcode": None,
-        "pcc_llmainphone": None,
+        "pcc_lladdress1zippostalcode": answers.landlord_details["postcode"],
+        "pcc_llmainphone": answers.landlord_details["phone"],
         "pcc_website": None,
         "pcc_howdidyouhearaboutpec2": (
             option_value_mapping(

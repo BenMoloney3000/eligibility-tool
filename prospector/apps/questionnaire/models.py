@@ -444,6 +444,32 @@ class Answers(models.Model):
         ]
 
     @property
+    def landlord_details(self) -> Optional[dict]:
+        if (
+            self.respondent_role is None
+            or self.respondent_role != enums.RespondentRole.LANDLORD.value
+        ):
+            return {
+                "address1": None,
+                "address2": None,
+                "city": None,
+                "postcode": None,
+                "phone": None,
+            }
+        else:
+            if self.contact_phone:
+                phone = self.contact_phone
+            else:
+                phone = self.contact_mobile
+            return {
+                "address1": self.respondent_address_1,
+                "address2": self.respondent_address_2,
+                "city": self.respondent_address_3,
+                "postcode": self.respondent_postcode,
+                "phone": phone,
+            }
+
+    @property
     def is_owner(self) -> Optional[bool]:
         if self.respondent_role is None:
             return None
