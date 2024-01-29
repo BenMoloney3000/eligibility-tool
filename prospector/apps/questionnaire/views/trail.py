@@ -703,7 +703,7 @@ class AnswersSummary(abstract_views.Question):
 
 
 class RecommendedMeasures(abstract_views.Question):
-    template_name = "questionnaire/recommended_measures.html"
+    template_name = "questionnaire/final_recommendations.html"
     title = "Recommendations for this property"
     percent_complete = 100
 
@@ -725,19 +725,31 @@ class RecommendedMeasures(abstract_views.Question):
             measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
         if self.answers.is_solar_pv_installation_recommended:
             measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
+        if len(measures) == 0:
+            return None
         return measures
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         services.close_questionnaire(self.answers)
         measures = self.determine_recommended_measures()
-        for measure in measures:
-            measure.disruption = utils.get_disruption(measure)
-            measure.comfort_benefit = utils.get_comfort_benefit(measure)
-            measure.bill_impact = utils.get_bill_impact(measure)
+        if measures:
+            for measure in measures:
+                measure.disruption = utils.get_disruption(measure)
+                measure.comfort_benefit = utils.get_comfort_benefit(measure)
+                measure.bill_impact = utils.get_bill_impact(measure)
 
         context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
+        context["not_in_mains_gas"] = self.answers.is_property_not_heated_by_mains_gas
+        context["any_scheme_eligible"] = self.answers.is_any_scheme_eligible
+        context["bus_eligibility"] = self.answers.is_bus_eligible
+        context["eco4_eligibility"] = self.answers.is_eco4_eligible
+        context["eco4flex_eligibility"] = self.answers.is_eco4_flex_eligible
+        context["eco4_condition_1"] = self.answers.if_off_mains_gas_and_given_sap_score
+        context["eco4_condition_2"] = self.answers.sap_band == enums.EfficiencyBand.D
+        context["cfw_eligibility"] = self.answers.is_connected_for_warmth_eligible
+        context["gbis_eligibility"] = self.answers.is_gbis_eligible
         context["hug2_eligibility"] = self.answers.is_hug2_eligible
         return context
 

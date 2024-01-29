@@ -492,7 +492,7 @@ class Answers(models.Model):
         ]
 
     @property
-    def is_property_not_heated_by_main_gas(self) -> Optional[bool]:
+    def is_property_not_heated_by_mains_gas(self) -> Optional[bool]:
         if self.main_fuel is None:
             return None
 
@@ -781,7 +781,7 @@ class Answers(models.Model):
         if self.tenure == enums.Tenure.OWNER_OCCUPIED.value:
             return (
                 self.is_property_in_lower_sap_band
-                and self.is_property_not_heated_by_main_gas
+                and self.is_property_not_heated_by_mains_gas
                 and (
                     self.is_deprivation_index_upto_3
                     or self.is_income_less_than_or_equal_to_31K
@@ -801,6 +801,24 @@ class Answers(models.Model):
                 )
             )
         return False
+
+    @property
+    def is_any_scheme_eligible(self) -> Optional[bool]:
+        return (
+            self.is_bus_eligible
+            or self.is_connected_for_warmth_eligible
+            or self.is_eco4_eligible
+            or self.is_eco4_flex_eligible
+            or self.is_gbis_eligible
+            or self.is_hug2_eligible
+        )
+
+    @property
+    def if_off_mains_gas_and_given_sap_score(self) -> Optional[bool]:
+        return (
+            self.is_property_not_heated_by_mains_gas
+            and self.sap_band in SAP_BANDS[1:3]  # E-F only
+        )
 
     """
     # Measure recommendations
