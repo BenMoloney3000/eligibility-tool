@@ -613,7 +613,7 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_respondentmobile": answers.contact_mobile,
         "cr51a_respondentphonenumber": answers.contact_phone,
         "cr51a_respondentrelationshiptooccupier": answers.respondent_role_other,
-        "cr51a_Situation": answers.advice_needed_details,
+        "cr51a_situation": answers.advice_needed_details,
         "cr51a_shortid": answers.short_uid,
         "cr51a_tco2current": tco2current(),
         "cr51a_tenure": (
