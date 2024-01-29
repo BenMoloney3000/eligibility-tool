@@ -533,9 +533,9 @@ class Vulnerabilities(abstract_views.Question):
 
 class HouseholdIncome(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
-    question = "Total household income"
+    question = "Total annual household income"
     supplementary = (
-        "What is your total household income before tax "
+        "What is your total annual household income before tax "
         "including any means tested benefits?"
     )
     title = "Household income"
@@ -569,7 +569,7 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 
 class HousingCosts(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.Text
-    question = "What are your housing costs?"
+    question = "What are your monthly housing costs?"
     title = "Housing costs"
     icon = "house"
     next = "CouncilTaxReduction"
