@@ -625,7 +625,7 @@ class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
         "Are any children living in the household eligible "
         "for free school meals due to low income?"
     )
-    next = "EnergyAdvices"
+    next = "AnswersSummary"
     percent_complete = 90
 
 
