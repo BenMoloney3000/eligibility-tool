@@ -791,7 +791,7 @@ class Answers(models.Model):
         elif self.tenure == enums.Tenure.RENTED_PRIVATE.value:
             return (
                 self.is_property_in_lower_sap_band
-                and self.is_property_not_heated_by_main_gas
+                and self.is_property_not_heated_by_mains_gas
                 and self.does_landlord_own_no_more_than_4_properties
                 and self.will_landlord_contribute
                 and (
