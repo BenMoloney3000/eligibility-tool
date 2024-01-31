@@ -316,7 +316,7 @@ class PropertyAddress(abstract_views.Question):
         return context
 
     def pre_save(self):
-        if self.answers.property_address_1 and self.answers.property_address_2:
+        if self.answers.property_address_1:
             try:
                 self.answers = services.prepopulate_from_parity(self.answers)
                 self.answers.save()
