@@ -62,6 +62,9 @@ class QuestionnaireAdmin(ExportMixin, admin.ModelAdmin):
         "completed_at",
         "crmresults",
     )
+    readonly_fields = [
+        "uuid",
+    ]
     list_filter = (CrmResultFilter,)
 
     def get_queryset(self, request):
