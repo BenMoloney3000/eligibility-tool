@@ -634,7 +634,10 @@ class Answers(models.Model):
     def is_eco4_eligible(self) -> Optional[bool]:
         if (
             self.means_tested_benefits is None
-            or self.past_means_tested_benefits is None
+            or (
+                self.means_tested_benefits is False
+                and self.past_means_tested_benefits is None
+            )
             or self.sap_band is None
             or self.tenure is None
         ):
