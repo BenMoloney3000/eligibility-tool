@@ -27,7 +27,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.property_attachment = po.attachment
         answers.property_construction_years = po.construction_years
         answers.wall_construction = po.wall_construction
-        answers.wall_insulation = po.wall_insulation
+        answers.walls_insulation = po.wall_insulation
         answers.roof_construction = po.roof_construction
         answers.roof_insulation = po.roof_insulation
         answers.floor_construction = po.floor_construction
