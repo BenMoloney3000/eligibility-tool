@@ -64,6 +64,7 @@ class QuestionnaireAdmin(ExportMixin, admin.ModelAdmin):
     )
     readonly_fields = [
         "uuid",
+        "parity_object_id",
     ]
     list_filter = (CrmResultFilter,)
 

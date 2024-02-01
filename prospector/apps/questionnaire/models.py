@@ -45,6 +45,10 @@ class Answers(models.Model):
         verbose_name="Client's unique reference number to be passed in email for reference purpose",
     )
 
+    parity_object_id = models.CharField(
+        max_length=20, editable=False, blank=True, null=True
+    )
+
     """
     # "YOUR DETAILS"
     """

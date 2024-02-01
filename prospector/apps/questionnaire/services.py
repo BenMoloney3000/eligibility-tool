@@ -47,6 +47,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.uprn = po.uprn
         answers.multiple_deprivation_index = po.multiple_deprivation_index
         answers.council_tax_band = po.tax_band
+        answers.parity_object_id = str(po.id)
 
         return answers
 
