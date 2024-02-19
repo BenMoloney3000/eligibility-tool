@@ -309,7 +309,7 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.PropertyConstructionYears.FROM_1996: "1996-2002",
                     enums.PropertyConstructionYears.FROM_2003: "2003-2006",
                     enums.PropertyConstructionYears.FROM_2007: "2007-2011",
-                    enums.PropertyConstructionYears.FROM_2012: "2012 onwards",
+                    enums.PropertyConstructionYears.FROM_2012: "2012 Onwards",
                 },
             )
         ),
