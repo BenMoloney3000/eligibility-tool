@@ -216,7 +216,7 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_street1": answers.property_address_1,
         "pcc_street2": answers.property_address_2,
         "pcc_street3": answers.property_address_3,
-        "pcc_towncity": answers.property_address_3,
+        "pcc_towncity": "PLYMOUTH",
         "pcc_county": None,  # Leave blank
         "pcc_postcode": answers.property_postcode,
         "pcc_udprn": answers.property_udprn,
