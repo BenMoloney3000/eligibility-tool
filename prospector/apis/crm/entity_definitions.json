@@ -115,7 +115,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Would like advice from Energy Advice Team",
+                        "Label": "Energy advice wanted?",
                         "LanguageCode": 1033,
                         "MetadataId": "0c45de79-afcc-4960-afbf-0c734e10d136"
                     }
@@ -123,7 +123,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Would like advice from Energy Advice Team",
+                    "Label": "Energy advice wanted?",
                     "LanguageCode": 1033,
                     "MetadataId": "0c45de79-afcc-4960-afbf-0c734e10d136"
                 }
@@ -3039,7 +3039,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Email",
+                        "Label": "Occupant Email",
                         "LanguageCode": 1033,
                         "MetadataId": "7d104c9b-eb01-ed11-82e5-000d3a3aa389"
                     }
@@ -3047,7 +3047,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Email",
+                    "Label": "Occupant Email",
                     "LanguageCode": 1033,
                     "MetadataId": "7d104c9b-eb01-ed11-82e5-000d3a3aa389"
                 }
@@ -3141,7 +3141,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "First Name",
+                        "Label": "Occupant First Name",
                         "LanguageCode": 1033,
                         "MetadataId": "d9f9d175-eb01-ed11-82e5-000d3a3aa389"
                     }
@@ -3149,7 +3149,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "First Name",
+                    "Label": "Occupant First Name",
                     "LanguageCode": 1033,
                     "MetadataId": "d9f9d175-eb01-ed11-82e5-000d3a3aa389"
                 }
@@ -3413,7 +3413,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Home Phone",
+                        "Label": "Occupant Home Phone",
                         "LanguageCode": 1033,
                         "MetadataId": "8748d087-eb01-ed11-82e5-000d3a3aa389"
                     }
@@ -3421,7 +3421,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Home Phone",
+                    "Label": "Occupant Home Phone",
                     "LanguageCode": 1033,
                     "MetadataId": "8748d087-eb01-ed11-82e5-000d3a3aa389"
                 }
@@ -3549,7 +3549,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Last Name",
+                        "Label": "Occupant Last Name",
                         "LanguageCode": 1033,
                         "MetadataId": "59a4cc7b-eb01-ed11-82e5-000d3a3aa389"
                     }
@@ -3557,7 +3557,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Last Name",
+                    "Label": "Occupant Last Name",
                     "LanguageCode": 1033,
                     "MetadataId": "59a4cc7b-eb01-ed11-82e5-000d3a3aa389"
                 }
@@ -3889,7 +3889,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Mobile",
+                        "Label": "Occupant Mobile",
                         "LanguageCode": 1033,
                         "MetadataId": "0ddfd68d-eb01-ed11-82e5-000d3a3aa389"
                     }
@@ -3897,7 +3897,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Mobile",
+                    "Label": "Occupant Mobile",
                     "LanguageCode": 1033,
                     "MetadataId": "0ddfd68d-eb01-ed11-82e5-000d3a3aa389"
                 }
