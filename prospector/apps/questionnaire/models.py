@@ -535,10 +535,10 @@ class Answers(models.Model):
         return self.multiple_deprivation_index in [1, 2, 3]
 
     @property
-    def is_income_less_than_or_equal_to_31K(self) -> Optional[bool]:
+    def is_income_less_than_or_equal_to_36K(self) -> Optional[bool]:
         if self.household_income is None:
             return None
-        return self.household_income <= 31000
+        return self.household_income <= 36000
 
     @property
     def is_income_under_or_equal_to_max_for_eco4_flex(self) -> Optional[bool]:
@@ -785,7 +785,7 @@ class Answers(models.Model):
                 and self.is_property_not_heated_by_mains_gas
                 and (
                     self.is_deprivation_index_upto_3
-                    or self.is_income_less_than_or_equal_to_31K
+                    or self.is_income_less_than_or_equal_to_36K
                     or self.is_income_under_or_equal_to_max_for_hug2
                 )
             )
@@ -797,7 +797,7 @@ class Answers(models.Model):
                 and self.will_landlord_contribute
                 and (
                     self.is_deprivation_index_upto_3
-                    or self.is_income_less_than_or_equal_to_31K
+                    or self.is_income_less_than_or_equal_to_36K
                     or self.is_income_under_or_equal_to_max_for_hug2
                 )
             )
