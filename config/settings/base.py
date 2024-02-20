@@ -301,7 +301,7 @@ POSTCODER = env.str("POSTCODER", default="DATA8")
 IDEAL_POSTCODES_API_KEY = env.str("IDEAL_POSTCODES_API_KEY", default="")
 DATA8_API_KEY = env.str("DATA8_API_KEY", default="")
 DATA8_LICENSE = env.str("DATA8_LICENSE", default="FreeTrial")
-MAIL_FROM = env.str("EMAIL_FROM", default="support@plymouthenergycommunity.com")
+MAIL_FROM = env.str("EMAIL_FROM", default="futurefit@plymouthenergycommunity.com")
 DEFAULT_FROM_EMAIL = MAIL_FROM
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
