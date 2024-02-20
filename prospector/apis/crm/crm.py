@@ -442,7 +442,7 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_email": answers.occupant_details["email"],
         "pcc_address1street1": answers.respondent_address_1,
         "pcc_address1street2": answers.respondent_address_2,
-        "pcc_address1street3": answers.respondent_address_3,
+        "pcc_address1street3": None,
         "pcc_address1city": answers.respondent_address_3,
         "pcc_address1county": None,
         "pcc_address1zippostalcode": answers.respondent_postcode,
