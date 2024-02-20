@@ -251,8 +251,8 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.MainFuel.OC: "Oil - community",
                     enums.MainFuel.ONC: "Oil - not community",
                     enums.MainFuel.SC: "Smokeless coal",
-                    enums.MainFuel.WC: "Wood chips",
-                    enums.MainFuel.WL: "Wood logs",
+                    enums.MainFuel.WC: "Wood - chips",
+                    enums.MainFuel.WL: "Wood - logs",
                 },
             )
         ),
