@@ -206,6 +206,40 @@
             "SchemaName": "cr51a_advice_needed_warm"
         },
         {
+            "@odata.type": "#Microsoft.Dynamics.CRM.StringAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "String",
+            "AttributeTypeName": {
+                "Value": "StringType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Automatic email sent",
+                        "LanguageCode": 1033,
+                        "MetadataId": "57afed2e-1695-429a-a500-da0ec5460dea"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Automatic email sent",
+                    "LanguageCode": 1033,
+                    "MetadataId": "57afed2e-1695-429a-a500-da0ec5460dea"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_automaticemailsent",
+            "MetadataId": "05d9ea7c-c016-ef11-9f89-000d3a4a057e",
+            "SchemaName": "cr51a_Automaticemailsent"
+        },
+        {
             "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Picklist",
@@ -489,7 +523,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Consented to call back",
+                        "Label": "Consented to call/email back",
                         "LanguageCode": 1033,
                         "MetadataId": "46e097ae-f23f-422e-a364-12879c72469d"
                     }
@@ -497,7 +531,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Consented to call back",
+                    "Label": "Consented to call/email back",
                     "LanguageCode": 1033,
                     "MetadataId": "46e097ae-f23f-422e-a364-12879c72469d"
                 }
@@ -523,7 +557,7 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
-                        "Label": "Consent for future schemes",
+                        "Label": "Consent to future scheme communication",
                         "LanguageCode": 1033,
                         "MetadataId": "83364fe2-41ad-4409-97e1-115bf13ba6f7"
                     }
@@ -531,7 +565,7 @@
                 "UserLocalizedLabel": {
                     "HasChanged": null,
                     "IsManaged": false,
-                    "Label": "Consent for future schemes",
+                    "Label": "Consent to future scheme communication",
                     "LanguageCode": 1033,
                     "MetadataId": "83364fe2-41ad-4409-97e1-115bf13ba6f7"
                 }
@@ -544,6 +578,40 @@
             "LogicalName": "cr51a_consented_future_schemes",
             "MetadataId": "a35b55c0-ebae-ee11-a569-000d3abd864b",
             "SchemaName": "cr51a_consented_future_schemes"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Picklist",
+            "AttributeTypeName": {
+                "Value": "PicklistType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Consented to LEAD",
+                        "LanguageCode": 1033,
+                        "MetadataId": "141bc42e-888b-4f37-bcc7-7d86348e064a"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Consented to LEAD",
+                    "LanguageCode": 1033,
+                    "MetadataId": "141bc42e-888b-4f37-bcc7-7d86348e064a"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_consentedtolead",
+            "MetadataId": "671f357e-9a00-ef11-9f89-6045bd886dd6",
+            "SchemaName": "cr51a_ConsentedToLEAD"
         },
         {
             "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
@@ -4419,6 +4487,40 @@
             "LogicalName": "pcc_retrofitprojectlookup",
             "MetadataId": "538d1aa0-29e3-41e9-a35a-cb17b4a815be",
             "SchemaName": "pcc_RetrofitProjectLookup"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Boolean",
+            "AttributeTypeName": {
+                "Value": "BooleanType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Retrofit Project Record Required?",
+                        "LanguageCode": 1033,
+                        "MetadataId": "deb1997d-7a76-4bfb-b015-3a5dee3e8891"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Retrofit Project Record Required?",
+                    "LanguageCode": 1033,
+                    "MetadataId": "deb1997d-7a76-4bfb-b015-3a5dee3e8891"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_retrofitprojectrecordrequired",
+            "MetadataId": "f3dec1b6-53da-ee11-904b-000d3aae2ff6",
+            "SchemaName": "pcc_RetrofitProjectRecordRequired"
         },
         {
             "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
