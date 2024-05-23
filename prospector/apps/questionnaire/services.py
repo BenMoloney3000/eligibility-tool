@@ -1,8 +1,5 @@
 import logging
 
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils import timezone
 
 from . import models
@@ -58,8 +55,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
 def close_questionnaire(answers: models.Answers):
     """Set the questionnaire as completed.
 
-    Prevents any part of it being edited through the questionnaire views. Also
-    sends an acknowledment email.
+    Prevents any part of it being edited through the questionnaire views.
     """
 
     answers.completed_at = timezone.now()
@@ -67,24 +63,5 @@ def close_questionnaire(answers: models.Answers):
 
     try:
         crm_create.delay(str(answers.uuid))
-
-        context = {
-            "full_name": f"{answers.first_name} {answers.last_name}",
-            "postcode": answers.property_postcode,
-            "consented_callback": answers.consented_callback,
-            "consented_future_schemes": answers.consented_future_schemes,
-            "short_uid": answers.short_uid,
-        }
-        message_body_txt = render_to_string("emails/acknowledgement.txt", context)
-        message_body_html = render_to_string("emails/acknowledgement.html", context)
-
-        message = EmailMultiAlternatives(
-            subject="Thanks for completing the PEC Funding Eligibility Checker",
-            body=message_body_txt,
-            from_email=settings.MAIL_FROM,
-            to=[answers.email],
-        )
-        message.attach_alternative(message_body_html, "text/html")
-        message.send()
     except Exception as e:
         logger.error("close_questionnaire_func exception %s", str(e))

@@ -87,6 +87,7 @@ class HowDidYouHearAboutPEC(models.TextChoices):
     SIGNPOST_LB = "Signpost - Local business", "Referred by local business"
     TWITTER = "Twitter", "X, formerly known as Twitter"
     WEB_SEARCH = "Web search", "Web search"
+    BUSINESS_CARD_IN_SHOP = "Business card in shop", "Business card in shop"
     WORD_OF_MOUTH = "Word of mouth", "Word of mouth"
     NOT_SPECIFIED = "Not Yet Specified", "Other"
     LABEL = "Input label", "Please choose option"
