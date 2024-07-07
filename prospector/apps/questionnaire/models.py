@@ -478,16 +478,23 @@ class Answers(models.Model):
         ]
 
     @property
-    def is_property_in_lower_sap_band(self) -> Optional[bool]:
-        if self.sap_band is None:
+    def is_property_in_lower_band(self) -> Optional[bool]:
+        if self.lodged_epc_band:
+            return self.lodged_epc_band in [
+                enums.EfficiencyBand.D.value,
+                enums.EfficiencyBand.E.value,
+                enums.EfficiencyBand.F.value,
+                enums.EfficiencyBand.G.value,
+            ]
+        elif self.sap_band:
+            return self.sap_band in [
+                enums.EfficiencyBand.D.value,
+                enums.EfficiencyBand.E.value,
+                enums.EfficiencyBand.F.value,
+                enums.EfficiencyBand.G.value,
+            ]
+        else:
             return None
-
-        return self.sap_band in [
-            enums.EfficiencyBand.D.value,
-            enums.EfficiencyBand.E.value,
-            enums.EfficiencyBand.F.value,
-            enums.EfficiencyBand.G.value,
-        ]
 
     @property
     def is_property_not_heated_by_mains_gas(self) -> Optional[bool]:
@@ -781,7 +788,7 @@ class Answers(models.Model):
             return None
         if self.tenure == enums.Tenure.OWNER_OCCUPIED.value:
             return (
-                self.is_property_in_lower_sap_band
+                self.is_property_in_lower_band
                 and self.is_property_not_heated_by_mains_gas
                 and (
                     self.is_deprivation_index_upto_3
@@ -791,7 +798,7 @@ class Answers(models.Model):
             )
         elif self.tenure == enums.Tenure.RENTED_PRIVATE.value:
             return (
-                self.is_property_in_lower_sap_band
+                self.is_property_in_lower_band
                 and self.is_property_not_heated_by_mains_gas
                 and self.does_landlord_own_no_more_than_4_properties
                 and self.will_landlord_contribute
