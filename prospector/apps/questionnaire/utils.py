@@ -73,7 +73,7 @@ def get_bill_impact(measure: enums.PossibleMeasures) -> str:
 
 def get_hug2_eligible_postcodes():
     postcodes = []
-    with open("hug2-eligible-postcodes.csv", "r") as file:
+    with open("external_data/hug2-eligible-postcodes.csv", "r") as file:
         reader = csv.reader(file)
         for row in reader:
             try:
