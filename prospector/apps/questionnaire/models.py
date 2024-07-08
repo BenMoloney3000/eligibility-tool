@@ -4,6 +4,7 @@ from typing import Optional
 from django.db import models
 
 from . import enums
+from .utils import get_hug2_eligible_postcodes
 
 SAP_BANDS = [
     enums.EfficiencyBand.D,
@@ -23,6 +24,8 @@ TENURES = [
     enums.Tenure.OWNER_OCCUPIED,
     enums.Tenure.RENTED_PRIVATE,
 ]
+
+HUG2_ELIGIBLE_POSTCODES = get_hug2_eligible_postcodes()
 
 
 class Answers(models.Model):
@@ -535,11 +538,8 @@ class Answers(models.Model):
         return self.willing_to_contribute in [None, True]
 
     @property
-    def is_deprivation_index_upto_3(self) -> Optional[bool]:
-        if self.multiple_deprivation_index is None:
-            return None
-
-        return self.multiple_deprivation_index in [1, 2, 3]
+    def is_property_among_hug2_eligible_postcodes(self) -> bool:
+        return self.property_postcode in HUG2_ELIGIBLE_POSTCODES
 
     @property
     def is_income_less_than_or_equal_to_36K(self) -> Optional[bool]:
@@ -791,7 +791,7 @@ class Answers(models.Model):
                 self.is_property_in_lower_band
                 and self.is_property_not_heated_by_mains_gas
                 and (
-                    self.is_deprivation_index_upto_3
+                    self.is_property_among_hug2_eligible_postcodes
                     or self.is_income_less_than_or_equal_to_36K
                     or self.is_income_under_or_equal_to_max_for_hug2
                 )
@@ -803,7 +803,7 @@ class Answers(models.Model):
                 and self.does_landlord_own_no_more_than_4_properties
                 and self.will_landlord_contribute
                 and (
-                    self.is_deprivation_index_upto_3
+                    self.is_property_among_hug2_eligible_postcodes
                     or self.is_income_less_than_or_equal_to_36K
                     or self.is_income_under_or_equal_to_max_for_hug2
                 )
