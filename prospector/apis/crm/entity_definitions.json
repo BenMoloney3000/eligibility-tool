@@ -2484,6 +2484,40 @@
             "SchemaName": "cr51a_VulnerabilityToTheCold_YoungChildren"
         },
         {
+            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Boolean",
+            "AttributeTypeName": {
+                "Value": "BooleanType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "WHLG",
+                        "LanguageCode": 1033,
+                        "MetadataId": "5af1ee93-632d-42d8-8204-eff340d45e4b"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "WHLG",
+                    "LanguageCode": 1033,
+                    "MetadataId": "5af1ee93-632d-42d8-8204-eff340d45e4b"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_whlg",
+            "MetadataId": "7f6c3ce5-44a7-ef11-b8e9-6045bdf44173",
+            "SchemaName": "cr51a_WHLG"
+        },
+        {
             "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Integer",
@@ -4420,6 +4454,108 @@
             "LogicalName": "pcc_propertytype",
             "MetadataId": "5eac5e4a-e901-ed11-82e5-000d3a3aa389",
             "SchemaName": "pcc_PropertyType"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Lookup",
+            "AttributeTypeName": {
+                "Value": "LookupType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Retrfit Case Lookup v2",
+                        "LanguageCode": 1033,
+                        "MetadataId": "ebbc863a-b3b8-44d1-baf0-437f54ecacf7"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Retrfit Case Lookup v2",
+                    "LanguageCode": 1033,
+                    "MetadataId": "ebbc863a-b3b8-44d1-baf0-437f54ecacf7"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_retrfitcaselookupv2",
+            "MetadataId": "6fab288e-3a27-454f-8f94-24b46f3b99d5",
+            "SchemaName": "pcc_RetrfitCaseLookupv2"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.LookupAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Lookup",
+            "AttributeTypeName": {
+                "Value": "LookupType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Retrofit Case Lookup",
+                        "LanguageCode": 1033,
+                        "MetadataId": "cf65e5cc-5ecd-448c-9027-9dc49346c691"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Retrofit Case Lookup",
+                    "LanguageCode": 1033,
+                    "MetadataId": "cf65e5cc-5ecd-448c-9027-9dc49346c691"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_retrofitcaselookup",
+            "MetadataId": "403d3663-d1fb-4b5e-ac93-b427f2b412fd",
+            "SchemaName": "pcc_RetrofitCaseLookup"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Boolean",
+            "AttributeTypeName": {
+                "Value": "BooleanType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Retrofit Case Record Required?",
+                        "LanguageCode": 1033,
+                        "MetadataId": "957c85b4-42f4-4af4-9457-62cecda8ff98"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Retrofit Case Record Required?",
+                    "LanguageCode": 1033,
+                    "MetadataId": "957c85b4-42f4-4af4-9457-62cecda8ff98"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "pcc_retrofitcaserecordrequired",
+            "MetadataId": "16f55c0e-5e4e-ef11-bfe2-6045bdf5a65a",
+            "SchemaName": "pcc_RetrofitCaseRecordRequired"
         },
         {
             "AttributeOf": null,

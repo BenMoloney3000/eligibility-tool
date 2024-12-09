@@ -65,6 +65,8 @@ def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
 def get_bill_impact(measure: enums.PossibleMeasures) -> str:
     if measure in [
         enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+        enums.PossibleMeasures.BATTERY_STORAGE,
+        enums.PossibleMeasures.HEATING_CONTROLS,
     ]:
         return "Medium"
     else:
@@ -74,6 +76,18 @@ def get_bill_impact(measure: enums.PossibleMeasures) -> str:
 def get_hug2_eligible_postcodes():
     postcodes = []
     with open("external_data/hug2-eligible-postcodes.csv", "r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            try:
+                postcodes.append(row[0])
+            except Exception:
+                raise CommandError("Operation aborted due to data error.")
+    return postcodes
+
+
+def get_whlg_eligible_postcodes():
+    postcodes = []
+    with open("external_data/WHLG-eligible-postcodes.csv", "r") as file:
         reader = csv.reader(file)
         for row in reader:
             try:

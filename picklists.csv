@@ -8,6 +8,8 @@ cr51a_boilerefficiency,F,106870005
 cr51a_boilerefficiency,G,106870006
 cr51a_childbenefitclaimantsingleorcouple,Single,106870000
 cr51a_childbenefitclaimantsingleorcouple,Couple,106870001
+cr51a_consentedtolead,No,0
+cr51a_consentedtolead,Yes,1
 cr51a_counciltaxbracket,A,106870000
 cr51a_counciltaxbracket,B,106870001
 cr51a_counciltaxbracket,C,106870002
@@ -102,8 +104,13 @@ pcc_heatingcontrols,Smart Thermostat,798360006
 pcc_heatingcontrols,Thermostat Only,798360004
 pcc_heatingcontrols,Not applicable,798360005
 pcc_heatingcontrols,Unknown,798360000
+pcc_howdidyouhearaboutpec2,Business card in shop,106870002
 pcc_howdidyouhearaboutpec2,Door knocking,798360000
+pcc_howdidyouhearaboutpec2,Drop-in,106870005
+pcc_howdidyouhearaboutpec2,Employer,106870003
+pcc_howdidyouhearaboutpec2,Event,106870006
 pcc_howdidyouhearaboutpec2,Facebook,798360001
+pcc_howdidyouhearaboutpec2,Flyer through the door,106870004
 pcc_howdidyouhearaboutpec2,Flyer/poster,798360002
 pcc_howdidyouhearaboutpec2,Instagram,798360003
 pcc_howdidyouhearaboutpec2,Letter in the post,798360016
@@ -118,6 +125,7 @@ pcc_howdidyouhearaboutpec2,Signpost – Local business,798360011
 pcc_howdidyouhearaboutpec2,Twitter,798360012
 pcc_howdidyouhearaboutpec2,Web Search,798360013
 pcc_howdidyouhearaboutpec2,Word of mouth,798360014
+pcc_howdidyouhearaboutpec2,Other,106870001
 pcc_inscopeformees,No,798360001
 pcc_inscopeformees,Yes,798360002
 pcc_inscopeformees,Maybe,798360003
@@ -126,9 +134,9 @@ pcc_likelihoodofprivatelyrented,Low,798360003
 pcc_likelihoodofprivatelyrented,Medium,798360002
 pcc_likelihoodofprivatelyrented,High,798360001
 pcc_likelihoodofprivatelyrented,Unknown,798360000
-pcc_listedproperty,II,798360003
-pcc_listedproperty,II*,798360001
 pcc_listedproperty,Not Listed,798360002
+pcc_listedproperty,Grade II,798360003
+pcc_listedproperty,Grade II*,798360001
 pcc_mouldgrowth,Yes,798360001
 pcc_mouldgrowth,No,798360002
 pcc_mouldgrowth,Unknown,798360000
@@ -201,10 +209,13 @@ pcc_propertyeligibilityscore,🟧 Amber,798360001
 pcc_propertyeligibilityscore,🟨 Yellow,798360002
 pcc_propertyeligibilityscore,🟩 Green,798360003
 pcc_propertytype,Bungalow,106870001
-pcc_propertytype,Flat,106870002
 pcc_propertytype,House,106870005
 pcc_propertytype,Maisonette,798360001
 pcc_propertytype,Park home,798360000
+pcc_propertytype,Flat,106870002
+pcc_propertytype,Flat: Low Rise (1-2 Storey),106870006
+pcc_propertytype,Flat: Medium Rise (3-5 Storey),106870007
+pcc_propertytype,Flat: High Rise (6+ Storey),106870008
 pcc_propertytype,Unknown,798360010
 pcc_roofinsulation,Another dwelling above,106870001
 pcc_roofinsulation,AsBuilt,106870002
@@ -218,7 +229,7 @@ pcc_roofinsulation,mm 100,106870003
 pcc_roofinsulation,mm 150,106870005
 pcc_roofinsulation,mm 200,106870006
 pcc_roofinsulation,mm 250,106870008
-pcc_roofinsulation,mm2 70,106870009
+pcc_roofinsulation,mm 270,106870009
 pcc_roofinsulation,mm 300,106870010
 pcc_roofinsulation,mm 350,106870011
 pcc_roofinsulation,mm 400,106870012
@@ -297,5 +308,6 @@ pcc_walltype,Granite,106870003
 pcc_walltype,Park home,106870004
 pcc_walltype,Sandstone,106870005
 pcc_walltype,Solid brick,106870006
-pcc_walltype,System ,798360011
+pcc_walltype,Solid stone,106870007
+pcc_walltype,System,798360011
 pcc_walltype,Timber frame,798360012

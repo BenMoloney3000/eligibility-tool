@@ -5,6 +5,7 @@ from django.db import models
 
 from . import enums
 from .utils import get_hug2_eligible_postcodes
+from .utils import get_whlg_eligible_postcodes
 
 SAP_BANDS = [
     enums.EfficiencyBand.D,
@@ -20,12 +21,20 @@ TAX_BANDS = [
     enums.CouncilTaxBand.D,
 ]
 
+EPC_BANDS = [
+    enums.EfficiencyBand.D,
+    enums.EfficiencyBand.E,
+    enums.EfficiencyBand.F,
+    enums.EfficiencyBand.G,
+]
+
 TENURES = [
     enums.Tenure.OWNER_OCCUPIED,
     enums.Tenure.RENTED_PRIVATE,
 ]
 
 HUG2_ELIGIBLE_POSTCODES = get_hug2_eligible_postcodes()
+WHLG_ELIGIBLE_POSTCODES = get_whlg_eligible_postcodes()
 
 
 class Answers(models.Model):
@@ -542,6 +551,10 @@ class Answers(models.Model):
         return self.property_postcode in HUG2_ELIGIBLE_POSTCODES
 
     @property
+    def is_property_among_whlg_eligible_postcodes(self) -> bool:
+        return self.property_postcode in WHLG_ELIGIBLE_POSTCODES
+
+    @property
     def is_income_less_than_or_equal_to_36K(self) -> Optional[bool]:
         if self.household_income is None:
             return None
@@ -615,6 +628,45 @@ class Answers(models.Model):
                 return self.household_income <= 27600
             elif dependents >= 5:
                 return self.household_income <= 31600
+        return False
+
+    @property
+    def is_income_under_or_equal_to_max_for_whlg(self) -> Optional[bool]:
+        if self.children is not None and self.seniors is None:
+            dependents = self.children
+        elif self.seniors is not None and self.children is None:
+            dependents = self.seniors
+        elif self.children is None and self.seniors is None:
+            return None
+        else:
+            dependents = self.children + self.seniors
+
+        if self.household_income is None:
+            return None
+        elif self.adults is None:
+            return None
+        elif self.adults >= 2:
+            if dependents == 1:
+                return self.household_income <= 24000
+            elif dependents == 2:
+                return self.household_income <= 28000
+            elif dependents == 3:
+                return self.household_income <= 32000
+            elif dependents == 4:
+                return self.household_income <= 36000
+            elif dependents >= 5:
+                return self.household_income <= 40000
+            else:
+                return False
+        elif self.adults == 1:
+            if dependents == 3:
+                return self.household_income <= 23600
+            elif dependents == 4:
+                return self.household_income <= 27600
+            elif dependents >= 5:
+                return self.household_income <= 31600
+            else:
+                return False
         return False
 
     """
@@ -800,7 +852,6 @@ class Answers(models.Model):
             return (
                 self.is_property_in_lower_band
                 and self.is_property_not_heated_by_mains_gas
-                and self.does_landlord_own_no_more_than_4_properties
                 and self.will_landlord_contribute
                 and (
                     self.is_property_among_hug2_eligible_postcodes
@@ -811,6 +862,36 @@ class Answers(models.Model):
         return False
 
     @property
+    def is_whlg_eligible(self) -> Optional[bool]:
+        return (
+            self.sap_band in SAP_BANDS
+            and (
+                (
+                    self.tenure == enums.Tenure.RENTED_PRIVATE
+                    and self.lodged_epc_band in EPC_BANDS[:2]
+                )
+                or self.tenure == enums.Tenure.OWNER_OCCUPIED
+            )
+            and (
+                self.is_property_among_whlg_eligible_postcodes
+                or self.means_tested_benefits
+                or self.household_income < 36000
+                or self.is_income_under_or_equal_to_max_for_whlg
+                or self.is_eco4_flex_eligible_route_2_a
+                or self.is_eco4_flex_eligible_route_2_b
+                or (
+                    (
+                        self.vulnerabilities_general
+                        or self.multiple_deprivation_index in [1, 2, 3]
+                    )
+                    and self.council_tax_reduction
+                    or self.free_school_meals_eligibility
+                )
+                or (self.free_school_meals_eligibility and ())
+            )
+        )
+
+    @property
     def is_any_scheme_eligible(self) -> Optional[bool]:
         return (
             self.is_bus_eligible
@@ -819,6 +900,7 @@ class Answers(models.Model):
             or self.is_eco4_flex_eligible
             or self.is_gbis_eligible
             or self.is_hug2_eligible
+            or self.is_whlg_eligible
         )
 
     @property
@@ -957,6 +1039,7 @@ class Answers(models.Model):
 
     @property
     def is_solar_pv_installation_recommended(self) -> bool:
+        """Check for both solar PV and battery storage recommendation."""
         roof_for_PV = [
             enums.RoofConstruction.PNLA,
             enums.RoofConstruction.PNNLA,
@@ -964,6 +1047,10 @@ class Answers(models.Model):
         ]
 
         return self.floor_construction in roof_for_PV
+
+    @property
+    def is_heating_controls_installation_recommended(self) -> bool:
+        return self.heating == enums.Heating.BOILERS
 
     @property
     def occupant_details(self) -> dict:

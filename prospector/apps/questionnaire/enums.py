@@ -163,6 +163,14 @@ class PossibleMeasures(models.TextChoices):
     )
     LOFT_INSULATION = "LOFT_INSULATION", "Additional insulation in loft space"
     HEAT_PUMP_INSTALLATION = "HEAT_PUMP_INSTALLATION", "Installation of a heat pump"
+    BATTERY_STORAGE = (
+        "BATTERY_STORAGE",
+        "A home energy battery system to store renewable energy for later use",
+    )
+    HEATING_CONTROLS = (
+        "HEATING_CONTROLS",
+        "Advanced heating controls to manage and optimise your home's temperature efficiently",
+    )
 
 
 class PropertyAttachment(models.TextChoices):
