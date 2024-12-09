@@ -14,7 +14,6 @@ urlpatterns = [
         views.RespondentHasPermission.as_view(),
         name="respondent-has-permission",
     ),
-    path("properties-limit", views.PropertiesLimit.as_view(), name="properties-limit"),
     path(
         "will-to-contribute",
         views.WillToContribute.as_view(),

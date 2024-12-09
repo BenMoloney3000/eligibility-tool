@@ -163,7 +163,7 @@ class RespondentAddress(abstract_views.Question):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
-    next = "PropertiesLimit"
+    next = "WillToContribute"
     percent_complete = 27
     prefilled_addresses = {}
 
@@ -229,15 +229,6 @@ class RespondentAddress(abstract_views.Question):
           (would still have to check for a change in UDPRN before overwriting address?)
         - hide address selector if address fields are populated
         """
-
-
-class PropertiesLimit(abstract_views.SingleQuestion):
-    title = "Properties limit"
-    answer_field = "nmt4properties"
-    type_ = abstract_views.QuestionType.YesNo
-    question = "Do you confirm that you own no more than 4 properties?"
-    percent_complete = 30
-    next = "WillToContribute"
 
 
 class WillToContribute(abstract_views.SingleQuestion):
@@ -710,21 +701,72 @@ class RecommendedMeasures(abstract_views.Question):
     def determine_recommended_measures(self):
         measures = []
         if self.answers.is_cavity_wall_insulation_recommended:
-            measures.append(enums.PossibleMeasures.CAVITY_WALL_INSULATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.CAVITY_WALL_INSULATION,
+                    "label": enums.PossibleMeasures.CAVITY_WALL_INSULATION.label,
+                }
+            )
         if self.answers.is_solid_wall_insulation_recommended:
-            measures.append(enums.PossibleMeasures.SOLID_WALL_INSULATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.SOLID_WALL_INSULATION,
+                    "label": enums.PossibleMeasures.SOLID_WALL_INSULATION.label,
+                }
+            )
         if self.answers.is_underfloor_insulation_recommended:
-            measures.append(enums.PossibleMeasures.UNDERFLOOR_INSULATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.UNDERFLOOR_INSULATION,
+                    "label": enums.PossibleMeasures.UNDERFLOOR_INSULATION.label,
+                }
+            )
         if self.answers.is_loft_insulation_recommended:
-            measures.append(enums.PossibleMeasures.LOFT_INSULATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.LOFT_INSULATION,
+                    "label": enums.PossibleMeasures.LOFT_INSULATION.label,
+                }
+            )
         if self.answers.is_rir_insulation_recommended:
-            measures.append(enums.PossibleMeasures.RIR_INSULATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.RIR_INSULATION,
+                    "label": enums.PossibleMeasures.RIR_INSULATION.label,
+                }
+            )
         if self.answers.is_boiler_upgrade_recommended:
-            measures.append(enums.PossibleMeasures.BOILER_UPGRADE)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.BOILER_UPGRADE,
+                    "label": enums.PossibleMeasures.BOILER_UPGRADE.label,
+                }
+            )
         if self.answers.is_heatpump_installation_recommended:
-            measures.append(enums.PossibleMeasures.HEAT_PUMP_INSTALLATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
+                    "label": enums.PossibleMeasures.HEAT_PUMP_INSTALLATION.label,
+                }
+            )
         if self.answers.is_solar_pv_installation_recommended:
-            measures.append(enums.PossibleMeasures.SOLAR_PV_INSTALLATION)
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.SOLAR_PV_INSTALLATION,
+                    "label": enums.PossibleMeasures.SOLAR_PV_INSTALLATION.label,
+                },
+                {
+                    "type": enums.PossibleMeasures.BATTERY_STORAGE,
+                    "label": enums.PossibleMeasures.BATTERY_STORAGE.label,
+                },
+            )
+        if self.answers.is_heating_controls_installation_recommended:
+            measures.append(
+                {
+                    "type": enums.PossibleMeasures.HEATING_CONTROLS,
+                    "label": enums.PossibleMeasures.HEATING_CONTROLS.label,
+                }
+            )
         if len(measures) == 0:
             return None
         return measures
@@ -735,9 +777,9 @@ class RecommendedMeasures(abstract_views.Question):
         measures = self.determine_recommended_measures()
         if measures:
             for measure in measures:
-                measure.disruption = utils.get_disruption(measure)
-                measure.comfort_benefit = utils.get_comfort_benefit(measure)
-                measure.bill_impact = utils.get_bill_impact(measure)
+                measure["disruption"] = utils.get_disruption(measure["type"])
+                measure["comfort_benefit"] = utils.get_comfort_benefit(measure["type"])
+                measure["bill_impact"] = utils.get_bill_impact(measure["type"])
 
         context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
@@ -748,9 +790,9 @@ class RecommendedMeasures(abstract_views.Question):
         context["eco4flex_eligibility"] = self.answers.is_eco4_flex_eligible
         context["eco4_condition_1"] = self.answers.if_off_mains_gas_and_given_sap_score
         context["eco4_condition_2"] = self.answers.sap_band == enums.EfficiencyBand.D
-        context["cfw_eligibility"] = self.answers.is_connected_for_warmth_eligible
         context["gbis_eligibility"] = self.answers.is_gbis_eligible
         context["hug2_eligibility"] = self.answers.is_hug2_eligible
+        context["whlg_eligibility"] = self.answers.is_whlg_eligible
         return context
 
     # Due to closing questionnaire we also remove "Back to previous question" link
