@@ -868,7 +868,7 @@ class Answers(models.Model):
             and (
                 (
                     self.tenure == enums.Tenure.RENTED_PRIVATE
-                    and self.lodged_epc_band in EPC_BANDS[:2]
+                    and self.sap_band in SAP_BANDS[:2]
                 )
                 or self.tenure == enums.Tenure.OWNER_OCCUPIED
             )
