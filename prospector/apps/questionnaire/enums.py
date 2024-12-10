@@ -96,7 +96,7 @@ class HowDidYouHearAboutPEC(models.TextChoices):
 class MainFuel(models.TextChoices):
     ANTHRACITE = "Anthracite", "Anthracite"
     BWP = "BulkWoodPellets", "Bulk wood pellets"
-    DFMW = "DualFuelMineralWood", "Dual fuel mineral wood"
+    DFMW = "DualFuelMineralWood", "Dual Fuel Mineral Wood"
     EC = "ElectricityCommunity", "Electricity - community"
     ENC = "ElectricityNotCommunity", "Electricity - not community"
     GBLPG = "GasBottledLPG", "Bottled gas (LPG)"
