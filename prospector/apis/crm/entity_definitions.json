@@ -240,6 +240,40 @@
             "SchemaName": "cr51a_Automaticemailsent"
         },
         {
+            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Boolean",
+            "AttributeTypeName": {
+                "Value": "BooleanType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Battery Storage",
+                        "LanguageCode": 1033,
+                        "MetadataId": "29f53a28-1062-48d1-b3e3-76b65b6ef585"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Battery Storage",
+                    "LanguageCode": 1033,
+                    "MetadataId": "29f53a28-1062-48d1-b3e3-76b65b6ef585"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_batterystorage",
+            "MetadataId": "01d5e2a2-18b7-ef11-b8e8-6045bd8e2e9a",
+            "SchemaName": "cr51a_BatteryStorage"
+        },
+        {
             "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Picklist",
@@ -1972,6 +2006,40 @@
             "LogicalName": "cr51a_situation",
             "MetadataId": "6fb067da-d4b9-ee11-a569-000d3abd864b",
             "SchemaName": "cr51a_Situation"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Boolean",
+            "AttributeTypeName": {
+                "Value": "BooleanType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "Smart Heating Controls",
+                        "LanguageCode": 1033,
+                        "MetadataId": "53648e67-3e47-445a-885d-8984b325ff72"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Smart Heating Controls",
+                    "LanguageCode": 1033,
+                    "MetadataId": "53648e67-3e47-445a-885d-8984b325ff72"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_smartheatingcontrols",
+            "MetadataId": "e8a13b37-19b7-ef11-b8e8-7c1e528542d1",
+            "SchemaName": "cr51a_SmartHeatingControls"
         },
         {
             "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
