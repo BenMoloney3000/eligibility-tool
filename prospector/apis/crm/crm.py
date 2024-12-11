@@ -654,11 +654,13 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_hug2": answers.is_hug2_eligible,
         "cr51a_whlg": answers.is_whlg_eligible,
         # Potential measures' fields:
+        "cr51a_batterystorage": answers.is_solar_pv_installation_recommended,
         "cr51a_cavity_wall_insulation": answers.is_cavity_wall_insulation_recommended,
         "cr51a_heat_pump": answers.is_heatpump_installation_recommended,
         "cr51a_loft_insulation": answers.is_loft_insulation_recommended,
         "cr51a_low_carbon_heating_upgrade": answers.is_boiler_upgrade_recommended,
         "cr51a_rir_insulation": answers.is_rir_insulation_recommended,
+        "cr51a_smartheatingcontrols": answers.is_heating_controls_installation_recommended,
         "cr51a_solarpv": answers.is_solar_pv_installation_recommended,
         "cr51a_solid_wall_insulation": answers.is_solid_wall_insulation_recommended,
         "cr51a_underfloor_insulation": answers.is_underfloor_insulation_recommended,
