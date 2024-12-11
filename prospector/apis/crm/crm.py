@@ -238,7 +238,7 @@ def map_crm(answers: models.Answers) -> dict:
                 {
                     enums.MainFuel.ANTHRACITE: "Anthracite",
                     enums.MainFuel.BWP: "Bulk wood pellets",
-                    enums.MainFuel.DFMW: "Dual fuel mineral wood",
+                    enums.MainFuel.DFMW: "Dual Fuel Mineral Wood",
                     enums.MainFuel.EC: "Electricity - community",
                     enums.MainFuel.ENC: "Electricity - not community",
                     enums.MainFuel.GBLPG: "Bottled gas (LPG)",
