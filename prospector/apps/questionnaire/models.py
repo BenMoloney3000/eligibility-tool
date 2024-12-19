@@ -172,6 +172,7 @@ class Answers(models.Model):
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True, null=True
     )
     multiple_deprivation_index = models.SmallIntegerField(blank=True, null=True)
+    income_decile = models.SmallIntegerField(blank=True, null=True)
 
     # PROPERTY ENERGY PERFORMANCE DETAILS
 

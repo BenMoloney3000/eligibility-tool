@@ -42,6 +42,7 @@ class ParityData:
     long_coordinate: float
     lower_super_output_area_code: str
     multiple_deprivation_index: int
+    income_decile: int
 
     def __repr__(self):
         return (f"{self.address_1}, {self.address_2}".strip(", ")) + (
