@@ -1090,6 +1090,40 @@
             "SchemaName": "cr51a_IMD_Decile"
         },
         {
+            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Integer",
+            "AttributeTypeName": {
+                "Value": "IntegerType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
+                        "Label": "IMD Income Decile",
+                        "LanguageCode": 1033,
+                        "MetadataId": "039e5778-ff03-4564-8721-942386a10047"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "IMD Income Decile",
+                    "LanguageCode": 1033,
+                    "MetadataId": "039e5778-ff03-4564-8721-942386a10047"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_imdincomedecile",
+            "MetadataId": "181707d8-a9b7-ef11-b8e9-6045bdf44173",
+            "SchemaName": "cr51a_IMDIncomeDecile"
+        },
+        {
             "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Picklist",

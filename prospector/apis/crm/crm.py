@@ -583,6 +583,7 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_housingcosts": answers.housing_costs,
         "cr51a_housingcosts_base": None,
         "cr51a_imd_decile": answers.multiple_deprivation_index,
+        "cr51a_imdincomedecile": answers.income_decile,
         "cr51a_incomeafterhousingcosts": None,
         "cr51a_incomeafterhousingcosts_base": None,
         "cr51a_lodgedepcscore": answers.lodged_epc_score,
