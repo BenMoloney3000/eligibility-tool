@@ -965,6 +965,40 @@
                     {
                         "HasChanged": null,
                         "IsManaged": false,
+                        "Label": "Household Income After Tax",
+                        "LanguageCode": 1033,
+                        "MetadataId": "78c1d2ad-b5c8-4809-bda5-2851b5cae7b0"
+                    }
+                ],
+                "UserLocalizedLabel": {
+                    "HasChanged": null,
+                    "IsManaged": false,
+                    "Label": "Household Income After Tax",
+                    "LanguageCode": 1033,
+                    "MetadataId": "78c1d2ad-b5c8-4809-bda5-2851b5cae7b0"
+                }
+            },
+            "EntityLogicalName": "pcc_retrofitintermediate",
+            "IsCustomAttribute": true,
+            "IsPrimaryId": false,
+            "IsRequiredForForm": false,
+            "IsValidODataAttribute": true,
+            "LogicalName": "cr51a_householdincomeaftertax",
+            "MetadataId": "7526468e-b9d1-ef11-8ee9-6045bd8e2e9a",
+            "SchemaName": "cr51a_HouseholdIncomeAfterTax"
+        },
+        {
+            "@odata.type": "#Microsoft.Dynamics.CRM.MoneyAttributeMetadata",
+            "AttributeOf": null,
+            "AttributeType": "Money",
+            "AttributeTypeName": {
+                "Value": "MoneyType"
+            },
+            "DisplayName": {
+                "LocalizedLabels": [
+                    {
+                        "HasChanged": null,
+                        "IsManaged": false,
                         "Label": "Household Savings",
                         "LanguageCode": 1033,
                         "MetadataId": "257df001-4151-4a20-9fdf-5ae11e91e7c4"

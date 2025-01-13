@@ -287,6 +287,12 @@ class Answers(models.Model):
         verbose_name="Total gross household income before tax",
     )
 
+    household_income_after_tax = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Household income after tax",
+    )
+
     means_tested_benefits = models.BooleanField(
         null=True,
         blank=True,
@@ -642,30 +648,35 @@ class Answers(models.Model):
         else:
             dependents = self.children + self.seniors
 
-        if self.household_income is None:
+        if self.housing_costs is None:
+            return None
+        else:
+            housing_annual_cost = self.housing_costs * 12
+
+        if self.household_income_after_tax is None:
             return None
         elif self.adults is None:
             return None
         elif self.adults >= 2:
             if dependents == 1:
-                return self.household_income <= 24000
+                return self.household_income_after_tax - housing_annual_cost <= 24000
             elif dependents == 2:
-                return self.household_income <= 28000
+                return self.household_income_after_tax - housing_annual_cost <= 28000
             elif dependents == 3:
-                return self.household_income <= 32000
+                return self.household_income_after_tax - housing_annual_cost <= 32000
             elif dependents == 4:
-                return self.household_income <= 36000
+                return self.household_income_after_tax - housing_annual_cost <= 36000
             elif dependents >= 5:
-                return self.household_income <= 40000
+                return self.household_income_after_tax - housing_annual_cost <= 40000
             else:
                 return False
         elif self.adults == 1:
             if dependents == 3:
-                return self.household_income <= 23600
+                return self.household_income_after_tax - housing_annual_cost <= 23600
             elif dependents == 4:
-                return self.household_income <= 27600
+                return self.household_income_after_tax - housing_annual_cost <= 27600
             elif dependents >= 5:
-                return self.household_income <= 31600
+                return self.household_income_after_tax - housing_annual_cost <= 31600
             else:
                 return False
         return False

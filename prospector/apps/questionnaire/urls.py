@@ -52,6 +52,11 @@ urlpatterns = [
         name="past-means-tested-benefits",
     ),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
+    path(
+        "after-tax-income",
+        views.HouseholdIncomeAfterTax.as_view(),
+        name="household-income-after-tax",
+    ),
     path("housing-costs", views.HousingCosts.as_view(), name="housing-costs"),
     path(
         "disability-benefits",
