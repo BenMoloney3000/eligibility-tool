@@ -577,6 +577,7 @@ def map_crm(answers: models.Answers) -> dict:
             )
         ),
         "cr51a_householdincome": answers.household_income,
+        "cr51a_householdincomeaftertax": answers.household_income_after_tax,
         "cr51a_householdincome_base": None,
         "cr51a_householdsavings": None,
         "cr51a_householdsavings_base": None,

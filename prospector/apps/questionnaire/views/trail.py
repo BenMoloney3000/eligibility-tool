@@ -531,6 +531,49 @@ class HouseholdIncome(abstract_views.SingleQuestion):
     )
     title = "Household income"
     icon = "house"
+    next = "HouseholdIncomeAfterTax"
+    percent_complete = 78
+
+    def sanitise_answer(self, data):
+        data = re.sub(",", "", data)
+        data = re.sub("£", "", data)
+        return data
+
+    @staticmethod
+    def validate_answer(data):
+        for character in data:
+            if character not in "£," and not character.isdigit():
+                raise ValidationError(
+                    "It seems that you used one or more invalid characters."
+                    " Please enter a value represented by an integer number."
+                )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(
+            {
+                "answers": self.answers,
+            }
+        )
+        return context
+
+
+class HouseholdIncomeAfterTax(abstract_views.SingleQuestion):
+    type_ = abstract_views.QuestionType.Text
+    question = "Total annual household income after tax"
+    supplementary = (
+        "What is your total annual household income after tax "
+        "including any means tested benefits?"
+    )
+    note = (
+        "If you do not know your after tax income, you can use an online income calculator, "
+        "for example this one provided by "
+        "<a href='https://www.moneysavingexpert.com/tax-calculator/' \
+target='_blank' rel='noopener noreferrer'>MoneySavingExpert.com</a> "
+        "(link will open in a new tab)."
+    )
+    title = "After tax income"
+    icon = "house"
     next = "HousingCosts"
     percent_complete = 78
 
