@@ -834,7 +834,6 @@ class RecommendedMeasures(abstract_views.Question):
         context["eco4_condition_1"] = self.answers.if_off_mains_gas_and_given_sap_score
         context["eco4_condition_2"] = self.answers.sap_band == enums.EfficiencyBand.D
         context["gbis_eligibility"] = self.answers.is_gbis_eligible
-        context["hug2_eligibility"] = self.answers.is_hug2_eligible
         context["whlg_eligibility"] = self.answers.is_whlg_eligible
         return context
 

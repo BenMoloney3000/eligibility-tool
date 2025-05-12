@@ -4,7 +4,6 @@ from typing import Optional
 from django.db import models
 
 from . import enums
-from .utils import get_hug2_eligible_postcodes
 from .utils import get_whlg_eligible_postcodes
 
 SAP_BANDS = [
@@ -33,7 +32,6 @@ TENURES = [
     enums.Tenure.RENTED_PRIVATE,
 ]
 
-HUG2_ELIGIBLE_POSTCODES = get_hug2_eligible_postcodes()
 WHLG_ELIGIBLE_POSTCODES = get_whlg_eligible_postcodes()
 
 
@@ -554,10 +552,6 @@ class Answers(models.Model):
         return self.willing_to_contribute in [None, True]
 
     @property
-    def is_property_among_hug2_eligible_postcodes(self) -> bool:
-        return self.property_postcode in HUG2_ELIGIBLE_POSTCODES
-
-    @property
     def is_property_among_whlg_eligible_postcodes(self) -> bool:
         return self.property_postcode in WHLG_ELIGIBLE_POSTCODES
 
@@ -591,49 +585,6 @@ class Answers(models.Model):
                 return self.household_income <= 40000
         elif self.adults == 1:
             if dependents >= 5:
-                return self.household_income <= 31600
-        return False
-
-    @property
-    def is_income_under_or_equal_to_max_for_hug2(self) -> Optional[bool]:
-        if self.children is not None and self.seniors is None:
-            dependents = self.children
-        elif self.seniors is not None and self.children is None:
-            dependents = self.seniors
-        elif self.children is None and self.seniors is None:
-            dependents = None
-        else:
-            dependents = self.children + self.seniors
-
-        if self.household_income is None:
-            return None
-        elif self.adults is None:
-            return None
-        elif self.adults >= 2:
-            if dependents in [None, 0]:
-                return self.household_income <= 20000
-            elif dependents == 1:
-                return self.household_income <= 24000
-            elif dependents == 2:
-                return self.household_income <= 28000
-            elif dependents == 3:
-                return self.household_income <= 32000
-            elif dependents == 4:
-                return self.household_income <= 36000
-            elif dependents >= 5:
-                return self.household_income <= 40000
-        elif self.adults == 1:
-            if dependents in [None, 0]:
-                return self.household_income <= 20000
-            elif dependents == 1:
-                return self.household_income <= 20000
-            elif dependents == 2:
-                return self.household_income <= 20000
-            elif dependents == 3:
-                return self.household_income <= 23000
-            elif dependents == 4:
-                return self.household_income <= 27600
-            elif dependents >= 5:
                 return self.household_income <= 31600
         return False
 
@@ -847,33 +798,6 @@ class Answers(models.Model):
         return self.is_gbis_eligible_route_1 or self.is_gbis_eligible_route_2
 
     @property
-    def is_hug2_eligible(self) -> Optional[bool]:
-        if self.tenure is None:
-            return None
-        if self.tenure == enums.Tenure.OWNER_OCCUPIED.value:
-            return (
-                self.is_property_in_lower_band
-                and self.is_property_not_heated_by_mains_gas
-                and (
-                    self.is_property_among_hug2_eligible_postcodes
-                    or self.is_income_less_than_or_equal_to_36K
-                    or self.is_income_under_or_equal_to_max_for_hug2
-                )
-            )
-        elif self.tenure == enums.Tenure.RENTED_PRIVATE.value:
-            return (
-                self.is_property_in_lower_band
-                and self.is_property_not_heated_by_mains_gas
-                and self.will_landlord_contribute
-                and (
-                    self.is_property_among_hug2_eligible_postcodes
-                    or self.is_income_less_than_or_equal_to_36K
-                    or self.is_income_under_or_equal_to_max_for_hug2
-                )
-            )
-        return False
-
-    @property
     def is_whlg_eligible(self) -> Optional[bool]:
         return (
             self.sap_band in SAP_BANDS
@@ -911,7 +835,6 @@ class Answers(models.Model):
             or self.is_eco4_eligible
             or self.is_eco4_flex_eligible
             or self.is_gbis_eligible
-            or self.is_hug2_eligible
             or self.is_whlg_eligible
         )
 
