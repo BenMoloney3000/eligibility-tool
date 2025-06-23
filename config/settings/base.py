@@ -2,12 +2,12 @@
 import logging
 
 import environ
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk.integrations.logging import LoggingIntegration
-from sentry_sdk.integrations.redis import RedisIntegration
-from sentry_sdk.integrations.rq import RqIntegration
-from ssm_parameter_store import EC2ParameterStore
+#import sentry_sdk
+#from sentry_sdk.integrations.django import DjangoIntegration
+#from sentry_sdk.integrations.logging import LoggingIntegration
+#from sentry_sdk.integrations.redis import RedisIntegration
+#from sentry_sdk.integrations.rq import RqIntegration
+#from ssm_parameter_store import EC2ParameterStore
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -60,41 +60,41 @@ SITE_URL = env.str("SITE_URL", "")
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Sentry
-# ------------------------------------------------------------------------------
-SENTRY_DSN = env("SENTRY_DSN", default="")
-SENTRY_RELEASE = ""
-if SENTRY_DSN:
-    SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
-    RQ_SENTRY_DSN = env("SENTRY_DSN")
-
-    sentry_logging = LoggingIntegration(
-        level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
-        event_level=logging.ERROR,  # Send events from Error messages
-    )
+## ------------------------------------------------------------------------------
+#SENTRY_DSN = env("SENTRY_DSN", default="")
+#SENTRY_RELEASE = ""
+#if SENTRY_DSN:
+#    SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+#    RQ_SENTRY_DSN = env("SENTRY_DSN")
+#
+#    sentry_logging = LoggingIntegration(
+#        level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
+#        event_level=logging.ERROR,  # Send events from Error messages
+#    )
 
     # This commit ID is substituted in during the Docker build process
-    COMMIT_ID = "@@__COMMIT_ID__@@"
-    if COMMIT_ID != ("@@" + "__COMMIT_ID__" + "@@"):
-        SENTRY_RELEASE = f"prospector@{COMMIT_ID}"
-    else:
-        SENTRY_RELEASE = None
-
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            sentry_logging,
-            DjangoIntegration(),
-            RqIntegration(),
-            RedisIntegration(),
-        ],
-        environment=ENV,
-        release=SENTRY_RELEASE,
-    )
-
-    # DisallowedHost errors are basically spam
-    from sentry_sdk.integrations.logging import ignore_logger
-
-    ignore_logger("django.security.DisallowedHost")
+#    COMMIT_ID = "@@__COMMIT_ID__@@"
+#    if COMMIT_ID != ("@@" + "__COMMIT_ID__" + "@@"):
+#        SENTRY_RELEASE = f"prospector@{COMMIT_ID}"
+ #   else:
+ #       SENTRY_RELEASE = None
+#
+ #   sentry_sdk.init(
+ #       dsn=SENTRY_DSN,
+ #       integrations=[
+#         #   sentry_logging,
+        #    DjangoIntegration(),
+       #     RqIntegration(),
+     ##       RedisIntegration(),
+    #    ],
+   #     environment=ENV,
+  #      release=SENTRY_RELEASE,
+ #   )
+#
+#    # DisallowedHost errors are basically spam
+ #   from sentry_sdk.integrations.logging import ignore_logger
+#
+#    ignore_logger("django.security.DisallowedHost")
 
 
 # DATABASES

@@ -1,3 +1,4 @@
+pyyaml==6.0.1
 # ! When you alter this file, make sure that you recompile the output .txt files too.
 
 argon2-cffi              # Password hashing for when you don't use Auth0

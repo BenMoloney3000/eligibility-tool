@@ -34,6 +34,13 @@ if LOCAL_HOSTNAME and not DEBUG:  # noqa F405
 
 # DATABASES
 # ------------------------------------------------------------------------------
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql"
+    }
+}
+
+
 DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa F405
@@ -114,19 +121,27 @@ ADMINS = [
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
-ADMIN_URL = env("DJANGO_ADMIN_URL")
+#ADMIN_URL = env("DJANGO_ADMIN_URL")
 
 # Anymail (Mailgun)
 # ------------------------------------------------------------------------------
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
-INSTALLED_APPS += ["anymail"]  # noqa F405
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+#INSTALLED_APPS += ["anymail"]  # noqa F405
+#EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
-ANYMAIL = {
-    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-    "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.eu.mailgun.net/v3"),
-    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
-}
+#ANYMAIL = {
+#    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
+#    "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.eu.mailgun.net/v3"),
+#    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
+#}
+
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # STATIC
 # ------------------------
@@ -162,3 +177,5 @@ LOGGING = {
         "": {"handlers": ["console", "mail_admins"], "level": "DEBUG"},
     },
 }
+
+DEBUG=True
