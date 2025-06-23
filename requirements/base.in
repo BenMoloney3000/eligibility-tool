@@ -2,7 +2,7 @@ pyyaml==6.0.1
 # ! When you alter this file, make sure that you recompile the output .txt files too.
 
 argon2-cffi              # Password hashing for when you don't use Auth0
-psycopg2-binary          # Postgres driver
+psycopg2-binary>=2.9.7   # Postgres driver
 requests                 # For making HTTP requests
 python-dateutil          # Various datetime manipulation functions
 
@@ -16,7 +16,7 @@ django-rq                # Django integration for rq
 rq-scheduler             # RQ scheduler component
 
 # Celery
-celery[redis]
+celery[redis]>=5.3,<6.0
 django-celery-beat
 django-celery-results
 celery-singleton
