@@ -1056,40 +1056,6 @@
             "SchemaName": "cr51a_HousingCosts"
         },
         {
-            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Boolean",
-            "AttributeTypeName": {
-                "Value": "BooleanType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "HUG2",
-                        "LanguageCode": 1033,
-                        "MetadataId": "100cdc0e-a9c3-46a0-8567-ca3ac19b520a"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "HUG2",
-                    "LanguageCode": 1033,
-                    "MetadataId": "100cdc0e-a9c3-46a0-8567-ca3ac19b520a"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_hug2",
-            "MetadataId": "c9cbc652-d5af-ee11-a569-000d3aaacd20",
-            "SchemaName": "cr51a_HUG2"
-        },
-        {
             "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Integer",

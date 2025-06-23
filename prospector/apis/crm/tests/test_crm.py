@@ -103,7 +103,6 @@ def mock_crm_response(mock_crm_api_settings):
         "cr51a_eco4": False,
         "cr51a_eco4flex": False,
         "cr51a_gbis": False,
-        "cr51a_hug2": True,
         "cr51a_cavity_wall_insulation": False,
         "cr51a_heat_pump": False,
         "cr51a_loft_insulation": False,
