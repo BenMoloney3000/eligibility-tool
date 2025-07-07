@@ -1,5 +1,4 @@
 # models.py
-
 import uuid as uuid_lib
 from typing import Optional
 
@@ -821,21 +820,25 @@ class Answers(models.Model):
                     and self.council_tax_reduction
                     or self.free_school_meals_eligibility
                 )
-                or (
-                    self.tenure == enums.Tenure.RENTED_PRIVATE
-                    and self.sap_band
-                    in [enums.EfficiencyBand.F, enums.EfficiencyBand.G]
-                )
             )
         )
 
     @property
+    def is_whlg_prs_sap_f_or_g(self) -> Optional[bool]:
+        if self.tenure is None or self.sap_band is None:
+            return None
+        return self.tenure == enums.Tenure.RENTED_PRIVATE and self.sap_band in [
+            enums.EfficiencyBand.F,
+            enums.EfficiencyBand.G,
+        ]
+
+    @property
     def whlg_all_eligibility_routes(self) -> list[str]:
         """Return a list of all WHLG eligibility pathways the respondent meets."""
-        if (
-            self.sap_band not in SAP_BANDS
-            or self.tenure not in [enums.Tenure.RENTED_PRIVATE, enums.Tenure.OWNER_OCCUPIED]
-        ):
+        if self.sap_band not in SAP_BANDS or self.tenure not in [
+            enums.Tenure.RENTED_PRIVATE,
+            enums.Tenure.OWNER_OCCUPIED,
+        ]:
             return []
 
         routes: list[str] = []
@@ -856,7 +859,6 @@ class Answers(models.Model):
             routes.append("Pathway 3: AHC Equalisation")
 
         return routes
-
 
     @property
     def is_any_scheme_eligible(self) -> Optional[bool]:

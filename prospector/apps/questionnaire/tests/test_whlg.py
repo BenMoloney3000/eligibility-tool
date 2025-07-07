@@ -11,7 +11,7 @@ class TestWHLGEligibility(TestCase):
             sap_band=enums.EfficiencyBand.F,
         )
 
-        assert answers.is_whlg_eligible is True
+        assert answers.is_whlg_prs_sap_f_or_g is True
 
     def test_whlg_all_eligibility_routes(self):
         answers = factories.AnswersFactory(
