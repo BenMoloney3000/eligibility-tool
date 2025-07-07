@@ -801,10 +801,11 @@ class Answers(models.Model):
 
     @property
     def is_whlg_eligible(self) -> Optional[bool]:
-        print("DEBUG: is_whlg_eligible was called")
+        """Check eligibility for the Warm Homes: Local Grant scheme."""
         return (
             self.sap_band in SAP_BANDS
-            and self.tenure in [enums.Tenure.RENTED_PRIVATE, enums.Tenure.OWNER_OCCUPIED]
+            and self.tenure
+            in [enums.Tenure.RENTED_PRIVATE, enums.Tenure.OWNER_OCCUPIED]
             and (
                 self.is_property_among_whlg_eligible_postcodes
                 or self.means_tested_benefits
@@ -820,8 +821,41 @@ class Answers(models.Model):
                     and self.council_tax_reduction
                     or self.free_school_meals_eligibility
                 )
+                or (
+                    self.tenure == enums.Tenure.RENTED_PRIVATE
+                    and self.sap_band
+                    in [enums.EfficiencyBand.F, enums.EfficiencyBand.G]
+                )
             )
         )
+
+    @property
+    def whlg_all_eligibility_routes(self) -> list[str]:
+        """Return a list of all WHLG eligibility pathways the respondent meets."""
+        if (
+            self.sap_band not in SAP_BANDS
+            or self.tenure not in [enums.Tenure.RENTED_PRIVATE, enums.Tenure.OWNER_OCCUPIED]
+        ):
+            return []
+
+        routes: list[str] = []
+
+        if self.multiple_deprivation_index in [1, 2]:
+            routes.append("Pathway 1: IMD:ID 1-2")
+
+        if self.means_tested_benefits:
+            routes.append("Pathway 2: Means-Tested Benefits")
+
+        if self.is_eco4_flex_eligible_route_2_a or self.is_eco4_flex_eligible_route_2_b:
+            routes.append("Pathway2: ECO Flex Route 2")
+
+        if self.household_income is not None and self.household_income < 36000:
+            routes.append("Pathway 3: Income < £36k")
+
+        if self.is_income_under_or_equal_to_max_for_whlg:
+            routes.append("Pathway 3: AHC Equalisation")
+
+        return routes
 
 
     @property
