@@ -1,6 +1,7 @@
 import csv
 import logging
 import random
+import os
 
 from django.core.management.base import CommandError
 
@@ -74,8 +75,14 @@ def get_bill_impact(measure: enums.PossibleMeasures) -> str:
 
 
 def get_whlg_eligible_postcodes():
+    path = "external_data/WHLG-eligible-postcodes.csv"
+    
+    if not os.path.exists(path):
+        print("⚠️ Skipping postcode loading: file not found")
+        return []
+
     postcodes = []
-    with open("external_data/WHLG-eligible-postcodes.csv", "r") as file:
+    with open(path, "r") as file:
         reader = csv.reader(file)
         for row in reader:
             try:
