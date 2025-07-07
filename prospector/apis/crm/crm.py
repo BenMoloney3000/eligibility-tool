@@ -654,6 +654,7 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_eco4flex": answers.is_eco4_flex_eligible,
         "cr51a_gbis": answers.is_gbis_eligible,
         "cr51a_whlg": answers.is_whlg_eligible,
+        "cr51a_whlg_prs_fg": answers.is_whlg_prs_sap_f_or_g,
         # Potential measures' fields:
         "cr51a_batterystorage": answers.is_solar_pv_installation_recommended,
         "cr51a_cavity_wall_insulation": answers.is_cavity_wall_insulation_recommended,
