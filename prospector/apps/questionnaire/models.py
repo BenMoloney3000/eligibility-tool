@@ -801,13 +801,7 @@ class Answers(models.Model):
     def is_whlg_eligible(self) -> Optional[bool]:
         return (
             self.sap_band in SAP_BANDS
-            and (
-                (
-                    self.tenure == enums.Tenure.RENTED_PRIVATE
-                    and self.sap_band in SAP_BANDS[:2]
-                )
-                or self.tenure == enums.Tenure.OWNER_OCCUPIED
-            )
+            and self.tenure in [enums.Tenure.RENTED_PRIVATE, enums.Tenure.OWNER_OCCUPIED]
             and (
                 self.is_property_among_whlg_eligible_postcodes
                 or self.means_tested_benefits
@@ -823,9 +817,9 @@ class Answers(models.Model):
                     and self.council_tax_reduction
                     or self.free_school_meals_eligibility
                 )
-                or (self.free_school_meals_eligibility and ())
             )
         )
+
 
     @property
     def is_any_scheme_eligible(self) -> Optional[bool]:
