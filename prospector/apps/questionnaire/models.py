@@ -862,7 +862,7 @@ class Answers(models.Model):
         ]
 
         return (
-            self.floor_construction in solid_walls
+            self.wall_construction in solid_walls
             and self.walls_insulation == enums.WallInsulation.AS_BUILT
         )
 
@@ -978,7 +978,7 @@ class Answers(models.Model):
             enums.RoofConstruction.PWSC,
         ]
 
-        return self.floor_construction in roof_for_PV
+        return self.roof_construction in roof_for_PV
 
     @property
     def is_heating_controls_installation_recommended(self) -> bool:
