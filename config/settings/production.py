@@ -169,6 +169,6 @@ LOGGING = {
 
 # Load environment variables from a .env file if specified
 if env.bool("DJANGO_READ_DOT_ENV_FILE", default=False):
-    env.read_env(Path(ROOT_DIR) / ".env")
+    env.read_env(str(ROOT_DIR.path(".env")))
 
 
