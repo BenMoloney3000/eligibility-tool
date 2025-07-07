@@ -1,3 +1,5 @@
+# models.py
+
 import uuid as uuid_lib
 from typing import Optional
 
@@ -799,6 +801,7 @@ class Answers(models.Model):
 
     @property
     def is_whlg_eligible(self) -> Optional[bool]:
+        print("DEBUG: is_whlg_eligible was called")
         return (
             self.sap_band in SAP_BANDS
             and self.tenure in [enums.Tenure.RENTED_PRIVATE, enums.Tenure.OWNER_OCCUPIED]
