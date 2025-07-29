@@ -123,8 +123,8 @@ ADMIN_URL = env("DJANGO_ADMIN_URL")
 # Anymail (Mailgun)
 # ------------------------------------------------------------------------------
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
-INSTALLED_APPS += ["anymail"]  # noqa F405
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+#INSTALLED_APPS += ["anymail"]  # noqa F405
+#EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
 #ANYMAIL = {
 #    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
