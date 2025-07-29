@@ -801,6 +801,13 @@ class Answers(models.Model):
     @property
     def is_whlg_eligible(self) -> Optional[bool]:
         """Check eligibility for the Warm Homes: Local Grant scheme."""
+        if (
+            self.sap_band is None
+            or self.tenure is None
+            or self.household_income is None
+        ):
+            return None
+
         return (
             self.sap_band in SAP_BANDS
             and self.tenure
