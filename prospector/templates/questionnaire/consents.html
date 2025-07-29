@@ -7,13 +7,12 @@
 {% block question_text %}
     <h2 class="question-heading">
         {% include "./includes/icon_agree.html" %}
-        Your consent in how your data is used
+        Your consent to be contacted
     </h2>
-    <p>Please tell us which of the following purposes you are happy for us to
-        store and use your data for:</p>
+    <p>Please confirm that you're happy for us to get in touch with you with
+        advice and information on relevant grants.</p>
 {% endblock question_text %}
 
 {% block form_content %}
     {{ form.consented_callback|as_crispy_field }}
-    {{ form.consented_future_schemes|as_crispy_field }}
 {% endblock form_content %}

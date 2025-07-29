@@ -291,20 +291,17 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
 
 class Consents(AnswerFormMixin, forms.ModelForm):
     consented_callback = forms.BooleanField(
-        required=False, label="To call or email you to offer advice and help."
-    )
-    consented_future_schemes = forms.BooleanField(
         required=False,
         label=(
-            "To contact you in the future when we think there are grants or "
-            "programmes relevant for you."
+            "To call or email you now or in the future with advice or details "
+            "of relevant grants."
         ),
     )
 
     class Meta:
         model = models.Answers
-        optional_fields = ["consented_callback", "consented_future_schemes"]
-        fields = ["consented_callback", "consented_future_schemes"]
+        optional_fields = ["consented_callback"]
+        fields = ["consented_callback"]
 
     def clean(self):
         """If fields weren't submitted, make them False."""
@@ -312,8 +309,9 @@ class Consents(AnswerFormMixin, forms.ModelForm):
         data = super().clean()
         if data.get("consented_callback") is None:
             data["consented_callback"] = False
-        if data.get("consented_future_schemes") is None:
-            data["consented_future_schemes"] = False
+
+        # Mirror the value for future schemes consent to maintain existing data
+        data["consented_future_schemes"] = data["consented_callback"]
 
         return data
 
