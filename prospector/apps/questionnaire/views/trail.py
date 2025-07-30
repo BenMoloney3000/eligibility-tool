@@ -793,15 +793,17 @@ class RecommendedMeasures(abstract_views.Question):
                 }
             )
         if self.answers.is_solar_pv_installation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.SOLAR_PV_INSTALLATION,
-                    "label": enums.PossibleMeasures.SOLAR_PV_INSTALLATION.label,
-                },
-                {
-                    "type": enums.PossibleMeasures.BATTERY_STORAGE,
-                    "label": enums.PossibleMeasures.BATTERY_STORAGE.label,
-                },
+            measures.extend(
+                [
+                    {
+                        "type": enums.PossibleMeasures.SOLAR_PV_INSTALLATION,
+                        "label": enums.PossibleMeasures.SOLAR_PV_INSTALLATION.label,
+                    },
+                    {
+                        "type": enums.PossibleMeasures.BATTERY_STORAGE,
+                        "label": enums.PossibleMeasures.BATTERY_STORAGE.label,
+                    },
+                ]
             )
         if self.answers.is_heating_controls_installation_recommended:
             measures.append(
