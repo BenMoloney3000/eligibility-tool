@@ -66,8 +66,9 @@ class Command(BaseCommand):
 
                     temp_data.append(csv_data)
 
-            except Exception:
-                raise CommandError("An error occured during uploading csv data")
+            except Exception as e:
+                raise CommandError(f"An error occurred during uploading csv data: {e}")
+
 
         if len(temp_data) > 0:
             ParityData.objects.bulk_create(temp_data, batch_size=500)
