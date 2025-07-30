@@ -63,6 +63,7 @@ class Command(BaseCommand):
                     csv_data.multiple_deprivation_index = int(row[47] or 0)
                     csv_data.income_decile = int(row[46] or 0)
 
+
                     temp_data.append(csv_data)
 
             except Exception:
