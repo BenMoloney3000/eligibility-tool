@@ -1,4 +1,5 @@
 import csv
+from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
@@ -29,16 +30,16 @@ class Command(BaseCommand):
                     csv_data.address_2 = row[4]
                     csv_data.address_3 = row[5]
                     csv_data.postcode = row[6]
-                    csv_data.sap_score = row[7]
+                    csv_data.sap_score = Decimal(row[7] or 0)
                     csv_data.sap_band = row[8]
-                    csv_data.lodged_epc_score = row[9] or None
+                    csv_data.lodged_epc_score = int(row[9]) if row[9] else None
                     csv_data.lodged_epc_band = row[10] or None
-                    csv_data.tco2_current = row[12]
+                    csv_data.tco2_current = Decimal(row[12] or 0)
                     csv_data.realistic_fuel_bill = row[16]
                     csv_data.type = row[17]
                     csv_data.attachment = row[18]
                     csv_data.construction_years = row[19]
-                    csv_data.heated_rooms = row[20]
+                    csv_data.heated_rooms = int(row[20] or 0)
                     csv_data.wall_construction = row[22]
                     csv_data.wall_insulation = row[23]
                     csv_data.roof_construction = row[24]
@@ -56,11 +57,12 @@ class Command(BaseCommand):
                     csv_data.region_name = row[38]
                     csv_data.tenure = row[39]
                     csv_data.uprn = row[40] or None
-                    csv_data.lat_coordinate = row[41] or None
-                    csv_data.long_coordinate = row[42] or None
+                    csv_data.lat_coordinate = Decimal(row[41]) if row[41] else None
+                    csv_data.long_coordinate = Decimal(row[42]) if row[42] else None
                     csv_data.lower_super_output_area_code = row[43]
-                    csv_data.multiple_deprivation_index = row[47]
-                    csv_data.income_decile = row[46]
+                    csv_data.multiple_deprivation_index = int(row[47] or 0)
+                    csv_data.income_decile = int(row[46] or 0)
+
 
                     temp_data.append(csv_data)
 
