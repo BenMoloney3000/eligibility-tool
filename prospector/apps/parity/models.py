@@ -13,7 +13,7 @@ class ParityData(models.Model):
     sap_band = models.CharField(max_length=1)
     lodged_epc_score = models.IntegerField(blank=True, null=True)
     lodged_epc_band = models.CharField(max_length=1, blank=True, null=True)
-    tco2_current = models.DecimalField(max_digits=3, decimal_places=1)
+    tco2_current = models.DecimalField(max_digits=5, decimal_places=1)
     realistic_fuel_bill = models.CharField(max_length=8)
     type = models.CharField(max_length=128)
     attachment = models.CharField(max_length=128)
