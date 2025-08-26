@@ -6,6 +6,37 @@ from django.core.management.base import BaseCommand, CommandError
 from ...models import ParityData
 
 
+def parse_uprn(value: str) -> str | None:
+    """Parse a UPRN from a CSV value.
+
+    The source data sometimes stores UPRNs in scientific notation.  Using
+    ``Decimal`` avoids the pitfalls of floating point conversion and ensures we
+    preserve the full digit string.  Any fractional part is discarded as UPRNs
+    are integer identifiers.
+
+    Args:
+        value: Raw value from the CSV.
+
+    Returns:
+        The normalised UPRN as a string, or ``None`` if ``value`` is empty.
+
+    Raises:
+        CommandError: If ``value`` cannot be parsed as a decimal number.
+    """
+
+    if not value:
+        return None
+    try:
+        # ``Decimal`` handles both integer and scientific notation reliably.
+        uprn = Decimal(value)
+    except InvalidOperation as exc:
+        raise CommandError(f"Invalid UPRN: {value}") from exc
+
+    # ``'f'`` formats without exponent. Split on the decimal point and take
+    # the integer component to remove any fractional part.
+    return format(uprn, "f").split(".")[0]
+
+
 class Command(BaseCommand):
     help = "Upload Parity data from CSV"
 
@@ -67,7 +98,7 @@ class Command(BaseCommand):
                             parliamentary_constituency=row[37],
                             region_name=row[38],
                             tenure=row[39],
-                            uprn=row[40] or None,
+                            uprn=parse_uprn(row[40]),
                             lat_coordinate=(
                                 Decimal(row[41]) if row[41] else None
                             ),
