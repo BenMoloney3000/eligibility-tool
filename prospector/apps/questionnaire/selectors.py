@@ -7,7 +7,6 @@ from django.core.cache import caches
 from . import models
 from prospector.apis import data8
 from prospector.apis import fake_postcodes
-from prospector.apis import ideal_postcodes
 
 
 # Running "manage.py compilescss" will import this file, so here we
@@ -63,10 +62,9 @@ def get_postcode(postcode):
 
     postcoders = {
         "DATA8": data8,
-        "IDEAL_POSTCODES": ideal_postcodes,
         "FAKE": fake_postcodes,
     }
-    postcoder = postcoders.get(settings.POSTCODER, ideal_postcodes)
+    postcoder = postcoders.get(settings.POSTCODER, data8)
 
     addresses = postcoder.get_for_postcode(postcode)
 

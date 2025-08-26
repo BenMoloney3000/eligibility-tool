@@ -58,23 +58,3 @@ class TestPostcodeCacher(TestCase):
             op = selectors.get_postcode("M4 7HR")
             assert get_for_postcode.call_count == 1
             assert op == DUMMY_RESULTS
-
-    @override_settings(POSTCODER="IDEAL_POSTCODES")
-    @mock.patch("prospector.apis.ideal_postcodes.get_for_postcode")
-    def test_ideal_postcode_postcodes_get_cached(self, get_for_postcode):
-        get_for_postcode.return_value = DUMMY_RESULTS
-
-        DUMMY_CACHE.wipe()
-
-        with mock.patch(
-            "prospector.apps.questionnaire.selectors.POSTCODE_CACHE", new=DUMMY_CACHE
-        ):
-            op = selectors.get_postcode("M4 7HR")
-
-            assert get_for_postcode.call_count == 1
-            assert op == DUMMY_RESULTS
-
-            # The API call wasn't triggered the second time
-            op = selectors.get_postcode("M4 7HR")
-            assert get_for_postcode.call_count == 1
-            assert op == DUMMY_RESULTS
