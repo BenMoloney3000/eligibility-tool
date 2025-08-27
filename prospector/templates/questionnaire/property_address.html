@@ -15,7 +15,7 @@
     {{ all_postcode_addresses|json_script:"allPostcodes" }}
     {% if form.chosen_address.field.widget.choices %}
         <p class="postcode-populator">
-            <label for="id_udprn">
+            <label for="id_chosen_address">
                 Choose the address from the drop-down list:
             </label>
             {{ form.chosen_address }}

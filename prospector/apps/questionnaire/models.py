@@ -110,7 +110,7 @@ class Answers(models.Model):
     respondent_address_3 = models.CharField(max_length=128, blank=True)
 
     respondent_udprn = models.CharField(
-        max_length=10, blank=True, verbose_name="Respondent UDPRN from API"
+        max_length=12, blank=True, verbose_name="Respondent UPRN from API"
     )
 
     respondent_postcode = models.CharField(max_length=16, blank=True)
@@ -141,7 +141,7 @@ class Answers(models.Model):
     property_address_3 = models.CharField(max_length=128, blank=True)
     property_postcode = models.CharField(max_length=16, blank=True)
     property_udprn = models.CharField(
-        max_length=10, blank=True, verbose_name="Property UDPRN from API"
+        max_length=12, blank=True, verbose_name="Property UPRN from API"
     )
     lower_super_output_area_code = models.CharField(max_length=50, blank=True)
 

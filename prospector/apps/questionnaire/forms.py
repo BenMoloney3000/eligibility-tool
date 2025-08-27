@@ -135,17 +135,17 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
 
         self.prefilled_addresses = prefilled_addresses
 
-        udprn_choices = [
-            (udprn, f"{house.line_1}, {house.line_2}".strip(", "))
-            for udprn, house in prefilled_addresses.items()
+        uprn_choices = [
+            (uprn, f"{house.line_1}, {house.line_2}".strip(", "))
+            for uprn, house in prefilled_addresses.items()
         ]
-        udprn_choices.append((None, "Address not in the list"))
-        udprn_choices.insert(0, (None, "Click here to choose the address"))
+        uprn_choices.append((None, "Address not in the list"))
+        uprn_choices.insert(0, (None, "Click here to choose the address"))
         self.fields["respondent_udprn"] = forms.ChoiceField(
-            required=False, choices=udprn_choices
+            required=False, choices=uprn_choices
         )
 
-        self.initial["respondent_udprn"] = udprn_choices[0][0]
+        self.initial["respondent_udprn"] = uprn_choices[0][0]
 
     class Meta:
         model = models.Answers
@@ -251,8 +251,8 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         self.prefilled_addresses = prefilled_addresses
 
         address_choices = [
-            (id, f"{house.address_1}, {house.address_2}".strip(", "))
-            for id, house in prefilled_addresses.items()
+            (uprn, f"{house.line_1}, {house.line_2}".strip(", "))
+            for uprn, house in prefilled_addresses.items()
         ]
         address_choices.append((None, "Address not in the list"))
         address_choices.insert(0, (None, "Click here to choose the address"))
@@ -280,7 +280,7 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         """Check we got enough data, since no field is actually required."""
         data = super().clean()
 
-        if not data.get("property_udprn") and not data.get("property_address_1"):
+        if not data.get("chosen_address") and not data.get("property_address_1"):
             self.add_error(
                 "property_address_1",
                 "Please enter the first line of an address or select an address from the drop-down list above",

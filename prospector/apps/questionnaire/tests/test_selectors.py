@@ -15,8 +15,7 @@ DUMMY_RESULTS = [
         "MANCHESTER",
         "Manchester District",
         "M4 7HR",
-        52418170,
-        "",
+        "524181705241",
     )
 ]
 
