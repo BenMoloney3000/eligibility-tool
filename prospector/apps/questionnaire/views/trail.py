@@ -213,6 +213,8 @@ class RespondentAddress(abstract_views.Question):
                 self.answers.respondent_address_1 = selected_address.line_1
                 self.answers.respondent_address_2 = selected_address.line_2
                 self.answers.respondent_address_3 = selected_address.post_town
+        # Clear stored UDPRN as Data8 only provides UPRN
+        self.answers.respondent_udprn = ""
         """ # TODO (maybe)
         There is an edge case where a user with JS disabled selects an
         address from the API-supplied list (which populates the address fields
@@ -317,7 +319,9 @@ class PropertyAddress(abstract_views.Question):
                 self.answers.property_address_1 = selected_address.line_1
                 self.answers.property_address_2 = selected_address.line_2
                 self.answers.property_address_3 = selected_address.post_town
-            self.answers.property_udprn = selected_address.uprn
+            # UDPRN values are not available from Data8; ensure the field remains blank
+            self.answers.property_udprn = ""
+            # UPRN is still stored separately
             self.answers.uprn = selected_address.uprn
 
         if self.answers.property_address_1:

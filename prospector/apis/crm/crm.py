@@ -219,7 +219,8 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_towncity": "PLYMOUTH",
         "pcc_county": None,  # Leave blank
         "pcc_postcode": answers.property_postcode,
-        "pcc_udprn": answers.property_udprn,
+        # UDPRN values are not available; leave blank in CRM payload
+        "pcc_udprn": None,
         "pcc_likelihoodofprivatelyrented": (
             option_value_mapping(
                 "pcc_likelihoodofprivatelyrented",
@@ -446,7 +447,8 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_address1city": answers.respondent_address_3,
         "pcc_address1county": None,
         "pcc_address1zippostalcode": answers.respondent_postcode,
-        "pcc_udprncontact": answers.respondent_udprn,
+        # UDPRN values are not available; leave blank in CRM payload
+        "pcc_udprncontact": None,
         # Occupier
         "pcc_occupiedfrom": None,
         "pcc_occupiedto": None,
