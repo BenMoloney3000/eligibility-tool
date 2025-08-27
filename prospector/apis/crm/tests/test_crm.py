@@ -330,6 +330,20 @@ def test_map_crm(answers):
 
 
 @pytest.mark.django_db
+def test_map_crm_does_not_populate_udprn(answers):
+    """Ensure UDPRN fields are always left empty in CRM payload."""
+    dummy_answers = answers(
+        property_udprn="1234567890",
+        respondent_udprn="0987654321",
+        uprn="100040423808",
+    )
+    crm_data = crm.map_crm(dummy_answers)
+    assert crm_data["pcc_udprn"] is None
+    assert crm_data["pcc_udprncontact"] is None
+    assert crm_data["cr51a_uprn"] == "100040423808"
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "property_ownership,expected",
     [
