@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
         temp_data = []
         csv_path = options["file"]
-        expected_cols = 48                       # highest index used is 47
+        expected_cols = 46                       # highest index used is 45
 
         try:
             with open(csv_path, newline="", encoding="utf-8") as f:
@@ -88,26 +88,26 @@ class Command(BaseCommand):
                             roof_insulation=row[25],
                             floor_construction=row[26],
                             floor_insulation=row[27],
-                            glazing=row[29],
-                            heating=row[30],
-                            boiler_efficiency=row[31],
-                            main_fuel=row[32],
-                            controls_adequacy=row[34],
-                            local_authority=row[35],
-                            ward=row[36],
-                            parliamentary_constituency=row[37],
-                            region_name=row[38],
-                            tenure=row[39],
-                            uprn=parse_uprn(row[40]),
+                            glazing=row[28],
+                            heating=row[29],
+                            boiler_efficiency=row[30],
+                            main_fuel=row[31],
+                            controls_adequacy=row[32],
+                            local_authority=row[33],
+                            ward=row[34],
+                            parliamentary_constituency=row[35],
+                            region_name=row[36],
+                            tenure=row[37],
+                            uprn=parse_uprn(row[38]),
                             lat_coordinate=(
-                                Decimal(row[41]) if row[41] else None
+                                Decimal(row[39]) if row[39] else None
                             ),
                             long_coordinate=(
-                                Decimal(row[42]) if row[42] else None
+                                Decimal(row[40]) if row[40] else None
                             ),
-                            lower_super_output_area_code=row[43],
-                            multiple_deprivation_index=int(row[47] or 0),
-                            income_decile=int(row[46] or 0),
+                            lower_super_output_area_code=row[42],
+                            multiple_deprivation_index=int(row[45] or 0),
+                            income_decile=int(row[44] or 0),
                         )
 
                         temp_data.append(pd)
