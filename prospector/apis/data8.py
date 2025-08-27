@@ -1,13 +1,12 @@
-"""Get data from the Data8 Postcodes API to pre-fill addresses."""
+"""Get data from the Data8 Postcodes API to pre-fill addresses (UPRN only)."""
 import json
 import logging
 from dataclasses import dataclass
-from typing import Optional
+from typing import List, Optional
 
 import requests
 from django.conf import settings
 from requests.adapters import HTTPAdapter
-from requests.exceptions import HTTPError
 
 from prospector.dataformats import postcodes
 
@@ -24,87 +23,97 @@ class AddressData:
     post_town: str
     district: str
     postcode: str
-    udprn: int
-    uprn: str
+    uprn: str  # UPRN only
 
 
-def _process_results(results):
-    return [
-        AddressData(
-            row["Address"]["Lines"][0],  # line_1
-            row["Address"]["Lines"][1],  # line_2
-            row["Address"]["Lines"][2],  # line_3
-            row["Address"]["Lines"][4],  # post_town
-            row["RawAddress"]["Location"]["District"],  # district
-            row["Address"]["Lines"][5],  # postcode
-            int(row["RawAddress"]["UniqueReference"] or 0),  # UDPRN, shoudn't ever be 0
-            "",  # UPRN
+def _process_results(results: list) -> List[AddressData]:
+    out: List[AddressData] = []
+
+    for row in results or []:
+        addr = row.get("Address", {}) or {}
+        lines = addr.get("Lines", []) or []
+        district = row.get("District", "") or ""  # present when IncludeAdminArea=True
+        uprn = str(row.get("UPRN") or "")
+
+        def _get(i: int) -> str:
+            return lines[i] if i < len(lines) else ""
+
+        out.append(
+            AddressData(
+                line_1=_get(0),
+                line_2=_get(1),
+                line_3=_get(2),
+                post_town=_get(4),   # Data8 commonly places town at index 4
+                district=district,
+                postcode=_get(6),    # and postcode at index 6
+                uprn=uprn,
+            )
         )
-        for row in results
-    ]
+
+    return out
 
 
-def get_for_postcode(raw_postcode: str) -> Optional[list]:
-    """Return a list of addresses for the given postcode.
+def get_for_postcode(raw_postcode: str) -> Optional[List[AddressData]]:
+    """Return addresses for the given postcode (UPRN only).
 
-    Raises as ValueError exception if malformed or None if not a valid postcode.
+    Raises:
+        ValueError: if the postcode is malformed / not a UK household postcode.
+
+    Returns:
+        list[AddressData]: on success,
+        []: if the API can’t be reached or another non-fatal error occurred,
+        None: if the postcode is validly-formed but not a real/serviced postcode.
     """
-
     postcode = postcodes.normalise(raw_postcode)
     if not postcodes.validate_household_postcode(postcode):
-        return ValueError("This is not a UK household postcode")
+        raise ValueError("This is not a UK household postcode")
 
-    if not getattr(settings, "DATA8_API_KEY", False):
-        # Probably a dev environment. Log an error and continue as if no data
+    if not getattr(settings, "DATA8_API_KEY", None):
+        # Likely a dev environment. Log and behave as "no data" rather than erroring.
         logger.error("DATA8_API_KEY not set.")
-
-        # Can't say it's not a valid postcode, or that it wasn't found, so we'll
-        # do our best to put on a brave face and continue.
         return []
 
-    url = BASE_URL + "?key=" + settings.DATA8_API_KEY
+    url = f"{BASE_URL}?key={settings.DATA8_API_KEY}"
     params = {
-        "licence": settings.DATA8_LICENSE,
+        "licence": settings.DATA8_LICENSE,  # Data8 uses British spelling
         "postcode": postcode,
         "options": {
             "ApplicationName": "Prospector",
-            "IncludeUDPRN": True,
+            # Request **only** UPRN (do not request UDPRN alongside it)
+            "IncludeUPRN": True,
             "IncludeAdminArea": True,
-            "NormalizeTownCase ": True,  # Doesn't seem to work!
+            # Normalisation helpers (exact casing matters)
+            "NormalizeCase": True,
+            "NormalizeTownCase": True,
         },
     }
+
     try:
         with requests.Session() as s:
-            s.mount(url, HTTPAdapter(max_retries=3))
-
-            results = s.post(
-                url,
-                json=params,
-                timeout=15,
-            )
+            # Mount retries for the scheme/host, not the full URL
+            s.mount("https://", HTTPAdapter(max_retries=3))
+            resp = s.post(url, json=params, timeout=15)
+            resp.raise_for_status()
+            data = resp.json()
     except requests.exceptions.RequestException as e:
-        logging.error(f"Could not reach Data8 server: {e}")
+        logger.error(f"Could not reach Data8 server: {e}")
         return []
-    except HTTPError as http_err:
-        logging.error(f"Data8 server responded with an error: {http_err}")
+    except json.JSONDecodeError as e:
+        logger.error(f"Data8 response was not valid JSON for {postcode}: {e}")
         return []
 
-    data = results.json()
-
-    if not data["Status"].get("Success", False):
-        if "not a valid postcode" in data["Status"]["ErrorMessage"]:
+    status = (data or {}).get("Status", {})
+    if not status.get("Success", False):
+        msg = (status.get("ErrorMessage") or "").strip()
+        # Data8 uses a variety of phrasings; be permissive in detection
+        if "invalid postcode" in msg.lower() or "not a valid postcode" in msg.lower():
             return None
-        else:
-            logging.error(
-                "Data8 request unsuccessful: " + data["Status"]["ErrorMessage"]
-            )
-            return []
+        logger.error(f"Data8 request unsuccessful: {msg}")
+        return []
 
     try:
-        return _process_results(data["Results"])
-    except json.JSONDecodeError:
-        # Something went wrong technically. Log it for debugging
-        logging.error(
-            f"Data8 request unsuccessful: could not parse response for {postcode}"
-        )
+        return _process_results(data.get("Results", []))
+    except Exception as e:
+        # Guard against unexpected shape changes
+        logger.error(f"Data8 response parse error for {postcode}: {e}")
         return []
