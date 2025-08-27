@@ -135,17 +135,17 @@ class RespondentAddress(AnswerFormMixin, forms.ModelForm):
 
         self.prefilled_addresses = prefilled_addresses
 
-        uprn_choices = [
-            (uprn, f"{house.line_1}, {house.line_2}".strip(", "))
-            for uprn, house in prefilled_addresses.items()
+        address_choices = [
+            (key, f"{house.line_1}, {house.line_2}".strip(", "))
+            for key, house in prefilled_addresses.items()
         ]
-        uprn_choices.append((None, "Address not in the list"))
-        uprn_choices.insert(0, (None, "Click here to choose the address"))
+        address_choices.append((None, "Address not in the list"))
+        address_choices.insert(0, (None, "Click here to choose the address"))
         self.fields["respondent_udprn"] = forms.ChoiceField(
-            required=False, choices=uprn_choices
+            required=False, choices=address_choices
         )
 
-        self.initial["respondent_udprn"] = uprn_choices[0][0]
+        self.initial["respondent_udprn"] = address_choices[0][0]
 
     class Meta:
         model = models.Answers
@@ -251,8 +251,8 @@ class PropertyAddress(AnswerFormMixin, forms.ModelForm):
         self.prefilled_addresses = prefilled_addresses
 
         address_choices = [
-            (uprn, f"{house.line_1}, {house.line_2}".strip(", "))
-            for uprn, house in prefilled_addresses.items()
+            (key, f"{house.line_1}, {house.line_2}".strip(", "))
+            for key, house in prefilled_addresses.items()
         ]
         address_choices.append((None, "Address not in the list"))
         address_choices.insert(0, (None, "Click here to choose the address"))

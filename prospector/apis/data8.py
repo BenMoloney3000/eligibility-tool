@@ -24,19 +24,21 @@ class AddressData:
     district: str
     postcode: str
     uprn: str  # UPRN only
+    id: str  # Fallback identifier
 
 
 def _process_results(results: list) -> List[AddressData]:
     out: List[AddressData] = []
 
-    for row in results or []:
+    for i, row in enumerate(results or []):
         addr = row.get("Address", {}) or {}
         lines = addr.get("Lines", []) or []
         district = row.get("District", "") or ""  # present when IncludeAdminArea=True
         uprn = str(row.get("UPRN") or "")
+        fallback_id = f"addr-{i}"
 
-        def _get(i: int) -> str:
-            return lines[i] if i < len(lines) else ""
+        def _get(j: int) -> str:
+            return lines[j] if j < len(lines) else ""
 
         out.append(
             AddressData(
@@ -47,6 +49,7 @@ def _process_results(results: list) -> List[AddressData]:
                 district=district,
                 postcode=_get(6),    # and postcode at index 6
                 uprn=uprn,
+                id=fallback_id,
             )
         )
 
@@ -79,7 +82,7 @@ def get_for_postcode(raw_postcode: str) -> Optional[List[AddressData]]:
         "postcode": postcode,
         "options": {
             "ApplicationName": "Prospector",
-            # Request **only** UPRN (do not request UDPRN alongside it)
+            # Request only UPRN
             "IncludeUPRN": True,
             "IncludeAdminArea": True,
             # Normalisation helpers (exact casing matters)

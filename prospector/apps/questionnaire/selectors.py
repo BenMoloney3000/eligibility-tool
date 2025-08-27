@@ -85,6 +85,7 @@ def _process_cached_results(results):
             row["district"],
             row["postcode"],
             row["uprn"],
+            row["id"],
         )
         for row in results
     ]

@@ -12,6 +12,7 @@ class AddressData:
     district: str
     postcode: str
     uprn: str
+    id: str
 
 
 def get_for_postcode(raw_postcode: str) -> Optional[list]:
@@ -24,6 +25,7 @@ def get_for_postcode(raw_postcode: str) -> Optional[list]:
             "",
             "PL1 2AB",
             "100000000000",
+            "addr-0",
         )
     ]
 
