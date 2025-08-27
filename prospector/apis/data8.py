@@ -26,26 +26,37 @@ class AddressData:
     uprn: str  # UPRN only
 
 
+def _extract_additional_value(raw: dict, name: str) -> str:
+    """Get a value from RawAddress.AdditionalData by Name."""
+    for kv in (raw or {}).get("AdditionalData", []) or []:
+        if kv.get("Name") == name and kv.get("Value"):
+            return str(kv["Value"])
+    return ""
+
+
 def _process_results(results: list) -> List[AddressData]:
     out: List[AddressData] = []
 
     for row in results or []:
         addr = row.get("Address", {}) or {}
         lines = addr.get("Lines", []) or []
-        district = row.get("District", "") or ""  # present when IncludeAdminArea=True
-        uprn = str(row.get("UPRN") or "")
+        raw = row.get("RawAddress", {}) or {}
+        loc = raw.get("Location", {}) or {}
 
         def _get(i: int) -> str:
             return lines[i] if i < len(lines) else ""
+
+        # UPRN is provided in RawAddress.AdditionalData as {"Name": "UPRN", "Value": "..."}
+        uprn = _extract_additional_value(raw, "UPRN") or str(row.get("UPRN") or raw.get("UPRN") or "")
 
         out.append(
             AddressData(
                 line_1=_get(0),
                 line_2=_get(1),
                 line_3=_get(2),
-                post_town=_get(4),   # Data8 commonly places town at index 4
-                district=district,
-                postcode=_get(6),    # and postcode at index 6
+                post_town=_get(4),   # town commonly at index 4
+                district=str(loc.get("District") or ""),  # in your payload, District lives under RawAddress.Location
+                postcode=_get(6),    # postcode commonly at index 6
                 uprn=uprn,
             )
         )
@@ -112,8 +123,14 @@ def get_for_postcode(raw_postcode: str) -> Optional[List[AddressData]]:
         return []
 
     try:
-        return _process_results(data.get("Results", []))
+        addresses = _process_results(data.get("Results", []))
     except Exception as e:
         # Guard against unexpected shape changes
         logger.error(f"Data8 response parse error for {postcode}: {e}")
         return []
+
+    # Helpful signal if the API shape changes or licence/options don’t return UPRN
+    if params["options"].get("IncludeUPRN") and addresses and all(not a.uprn for a in addresses):
+        logger.warning("Data8: IncludeUPRN=True but no UPRN values found in results for %s", postcode)
+
+    return addresses
