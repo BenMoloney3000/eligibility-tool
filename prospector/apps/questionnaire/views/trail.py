@@ -8,7 +8,6 @@ from django.views.generic.base import TemplateView
 
 from . import abstract as abstract_views
 from prospector.apis.data8 import get_for_postcode
-from prospector.apps.parity.utils import get_addresses_for_postcode
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
 from prospector.apps.questionnaire import services
@@ -173,7 +172,7 @@ class RespondentAddress(abstract_views.Question):
 
         try:
             self.prefilled_addresses = {
-                address.udprn: address
+                address.uprn: address
                 for address in get_for_postcode(self.answers.respondent_postcode)
             }
         except Exception:
@@ -202,10 +201,10 @@ class RespondentAddress(abstract_views.Question):
     def pre_save(self):
         if (
             self.answers.respondent_udprn
-            and int(self.answers.respondent_udprn) in self.prefilled_addresses
+            and self.answers.respondent_udprn in self.prefilled_addresses
         ):
             selected_address = self.prefilled_addresses[
-                int(self.answers.respondent_udprn)
+                self.answers.respondent_udprn
             ]
             if not self.answers.respondent_address_1:
                 # Populate fields if it wasn't already done by JS
@@ -282,12 +281,10 @@ class PropertyAddress(abstract_views.Question):
 
         try:
             self.prefilled_addresses = {
-                property_object.id: property_object
-                for property_object in get_addresses_for_postcode(
-                    self.answers.property_postcode
-                )
+                address.uprn: address
+                for address in get_for_postcode(self.answers.property_postcode)
             }
-        except ValueError:
+        except Exception:
             pass
 
         kwargs["prefilled_addresses"] = self.prefilled_addresses
@@ -298,21 +295,33 @@ class PropertyAddress(abstract_views.Question):
         context["property_postcode"] = self.answers.property_postcode
         context["all_postcode_addresses"] = {
             key: {
-                "address1": property_object.address_1,
-                "address2": property_object.address_2,
-                "address3": property_object.address_3,
+                "address1": address.line_1,
+                "address2": address.line_2,
+                "address3": address.post_town,
             }
-            for key, property_object in self.prefilled_addresses.items()
+            for key, address in self.prefilled_addresses.items()
         }
         return context
 
     def pre_save(self):
+        if (
+            getattr(self.answers, "chosen_address", "")
+            and self.answers.chosen_address in self.prefilled_addresses
+        ):
+            selected_address = self.prefilled_addresses[self.answers.chosen_address]
+            if not self.answers.property_address_1:
+                self.answers.property_address_1 = selected_address.line_1
+                self.answers.property_address_2 = selected_address.line_2
+                self.answers.property_address_3 = selected_address.post_town
+            self.answers.property_udprn = selected_address.uprn
+            self.answers.uprn = selected_address.uprn
+
         if self.answers.property_address_1:
             try:
                 self.answers = services.prepopulate_from_parity(self.answers)
                 self.answers.save()
             except Exception as e:
-                logging.error("prepopulate_from_parity failed", e)
+                logger.error("prepopulate_from_parity failed", e)
 
     def get_next(self):
         if self.answers.sap_score:

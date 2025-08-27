@@ -10,11 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
-    parity_object = ParityData.objects.filter(
-        address_1=answers.property_address_1,
-        address_2=answers.property_address_2,
-        postcode=answers.property_postcode,
-    ).first()
+    parity_object = None
+    if answers.uprn:
+        parity_object = ParityData.objects.filter(uprn=answers.uprn).first()
+    if parity_object is None:
+        parity_object = ParityData.objects.filter(
+            address_1=answers.property_address_1,
+            address_2=answers.property_address_2,
+            postcode=answers.property_postcode,
+        ).first()
 
     if parity_object:
         """Parse Parity contents to populate initial values for property energy data."""
@@ -41,7 +45,6 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.heated_rooms = po.heated_rooms
         answers.t_co2_current = po.tco2_current
         answers.realistic_fuel_bill = po.realistic_fuel_bill
-        answers.uprn = po.uprn
         answers.multiple_deprivation_index = po.multiple_deprivation_index
         answers.income_decile = po.income_decile
         answers.council_tax_band = po.tax_band

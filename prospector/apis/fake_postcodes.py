@@ -11,7 +11,6 @@ class AddressData:
     post_town: str
     district: str
     postcode: str
-    udprn: int
     uprn: str
 
 
@@ -24,8 +23,7 @@ def get_for_postcode(raw_postcode: str) -> Optional[list]:
             "Plymouth",
             "",
             "PL1 2AB",
-            "",
-            "",
+            "100000000000",
         )
     ]
 
