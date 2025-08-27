@@ -24,6 +24,15 @@ class AddressData:
     district: str
     postcode: str
     uprn: str  # UPRN only
+    id: str  # Fallback identifier
+
+
+def _extract_additional_value(raw: dict, name: str) -> str:
+    """Get a value from RawAddress.AdditionalData by Name."""
+    for kv in (raw or {}).get("AdditionalData", []) or []:
+        if kv.get("Name") == name and kv.get("Value"):
+            return str(kv["Value"])
+    return ""
 
 
 def _extract_additional_value(raw: dict, name: str) -> str:
@@ -37,14 +46,17 @@ def _extract_additional_value(raw: dict, name: str) -> str:
 def _process_results(results: list) -> List[AddressData]:
     out: List[AddressData] = []
 
-    for row in results or []:
+    for i, row in enumerate(results or []):
         addr = row.get("Address", {}) or {}
         lines = addr.get("Lines", []) or []
         raw = row.get("RawAddress", {}) or {}
         loc = raw.get("Location", {}) or {}
 
-        def _get(i: int) -> str:
-            return lines[i] if i < len(lines) else ""
+        def _get(j: int) -> str:
+            return lines[j] if j < len(lines) else ""
+
+        # UPRN is provided in RawAddress.AdditionalData as {"Name": "UPRN", "Value": "..."}
+        uprn = _extract_additional_value(raw, "UPRN") or str(row.get("UPRN") or raw.get("UPRN") or "")
 
         # UPRN is provided in RawAddress.AdditionalData as {"Name": "UPRN", "Value": "..."}
         uprn = _extract_additional_value(raw, "UPRN") or str(row.get("UPRN") or raw.get("UPRN") or "")
@@ -58,6 +70,7 @@ def _process_results(results: list) -> List[AddressData]:
                 district=str(loc.get("District") or ""),  # in your payload, District lives under RawAddress.Location
                 postcode=_get(6),    # postcode commonly at index 6
                 uprn=uprn,
+                id=f"addr-{i}",
             )
         )
 
@@ -90,7 +103,7 @@ def get_for_postcode(raw_postcode: str) -> Optional[List[AddressData]]:
         "postcode": postcode,
         "options": {
             "ApplicationName": "Prospector",
-            # Request **only** UPRN (do not request UDPRN alongside it)
+            # Request only UPRN
             "IncludeUPRN": True,
             "IncludeAdminArea": True,
             # Normalisation helpers (exact casing matters)

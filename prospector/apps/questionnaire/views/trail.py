@@ -172,8 +172,10 @@ class RespondentAddress(abstract_views.Question):
 
         try:
             self.prefilled_addresses = {
-                address.uprn: address
-                for address in get_for_postcode(self.answers.respondent_postcode)
+                (address.uprn or address.id or f"addr-{i}"): address
+                for i, address in enumerate(
+                    get_for_postcode(self.answers.respondent_postcode)
+                )
             }
         except Exception:
             pass
@@ -222,10 +224,10 @@ class RespondentAddress(abstract_views.Question):
         initial address field values so it provides the user-submitted values,
         which may have been edited from the API-supplied values. Possible
         solutions are:
-        - Test to see whether the UDPRN has changed but address_1 has not
+        - Test to see whether the address identifier has changed but address_1 has not
         - Split this into an additional step:
             1. postcode -> 2. select property/not in list -> 3. confirm address
-          (would still have to check for a change in UDPRN before overwriting address?)
+          (would still have to check for a change in identifier before overwriting address?)
         - hide address selector if address fields are populated
         """
 
@@ -281,8 +283,10 @@ class PropertyAddress(abstract_views.Question):
 
         try:
             self.prefilled_addresses = {
-                address.uprn: address
-                for address in get_for_postcode(self.answers.property_postcode)
+                (address.uprn or address.id or f"addr-{i}"): address
+                for i, address in enumerate(
+                    get_for_postcode(self.answers.property_postcode)
+                )
             }
         except Exception:
             pass
