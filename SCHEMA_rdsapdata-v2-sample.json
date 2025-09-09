@@ -1,0 +1,5989 @@
+{
+  "schemaVersion": {
+    "type": "String",
+    "required": true
+  },
+  "address": {
+    "id": {
+      "type": "Number",
+      "required": true,
+      "validRange": "0 to 2147483647",
+      "isWholeNumber": true
+    }
+  },
+  "propertyType": {
+    "required": true,
+    "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+    "validValues": [
+      {
+        "description": "House",
+        "value": 0
+      },
+      {
+        "description": "Bungalow",
+        "value": 1
+      },
+      {
+        "description": "Flat",
+        "value": 2
+      },
+      {
+        "description": "Maisonette",
+        "value": 3
+      },
+      {
+        "description": "ParkHome",
+        "value": 4
+      },
+      {
+        "description": "EMPTY",
+        "value": 999
+      }
+    ],
+    "rdSapEnumName": "PropertyTypeCode"
+  },
+  "builtForm": {
+    "required": true,
+    "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+    "validValues": [
+      {
+        "description": "NotRecorded",
+        "value": 0
+      },
+      {
+        "description": "Detached",
+        "value": 1
+      },
+      {
+        "description": "SemiDetached",
+        "value": 2
+      },
+      {
+        "description": "EndTerrace",
+        "value": 3
+      },
+      {
+        "description": "MidTerrace",
+        "value": 4
+      },
+      {
+        "description": "EnclosedEndTerrace",
+        "value": 5
+      },
+      {
+        "description": "EnclosedMidTerrace",
+        "value": 6
+      },
+      {
+        "description": "EMPTY",
+        "value": 999
+      }
+    ],
+    "rdSapEnumName": "SAPBuiltFormCode"
+  },
+  "calculationsFromEpc": {
+    "heating": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "hotWater": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "lighting": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    }
+  },
+  "habitableRoomCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "heatedRoomCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true,
+    "lessThanOrEqualToProperty": "habitableRoomCount",
+    "additionalNotes": "Must be less than or equal to `habitableRoomCount`"
+  },
+  "measurementType": {
+    "required": true,
+    "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+    "validValues": [
+      {
+        "description": "Internal",
+        "value": 1
+      },
+      {
+        "description": "External",
+        "value": 2
+      },
+      {
+        "description": "EMPTY",
+        "value": 999
+      }
+    ],
+    "rdSapEnumName": "MeasurementTypeCode"
+  },
+  "openFireplacesCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "tenure": {
+    "required": false,
+    "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+    "validValues": [
+      {
+        "description": "OwnerOccupied",
+        "value": 1
+      },
+      {
+        "description": "RentedSocial",
+        "value": 2
+      },
+      {
+        "description": "RentedPrivate",
+        "value": 3
+      },
+      {
+        "description": "NotDefinedNewBuildOnly",
+        "value": 4
+      },
+      {
+        "description": "EMPTY",
+        "value": 999
+      }
+    ],
+    "rdSapEnumName": "TenureCode"
+  },
+  "tenureFromEpc": {
+    "type": "Boolean",
+    "required": false
+  },
+  "mechanicalVentilation": {
+    "required": true,
+    "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+    "validValues": [
+      {
+        "description": "Natural",
+        "value": 0
+      },
+      {
+        "description": "MechanicalSupplyAndExtract",
+        "value": 1
+      },
+      {
+        "description": "MechanicalExtractOnly",
+        "value": 2
+      },
+      {
+        "description": "MvWithoutHeatRecovery",
+        "value": 11
+      },
+      {
+        "description": "MevDecentralised",
+        "value": 12
+      },
+      {
+        "description": "MevCentralised",
+        "value": 13
+      },
+      {
+        "description": "Mvhr",
+        "value": 14
+      },
+      {
+        "description": "PositiveInputFromLoft",
+        "value": 15
+      },
+      {
+        "description": "PositiveInputFromOutside",
+        "value": 16
+      },
+      {
+        "description": "EMPTY",
+        "value": 999
+      }
+    ],
+    "rdSapEnumName": "VentilationTypeCode"
+  },
+  "hasFixedAirConditioning": {
+    "type": "Boolean",
+    "required": false
+  },
+  "flat": {
+    "storeyCount": {
+      "type": "Number",
+      "required": false,
+      "validRange": "1 to 32767",
+      "isWholeNumber": true
+    },
+    "location": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Ground",
+          "value": 0
+        },
+        {
+          "description": "Floor1st",
+          "value": 1
+        },
+        {
+          "description": "Floor2nd",
+          "value": 2
+        },
+        {
+          "description": "Floor3rd",
+          "value": 3
+        },
+        {
+          "description": "Floor4th",
+          "value": 4
+        },
+        {
+          "description": "Floor5th",
+          "value": 5
+        },
+        {
+          "description": "Floor6th",
+          "value": 6
+        },
+        {
+          "description": "Floor7th",
+          "value": 7
+        },
+        {
+          "description": "Floor8th",
+          "value": 8
+        },
+        {
+          "description": "Floor9th",
+          "value": 9
+        },
+        {
+          "description": "Floor10th",
+          "value": 10
+        },
+        {
+          "description": "Floor11th",
+          "value": 11
+        },
+        {
+          "description": "Floor12th",
+          "value": 12
+        },
+        {
+          "description": "Floor13th",
+          "value": 13
+        },
+        {
+          "description": "Floor14th",
+          "value": 14
+        },
+        {
+          "description": "Floor15th",
+          "value": 15
+        },
+        {
+          "description": "Floor16th",
+          "value": 16
+        },
+        {
+          "description": "Floor17th",
+          "value": 17
+        },
+        {
+          "description": "Floor18th",
+          "value": 18
+        },
+        {
+          "description": "Floor19th",
+          "value": 19
+        },
+        {
+          "description": "Floor20th",
+          "value": 20
+        },
+        {
+          "description": "Above20th",
+          "value": 21
+        },
+        {
+          "description": "Basement",
+          "value": -1
+        }
+      ],
+      "rdSapEnumName": "BlockStoreyCode"
+    },
+    "level": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Basement",
+          "value": 0
+        },
+        {
+          "description": "GroundFloor",
+          "value": 1
+        },
+        {
+          "description": "MidFloor",
+          "value": 2
+        },
+        {
+          "description": "TopFloor",
+          "value": 3
+        }
+      ],
+      "rdSapEnumName": "FlatLevelCode"
+    },
+    "topStorey": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "fourInABlock": {
+      "required": true,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "heatLossCorridor": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "NoCorridor",
+          "value": 0
+        },
+        {
+          "description": "HeatedCorridor",
+          "value": 1
+        },
+        {
+          "description": "UnheatedCorridor",
+          "value": 2
+        },
+        {
+          "description": "Stairwell",
+          "value": 3
+        }
+      ],
+      "rdSapEnumName": "HeatLossCorridorCode"
+    },
+    "unheatedCorridorLength": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 1000",
+      "isWholeNumber": false
+    }
+  },
+  "glazing": {
+    "multipleGlazedProportion": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 100",
+      "isWholeNumber": true
+    },
+    "multipleGlazingType": {
+      "required": true,
+      "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+      "validValues": [
+        {
+          "description": "NotDefined",
+          "value": 0
+        },
+        {
+          "description": "DoubleGlazingPre2002",
+          "value": 1
+        },
+        {
+          "description": "DoubleGlazing2002OrLater",
+          "value": 2
+        },
+        {
+          "description": "DoubleGlazingUnknownAge",
+          "value": 3
+        },
+        {
+          "description": "SecondaryGlazing",
+          "value": 4
+        },
+        {
+          "description": "SingleGlazing",
+          "value": 5
+        },
+        {
+          "description": "TripleGlazing",
+          "value": 6
+        },
+        {
+          "description": "DoubleKnownData",
+          "value": 7
+        },
+        {
+          "description": "TripleKnownData",
+          "value": 8
+        },
+        {
+          "description": "TripleGlazingUnknownAge",
+          "value": 9
+        },
+        {
+          "description": "TripleGlazingPre2002",
+          "value": 10
+        },
+        {
+          "description": "TripleGlazing2002OrLater",
+          "value": 11
+        },
+        {
+          "description": "SecondaryGlazingNormEmiss",
+          "value": 12
+        },
+        {
+          "description": "SecondaryGlazingLowEmiss",
+          "value": 13
+        },
+        {
+          "description": "DoubleGlazingPost2021",
+          "value": 14
+        },
+        {
+          "description": "TripleGlazingPost2021",
+          "value": 15
+        },
+        {
+          "description": "SingleKnownData",
+          "value": 16
+        },
+        {
+          "description": "EMPTY",
+          "value": 999
+        }
+      ],
+      "rdSapEnumName": "SAPGlazingTypeCode"
+    },
+    "pvcWindowFrames": {
+      "type": "Boolean",
+      "required": false,
+      "additionalNotes": "This is the general value. Each item in `Windows` also has it's own."
+    },
+    "gap": {
+      "required": false,
+      "additionalNotes": "This is the general value. Each item in `Windows` also has it's own.",
+      "validValues": [
+        {
+          "description": "mm6",
+          "value": 6
+        },
+        {
+          "description": "mm12",
+          "value": 12
+        },
+        {
+          "description": "mm16Plus",
+          "value": 16
+        }
+      ],
+      "rdSapEnumName": "SAPGlazingGapTypeCode"
+    },
+    "glazedArea": {
+      "required": true,
+      "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+      "validValues": [
+        {
+          "description": "Normal",
+          "value": 1
+        },
+        {
+          "description": "MoreThanTypical",
+          "value": 2
+        },
+        {
+          "description": "LessThanTypical",
+          "value": 3
+        },
+        {
+          "description": "MuchMoreThanTypical",
+          "value": 4
+        },
+        {
+          "description": "MuchLessThanTypical",
+          "value": 5
+        },
+        {
+          "description": "IndividualWindows",
+          "value": 6
+        },
+        {
+          "description": "NotDefined",
+          "value": 99
+        },
+        {
+          "description": "EMPTY",
+          "value": 999
+        }
+      ],
+      "rdSapEnumName": "GlazedAreaCode"
+    },
+    "windowsUValue": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 10",
+      "isWholeNumber": false,
+      "additionalNotes": "This is the general value. Each item in `Windows` also has it's own."
+    },
+    "solarTransmittance": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 1",
+      "isWholeNumber": false,
+      "additionalNotes": "This is the general value. Each item in `Windows` also has it's own."
+    },
+    "windowsDataSource": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "ManufacturerData",
+          "value": 2
+        },
+        {
+          "description": "BFRCData",
+          "value": 4
+        }
+      ],
+      "rdSapEnumName": "SAPOpeningDataSourceCode"
+    },
+    "windows": {
+      "type": "Array",
+      "required": false,
+      "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+      "itemSchema": {
+        "indexNumber": {
+          "type": "Number",
+          "required": true,
+          "validRange": "0 to 32767",
+          "isWholeNumber": true,
+          "additionalNotes": "This is a required field as it denotes the index for a sub-property."
+        },
+        "location": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "Main",
+              "value": 0
+            },
+            {
+              "description": "Ext1",
+              "value": 1
+            },
+            {
+              "description": "Ext2",
+              "value": 2
+            },
+            {
+              "description": "Ext3",
+              "value": 3
+            },
+            {
+              "description": "Ext4",
+              "value": 4
+            }
+          ],
+          "rdSapEnumName": "BuildingPartCode"
+        },
+        "area": {
+          "type": "Number",
+          "required": true,
+          "validRange": "0 to 100",
+          "isWholeNumber": false,
+          "additionalNotes": "Is measured in square meters."
+        },
+        "glazingType": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "NotDefined",
+              "value": 0
+            },
+            {
+              "description": "DoubleGlazingPre2002",
+              "value": 1
+            },
+            {
+              "description": "DoubleGlazing2002OrLater",
+              "value": 2
+            },
+            {
+              "description": "DoubleGlazingUnknownAge",
+              "value": 3
+            },
+            {
+              "description": "SecondaryGlazing",
+              "value": 4
+            },
+            {
+              "description": "SingleGlazing",
+              "value": 5
+            },
+            {
+              "description": "TripleGlazing",
+              "value": 6
+            },
+            {
+              "description": "DoubleKnownData",
+              "value": 7
+            },
+            {
+              "description": "TripleKnownData",
+              "value": 8
+            },
+            {
+              "description": "TripleGlazingUnknownAge",
+              "value": 9
+            },
+            {
+              "description": "TripleGlazingPre2002",
+              "value": 10
+            },
+            {
+              "description": "TripleGlazing2002OrLater",
+              "value": 11
+            },
+            {
+              "description": "SecondaryGlazingNormEmiss",
+              "value": 12
+            },
+            {
+              "description": "SecondaryGlazingLowEmiss",
+              "value": 13
+            },
+            {
+              "description": "DoubleGlazingPost2021",
+              "value": 14
+            },
+            {
+              "description": "TripleGlazingPost2021",
+              "value": 15
+            },
+            {
+              "description": "SingleKnownData",
+              "value": 16
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "SAPGlazingTypeCode"
+        },
+        "windowType": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "EMPTY",
+              "value": 0
+            },
+            {
+              "description": "Window",
+              "value": 1
+            },
+            {
+              "description": "RoofWindow",
+              "value": 2
+            }
+          ],
+          "rdSapEnumName": "WindowTypeCode"
+        },
+        "uValue": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 10",
+          "isWholeNumber": false
+        },
+        "solarTransmittance": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 1",
+          "isWholeNumber": false
+        },
+        "dataSource": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "ManufacturerData",
+              "value": 2
+            },
+            {
+              "description": "BFRCData",
+              "value": 4
+            }
+          ],
+          "rdSapEnumName": "SAPOpeningDataSourceCode"
+        },
+        "orientation": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "UnknownOrUnspecified",
+              "value": 0
+            },
+            {
+              "description": "North",
+              "value": 1
+            },
+            {
+              "description": "NorthEast",
+              "value": 2
+            },
+            {
+              "description": "East",
+              "value": 3
+            },
+            {
+              "description": "SouthEast",
+              "value": 4
+            },
+            {
+              "description": "South",
+              "value": 5
+            },
+            {
+              "description": "SouthWest",
+              "value": 6
+            },
+            {
+              "description": "West",
+              "value": 7
+            },
+            {
+              "description": "NorthWest",
+              "value": 8
+            },
+            {
+              "description": "HorizontalNotDoors",
+              "value": 9
+            }
+          ],
+          "rdSapEnumName": "SAPOrientationCode"
+        },
+        "pvcFrame": {
+          "type": "Boolean",
+          "required": false
+        },
+        "glazingGap": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "mm6",
+              "value": 6
+            },
+            {
+              "description": "mm12",
+              "value": 12
+            },
+            {
+              "description": "mm16Plus",
+              "value": 16
+            }
+          ],
+          "rdSapEnumName": "SAPGlazingGapTypeCode"
+        }
+      }
+    },
+    "conservatory": {
+      "type": {
+        "required": true,
+        "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+        "validValues": [
+          {
+            "description": "NoConservatory",
+            "value": 1
+          },
+          {
+            "description": "SeparatedUnheatedConservatory",
+            "value": 2
+          },
+          {
+            "description": "SeparatedHeatedConservatory",
+            "value": 3
+          },
+          {
+            "description": "NotSeparated",
+            "value": 4
+          },
+          {
+            "description": "EMPTY",
+            "value": 999
+          }
+        ],
+        "rdSapEnumName": "SAPConservatoryTypeCode"
+      },
+      "floorArea": {
+        "type": "Number",
+        "required": false,
+        "validRange": "0 to 100",
+        "isWholeNumber": false,
+        "additionalNotes": "Is measured in square meters."
+      },
+      "glazedPerimeter": {
+        "type": "Number",
+        "required": false,
+        "validRange": "0 to 1.7976931348623157E+308",
+        "isWholeNumber": false
+      },
+      "doubleGlazed": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Y",
+            "value": true
+          },
+          {
+            "description": "N",
+            "value": false
+          }
+        ],
+        "rdSapEnumName": "Flag"
+      },
+      "roomHeight": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Height1Storey",
+            "value": 1
+          },
+          {
+            "description": "Height1pt5Storey",
+            "value": 2
+          },
+          {
+            "description": "Height2Storey",
+            "value": 3
+          },
+          {
+            "description": "Height2pt5Storey",
+            "value": 4
+          },
+          {
+            "description": "Height3Storey",
+            "value": 5
+          }
+        ],
+        "rdSapEnumName": "ConservatoryHeightCode"
+      }
+    }
+  },
+  "doorCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "insulatedDoorCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true,
+    "lessThanOrEqualToProperty": "doorCount",
+    "additionalNotes": "Must be less than or equal to `doorCount`"
+  },
+  "insulatedDoorUValue": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 10",
+    "isWholeNumber": false
+  },
+  "percentDraughtproofed": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 100",
+    "isWholeNumber": true
+  },
+  "isDwellingExportCapable": {
+    "type": "Boolean",
+    "required": false
+  },
+  "rrn": {
+    "type": "String",
+    "required": false
+  },
+  "prrn": {
+    "type": "Number",
+    "required": false,
+    "validRange": "-2147483648 to 2147483647",
+    "isWholeNumber": true
+  },
+  "previousEpcCheck": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "NR",
+        "value": 0
+      },
+      {
+        "description": "Y",
+        "value": 1
+      }
+    ],
+    "rdSapEnumName": "PreviousEpcCheckedCode"
+  },
+  "previousEPCExists": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "N",
+        "value": 0
+      },
+      {
+        "description": "Y",
+        "value": 1
+      },
+      {
+        "description": "NR",
+        "value": 2
+      }
+    ],
+    "rdSapEnumName": "PreviousEpcExistsCode"
+  },
+  "previousEPCReason": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "EpcExpired",
+        "value": 1
+      },
+      {
+        "description": "FabricOrServicesChanged",
+        "value": 2
+      },
+      {
+        "description": "AssessorInstructedAfterConfirmationThatValidEpcExists",
+        "value": 3
+      },
+      {
+        "description": "DuplicateEpcProducedInError",
+        "value": 4
+      },
+      {
+        "description": "ReplacementOfErroneousEpcMarkedNotForIssue",
+        "value": 5
+      },
+      {
+        "description": "ReplacementOfErroneousEpcNotMarkedNotForIssue",
+        "value": 6
+      },
+      {
+        "description": "GdarPre1April2012",
+        "value": 7
+      },
+      {
+        "description": "GdarPreviousEpcInaccurate",
+        "value": 8
+      },
+      {
+        "description": "RhiExistingEpcMoreThan12MonthsOld",
+        "value": 9
+      },
+      {
+        "description": "FitHouseholderChosenMeasuresToImproveRating",
+        "value": 10
+      },
+      {
+        "description": "RentalExistingEpcMoreThan10YearsOld",
+        "value": 11
+      },
+      {
+        "description": "EcoValidEpcRequiredToDemonstrateEFG",
+        "value": 12
+      },
+      {
+        "description": "EcoValidEpcRequiredToDemonstrateD",
+        "value": 13
+      },
+      {
+        "description": "EcoValidEpcRequiredToDemonstrateEFGFirstTimeCentralHeating",
+        "value": 14
+      },
+      {
+        "description": "EpcLessThan12WeeksNeededForHomeReportForMarketedSale",
+        "value": 15
+      }
+    ],
+    "rdSapEnumName": "PreviousEpcReasonCode"
+  },
+  "draughtproofedDoorCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "-32768 to 32767",
+    "isWholeNumber": true
+  },
+  "collectorLoopEfficiency": {
+    "type": "Number",
+    "required": false,
+    "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+    "isWholeNumber": false
+  },
+  "incidenceAngleModifier": {
+    "type": "Number",
+    "required": false,
+    "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+    "isWholeNumber": false
+  },
+  "serviceProvision": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "SpaceAndWater",
+        "value": 1
+      },
+      {
+        "description": "SpaceOnly",
+        "value": 2
+      },
+      {
+        "description": "WaterOnly",
+        "value": 3
+      }
+    ],
+    "rdSapEnumName": "ServiceProvisionCode"
+  },
+  "overallHeatLoss": {
+    "type": "Number",
+    "required": false,
+    "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+    "isWholeNumber": false
+  },
+  "kitchenRoomFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "nonKitchenRoomFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "kitchenDuctFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "nonKitchenDuctFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "kitchenWallFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "nonKitchenWallFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "mechanicalVentDuctInsulationLevel": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "Level1",
+        "value": 1
+      },
+      {
+        "description": "Level2",
+        "value": 2
+      }
+    ],
+    "rdSapEnumName": "SAPDuctInsulationLevel"
+  },
+  "mechanicalVentMeasuredInstallation": {
+    "type": "Boolean",
+    "required": false
+  },
+  "isMechanicalVentApprovedInstallerScheme": {
+    "type": "Boolean",
+    "required": false
+  },
+  "mechanicalVentilationIndexNumber": {
+    "type": "String",
+    "required": false
+  },
+  "hasDraughtLobby": {
+    "type": "Boolean",
+    "required": false
+  },
+  "openChimneysCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "blockedChimneysCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "openFluesCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "closedFluesCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "boilersFluesCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "otherFluesCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "extractFansCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "psvCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "fluelessGasFiresCount": {
+    "type": "Number",
+    "required": false,
+    "validRange": "0 to 32767",
+    "isWholeNumber": true
+  },
+  "pressureTest": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "NoTestSapUsed",
+        "value": 4
+      },
+      {
+        "description": "Tested50Pa",
+        "value": 6
+      },
+      {
+        "description": "Tested4Pa",
+        "value": 7
+      }
+    ],
+    "rdSapEnumName": "SAPPressureTestCode"
+  },
+  "pressureTestCertificateNumber": {
+    "type": "String",
+    "required": false
+  },
+  "airPermeability": {
+    "type": "Number",
+    "required": false,
+    "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+    "isWholeNumber": false
+  },
+  "mechanicalVentilationDuctInsulation": {
+    "required": false,
+    "validValues": [
+      {
+        "description": "Insulated",
+        "value": 1
+      },
+      {
+        "description": "NotInsulated",
+        "value": 2
+      }
+    ],
+    "rdSapEnumName": "SAPDuctInsulationCode"
+  },
+  "airChangeRate": {
+    "jan": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "feb": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "mar": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "apr": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "may": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "jun": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "jul": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "aug": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "sep": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "oct": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "nov": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    },
+    "dec": {
+      "type": "Number",
+      "required": false,
+      "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+      "isWholeNumber": false
+    }
+  },
+  "hardToTreatWalls": {
+    "stone": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "systemBuild": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "accessIssues": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "highExposure": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "narrowCavities": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "cavityFillRecommended": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    }
+  },
+  "heating": {
+    "mainDetails": {
+      "type": "Array",
+      "required": false,
+      "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+      "itemSchema": {
+        "heatingNumber": {
+          "type": "Number",
+          "required": true,
+          "validRange": "0 to 32767",
+          "isWholeNumber": true
+        },
+        "category": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "None",
+              "value": 1
+            },
+            {
+              "description": "BoilerRadsOrUF",
+              "value": 2
+            },
+            {
+              "description": "MicroCogen",
+              "value": 3
+            },
+            {
+              "description": "HeatPumpRadsOrUF",
+              "value": 4
+            },
+            {
+              "description": "HeatPumpWarmAir",
+              "value": 5
+            },
+            {
+              "description": "Community",
+              "value": 6
+            },
+            {
+              "description": "StorageHeaters",
+              "value": 7
+            },
+            {
+              "description": "ElectricUnderfloor",
+              "value": 8
+            },
+            {
+              "description": "WarmAirNotHeatPump",
+              "value": 9
+            },
+            {
+              "description": "RoomHeaters",
+              "value": 10
+            },
+            {
+              "description": "OtherSystem",
+              "value": 11
+            },
+            {
+              "description": "NotRecorded",
+              "value": 12
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "SAPMainHeatingCategoryCode"
+        },
+        "fuelType": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "NoHeatingOrHotWater",
+              "value": 0
+            },
+            {
+              "description": "GasBottledLPG",
+              "value": 3
+            },
+            {
+              "description": "Anthracite",
+              "value": 5
+            },
+            {
+              "description": "WoodLogs",
+              "value": 6
+            },
+            {
+              "description": "BulkWoodPellets",
+              "value": 7
+            },
+            {
+              "description": "WoodChips",
+              "value": 8
+            },
+            {
+              "description": "DualFuelMineralWood",
+              "value": 9
+            },
+            {
+              "description": "SmokelessCoal",
+              "value": 15
+            },
+            {
+              "description": "WoodPelletsInBags",
+              "value": 16
+            },
+            {
+              "description": "LPGSpecialCondition",
+              "value": 17
+            },
+            {
+              "description": "B30KNotCommunity",
+              "value": 18
+            },
+            {
+              "description": "Bioethanol",
+              "value": 19
+            },
+            {
+              "description": "MainsGasCommunity",
+              "value": 20
+            },
+            {
+              "description": "LPGCommunity",
+              "value": 21
+            },
+            {
+              "description": "OilCommunity",
+              "value": 22
+            },
+            {
+              "description": "B30DCommunity",
+              "value": 23
+            },
+            {
+              "description": "CoalCommunity",
+              "value": 24
+            },
+            {
+              "description": "ElectricityCommunity",
+              "value": 25
+            },
+            {
+              "description": "MainsGasNotCommunity",
+              "value": 26
+            },
+            {
+              "description": "LPGNotCommunity",
+              "value": 27
+            },
+            {
+              "description": "OilNotCommunity",
+              "value": 28
+            },
+            {
+              "description": "ElectricityNotCommunity",
+              "value": 29
+            },
+            {
+              "description": "WasteCombustionCommunity",
+              "value": 30
+            },
+            {
+              "description": "BiomassCommunity",
+              "value": 31
+            },
+            {
+              "description": "BiogasCommunity",
+              "value": 32
+            },
+            {
+              "description": "HouseCoalNotCommunity",
+              "value": 33
+            },
+            {
+              "description": "BiodieselFromAnyBiomass",
+              "value": 34
+            },
+            {
+              "description": "BiodieselFromUsedCookingOilOnly",
+              "value": 35
+            },
+            {
+              "description": "RapeseedOil",
+              "value": 36
+            },
+            {
+              "description": "MineralOrLiquidBiofuel",
+              "value": 37
+            },
+            {
+              "description": "GasBottledLPGSecondaryHeating",
+              "value": 38
+            },
+            {
+              "description": "BiogasNotCommunity",
+              "value": 51
+            },
+            {
+              "description": "HeatFromBoilersCanUseMineralOilOrBiodieselCommunity",
+              "value": 56
+            },
+            {
+              "description": "HeatFromBoilersUsingBiodieselFromAnySourceCommunity",
+              "value": 57
+            },
+            {
+              "description": "BiodieselFromVegetableOilOnlyCommunity",
+              "value": 58
+            },
+            {
+              "description": "FromHeatNetworkData",
+              "value": 99
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "HeatingFuelTypeCode"
+        },
+        "control": {
+          "required": false,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "DHWOnly",
+              "value": 2100
+            },
+            {
+              "description": "NoTimeOrThermostaticControl_BoilRUF",
+              "value": 2101
+            },
+            {
+              "description": "ProgrammerNoRoomThermostat_BoilRUF",
+              "value": 2102
+            },
+            {
+              "description": "RoomThermostatOnly_BoilRUF",
+              "value": 2103
+            },
+            {
+              "description": "ProgrammerAndRoomThermostat_BoilRUF",
+              "value": 2104
+            },
+            {
+              "description": "ProgrammerAndAtLeastTwoRoomThermostats_BoilRUF",
+              "value": 2105
+            },
+            {
+              "description": "ProgrammerRoomThermostatAndTRVs_BoilRUF",
+              "value": 2106
+            },
+            {
+              "description": "ProgrammerTRVsAndBypass_BoilRUF",
+              "value": 2107
+            },
+            {
+              "description": "ProgrammerTRVsAndBEM_BoilRUF",
+              "value": 2109
+            },
+            {
+              "description": "TTZCByPlumbingAndElectricalServices_BoilRUF",
+              "value": 2110
+            },
+            {
+              "description": "TRVsAndBypass_BoilRUF",
+              "value": 2111
+            },
+            {
+              "description": "TTZCByDeviceInDatabase_BoilRUF",
+              "value": 2112
+            },
+            {
+              "description": "RoomThermostatAndTRVs_BoilRUF",
+              "value": 2113
+            },
+            {
+              "description": "NoTimeOrThermostaticControlOfRoomTemperature_HPRUF",
+              "value": 2201
+            },
+            {
+              "description": "ProgrammerNoRoomThermostat_HPRUF",
+              "value": 2202
+            },
+            {
+              "description": "RoomThermostatOnly_HPRUF",
+              "value": 2203
+            },
+            {
+              "description": "ProgrammerAndRoomThermostat_HPRUF",
+              "value": 2204
+            },
+            {
+              "description": "ProgrammerAndAtLeastTwoRoomThermostats_HPRUF",
+              "value": 2205
+            },
+            {
+              "description": "ProgrammerTRVsAndBypass_HPRUF",
+              "value": 2206
+            },
+            {
+              "description": "TTZCByPlumbingAndElectricalServices_HPRUF",
+              "value": 2207
+            },
+            {
+              "description": "TTZCByDeviceInDatabase_HPRUF",
+              "value": 2208
+            },
+            {
+              "description": "RoomThermostatAndTRVs_HPRUF",
+              "value": 2209
+            },
+            {
+              "description": "ProgrammerRoomThermostatAndTRVs_HPRUF",
+              "value": 2210
+            },
+            {
+              "description": "FlatRateNoThermostaticControl_Comm",
+              "value": 2301
+            },
+            {
+              "description": "FlatRateProgrammerNoRoomstat_Comm",
+              "value": 2302
+            },
+            {
+              "description": "FlatRateRoomstatOnly_Comm",
+              "value": 2303
+            },
+            {
+              "description": "FlatRateProgrammerAndRoomstat_Comm",
+              "value": 2304
+            },
+            {
+              "description": "FlatRateProgrammerAndTRVs_Comm",
+              "value": 2305
+            },
+            {
+              "description": "ChargeLinkedToUseProgrammerAndTRVs_Comm",
+              "value": 2306
+            },
+            {
+              "description": "FlatRateTRVs_Comm",
+              "value": 2307
+            },
+            {
+              "description": "ChargeLinkedToUseRoomstatOnly_Comm",
+              "value": 2308
+            },
+            {
+              "description": "ChargeLinkedToUseProgrammerAndRoomstat_Comm",
+              "value": 2309
+            },
+            {
+              "description": "ChargeLinkedToUseTRVs_Comm",
+              "value": 2310
+            },
+            {
+              "description": "FlatRateProgrammerAndAtLeastTwoRoomstats_Comm",
+              "value": 2311
+            },
+            {
+              "description": "ChargeLinkedToUseProgrammerAndAtLeastTwoRoomstats_Comm",
+              "value": 2312
+            },
+            {
+              "description": "FlatRateRoomstatAndTRVs_Comm",
+              "value": 2313
+            },
+            {
+              "description": "ChargeLinkedToUseRoomstatAndTRVs_Comm",
+              "value": 2314
+            },
+            {
+              "description": "ManualCharge_Sto",
+              "value": 2401
+            },
+            {
+              "description": "AutoCharge_Sto",
+              "value": 2402
+            },
+            {
+              "description": "HighHeatRetControl_Sto",
+              "value": 2404
+            },
+            {
+              "description": "NoTimeOrThermostaticControl_WA",
+              "value": 2501
+            },
+            {
+              "description": "ProgrammerNoRoomThermostat_WA",
+              "value": 2502
+            },
+            {
+              "description": "RoomThermostatOnly_WA",
+              "value": 2503
+            },
+            {
+              "description": "ProgrammerAndRoomThermostat_WA",
+              "value": 2504
+            },
+            {
+              "description": "ProgrammerAndAtLeastTwoRoomThermostats_WA",
+              "value": 2505
+            },
+            {
+              "description": "TTZC_WA",
+              "value": 2506
+            },
+            {
+              "description": "NoThermostaticControl_App",
+              "value": 2601
+            },
+            {
+              "description": "ApplianceTstats_App",
+              "value": 2602
+            },
+            {
+              "description": "ProgrammerAndApplianceTstats_App",
+              "value": 2603
+            },
+            {
+              "description": "RoomstatsOnly_App",
+              "value": 2604
+            },
+            {
+              "description": "ProgrammerAndRoomstats_App",
+              "value": 2605
+            },
+            {
+              "description": "NoHeating",
+              "value": 2699
+            },
+            {
+              "description": "NoTimeOrThermostaticControl_Oth",
+              "value": 2701
+            },
+            {
+              "description": "ProgrammerNoRoomThermostat_Oth",
+              "value": 2702
+            },
+            {
+              "description": "RoomThermostatOnly_Oth",
+              "value": 2703
+            },
+            {
+              "description": "ProgrammerAndRoomThermostat_Oth",
+              "value": 2704
+            },
+            {
+              "description": "TemperatureZoneControl_Oth",
+              "value": 2705
+            },
+            {
+              "description": "TTZC_Oth",
+              "value": 2706
+            },
+            {
+              "description": "EMPTY",
+              "value": 9999
+            }
+          ],
+          "rdSapEnumName": "ParityControlCode"
+        },
+        "dataSource": {
+          "required": false,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "Database",
+              "value": 1
+            },
+            {
+              "description": "SAPTable",
+              "value": 2
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "BoilerDataSourceCode"
+        },
+        "sapCode": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "GasOrLPGBoilers1998OnRegNonCondensAutoIgnit",
+              "value": 101
+            },
+            {
+              "description": "GasOrLPGBoilers1998OnRegCondensAutoIgnit",
+              "value": 102
+            },
+            {
+              "description": "GasOrLPGBoilers1998OnCombiNonCondensAutoIgnit",
+              "value": 103
+            },
+            {
+              "description": "GasOrLPGBoilers1998OnCombiCondensAutoIgnit",
+              "value": 104
+            },
+            {
+              "description": "GasOrLPGBoilers1998OnRegNonCondensPermanentPilot",
+              "value": 105
+            },
+            {
+              "description": "GasOrLPGBoilers1998OnCombiNonCondensPermanentPilot",
+              "value": 107
+            },
+            {
+              "description": "GasOrLPGBoilers1998OnBackBoilerToRads",
+              "value": 109
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998FanFlueRegHighUnknownThermalCap",
+              "value": 111
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998FanFlueCombi",
+              "value": 112
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998FanFlueCondensingCombi",
+              "value": 113
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998FanFlueRegCondensing",
+              "value": 114
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998BalOrOpenFlueRegWallMountred",
+              "value": 115
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998BalOrOpenFlueRegFloorMountedPre1979",
+              "value": 116
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998BalOrOpenFlueRegFloorMounted1979To1997",
+              "value": 117
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998BalOrOpenFlueCombi",
+              "value": 118
+            },
+            {
+              "description": "GasOrLPGBoilersPre1998BalOrOpenFlueBackBoilerToRads",
+              "value": 119
+            },
+            {
+              "description": "CPSUGasOrLPGAutoIgnitionNonCondensing",
+              "value": 120
+            },
+            {
+              "description": "CPSUGasOrLPGAutoIgnitionCondensing",
+              "value": 121
+            },
+            {
+              "description": "OilBoilerStandard1985To1997",
+              "value": 125
+            },
+            {
+              "description": "OilBoilerStandard1998On",
+              "value": 126
+            },
+            {
+              "description": "OilBoilerCondensing",
+              "value": 127
+            },
+            {
+              "description": "OilBoilerCombiPre1998",
+              "value": 128
+            },
+            {
+              "description": "OilBoilerCombi1998On",
+              "value": 129
+            },
+            {
+              "description": "OilBoilerCondensingCombi",
+              "value": 130
+            },
+            {
+              "description": "OilBoilerRoomHeaterWithBoilerToRadsPre2000",
+              "value": 131
+            },
+            {
+              "description": "OilBoilerRoomHeaterWithBoilerToRads2000On",
+              "value": 132
+            },
+            {
+              "description": "RangeCookerBoilersGasLPGSingleBurnerPermanentPilot",
+              "value": 133
+            },
+            {
+              "description": "RangeCookerBoilersGasLPGSingleBurnerAutoIgnition",
+              "value": 134
+            },
+            {
+              "description": "RangeCookerBoilersOilTwinBurnerAutoIgnition",
+              "value": 136
+            },
+            {
+              "description": "RangeCookerBoilersOilSingleBurner",
+              "value": 139
+            },
+            {
+              "description": "RangeCookerBoilersOilTwinBurnerNonCondensPre1998",
+              "value": 140
+            },
+            {
+              "description": "SolidFuelBoilersManualFeedIndependentBoilerHeatedSpace",
+              "value": 151
+            },
+            {
+              "description": "SolidFuelBoilersManualFeedIndependentBoilerUnHeatedSpace",
+              "value": 152
+            },
+            {
+              "description": "SolidFuelBoilersAutoFeedIndependentBoilerInHeatedSpace",
+              "value": 153
+            },
+            {
+              "description": "SolidFuelBoilersAutoFeedIndependentBoilerInUnHeatedSpace",
+              "value": 154
+            },
+            {
+              "description": "SolidFuelBoilersWoodChipOrPelletIndependentBoiler",
+              "value": 155
+            },
+            {
+              "description": "SolidFuelBoilersOpenFireWithBackBoilerToRads",
+              "value": 156
+            },
+            {
+              "description": "SolidFuelBoilersClosedRoomHeaterWithBoilerToRads",
+              "value": 158
+            },
+            {
+              "description": "SolidFuelBoilersPelletStoveWithBoilerToRads",
+              "value": 159
+            },
+            {
+              "description": "SolidFuelBoilersRangeCookerBoilerIntegralOvenAndBoiler",
+              "value": 160
+            },
+            {
+              "description": "ElectricBoilersDirectActing",
+              "value": 191
+            },
+            {
+              "description": "ElectricBoilersCPSUInHeatedSpace",
+              "value": 192
+            },
+            {
+              "description": "ElectricBoilersDryCoreStorageBoilerInHeatedSpace",
+              "value": 193
+            },
+            {
+              "description": "ElectricBoilersWaterStorageBoilerInHeatedSpace",
+              "value": 195
+            },
+            {
+              "description": "HeatPumpsElectricGroundSourceWithFlowTempAtOrBelow35",
+              "value": 211
+            },
+            {
+              "description": "HeatPumpsElectricWaterSourceWithFlowTempAtOrBelow35",
+              "value": 213
+            },
+            {
+              "description": "HeatPumpsElectricAirSourceWithFlowTempAtOrBelow35",
+              "value": 214
+            },
+            {
+              "description": "HeatPumpsGasGroundSourceWithFlowTempAtOrBelow35",
+              "value": 215
+            },
+            {
+              "description": "HeatPumpsGasWaterSourceWithFlowTempAtOrBelow35",
+              "value": 216
+            },
+            {
+              "description": "HeatPumpsGasAirSourceWithFlowTempAtOrBelow35",
+              "value": 217
+            },
+            {
+              "description": "HeatPumpsElectricGroundSourceOtherCases",
+              "value": 221
+            },
+            {
+              "description": "HeatPumpsElectricWaterSourceOtherCases",
+              "value": 223
+            },
+            {
+              "description": "HeatPumpsElectricAirSourceOtherCases",
+              "value": 224
+            },
+            {
+              "description": "HeatPumpsGasGroundSourceOtherCases",
+              "value": 225
+            },
+            {
+              "description": "HeatPumpsGasWaterSourceOtherCases",
+              "value": 226
+            },
+            {
+              "description": "HeatPumpsGasAirSourceOtherCases",
+              "value": 227
+            },
+            {
+              "description": "CommunityBoilersOnly",
+              "value": 301
+            },
+            {
+              "description": "CommunityCHPAndBoilers",
+              "value": 302
+            },
+            {
+              "description": "CommunityHeatPump",
+              "value": 304
+            },
+            {
+              "description": "CommunityHeatNetwork",
+              "value": 310
+            },
+            {
+              "description": "ElecStorageOldLargeVolume",
+              "value": 401
+            },
+            {
+              "description": "ElecStorageModernSlimline",
+              "value": 402
+            },
+            {
+              "description": "ElecStorageFan",
+              "value": 404
+            },
+            {
+              "description": "ElecStorageIntegratedStorageAndDirectActing",
+              "value": 408
+            },
+            {
+              "description": "ElecStorageHighHeatRetention",
+              "value": 409
+            },
+            {
+              "description": "ElectricUnderfloorHeatingInConcreteSlabOffPeakOnly",
+              "value": 421
+            },
+            {
+              "description": "ElectricUnderfloorHeatingIntegratedStorageAndDirectActingOffPeakOnly",
+              "value": 422
+            },
+            {
+              "description": "ElectricUnderfloorHeatingInScreedAboveInsulationStandardOrOffPeak",
+              "value": 424
+            },
+            {
+              "description": "WarmAirSystemsGasWarmAirFanAssistedFlueDuctedOnOffControl1998On",
+              "value": 502
+            },
+            {
+              "description": "WarmAirSystemsGasWarmAirWithBalancedOrOpenFlueDuctedOrStubDuctedOnOffControlPre1998",
+              "value": 506
+            },
+            {
+              "description": "WarmAirSystemsGasWarmAirBalancedOrOpenFlueDuctedOrStubDuctedWithFlueHeatRecovery",
+              "value": 510
+            },
+            {
+              "description": "WarmAirSystemsGasWarmAirBalancedOrOpenFlueCondensing",
+              "value": 511
+            },
+            {
+              "description": "WarmAirSystemsOilWarmAirDuctedOnOffControl",
+              "value": 512
+            },
+            {
+              "description": "WarmAirSystemsElectricWarmAirElectricaire",
+              "value": 515
+            },
+            {
+              "description": "WarmAirHeatPumpsGroundToAirElectric",
+              "value": 521
+            },
+            {
+              "description": "WarmAirHeatPumpsWaterToAirElectric",
+              "value": 523
+            },
+            {
+              "description": "WarmAirHeatPumpsAirToAirElectric",
+              "value": 524
+            },
+            {
+              "description": "GasOrLPGRoomHeatersGasFireOpenFluePre1980OpenFronted",
+              "value": 601
+            },
+            {
+              "description": "GasOrLPGRoomHeatersGasFireOpenFluePre1980OpenFrontedBackBoiler",
+              "value": 602
+            },
+            {
+              "description": "GasOrLPGRoomHeatersGasFireOpenFlue1980OnOpenFrontedProudOfAndSealedToFireplace",
+              "value": 603
+            },
+            {
+              "description": "GasOrLPGRoomHeatersGasFireOpenFlue1980OnOpenFrontedProudOfAndSealedToFireplaceBackBoiler",
+              "value": 604
+            },
+            {
+              "description": "GasOrLPGRoomHeatersFlushFittingLiveEffectGasFireOpenFrontedSealedToFireplace",
+              "value": 605
+            },
+            {
+              "description": "GasOrLPGRoomHeatersFlushFittingLiveEffectGasFireOpenFrontedSealedToFireplaceBackBoiler",
+              "value": 606
+            },
+            {
+              "description": "GasOrLPGRoomHeatersFlushFittingLiveEffectGasFireOpenFrontedFanAssistedSealedToFireplace",
+              "value": 607
+            },
+            {
+              "description": "GasOrLPGRoomHeatersGasFireOrWallHeaterBalancedFlue",
+              "value": 609
+            },
+            {
+              "description": "GasOrLPGRoomHeatersGasFireClosedFrontedFanAssisted",
+              "value": 610
+            },
+            {
+              "description": "GasOrLPGRoomHeatersCondensingGasFire",
+              "value": 611
+            },
+            {
+              "description": "GasOrLPGRoomHeatersDecorativeFuelEffectGasFireOpenToChimney",
+              "value": 612
+            },
+            {
+              "description": "GasOrLPGRoomHeatersFluelessGasFireSecondaryHeatingOnly",
+              "value": 613
+            },
+            {
+              "description": "OilRoomHeatersRoomHeaterPre2000",
+              "value": 621
+            },
+            {
+              "description": "OilRoomHeatersRoomHeaterPre2000WithBoilerNoRads",
+              "value": 622
+            },
+            {
+              "description": "OilRoomHeatersRoomHeater2000On",
+              "value": 623
+            },
+            {
+              "description": "OilRoomHeatersRoomHeater2000OnWithBoilerNoRads",
+              "value": 624
+            },
+            {
+              "description": "OilRoomHeatersBioethanolHeaterSecondaryHeatingOnly",
+              "value": 625
+            },
+            {
+              "description": "SolidFuelRoomHeatersOpenFireInGrate",
+              "value": 631
+            },
+            {
+              "description": "SolidFuelRoomHeatersOpenFireWithBoilerNoRads",
+              "value": 632
+            },
+            {
+              "description": "SolidFuelRoomHeatersClosedRoomHeater",
+              "value": 633
+            },
+            {
+              "description": "SolidFuelRoomHeatersClosedRoomHeaterWithBoilerNoRads",
+              "value": 634
+            },
+            {
+              "description": "SolidFuelRoomHeatersStovePelletFired",
+              "value": 635
+            },
+            {
+              "description": "SolidFuelRoomHeatersStovePelletFiredWithBoilerNoRads",
+              "value": 636
+            },
+            {
+              "description": "ElectricRoomHeatersPanelConvectorOrRadiant",
+              "value": 691
+            },
+            {
+              "description": "ElectricRoomHeatersPortableElectric",
+              "value": 693
+            },
+            {
+              "description": "ElectricRoomHeatersWaterOrOilFilledRads",
+              "value": 694
+            },
+            {
+              "description": "NoHeatingSystemElectricHeatersAssumed",
+              "value": 699
+            },
+            {
+              "description": "OtherElectricCeilingHeating",
+              "value": 701
+            }
+          ],
+          "rdSapEnumName": "ParityMainHeatingCode"
+        },
+        "fraction": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 1",
+          "isWholeNumber": false
+        },
+        "boilerIndexNumber": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 999999",
+          "isWholeNumber": true
+        },
+        "boilerFlueType": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "OpenFlue",
+              "value": 1
+            },
+            {
+              "description": "BalancedFlue",
+              "value": 2
+            }
+          ],
+          "rdSapEnumName": "BoilerFlueTypeCode"
+        },
+        "fanFluePresent": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Y",
+              "value": true
+            },
+            {
+              "description": "N",
+              "value": false
+            }
+          ],
+          "rdSapEnumName": "Flag"
+        },
+        "heatEmitterType": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NotRadsOrUnderfloor",
+              "value": 0
+            },
+            {
+              "description": "Radiators",
+              "value": 1
+            },
+            {
+              "description": "Underfloor",
+              "value": 2
+            },
+            {
+              "description": "FanCoilUnits",
+              "value": 3
+            },
+            {
+              "description": "BothRadsAndUnderfloor",
+              "value": 4
+            }
+          ],
+          "rdSapEnumName": "HeatEmitterCode"
+        },
+        "emitterTemperature": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "Over45",
+              "value": 1
+            },
+            {
+              "description": "Over35AndLessThanOrEqualTo45",
+              "value": 3
+            },
+            {
+              "description": "LessThanOrEqualTo35",
+              "value": 4
+            },
+            {
+              "description": "NotApplicableForHeatingSystem",
+              "value": 5
+            }
+          ],
+          "rdSapEnumName": "EmitterTemperatureCode"
+        },
+        "mcsInstalledHeatPump": {
+          "type": "Boolean",
+          "required": false
+        },
+        "centralHeatingPumpAge": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "Y2012OrEarlier",
+              "value": 1
+            },
+            {
+              "description": "Y2013OrLater",
+              "value": 2
+            }
+          ],
+          "rdSapEnumName": "PumpAge"
+        },
+        "fghrs": {
+          "isPresent": {
+            "required": false,
+            "validValues": [
+              {
+                "description": "Y",
+                "value": true
+              },
+              {
+                "description": "N",
+                "value": false
+              }
+            ],
+            "rdSapEnumName": "Flag"
+          },
+          "indexNumber": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 999999",
+            "isWholeNumber": true
+          },
+          "pv": {
+            "orientation": {
+              "required": false,
+              "validValues": [
+                {
+                  "description": "Horizontal",
+                  "value": 0
+                },
+                {
+                  "description": "North",
+                  "value": 1
+                },
+                {
+                  "description": "NorthEast",
+                  "value": 2
+                },
+                {
+                  "description": "East",
+                  "value": 3
+                },
+                {
+                  "description": "SouthEast",
+                  "value": 4
+                },
+                {
+                  "description": "South",
+                  "value": 5
+                },
+                {
+                  "description": "SouthWest",
+                  "value": 6
+                },
+                {
+                  "description": "West",
+                  "value": 7
+                },
+                {
+                  "description": "NorthWest",
+                  "value": 8
+                }
+              ],
+              "rdSapEnumName": "SAPCompassDirectionCode"
+            },
+            "pitch": {
+              "required": false,
+              "validValues": [
+                {
+                  "description": "Horizontal",
+                  "value": 1
+                },
+                {
+                  "description": "Deg30",
+                  "value": 2
+                },
+                {
+                  "description": "Deg45",
+                  "value": 3
+                },
+                {
+                  "description": "Deg60",
+                  "value": 4
+                },
+                {
+                  "description": "Vertical",
+                  "value": 5
+                }
+              ],
+              "rdSapEnumName": "SAPVerticalPitchCode"
+            },
+            "overshading": {
+              "required": false,
+              "validValues": [
+                {
+                  "description": "NoneOrVeryLittle",
+                  "value": 1
+                },
+                {
+                  "description": "Modest",
+                  "value": 2
+                },
+                {
+                  "description": "Significant",
+                  "value": 3
+                },
+                {
+                  "description": "Heavy",
+                  "value": 4
+                },
+                {
+                  "description": "Severe",
+                  "value": 5
+                }
+              ],
+              "rdSapEnumName": "SAPSolarCollectorOvershadingCode"
+            },
+            "peakPower": {
+              "type": "Number",
+              "required": false,
+              "validRange": "0 to 1000",
+              "isWholeNumber": false
+            }
+          }
+        },
+        "compensatingControllerIndexNumber": {
+          "type": "String",
+          "required": true
+        },
+        "ttzcIndexNumber": {
+          "type": "String",
+          "required": true
+        },
+        "communityHeatNetworkIndexNumber": {
+          "type": "String",
+          "required": true
+        },
+        "storageHeaters": {
+          "type": "Array",
+          "required": false,
+          "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+          "itemSchema": {
+            "indexNumber": {
+              "type": "String",
+              "required": true,
+              "additionalNotes": "This should be unique within a collection by a given heating detail set."
+            },
+            "heatingDetailsId": {
+              "type": "Number",
+              "required": true,
+              "validRange": "0 to 2147483647",
+              "isWholeNumber": true,
+              "additionalNotes": "This should match the identifier of the parent heating detail returned on the GET. / If unknown submit 0."
+            },
+            "numberOfHeaters": {
+              "type": "Number",
+              "required": true,
+              "validRange": "0 to 32767",
+              "isWholeNumber": true,
+              "additionalNotes": "Whether submitted as a single entry or separated, this will coalesce to a total of all heaters relevant to the heating detail set with the appropriate `IndexNumber`."
+            },
+            "highHeatRetention": {
+              "type": "Boolean",
+              "required": true
+            }
+          }
+        }
+      }
+    },
+    "secondaryType": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "GasOrLPGBoilers1998OnRegNonCondensAutoIgnit",
+          "value": 101
+        },
+        {
+          "description": "GasOrLPGBoilers1998OnRegCondensAutoIgnit",
+          "value": 102
+        },
+        {
+          "description": "GasOrLPGBoilers1998OnCombiNonCondensAutoIgnit",
+          "value": 103
+        },
+        {
+          "description": "GasOrLPGBoilers1998OnCombiCondensAutoIgnit",
+          "value": 104
+        },
+        {
+          "description": "GasOrLPGBoilers1998OnRegNonCondensPermanentPilot",
+          "value": 105
+        },
+        {
+          "description": "GasOrLPGBoilers1998OnCombiNonCondensPermanentPilot",
+          "value": 107
+        },
+        {
+          "description": "GasOrLPGBoilers1998OnBackBoilerToRads",
+          "value": 109
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998FanFlueRegHighUnknownThermalCap",
+          "value": 111
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998FanFlueCombi",
+          "value": 112
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998FanFlueCondensingCombi",
+          "value": 113
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998FanFlueRegCondensing",
+          "value": 114
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998BalOrOpenFlueRegWallMountred",
+          "value": 115
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998BalOrOpenFlueRegFloorMountedPre1979",
+          "value": 116
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998BalOrOpenFlueRegFloorMounted1979To1997",
+          "value": 117
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998BalOrOpenFlueCombi",
+          "value": 118
+        },
+        {
+          "description": "GasOrLPGBoilersPre1998BalOrOpenFlueBackBoilerToRads",
+          "value": 119
+        },
+        {
+          "description": "CPSUGasOrLPGAutoIgnitionNonCondensing",
+          "value": 120
+        },
+        {
+          "description": "CPSUGasOrLPGAutoIgnitionCondensing",
+          "value": 121
+        },
+        {
+          "description": "OilBoilerStandard1985To1997",
+          "value": 125
+        },
+        {
+          "description": "OilBoilerStandard1998On",
+          "value": 126
+        },
+        {
+          "description": "OilBoilerCondensing",
+          "value": 127
+        },
+        {
+          "description": "OilBoilerCombiPre1998",
+          "value": 128
+        },
+        {
+          "description": "OilBoilerCombi1998On",
+          "value": 129
+        },
+        {
+          "description": "OilBoilerCondensingCombi",
+          "value": 130
+        },
+        {
+          "description": "OilBoilerRoomHeaterWithBoilerToRadsPre2000",
+          "value": 131
+        },
+        {
+          "description": "OilBoilerRoomHeaterWithBoilerToRads2000On",
+          "value": 132
+        },
+        {
+          "description": "RangeCookerBoilersGasLPGSingleBurnerPermanentPilot",
+          "value": 133
+        },
+        {
+          "description": "RangeCookerBoilersGasLPGSingleBurnerAutoIgnition",
+          "value": 134
+        },
+        {
+          "description": "RangeCookerBoilersOilTwinBurnerAutoIgnition",
+          "value": 136
+        },
+        {
+          "description": "RangeCookerBoilersOilSingleBurner",
+          "value": 139
+        },
+        {
+          "description": "RangeCookerBoilersOilTwinBurnerNonCondensPre1998",
+          "value": 140
+        },
+        {
+          "description": "SolidFuelBoilersManualFeedIndependentBoilerHeatedSpace",
+          "value": 151
+        },
+        {
+          "description": "SolidFuelBoilersManualFeedIndependentBoilerUnHeatedSpace",
+          "value": 152
+        },
+        {
+          "description": "SolidFuelBoilersAutoFeedIndependentBoilerInHeatedSpace",
+          "value": 153
+        },
+        {
+          "description": "SolidFuelBoilersAutoFeedIndependentBoilerInUnHeatedSpace",
+          "value": 154
+        },
+        {
+          "description": "SolidFuelBoilersWoodChipOrPelletIndependentBoiler",
+          "value": 155
+        },
+        {
+          "description": "SolidFuelBoilersOpenFireWithBackBoilerToRads",
+          "value": 156
+        },
+        {
+          "description": "SolidFuelBoilersClosedRoomHeaterWithBoilerToRads",
+          "value": 158
+        },
+        {
+          "description": "SolidFuelBoilersPelletStoveWithBoilerToRads",
+          "value": 159
+        },
+        {
+          "description": "SolidFuelBoilersRangeCookerBoilerIntegralOvenAndBoiler",
+          "value": 160
+        },
+        {
+          "description": "ElectricBoilersDirectActing",
+          "value": 191
+        },
+        {
+          "description": "ElectricBoilersCPSUInHeatedSpace",
+          "value": 192
+        },
+        {
+          "description": "ElectricBoilersDryCoreStorageBoilerInHeatedSpace",
+          "value": 193
+        },
+        {
+          "description": "ElectricBoilersWaterStorageBoilerInHeatedSpace",
+          "value": 195
+        },
+        {
+          "description": "HeatPumpsElectricGroundSourceWithFlowTempAtOrBelow35",
+          "value": 211
+        },
+        {
+          "description": "HeatPumpsElectricWaterSourceWithFlowTempAtOrBelow35",
+          "value": 213
+        },
+        {
+          "description": "HeatPumpsElectricAirSourceWithFlowTempAtOrBelow35",
+          "value": 214
+        },
+        {
+          "description": "HeatPumpsGasGroundSourceWithFlowTempAtOrBelow35",
+          "value": 215
+        },
+        {
+          "description": "HeatPumpsGasWaterSourceWithFlowTempAtOrBelow35",
+          "value": 216
+        },
+        {
+          "description": "HeatPumpsGasAirSourceWithFlowTempAtOrBelow35",
+          "value": 217
+        },
+        {
+          "description": "HeatPumpsElectricGroundSourceOtherCases",
+          "value": 221
+        },
+        {
+          "description": "HeatPumpsElectricWaterSourceOtherCases",
+          "value": 223
+        },
+        {
+          "description": "HeatPumpsElectricAirSourceOtherCases",
+          "value": 224
+        },
+        {
+          "description": "HeatPumpsGasGroundSourceOtherCases",
+          "value": 225
+        },
+        {
+          "description": "HeatPumpsGasWaterSourceOtherCases",
+          "value": 226
+        },
+        {
+          "description": "HeatPumpsGasAirSourceOtherCases",
+          "value": 227
+        },
+        {
+          "description": "CommunityBoilersOnly",
+          "value": 301
+        },
+        {
+          "description": "CommunityCHPAndBoilers",
+          "value": 302
+        },
+        {
+          "description": "CommunityHeatPump",
+          "value": 304
+        },
+        {
+          "description": "CommunityHeatNetwork",
+          "value": 310
+        },
+        {
+          "description": "ElecStorageOldLargeVolume",
+          "value": 401
+        },
+        {
+          "description": "ElecStorageModernSlimline",
+          "value": 402
+        },
+        {
+          "description": "ElecStorageFan",
+          "value": 404
+        },
+        {
+          "description": "ElecStorageIntegratedStorageAndDirectActing",
+          "value": 408
+        },
+        {
+          "description": "ElecStorageHighHeatRetention",
+          "value": 409
+        },
+        {
+          "description": "ElectricUnderfloorHeatingInConcreteSlabOffPeakOnly",
+          "value": 421
+        },
+        {
+          "description": "ElectricUnderfloorHeatingIntegratedStorageAndDirectActingOffPeakOnly",
+          "value": 422
+        },
+        {
+          "description": "ElectricUnderfloorHeatingInScreedAboveInsulationStandardOrOffPeak",
+          "value": 424
+        },
+        {
+          "description": "WarmAirSystemsGasWarmAirFanAssistedFlueDuctedOnOffControl1998On",
+          "value": 502
+        },
+        {
+          "description": "WarmAirSystemsGasWarmAirWithBalancedOrOpenFlueDuctedOrStubDuctedOnOffControlPre1998",
+          "value": 506
+        },
+        {
+          "description": "WarmAirSystemsGasWarmAirBalancedOrOpenFlueDuctedOrStubDuctedWithFlueHeatRecovery",
+          "value": 510
+        },
+        {
+          "description": "WarmAirSystemsGasWarmAirBalancedOrOpenFlueCondensing",
+          "value": 511
+        },
+        {
+          "description": "WarmAirSystemsOilWarmAirDuctedOnOffControl",
+          "value": 512
+        },
+        {
+          "description": "WarmAirSystemsElectricWarmAirElectricaire",
+          "value": 515
+        },
+        {
+          "description": "WarmAirHeatPumpsGroundToAirElectric",
+          "value": 521
+        },
+        {
+          "description": "WarmAirHeatPumpsWaterToAirElectric",
+          "value": 523
+        },
+        {
+          "description": "WarmAirHeatPumpsAirToAirElectric",
+          "value": 524
+        },
+        {
+          "description": "GasOrLPGRoomHeatersGasFireOpenFluePre1980OpenFronted",
+          "value": 601
+        },
+        {
+          "description": "GasOrLPGRoomHeatersGasFireOpenFluePre1980OpenFrontedBackBoiler",
+          "value": 602
+        },
+        {
+          "description": "GasOrLPGRoomHeatersGasFireOpenFlue1980OnOpenFrontedProudOfAndSealedToFireplace",
+          "value": 603
+        },
+        {
+          "description": "GasOrLPGRoomHeatersGasFireOpenFlue1980OnOpenFrontedProudOfAndSealedToFireplaceBackBoiler",
+          "value": 604
+        },
+        {
+          "description": "GasOrLPGRoomHeatersFlushFittingLiveEffectGasFireOpenFrontedSealedToFireplace",
+          "value": 605
+        },
+        {
+          "description": "GasOrLPGRoomHeatersFlushFittingLiveEffectGasFireOpenFrontedSealedToFireplaceBackBoiler",
+          "value": 606
+        },
+        {
+          "description": "GasOrLPGRoomHeatersFlushFittingLiveEffectGasFireOpenFrontedFanAssistedSealedToFireplace",
+          "value": 607
+        },
+        {
+          "description": "GasOrLPGRoomHeatersGasFireOrWallHeaterBalancedFlue",
+          "value": 609
+        },
+        {
+          "description": "GasOrLPGRoomHeatersGasFireClosedFrontedFanAssisted",
+          "value": 610
+        },
+        {
+          "description": "GasOrLPGRoomHeatersCondensingGasFire",
+          "value": 611
+        },
+        {
+          "description": "GasOrLPGRoomHeatersDecorativeFuelEffectGasFireOpenToChimney",
+          "value": 612
+        },
+        {
+          "description": "GasOrLPGRoomHeatersFluelessGasFireSecondaryHeatingOnly",
+          "value": 613
+        },
+        {
+          "description": "OilRoomHeatersRoomHeaterPre2000",
+          "value": 621
+        },
+        {
+          "description": "OilRoomHeatersRoomHeaterPre2000WithBoilerNoRads",
+          "value": 622
+        },
+        {
+          "description": "OilRoomHeatersRoomHeater2000On",
+          "value": 623
+        },
+        {
+          "description": "OilRoomHeatersRoomHeater2000OnWithBoilerNoRads",
+          "value": 624
+        },
+        {
+          "description": "OilRoomHeatersBioethanolHeaterSecondaryHeatingOnly",
+          "value": 625
+        },
+        {
+          "description": "SolidFuelRoomHeatersOpenFireInGrate",
+          "value": 631
+        },
+        {
+          "description": "SolidFuelRoomHeatersOpenFireWithBoilerNoRads",
+          "value": 632
+        },
+        {
+          "description": "SolidFuelRoomHeatersClosedRoomHeater",
+          "value": 633
+        },
+        {
+          "description": "SolidFuelRoomHeatersClosedRoomHeaterWithBoilerNoRads",
+          "value": 634
+        },
+        {
+          "description": "SolidFuelRoomHeatersStovePelletFired",
+          "value": 635
+        },
+        {
+          "description": "SolidFuelRoomHeatersStovePelletFiredWithBoilerNoRads",
+          "value": 636
+        },
+        {
+          "description": "ElectricRoomHeatersPanelConvectorOrRadiant",
+          "value": 691
+        },
+        {
+          "description": "ElectricRoomHeatersPortableElectric",
+          "value": 693
+        },
+        {
+          "description": "ElectricRoomHeatersWaterOrOilFilledRads",
+          "value": 694
+        },
+        {
+          "description": "NoHeatingSystemElectricHeatersAssumed",
+          "value": 699
+        },
+        {
+          "description": "OtherElectricCeilingHeating",
+          "value": 701
+        }
+      ],
+      "rdSapEnumName": "ParityMainHeatingCode"
+    },
+    "secondaryFuelType": {
+      "required": false,
+      "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+      "validValues": [
+        {
+          "description": "NoHeatingOrHotWater",
+          "value": 0
+        },
+        {
+          "description": "GasBottledLPG",
+          "value": 3
+        },
+        {
+          "description": "Anthracite",
+          "value": 5
+        },
+        {
+          "description": "WoodLogs",
+          "value": 6
+        },
+        {
+          "description": "BulkWoodPellets",
+          "value": 7
+        },
+        {
+          "description": "WoodChips",
+          "value": 8
+        },
+        {
+          "description": "DualFuelMineralWood",
+          "value": 9
+        },
+        {
+          "description": "SmokelessCoal",
+          "value": 15
+        },
+        {
+          "description": "WoodPelletsInBags",
+          "value": 16
+        },
+        {
+          "description": "LPGSpecialCondition",
+          "value": 17
+        },
+        {
+          "description": "B30KNotCommunity",
+          "value": 18
+        },
+        {
+          "description": "Bioethanol",
+          "value": 19
+        },
+        {
+          "description": "MainsGasCommunity",
+          "value": 20
+        },
+        {
+          "description": "LPGCommunity",
+          "value": 21
+        },
+        {
+          "description": "OilCommunity",
+          "value": 22
+        },
+        {
+          "description": "B30DCommunity",
+          "value": 23
+        },
+        {
+          "description": "CoalCommunity",
+          "value": 24
+        },
+        {
+          "description": "ElectricityCommunity",
+          "value": 25
+        },
+        {
+          "description": "MainsGasNotCommunity",
+          "value": 26
+        },
+        {
+          "description": "LPGNotCommunity",
+          "value": 27
+        },
+        {
+          "description": "OilNotCommunity",
+          "value": 28
+        },
+        {
+          "description": "ElectricityNotCommunity",
+          "value": 29
+        },
+        {
+          "description": "WasteCombustionCommunity",
+          "value": 30
+        },
+        {
+          "description": "BiomassCommunity",
+          "value": 31
+        },
+        {
+          "description": "BiogasCommunity",
+          "value": 32
+        },
+        {
+          "description": "HouseCoalNotCommunity",
+          "value": 33
+        },
+        {
+          "description": "BiodieselFromAnyBiomass",
+          "value": 34
+        },
+        {
+          "description": "BiodieselFromUsedCookingOilOnly",
+          "value": 35
+        },
+        {
+          "description": "RapeseedOil",
+          "value": 36
+        },
+        {
+          "description": "MineralOrLiquidBiofuel",
+          "value": 37
+        },
+        {
+          "description": "GasBottledLPGSecondaryHeating",
+          "value": 38
+        },
+        {
+          "description": "BiogasNotCommunity",
+          "value": 51
+        },
+        {
+          "description": "HeatFromBoilersCanUseMineralOilOrBiodieselCommunity",
+          "value": 56
+        },
+        {
+          "description": "HeatFromBoilersUsingBiodieselFromAnySourceCommunity",
+          "value": 57
+        },
+        {
+          "description": "BiodieselFromVegetableOilOnlyCommunity",
+          "value": 58
+        },
+        {
+          "description": "FromHeatNetworkData",
+          "value": 99
+        },
+        {
+          "description": "EMPTY",
+          "value": 999
+        }
+      ],
+      "rdSapEnumName": "HeatingFuelTypeCode"
+    }
+  },
+  "water": {
+    "communityDHWSubNetworkName": {
+      "type": "String",
+      "required": false
+    },
+    "communityDHWDistributionType": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Calculated",
+          "value": 5
+        },
+        {
+          "description": "Unknown",
+          "value": 6
+        },
+        {
+          "description": "TwoAdjoiningDwellings",
+          "value": 9
+        }
+      ],
+      "rdSapEnumName": "SAPHeatingDistributionCode"
+    },
+    "numberBaths": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 2147483647",
+      "isWholeNumber": true
+    },
+    "numberBathsWWHRS": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 2147483647",
+      "isWholeNumber": true
+    },
+    "solarHeating": {
+      "required": true,
+      "validValues": [
+        {
+          "description": "Y",
+          "value": true
+        },
+        {
+          "description": "N",
+          "value": false
+        }
+      ],
+      "rdSapEnumName": "Flag"
+    },
+    "solar": {
+      "panelApertureArea": {
+        "type": "Number",
+        "required": false,
+        "validRange": "0 to 100",
+        "isWholeNumber": false,
+        "additionalNotes": "Is measured in square meters."
+      },
+      "panelCollector": {
+        "type": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unglazed",
+              "value": 1
+            },
+            {
+              "description": "FlatPanel",
+              "value": 2
+            },
+            {
+              "description": "EvacuatedTube",
+              "value": 3
+            }
+          ],
+          "rdSapEnumName": "SAPSolarCollectorTypeCode"
+        },
+        "orientation": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Horizontal",
+              "value": 0
+            },
+            {
+              "description": "North",
+              "value": 1
+            },
+            {
+              "description": "NorthEast",
+              "value": 2
+            },
+            {
+              "description": "East",
+              "value": 3
+            },
+            {
+              "description": "SouthEast",
+              "value": 4
+            },
+            {
+              "description": "South",
+              "value": 5
+            },
+            {
+              "description": "SouthWest",
+              "value": 6
+            },
+            {
+              "description": "West",
+              "value": 7
+            },
+            {
+              "description": "NorthWest",
+              "value": 8
+            }
+          ],
+          "rdSapEnumName": "SAPCompassDirectionCode"
+        },
+        "pitch": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Horizontal",
+              "value": 1
+            },
+            {
+              "description": "Deg30",
+              "value": 2
+            },
+            {
+              "description": "Deg45",
+              "value": 3
+            },
+            {
+              "description": "Deg60",
+              "value": 4
+            },
+            {
+              "description": "Vertical",
+              "value": 5
+            }
+          ],
+          "rdSapEnumName": "SAPVerticalPitchCode"
+        },
+        "overshading": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NoneOrVeryLittle",
+              "value": 1
+            },
+            {
+              "description": "Modest",
+              "value": 2
+            },
+            {
+              "description": "Significant",
+              "value": 3
+            },
+            {
+              "description": "Heavy",
+              "value": 4
+            },
+            {
+              "description": "Severe",
+              "value": 5
+            }
+          ],
+          "rdSapEnumName": "SAPSolarCollectorOvershadingCode"
+        },
+        "dataSource": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Default",
+              "value": 1
+            },
+            {
+              "description": "DeclaredValues",
+              "value": 2
+            }
+          ],
+          "rdSapEnumName": "SAPSolarCollectorDataSourceCode"
+        },
+        "zeroLossEfficiency": {
+          "type": "Number",
+          "required": false,
+          "validRange": "-1000 to 1000",
+          "isWholeNumber": false
+        },
+        "linearHeatLossCoefficient": {
+          "type": "Number",
+          "required": false,
+          "validRange": "-1000 to 1000",
+          "isWholeNumber": false
+        },
+        "secondOrderHeatLossCoefficient": {
+          "type": "Number",
+          "required": false,
+          "validRange": "-1000 to 1000",
+          "isWholeNumber": false
+        }
+      },
+      "pump": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Unknown",
+            "value": 0
+          },
+          {
+            "description": "ElectricallyPowered",
+            "value": 1
+          },
+          {
+            "description": "PVPowered",
+            "value": 2
+          }
+        ],
+        "rdSapEnumName": "SolarPumpType"
+      },
+      "storeVolumeDetailsKnown": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Y",
+            "value": true
+          },
+          {
+            "description": "N",
+            "value": false
+          }
+        ],
+        "rdSapEnumName": "Flag"
+      },
+      "totalStoreVolume": {
+        "type": "Number",
+        "required": false,
+        "validRange": "0 to 1000",
+        "isWholeNumber": false
+      },
+      "dedicatedSolarVolume": {
+        "type": "Number",
+        "required": false,
+        "validRange": "0 to 1000",
+        "isWholeNumber": false,
+        "lessThanOrEqualToProperty": "water.solar.totalStoreVolume",
+        "additionalNotes": "Must be less than or equal to `water.solar.totalStoreVolume`"
+      },
+      "heatingDetailsKnown": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Y",
+            "value": true
+          },
+          {
+            "description": "N",
+            "value": false
+          }
+        ],
+        "rdSapEnumName": "Flag"
+      }
+    },
+    "heatingFuel": {
+      "required": true,
+      "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+      "validValues": [
+        {
+          "description": "NoHeatingOrHotWater",
+          "value": 0
+        },
+        {
+          "description": "GasBottledLPG",
+          "value": 3
+        },
+        {
+          "description": "Anthracite",
+          "value": 5
+        },
+        {
+          "description": "WoodLogs",
+          "value": 6
+        },
+        {
+          "description": "BulkWoodPellets",
+          "value": 7
+        },
+        {
+          "description": "WoodChips",
+          "value": 8
+        },
+        {
+          "description": "DualFuelMineralWood",
+          "value": 9
+        },
+        {
+          "description": "SmokelessCoal",
+          "value": 15
+        },
+        {
+          "description": "WoodPelletsInBags",
+          "value": 16
+        },
+        {
+          "description": "LPGSpecialCondition",
+          "value": 17
+        },
+        {
+          "description": "B30KNotCommunity",
+          "value": 18
+        },
+        {
+          "description": "Bioethanol",
+          "value": 19
+        },
+        {
+          "description": "MainsGasCommunity",
+          "value": 20
+        },
+        {
+          "description": "LPGCommunity",
+          "value": 21
+        },
+        {
+          "description": "OilCommunity",
+          "value": 22
+        },
+        {
+          "description": "B30DCommunity",
+          "value": 23
+        },
+        {
+          "description": "CoalCommunity",
+          "value": 24
+        },
+        {
+          "description": "ElectricityCommunity",
+          "value": 25
+        },
+        {
+          "description": "MainsGasNotCommunity",
+          "value": 26
+        },
+        {
+          "description": "LPGNotCommunity",
+          "value": 27
+        },
+        {
+          "description": "OilNotCommunity",
+          "value": 28
+        },
+        {
+          "description": "ElectricityNotCommunity",
+          "value": 29
+        },
+        {
+          "description": "WasteCombustionCommunity",
+          "value": 30
+        },
+        {
+          "description": "BiomassCommunity",
+          "value": 31
+        },
+        {
+          "description": "BiogasCommunity",
+          "value": 32
+        },
+        {
+          "description": "HouseCoalNotCommunity",
+          "value": 33
+        },
+        {
+          "description": "BiodieselFromAnyBiomass",
+          "value": 34
+        },
+        {
+          "description": "BiodieselFromUsedCookingOilOnly",
+          "value": 35
+        },
+        {
+          "description": "RapeseedOil",
+          "value": 36
+        },
+        {
+          "description": "MineralOrLiquidBiofuel",
+          "value": 37
+        },
+        {
+          "description": "GasBottledLPGSecondaryHeating",
+          "value": 38
+        },
+        {
+          "description": "BiogasNotCommunity",
+          "value": 51
+        },
+        {
+          "description": "HeatFromBoilersCanUseMineralOilOrBiodieselCommunity",
+          "value": 56
+        },
+        {
+          "description": "HeatFromBoilersUsingBiodieselFromAnySourceCommunity",
+          "value": 57
+        },
+        {
+          "description": "BiodieselFromVegetableOilOnlyCommunity",
+          "value": 58
+        },
+        {
+          "description": "FromHeatNetworkData",
+          "value": 99
+        },
+        {
+          "description": "EMPTY",
+          "value": 999
+        }
+      ],
+      "rdSapEnumName": "HeatingFuelTypeCode"
+    },
+    "heatingCode": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "FromMainHeatingSystem",
+          "value": 901
+        },
+        {
+          "description": "FromSecondarySystem",
+          "value": 902
+        },
+        {
+          "description": "ElectricImmersion",
+          "value": 903
+        },
+        {
+          "description": "SinglePointGasWaterHeater",
+          "value": 907
+        },
+        {
+          "description": "MultiPointGasWaterHeater",
+          "value": 908
+        },
+        {
+          "description": "ElectricInstantaneousAtPointOfUse",
+          "value": 909
+        },
+        {
+          "description": "GasBoilerOrCirculatorForWaterHeatingOnly",
+          "value": 911
+        },
+        {
+          "description": "OilBoilerOrCirculatorForWaterHeatingOnly",
+          "value": 912
+        },
+        {
+          "description": "SolidFuelBoilerOrCirculatorForWaterHeatingOnly",
+          "value": 913
+        },
+        {
+          "description": "FromSecondMainSystem",
+          "value": 914
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingGasSingleBurnerPermanentPilot",
+          "value": 921
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingGasSingleBurnerAutoIgnition",
+          "value": 922
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingGasTwinBurnerAutoIgnitionPre1998",
+          "value": 924
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingOilSingleBoiler",
+          "value": 927
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingOilTwinBurnerPre1998",
+          "value": 928
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingSolidFuelIntegralOvenAndBoiler",
+          "value": 930
+        },
+        {
+          "description": "RangeCookerWithBoilerForWaterHeatingSolidFuelIndependentOvenAndBoiler",
+          "value": 931
+        },
+        {
+          "description": "ElectricHeatPumpForWaterHeatingOnly",
+          "value": 941
+        },
+        {
+          "description": "HotWaterOnlyCommunitySchemeBoilers",
+          "value": 950
+        },
+        {
+          "description": "HotWaterOnlyCommunitySchemeCHP",
+          "value": 951
+        },
+        {
+          "description": "HotWaterOnlyCommunitySchemeHeatPump",
+          "value": 952
+        },
+        {
+          "description": "NoHotWaterSystemImmersionAssumed",
+          "value": 999
+        }
+      ],
+      "rdSapEnumName": "ParityWaterHeatingCode"
+    },
+    "immersionType": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "Dual",
+          "value": 1
+        },
+        {
+          "description": "Single",
+          "value": 2
+        },
+        {
+          "description": "NA",
+          "value": 3
+        }
+      ],
+      "rdSapEnumName": "ImmersionHeatingTypeCode"
+    },
+    "cylinder": {
+      "combinedCylinder": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Y",
+            "value": true
+          },
+          {
+            "description": "N",
+            "value": false
+          }
+        ],
+        "rdSapEnumName": "Flag"
+      },
+      "size": {
+        "required": true,
+        "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+        "validValues": [
+          {
+            "description": "NoAccess",
+            "value": 0
+          },
+          {
+            "description": "NoCylinder",
+            "value": 1
+          },
+          {
+            "description": "Normal90To130Litres",
+            "value": 2
+          },
+          {
+            "description": "Medium131To170Litres",
+            "value": 3
+          },
+          {
+            "description": "LargeGreaterThan170Litres",
+            "value": 4
+          },
+          {
+            "description": "ActualSizeIncludedInSHWDetails",
+            "value": 5
+          },
+          {
+            "description": "ExactVolumeIfKnown",
+            "value": 6
+          },
+          {
+            "description": "EMPTY",
+            "value": 999
+          }
+        ],
+        "rdSapEnumName": "CylinderSizeCode"
+      },
+      "insulationType": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "None",
+            "value": 0
+          },
+          {
+            "description": "Foam",
+            "value": 1
+          },
+          {
+            "description": "Jacket",
+            "value": 2
+          }
+        ],
+        "rdSapEnumName": "CylinderInsulationTypeCode"
+      },
+      "insulationThickness": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "mm12",
+            "value": 1
+          },
+          {
+            "description": "mm25",
+            "value": 2
+          },
+          {
+            "description": "mm38",
+            "value": 3
+          },
+          {
+            "description": "mm50",
+            "value": 4
+          },
+          {
+            "description": "mm80",
+            "value": 5
+          },
+          {
+            "description": "mm120",
+            "value": 6
+          },
+          {
+            "description": "mm160",
+            "value": 7
+          }
+        ],
+        "rdSapEnumName": "CylinderThicknessCode"
+      },
+      "thermostat": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Y",
+            "value": true
+          },
+          {
+            "description": "N",
+            "value": false
+          }
+        ],
+        "rdSapEnumName": "Flag"
+      },
+      "cylinderHeatLoss": {
+        "type": "Number",
+        "required": false,
+        "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+        "isWholeNumber": false
+      }
+    },
+    "showerTypes": {
+      "required": false,
+      "validValues": [
+        {
+          "description": "NonElectricShowersOnly",
+          "value": 1
+        },
+        {
+          "description": "ElectricShowersOnly",
+          "value": 2
+        },
+        {
+          "description": "ElectricAndNonElectricShowers",
+          "value": 3
+        },
+        {
+          "description": "NoShower",
+          "value": 4
+        }
+      ],
+      "rdSapEnumName": "ShowerTypeCode"
+    },
+    "communityDhwNetworkIndexNumber": {
+      "type": "String",
+      "required": true
+    },
+    "roomsWithBathAndOrShower": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "roomsWithMixerShowerNoBath": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "roomsWithBathAndMixerShower": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "mixerShowersWithSystem1WithBath": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "mixerShowersWithSystem1WithoutBath": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "mixerShowersWithSystem2WithBath": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "mixerShowersWithSystem2WithoutBath": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "wwhrsIndexNumber1": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 999999",
+      "isWholeNumber": true
+    },
+    "wwhrsIndexNumber2": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 999999",
+      "isWholeNumber": true
+    },
+    "storageWwhrsWwhrsIndexNumber": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 999999",
+      "isWholeNumber": true
+    },
+    "storageWwhrsTotalShowersAndBaths": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "storageWwhrsShowersAndBathsToWwhrs": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 32767",
+      "isWholeNumber": true
+    },
+    "storageWwhrsStoreVolume": {
+      "type": "Number",
+      "required": false,
+      "validRange": "0 to 1000",
+      "isWholeNumber": false
+    },
+    "showers": {
+      "type": "Array",
+      "required": false,
+      "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+      "itemSchema": {
+        "id": {
+          "type": "Number",
+          "required": true,
+          "validRange": "-2147483648 to 2147483647",
+          "isWholeNumber": true
+        },
+        "showerOutletType": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "NonElectricShowersOnly",
+              "value": 1
+            },
+            {
+              "description": "ElectricShowersOnly",
+              "value": 2
+            },
+            {
+              "description": "ElectricAndNonElectricShowers",
+              "value": 3
+            },
+            {
+              "description": "NoShower",
+              "value": 4
+            }
+          ],
+          "rdSapEnumName": "ShowerTypeCode"
+        },
+        "showerWwhrs": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "None",
+              "value": 1
+            },
+            {
+              "description": "Instant1",
+              "value": 2
+            },
+            {
+              "description": "Instant2",
+              "value": 3
+            },
+            {
+              "description": "Storage",
+              "value": 4
+            }
+          ],
+          "rdSapEnumName": "ShowerWWHRSCode"
+        }
+      }
+    }
+  },
+  "buildingParts": {
+    "type": "Array",
+    "required": true,
+    "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+    "itemSchema": {
+      "buildingPartNumber": {
+        "type": "Number",
+        "required": true,
+        "validRange": "1 to 5",
+        "isWholeNumber": true,
+        "additionalNotes": "This is a required field as it denotes the index for a sub-property."
+      },
+      "identifier": {
+        "type": "String",
+        "required": true
+      },
+      "constructionAgeBand": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "NA",
+            "value": 0
+          },
+          {
+            "description": "A",
+            "value": 1
+          },
+          {
+            "description": "B",
+            "value": 2
+          },
+          {
+            "description": "C",
+            "value": 3
+          },
+          {
+            "description": "D",
+            "value": 4
+          },
+          {
+            "description": "E",
+            "value": 5
+          },
+          {
+            "description": "F",
+            "value": 6
+          },
+          {
+            "description": "G",
+            "value": 7
+          },
+          {
+            "description": "H",
+            "value": 8
+          },
+          {
+            "description": "I",
+            "value": 9
+          },
+          {
+            "description": "J",
+            "value": 10
+          },
+          {
+            "description": "K",
+            "value": 11
+          },
+          {
+            "description": "L",
+            "value": 12
+          },
+          {
+            "description": "NR",
+            "value": 13
+          },
+          {
+            "description": "M",
+            "value": 14
+          }
+        ],
+        "rdSapEnumName": "ConstructionDateCode"
+      },
+      "storeysCount": {
+        "type": "Number",
+        "required": true,
+        "validRange": "1 to 200",
+        "isWholeNumber": true
+      },
+      "floor": {
+        "construction": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "Solid",
+              "value": 1
+            },
+            {
+              "description": "SuspendedTimber",
+              "value": 2
+            },
+            {
+              "description": "SuspendedNotTimber",
+              "value": 3
+            },
+            {
+              "description": "BasementFloor",
+              "value": 4
+            }
+          ],
+          "rdSapEnumName": "SAPFloorConstructionCode"
+        },
+        "sapStoreyCode": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "LowestOccupied",
+              "value": 0
+            },
+            {
+              "description": "LowestPlus1",
+              "value": 1
+            },
+            {
+              "description": "LowestPlus2",
+              "value": 2
+            },
+            {
+              "description": "LowestPlus3",
+              "value": 3
+            },
+            {
+              "description": "LowestPlus4",
+              "value": 4
+            },
+            {
+              "description": "LowestPlus5",
+              "value": 5
+            },
+            {
+              "description": "LowestPlus6",
+              "value": 6
+            },
+            {
+              "description": "NotRecorded",
+              "value": 7
+            },
+            {
+              "description": "RoofRooms",
+              "value": 99
+            }
+          ],
+          "rdSapEnumName": "SAPStoreyFloorCode"
+        },
+        "insulation": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "AsBuilt",
+              "value": 1
+            },
+            {
+              "description": "RetroFitted",
+              "value": 2
+            }
+          ],
+          "rdSapEnumName": "SAPFloorInsulationCode"
+        },
+        "uValue": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 10",
+          "isWholeNumber": false
+        },
+        "insulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "mm50",
+              "value": 1
+            },
+            {
+              "description": "mm100",
+              "value": 2
+            },
+            {
+              "description": "mm150",
+              "value": 3
+            },
+            {
+              "description": "mm25",
+              "value": 4
+            },
+            {
+              "description": "mm75",
+              "value": 5
+            },
+            {
+              "description": "mm125",
+              "value": 6
+            },
+            {
+              "description": "mm175",
+              "value": 7
+            },
+            {
+              "description": "mm200",
+              "value": 8
+            }
+          ],
+          "rdSapEnumName": "FloorInsulationThicknessCode"
+        },
+        "heatLoss": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "ExposedFloor",
+              "value": 1
+            },
+            {
+              "description": "SemiExposedToUnheated",
+              "value": 2
+            },
+            {
+              "description": "SemiExposedToPartHeated",
+              "value": 3
+            },
+            {
+              "description": "OtherFlatBelow",
+              "value": 6
+            },
+            {
+              "description": "GroundFloor",
+              "value": 7
+            },
+            {
+              "description": "SameDwellingBelow",
+              "value": 8
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "HeatLossFloorCode"
+        },
+        "totalArea": {
+          "type": "Number",
+          "required": true,
+          "validRange": "0 to 2147483647",
+          "isWholeNumber": true
+        }
+      },
+      "roof": {
+        "construction": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "None",
+              "value": 0
+            },
+            {
+              "description": "Flat",
+              "value": 1
+            },
+            {
+              "description": "AnotherDwellingAbove",
+              "value": 3
+            },
+            {
+              "description": "PitchedNormalLoftAccess",
+              "value": 4
+            },
+            {
+              "description": "PitchedNormalNoLoftAccess",
+              "value": 5
+            },
+            {
+              "description": "PitchedThatched",
+              "value": 6
+            },
+            {
+              "description": "SameDwellingAbove",
+              "value": 7
+            },
+            {
+              "description": "PitchedWithSlopingCeiling",
+              "value": 8
+            },
+            {
+              "description": "NotRecorded",
+              "value": 10
+            },
+            {
+              "description": "NonResidentialAbove",
+              "value": 11
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "RoofTypeCode"
+        },
+        "insulationLocation": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NotDefined",
+              "value": 0
+            },
+            {
+              "description": "Rafters",
+              "value": 1
+            },
+            {
+              "description": "Joists",
+              "value": 2
+            },
+            {
+              "description": "Unknown",
+              "value": 4
+            },
+            {
+              "description": "None",
+              "value": 5
+            },
+            {
+              "description": "FlatRoofInsulation",
+              "value": 6
+            },
+            {
+              "description": "SlopingCeilingInsulation",
+              "value": 7
+            }
+          ],
+          "rdSapEnumName": "RoofInsulationLocationCode"
+        },
+        "uValue": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 10",
+          "isWholeNumber": false
+        },
+        "insulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "None",
+              "value": 1
+            },
+            {
+              "description": "mm12",
+              "value": 2
+            },
+            {
+              "description": "mm25",
+              "value": 3
+            },
+            {
+              "description": "mm50",
+              "value": 4
+            },
+            {
+              "description": "mm75",
+              "value": 5
+            },
+            {
+              "description": "mm100",
+              "value": 6
+            },
+            {
+              "description": "mm150",
+              "value": 7
+            },
+            {
+              "description": "mm200",
+              "value": 8
+            },
+            {
+              "description": "mm250",
+              "value": 9
+            },
+            {
+              "description": "mm270",
+              "value": 10
+            },
+            {
+              "description": "mm300",
+              "value": 11
+            },
+            {
+              "description": "mm350",
+              "value": 12
+            },
+            {
+              "description": "mm400",
+              "value": 13
+            },
+            {
+              "description": "AB",
+              "value": 14
+            },
+            {
+              "description": "mm125",
+              "value": 15
+            },
+            {
+              "description": "mm175",
+              "value": 16
+            },
+            {
+              "description": "mm225",
+              "value": 17
+            },
+            {
+              "description": "NotDefined",
+              "value": 99
+            }
+          ],
+          "rdSapEnumName": "RoofInsulationThicknessCode"
+        },
+        "rafterInsulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NoInsulation",
+              "value": 0
+            },
+            {
+              "description": "mm50",
+              "value": 1
+            },
+            {
+              "description": "mm100",
+              "value": 2
+            },
+            {
+              "description": "mm150",
+              "value": 3
+            },
+            {
+              "description": "AsBuilt",
+              "value": 4
+            },
+            {
+              "description": "mm12",
+              "value": 5
+            },
+            {
+              "description": "mm25",
+              "value": 6
+            },
+            {
+              "description": "mm75",
+              "value": 7
+            },
+            {
+              "description": "mm125",
+              "value": 8
+            },
+            {
+              "description": "mm175",
+              "value": 9
+            },
+            {
+              "description": "mm200",
+              "value": 10
+            },
+            {
+              "description": "mm225",
+              "value": 11
+            },
+            {
+              "description": "mm250",
+              "value": 12
+            },
+            {
+              "description": "mm270",
+              "value": 13
+            },
+            {
+              "description": "mm300",
+              "value": 14
+            },
+            {
+              "description": "mm350",
+              "value": 15
+            },
+            {
+              "description": "mm400",
+              "value": 16
+            }
+          ],
+          "rdSapEnumName": "RafterInsulationThicknessCode"
+        },
+        "flatRoofInsulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NoInsulation",
+              "value": 0
+            },
+            {
+              "description": "mm50",
+              "value": 1
+            },
+            {
+              "description": "mm100",
+              "value": 2
+            },
+            {
+              "description": "mm150",
+              "value": 3
+            },
+            {
+              "description": "AsBuilt",
+              "value": 4
+            },
+            {
+              "description": "mm12",
+              "value": 5
+            },
+            {
+              "description": "mm25",
+              "value": 6
+            },
+            {
+              "description": "mm75",
+              "value": 7
+            },
+            {
+              "description": "mm125",
+              "value": 8
+            },
+            {
+              "description": "mm175",
+              "value": 9
+            },
+            {
+              "description": "mm200",
+              "value": 10
+            },
+            {
+              "description": "mm225",
+              "value": 11
+            },
+            {
+              "description": "mm250",
+              "value": 12
+            },
+            {
+              "description": "mm270",
+              "value": 13
+            },
+            {
+              "description": "mm300",
+              "value": 14
+            },
+            {
+              "description": "mm350",
+              "value": 15
+            },
+            {
+              "description": "mm400",
+              "value": 16
+            }
+          ],
+          "rdSapEnumName": "FlatRoofInsulationThicknessCode"
+        },
+        "slopingCeilingInsulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NoInsulation",
+              "value": 0
+            },
+            {
+              "description": "mm50",
+              "value": 1
+            },
+            {
+              "description": "mm100",
+              "value": 2
+            },
+            {
+              "description": "mm150",
+              "value": 3
+            },
+            {
+              "description": "AsBuilt",
+              "value": 4
+            },
+            {
+              "description": "mm12",
+              "value": 5
+            },
+            {
+              "description": "mm25",
+              "value": 6
+            },
+            {
+              "description": "mm75",
+              "value": 7
+            },
+            {
+              "description": "mm125",
+              "value": 8
+            },
+            {
+              "description": "mm175",
+              "value": 9
+            },
+            {
+              "description": "mm200",
+              "value": 10
+            },
+            {
+              "description": "mm225",
+              "value": 11
+            },
+            {
+              "description": "mm250",
+              "value": 12
+            },
+            {
+              "description": "mm270",
+              "value": 13
+            },
+            {
+              "description": "mm300",
+              "value": 14
+            },
+            {
+              "description": "mm350",
+              "value": 15
+            },
+            {
+              "description": "mm400",
+              "value": 16
+            }
+          ],
+          "rdSapEnumName": "FlatRoofInsulationThicknessCode"
+        },
+        "flatCeiling": {
+          "area1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          },
+          "area2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          }
+        }
+      },
+      "wall": {
+        "construction": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "GraniteOrWhinstone",
+              "value": 1
+            },
+            {
+              "description": "Sandstone",
+              "value": 2
+            },
+            {
+              "description": "SolidBrick",
+              "value": 3
+            },
+            {
+              "description": "Cavity",
+              "value": 4
+            },
+            {
+              "description": "TimberFrame",
+              "value": 5
+            },
+            {
+              "description": "BasementWall",
+              "value": 6
+            },
+            {
+              "description": "CurtainWall",
+              "value": 7
+            },
+            {
+              "description": "SystemBuilt",
+              "value": 8
+            },
+            {
+              "description": "CobWall",
+              "value": 9
+            },
+            {
+              "description": "ParkHomeWall",
+              "value": 10
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "WallConstructionCode"
+        },
+        "insulationType": {
+          "required": true,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "External",
+              "value": 1
+            },
+            {
+              "description": "FilledCavity",
+              "value": 2
+            },
+            {
+              "description": "Internal",
+              "value": 3
+            },
+            {
+              "description": "AsBuilt",
+              "value": 4
+            },
+            {
+              "description": "Unknown",
+              "value": 5
+            },
+            {
+              "description": "FilledCavityPlusExternal",
+              "value": 6
+            },
+            {
+              "description": "FilledCavityPlusInternal",
+              "value": 7
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "WallInsulationCode"
+        },
+        "insulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "mm50",
+              "value": 1
+            },
+            {
+              "description": "mm100",
+              "value": 2
+            },
+            {
+              "description": "mm150",
+              "value": 3
+            },
+            {
+              "description": "mm200",
+              "value": 4
+            },
+            {
+              "description": "mm10",
+              "value": 5
+            },
+            {
+              "description": "mm25",
+              "value": 6
+            },
+            {
+              "description": "mm75",
+              "value": 7
+            },
+            {
+              "description": "mm125",
+              "value": 8
+            },
+            {
+              "description": "mm175",
+              "value": 9
+            },
+            {
+              "description": "Measured",
+              "value": 10
+            }
+          ],
+          "rdSapEnumName": "WallInsulationThicknessCode"
+        },
+        "thicknessMeasured": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "Y",
+              "value": true
+            },
+            {
+              "description": "N",
+              "value": false
+            }
+          ],
+          "rdSapEnumName": "Flag"
+        },
+        "thickness": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 32767",
+          "isWholeNumber": true
+        },
+        "dryLined": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "Y",
+              "value": true
+            },
+            {
+              "description": "N",
+              "value": false
+            }
+          ],
+          "rdSapEnumName": "Flag"
+        },
+        "uValue": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 10",
+          "isWholeNumber": false
+        },
+        "partyWallConstruction": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "Solid",
+              "value": 1
+            },
+            {
+              "description": "UnfilledCavity",
+              "value": 2
+            },
+            {
+              "description": "FilledCavity",
+              "value": 3
+            },
+            {
+              "description": "NADetached",
+              "value": 4
+            },
+            {
+              "description": "NoInfoPre992Survey",
+              "value": 5
+            },
+            {
+              "description": "FilledAndSealedCavity",
+              "value": 6
+            }
+          ],
+          "rdSapEnumName": "PartyWallConstructionCode"
+        },
+        "alternate": {
+          "detailsEntered": {
+            "required": true,
+            "validValues": [
+              {
+                "description": "Y",
+                "value": true
+              },
+              {
+                "description": "N",
+                "value": false
+              }
+            ],
+            "rdSapEnumName": "Flag"
+          },
+          "construction": {
+            "required": false,
+            "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+            "validValues": [
+              {
+                "description": "GraniteOrWhinstone",
+                "value": 1
+              },
+              {
+                "description": "Sandstone",
+                "value": 2
+              },
+              {
+                "description": "SolidBrick",
+                "value": 3
+              },
+              {
+                "description": "Cavity",
+                "value": 4
+              },
+              {
+                "description": "TimberFrame",
+                "value": 5
+              },
+              {
+                "description": "BasementWall",
+                "value": 6
+              },
+              {
+                "description": "CurtainWall",
+                "value": 7
+              },
+              {
+                "description": "SystemBuilt",
+                "value": 8
+              },
+              {
+                "description": "CobWall",
+                "value": 9
+              },
+              {
+                "description": "ParkHomeWall",
+                "value": 10
+              },
+              {
+                "description": "EMPTY",
+                "value": 999
+              }
+            ],
+            "rdSapEnumName": "WallConstructionCode"
+          },
+          "insulationType": {
+            "required": false,
+            "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+            "validValues": [
+              {
+                "description": "External",
+                "value": 1
+              },
+              {
+                "description": "FilledCavity",
+                "value": 2
+              },
+              {
+                "description": "Internal",
+                "value": 3
+              },
+              {
+                "description": "AsBuilt",
+                "value": 4
+              },
+              {
+                "description": "Unknown",
+                "value": 5
+              },
+              {
+                "description": "FilledCavityPlusExternal",
+                "value": 6
+              },
+              {
+                "description": "FilledCavityPlusInternal",
+                "value": 7
+              },
+              {
+                "description": "EMPTY",
+                "value": 999
+              }
+            ],
+            "rdSapEnumName": "WallInsulationCode"
+          },
+          "insulationThickness": {
+            "required": false,
+            "validValues": [
+              {
+                "description": "Unknown",
+                "value": 0
+              },
+              {
+                "description": "mm50",
+                "value": 1
+              },
+              {
+                "description": "mm100",
+                "value": 2
+              },
+              {
+                "description": "mm150",
+                "value": 3
+              },
+              {
+                "description": "mm200",
+                "value": 4
+              },
+              {
+                "description": "mm10",
+                "value": 5
+              },
+              {
+                "description": "mm25",
+                "value": 6
+              },
+              {
+                "description": "mm75",
+                "value": 7
+              },
+              {
+                "description": "mm125",
+                "value": 8
+              },
+              {
+                "description": "mm175",
+                "value": 9
+              },
+              {
+                "description": "Measured",
+                "value": 10
+              }
+            ],
+            "rdSapEnumName": "WallInsulationThicknessCode"
+          },
+          "area": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "thicknessMeasured": {
+            "required": false,
+            "validValues": [
+              {
+                "description": "Y",
+                "value": true
+              },
+              {
+                "description": "N",
+                "value": false
+              }
+            ],
+            "rdSapEnumName": "Flag"
+          },
+          "thickness": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 32767",
+            "isWholeNumber": true
+          },
+          "dryLined": {
+            "required": false,
+            "validValues": [
+              {
+                "description": "Y",
+                "value": true
+              },
+              {
+                "description": "N",
+                "value": false
+              }
+            ],
+            "rdSapEnumName": "Flag"
+          },
+          "uValue": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          },
+          "shelteredWall": {
+            "required": false,
+            "validValues": [
+              {
+                "description": "Y",
+                "value": true
+              },
+              {
+                "description": "N",
+                "value": false
+              }
+            ],
+            "rdSapEnumName": "Flag"
+          }
+        }
+      },
+      "roomInRoof": {
+        "present": {
+          "required": true,
+          "validValues": [
+            {
+              "description": "Y",
+              "value": true
+            },
+            {
+              "description": "N",
+              "value": false
+            }
+          ],
+          "rdSapEnumName": "Flag"
+        },
+        "floorArea": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 10000",
+          "isWholeNumber": false
+        },
+        "constructionAgeBand": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "NA",
+              "value": 0
+            },
+            {
+              "description": "A",
+              "value": 1
+            },
+            {
+              "description": "B",
+              "value": 2
+            },
+            {
+              "description": "C",
+              "value": 3
+            },
+            {
+              "description": "D",
+              "value": 4
+            },
+            {
+              "description": "E",
+              "value": 5
+            },
+            {
+              "description": "F",
+              "value": 6
+            },
+            {
+              "description": "G",
+              "value": 7
+            },
+            {
+              "description": "H",
+              "value": 8
+            },
+            {
+              "description": "I",
+              "value": 9
+            },
+            {
+              "description": "J",
+              "value": 10
+            },
+            {
+              "description": "K",
+              "value": 11
+            },
+            {
+              "description": "L",
+              "value": 12
+            },
+            {
+              "description": "NR",
+              "value": 13
+            },
+            {
+              "description": "M",
+              "value": 14
+            }
+          ],
+          "rdSapEnumName": "ConstructionDateCode"
+        },
+        "insulation": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "None",
+              "value": 1
+            },
+            {
+              "description": "FlatCeilingOnly",
+              "value": 2
+            },
+            {
+              "description": "AllElements50mm",
+              "value": 3
+            },
+            {
+              "description": "AllElements100mm",
+              "value": 4
+            },
+            {
+              "description": "AllElements150mm",
+              "value": 5
+            },
+            {
+              "description": "AllElementsAsBuilt",
+              "value": 6
+            },
+            {
+              "description": "InsulationThicknessUnknown",
+              "value": 7
+            },
+            {
+              "description": "NotDetermined",
+              "value": 8
+            },
+            {
+              "description": "AsBuilt",
+              "value": 9
+            }
+          ],
+          "rdSapEnumName": "SAPRoomInRoofInsulationCode"
+        },
+        "roofRoomConnected": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Y",
+              "value": true
+            },
+            {
+              "description": "N",
+              "value": false
+            }
+          ],
+          "rdSapEnumName": "Flag"
+        },
+        "roofInsulationThickness": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Unknown",
+              "value": 0
+            },
+            {
+              "description": "None",
+              "value": 1
+            },
+            {
+              "description": "mm12",
+              "value": 2
+            },
+            {
+              "description": "mm25",
+              "value": 3
+            },
+            {
+              "description": "mm50",
+              "value": 4
+            },
+            {
+              "description": "mm75",
+              "value": 5
+            },
+            {
+              "description": "mm100",
+              "value": 6
+            },
+            {
+              "description": "mm150",
+              "value": 7
+            },
+            {
+              "description": "mm200",
+              "value": 8
+            },
+            {
+              "description": "mm250",
+              "value": 9
+            },
+            {
+              "description": "mm270",
+              "value": 10
+            },
+            {
+              "description": "mm300",
+              "value": 11
+            },
+            {
+              "description": "mm350",
+              "value": 12
+            },
+            {
+              "description": "mm400",
+              "value": 13
+            },
+            {
+              "description": "AB",
+              "value": 14
+            },
+            {
+              "description": "mm125",
+              "value": 15
+            },
+            {
+              "description": "mm175",
+              "value": 16
+            },
+            {
+              "description": "mm225",
+              "value": 17
+            },
+            {
+              "description": "NotDefined",
+              "value": 99
+            }
+          ],
+          "rdSapEnumName": "RoofInsulationThicknessCode"
+        },
+        "detailsEntered": {
+          "required": false,
+          "validValues": [
+            {
+              "description": "Y",
+              "value": true
+            },
+            {
+              "description": "N",
+              "value": false
+            }
+          ],
+          "rdSapEnumName": "Flag"
+        },
+        "studWall": {
+          "area1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          },
+          "area2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          }
+        },
+        "slope": {
+          "area1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          },
+          "area2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          }
+        },
+        "gableWall": {
+          "area1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue1": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          },
+          "area2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "uValue2": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10",
+            "isWholeNumber": false
+          }
+        }
+      },
+      "storeyDimensions": {
+        "type": "Array",
+        "required": true,
+        "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+        "itemSchema": {
+          "floor": {
+            "required": true,
+            "additionalNotes": "This is a required field as it denotes the index for a sub-property.",
+            "validValues": [
+              {
+                "description": "LowestOccupied",
+                "value": 0
+              },
+              {
+                "description": "LowestPlus1",
+                "value": 1
+              },
+              {
+                "description": "LowestPlus2",
+                "value": 2
+              },
+              {
+                "description": "LowestPlus3",
+                "value": 3
+              },
+              {
+                "description": "LowestPlus4",
+                "value": 4
+              },
+              {
+                "description": "LowestPlus5",
+                "value": 5
+              },
+              {
+                "description": "LowestPlus6",
+                "value": 6
+              },
+              {
+                "description": "NotRecorded",
+                "value": 7
+              },
+              {
+                "description": "RoofRooms",
+                "value": 99
+              }
+            ],
+            "rdSapEnumName": "SAPStoreyFloorCode"
+          },
+          "heatLossPerimeter": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "roomHeight": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "totalFloorArea": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "partyWallLength": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          }
+        }
+      }
+    }
+  },
+  "specialFeatures": {
+    "type": "Array",
+    "required": false,
+    "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+    "itemSchema": {
+      "indexNumber": {
+        "type": "Number",
+        "required": true,
+        "validRange": "0 to 32767",
+        "isWholeNumber": true,
+        "additionalNotes": "This is a required field as it denotes the index for a sub-property."
+      },
+      "description": {
+        "type": "String",
+        "required": true
+      },
+      "type": {
+        "required": false,
+        "validValues": [
+          {
+            "description": "Emissions",
+            "value": 1
+          },
+          {
+            "description": "Energy",
+            "value": 2
+          }
+        ],
+        "rdSapEnumName": "ParitySpecialFeatureType"
+      },
+      "emissions": {
+        "created": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 2147483647",
+          "isWholeNumber": true
+        },
+        "saved": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 2147483647",
+          "isWholeNumber": true
+        }
+      },
+      "energy": {
+        "savedOrGenerated": {
+          "type": "Number",
+          "required": false,
+          "validRange": "-10000 to 10000",
+          "isWholeNumber": false
+        },
+        "savedOrGeneratedFuel": {
+          "required": false,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "NoHeatingOrHotWater",
+              "value": 0
+            },
+            {
+              "description": "GasBottledLPG",
+              "value": 3
+            },
+            {
+              "description": "Anthracite",
+              "value": 5
+            },
+            {
+              "description": "WoodLogs",
+              "value": 6
+            },
+            {
+              "description": "BulkWoodPellets",
+              "value": 7
+            },
+            {
+              "description": "WoodChips",
+              "value": 8
+            },
+            {
+              "description": "DualFuelMineralWood",
+              "value": 9
+            },
+            {
+              "description": "SmokelessCoal",
+              "value": 15
+            },
+            {
+              "description": "WoodPelletsInBags",
+              "value": 16
+            },
+            {
+              "description": "LPGSpecialCondition",
+              "value": 17
+            },
+            {
+              "description": "B30KNotCommunity",
+              "value": 18
+            },
+            {
+              "description": "Bioethanol",
+              "value": 19
+            },
+            {
+              "description": "MainsGasCommunity",
+              "value": 20
+            },
+            {
+              "description": "LPGCommunity",
+              "value": 21
+            },
+            {
+              "description": "OilCommunity",
+              "value": 22
+            },
+            {
+              "description": "B30DCommunity",
+              "value": 23
+            },
+            {
+              "description": "CoalCommunity",
+              "value": 24
+            },
+            {
+              "description": "ElectricityCommunity",
+              "value": 25
+            },
+            {
+              "description": "MainsGasNotCommunity",
+              "value": 26
+            },
+            {
+              "description": "LPGNotCommunity",
+              "value": 27
+            },
+            {
+              "description": "OilNotCommunity",
+              "value": 28
+            },
+            {
+              "description": "ElectricityNotCommunity",
+              "value": 29
+            },
+            {
+              "description": "WasteCombustionCommunity",
+              "value": 30
+            },
+            {
+              "description": "BiomassCommunity",
+              "value": 31
+            },
+            {
+              "description": "BiogasCommunity",
+              "value": 32
+            },
+            {
+              "description": "HouseCoalNotCommunity",
+              "value": 33
+            },
+            {
+              "description": "BiodieselFromAnyBiomass",
+              "value": 34
+            },
+            {
+              "description": "BiodieselFromUsedCookingOilOnly",
+              "value": 35
+            },
+            {
+              "description": "RapeseedOil",
+              "value": 36
+            },
+            {
+              "description": "MineralOrLiquidBiofuel",
+              "value": 37
+            },
+            {
+              "description": "GasBottledLPGSecondaryHeating",
+              "value": 38
+            },
+            {
+              "description": "BiogasNotCommunity",
+              "value": 51
+            },
+            {
+              "description": "HeatFromBoilersCanUseMineralOilOrBiodieselCommunity",
+              "value": 56
+            },
+            {
+              "description": "HeatFromBoilersUsingBiodieselFromAnySourceCommunity",
+              "value": 57
+            },
+            {
+              "description": "BiodieselFromVegetableOilOnlyCommunity",
+              "value": 58
+            },
+            {
+              "description": "FromHeatNetworkData",
+              "value": 99
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "HeatingFuelTypeCode"
+        },
+        "used": {
+          "type": "Number",
+          "required": false,
+          "validRange": "0 to 10000",
+          "isWholeNumber": false
+        },
+        "usedFuel": {
+          "required": false,
+          "additionalNotes": "EMPTY is a fallback option and is not intended as a valid submission value.",
+          "validValues": [
+            {
+              "description": "NoHeatingOrHotWater",
+              "value": 0
+            },
+            {
+              "description": "GasBottledLPG",
+              "value": 3
+            },
+            {
+              "description": "Anthracite",
+              "value": 5
+            },
+            {
+              "description": "WoodLogs",
+              "value": 6
+            },
+            {
+              "description": "BulkWoodPellets",
+              "value": 7
+            },
+            {
+              "description": "WoodChips",
+              "value": 8
+            },
+            {
+              "description": "DualFuelMineralWood",
+              "value": 9
+            },
+            {
+              "description": "SmokelessCoal",
+              "value": 15
+            },
+            {
+              "description": "WoodPelletsInBags",
+              "value": 16
+            },
+            {
+              "description": "LPGSpecialCondition",
+              "value": 17
+            },
+            {
+              "description": "B30KNotCommunity",
+              "value": 18
+            },
+            {
+              "description": "Bioethanol",
+              "value": 19
+            },
+            {
+              "description": "MainsGasCommunity",
+              "value": 20
+            },
+            {
+              "description": "LPGCommunity",
+              "value": 21
+            },
+            {
+              "description": "OilCommunity",
+              "value": 22
+            },
+            {
+              "description": "B30DCommunity",
+              "value": 23
+            },
+            {
+              "description": "CoalCommunity",
+              "value": 24
+            },
+            {
+              "description": "ElectricityCommunity",
+              "value": 25
+            },
+            {
+              "description": "MainsGasNotCommunity",
+              "value": 26
+            },
+            {
+              "description": "LPGNotCommunity",
+              "value": 27
+            },
+            {
+              "description": "OilNotCommunity",
+              "value": 28
+            },
+            {
+              "description": "ElectricityNotCommunity",
+              "value": 29
+            },
+            {
+              "description": "WasteCombustionCommunity",
+              "value": 30
+            },
+            {
+              "description": "BiomassCommunity",
+              "value": 31
+            },
+            {
+              "description": "BiogasCommunity",
+              "value": 32
+            },
+            {
+              "description": "HouseCoalNotCommunity",
+              "value": 33
+            },
+            {
+              "description": "BiodieselFromAnyBiomass",
+              "value": 34
+            },
+            {
+              "description": "BiodieselFromUsedCookingOilOnly",
+              "value": 35
+            },
+            {
+              "description": "RapeseedOil",
+              "value": 36
+            },
+            {
+              "description": "MineralOrLiquidBiofuel",
+              "value": 37
+            },
+            {
+              "description": "GasBottledLPGSecondaryHeating",
+              "value": 38
+            },
+            {
+              "description": "BiogasNotCommunity",
+              "value": 51
+            },
+            {
+              "description": "HeatFromBoilersCanUseMineralOilOrBiodieselCommunity",
+              "value": 56
+            },
+            {
+              "description": "HeatFromBoilersUsingBiodieselFromAnySourceCommunity",
+              "value": 57
+            },
+            {
+              "description": "BiodieselFromVegetableOilOnlyCommunity",
+              "value": 58
+            },
+            {
+              "description": "FromHeatNetworkData",
+              "value": 99
+            },
+            {
+              "description": "EMPTY",
+              "value": 999
+            }
+          ],
+          "rdSapEnumName": "HeatingFuelTypeCode"
+        },
+        "airChangeRate": {
+          "jan": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "feb": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "mar": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "apr": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "may": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "jun": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "jul": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "aug": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "sep": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "oct": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "nov": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          },
+          "dec": {
+            "type": "Number",
+            "required": false,
+            "validRange": "0 to 10000",
+            "isWholeNumber": false
+          }
+        }
+      }
+    }
+  },
+  "batteries": {
+    "type": "Array",
+    "required": false,
+    "additionalNotes": "This property is an array of the object defined in `itemSchema`.",
+    "itemSchema": {
+      "id": {
+        "type": "Number",
+        "required": true,
+        "validRange": "-2147483648 to 2147483647",
+        "isWholeNumber": true
+      },
+      "capacity": {
+        "type": "Number",
+        "required": false,
+        "validRange": "-79228162514264337593543950335 to 79228162514264337593543950335",
+        "isWholeNumber": false
+      }
+    }
+  }
+}
