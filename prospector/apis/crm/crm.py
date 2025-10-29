@@ -210,6 +210,7 @@ def map_crm(answers: models.Answers) -> dict:
         # Metadata
         "statuscode": STATUSCODE_SUBMITTED,
         "statecode": STATECODE_ACTIVE,
+        "cr51a_source": 106870000, # Sets the source field to retrofit eligibility tool
         # CRM Links / Metadata
         "pcc_name": str(answers.uuid),
         # Domestic Property
