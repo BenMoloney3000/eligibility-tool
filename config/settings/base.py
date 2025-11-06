@@ -300,6 +300,7 @@ EPC_API_KEY = env.str("EPC_API_KEY", default="")
 POSTCODER = env.str("POSTCODER", default="DATA8")
 DATA8_API_KEY = env.str("DATA8_API_KEY", default="")
 DATA8_LICENSE = env.str("DATA8_LICENSE", default="FreeTrial")
+POSTCODER_API_KEY = env.str("POSTCODER_API_KEY", default="")
 MAIL_FROM = env.str("EMAIL_FROM", default="futurefit@plymouthenergycommunity.com")
 DEFAULT_FROM_EMAIL = MAIL_FROM
 SERVER_EMAIL = DEFAULT_FROM_EMAIL

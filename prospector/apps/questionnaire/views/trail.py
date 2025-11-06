@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.generic.base import TemplateView
 
 from . import abstract as abstract_views
-from prospector.apis.data8 import get_for_postcode
+from prospector.apis.postcoder import get_for_postcode
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import forms as questionnaire_forms
 from prospector.apps.questionnaire import services
