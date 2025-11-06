@@ -38,11 +38,11 @@ def _process_results(results: list) -> List[AddressData]:
                 line_1=row.get('addressline1', ''),
                 line_2=row.get('addressline2', ''),
                 line_3=row.get('addressline3', ''),
-                post_town=row.get('posttown', ''),
+                post_town=row.get('townname', ''),
                 district=row.get('dependentlocality', ''),
                 postcode=row.get('postcode', ''),
-                uprn=row.get('uniquedeliverypointreferencenumber', ''),
-                id=f"addr-{row.get('addresskey', '')}",
+                uprn=row.get('uprn', ''),
+                id=f"addr-{row.get('uprn', '')}",
             )
         )
 
@@ -70,13 +70,13 @@ def get_for_postcode(raw_postcode: str) -> Optional[List[AddressData]]:
         return []
 
     if settings.POSTCODER_API_KEY == 'DUMMY':
-        # Read in an example response file (for PL1 5PD) to allow local testing without using API credits.
+        # Read in an example response file (for PL2 1BX) to allow local testing without using API credits.
         with open(path.join(settings.SRC_DIR, 'testutils', 'example_postcoder_response.json')) as f:
             dummy_response = f.read()
         data = json.loads(dummy_response)
 
     else:
-        url = f"{BASE_URL}{settings.POSTCODER_API_KEY}/address/uk/{urllib.parse.quote_plus(postcode)}?lines=3&addtags=udprn,addresskey"
+        url = f"{BASE_URL}{settings.POSTCODER_API_KEY}/addressbase/{urllib.parse.quote_plus(postcode)}?lines=3&addtags=uprn&postcodeonly=true"
 
         try:
             with requests.Session() as s:
