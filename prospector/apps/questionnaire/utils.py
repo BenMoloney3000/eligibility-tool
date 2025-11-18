@@ -9,6 +9,8 @@ from . import enums
 
 logger = logging.getLogger(__name__)
 
+MAX_64_BIT_INT = 9223372036854775807
+MIN_64_BIT_INT = -9223372036854775808
 
 def generate_id():
     """
@@ -76,7 +78,7 @@ def get_bill_impact(measure: enums.PossibleMeasures) -> str:
 
 def get_whlg_eligible_postcodes():
     path = "external_data/WHLG-eligible-postcodes.csv"
-    
+
     if not os.path.exists(path):
         print("⚠️ Skipping postcode loading: file not found")
         return []
@@ -90,3 +92,15 @@ def get_whlg_eligible_postcodes():
             except Exception:
                 raise CommandError("Operation aborted due to data error.")
     return postcodes
+
+
+def is_valid_64_bit_integer(data):
+    try:
+        number = int(data)
+    except ValueError:
+        return False
+
+    if number > MAX_64_BIT_INT or number < MIN_64_BIT_INT:
+        return False
+
+    return True

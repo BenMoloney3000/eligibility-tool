@@ -558,12 +558,20 @@ class HouseholdIncome(abstract_views.SingleQuestion):
 
     @staticmethod
     def validate_answer(data):
+        filtered_number = ''
         for character in data:
             if character not in "£," and not character.isdigit():
                 raise ValidationError(
                     "It seems that you used one or more invalid characters."
                     " Please enter a value represented by an integer number."
                 )
+            filtered_number += character
+
+        if not utils.is_valid_64_bit_integer(filtered_number):
+            raise ValidationError(
+                "It seems that you used a value that is out of range."
+                " Please enter a value represented by an integer number."
+            )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -601,12 +609,20 @@ target='_blank' rel='noopener noreferrer'>MoneySavingExpert.com</a> "
 
     @staticmethod
     def validate_answer(data):
+        filtered_number = ''
         for character in data:
             if character not in "£," and not character.isdigit():
                 raise ValidationError(
                     "It seems that you used one or more invalid characters."
                     " Please enter a value represented by an integer number."
                 )
+            filtered_number += character
+
+        if not utils.is_valid_64_bit_integer(filtered_number):
+            raise ValidationError(
+                "It seems that you used a value that is out of range."
+                " Please enter a value represented by an integer number."
+            )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -644,12 +660,20 @@ class HousingCosts(abstract_views.SingleQuestion):
 
     @staticmethod
     def validate_answer(data):
+        filtered_number = ''
         for character in data:
             if character not in "£," and not character.isdigit():
                 raise ValidationError(
                     "It seems that you used one or more invalid characters."
                     " Please enter a value represented by an integer number."
                 )
+            filtered_number += character
+
+        if not utils.is_valid_64_bit_integer(filtered_number):
+            raise ValidationError(
+                "It seems that you used a value that is out of range."
+                " Please enter a value represented by an integer number."
+            )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

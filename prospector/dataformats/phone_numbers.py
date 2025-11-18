@@ -4,6 +4,7 @@
 # Original Java code is Copyright (C) 2009-2015 The Libphonenumber Authors.
 import re
 from collections import namedtuple
+from django.utils import html
 
 
 class ParseError(Exception):
@@ -53,7 +54,7 @@ def normalise(num: str) -> str:
             pass
 
         else:
-            raise ParseError(f"'{digit}' not allowed in a phone number")
+            raise ParseError(f"'{html.escape(digit)}' not allowed in a phone number")
 
     # International & national dialling codes
     if parsed.startswith("00"):
