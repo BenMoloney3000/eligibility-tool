@@ -13,6 +13,15 @@ class TestWHLGEligibility(TestCase):
 
         assert answers.is_whlg_prs_sap_f_or_g is True
 
+    def test_income_threshold_includes_36k(self):
+        answers = factories.AnswersFactory(
+            tenure=enums.Tenure.RENTED_PRIVATE,
+            sap_band=enums.EfficiencyBand.E,
+            household_income=36000,
+        )
+
+        assert answers.is_whlg_eligible is True
+
     def test_whlg_all_eligibility_routes(self):
         answers = factories.AnswersFactory(
             tenure=enums.Tenure.OWNER_OCCUPIED,
@@ -29,7 +38,7 @@ class TestWHLGEligibility(TestCase):
         expected = {
             "Pathway 1: IMD:ID 1-2",
             "Pathway 2: Means-Tested Benefits",
-            "Pathway 3: Income < £36k",
+            "Pathway 3: Income ≤ £36k",
             "Pathway 3: AHC Equalisation",
         }
 
