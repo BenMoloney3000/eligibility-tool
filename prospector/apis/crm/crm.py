@@ -653,10 +653,6 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_past_means_tested_benefits": answers.past_means_tested_benefits,
         # Potential schemes eligibility fields:
         "cr51a_bus": answers.is_bus_eligible,
-        "cr51a_connectedforwarmth": answers.is_connected_for_warmth_eligible,
-        "cr51a_eco4": answers.is_eco4_eligible,
-        "cr51a_eco4flex": answers.is_eco4_flex_eligible,
-        "cr51a_gbis": answers.is_gbis_eligible,
         "cr51a_whlg": answers.is_whlg_eligible,
         "cr51a_whlg_prs_fg": answers.is_whlg_prs_sap_f_or_g,
         # Potential measures' fields:
