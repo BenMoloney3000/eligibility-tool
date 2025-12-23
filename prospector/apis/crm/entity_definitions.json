@@ -376,74 +376,6 @@
             "SchemaName": "cr51a_cavity_wall_insulation"
         },
         {
-            "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Picklist",
-            "AttributeTypeName": {
-                "Value": "PicklistType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "Child Benefit Claimant Single or Couple",
-                        "LanguageCode": 1033,
-                        "MetadataId": "89c24b9c-421d-49d8-9759-33b7ac7185d7"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "Child Benefit Claimant Single or Couple",
-                    "LanguageCode": 1033,
-                    "MetadataId": "89c24b9c-421d-49d8-9759-33b7ac7185d7"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_childbenefitclaimantsingleorcouple",
-            "MetadataId": "f976508e-5c89-ee11-8179-000d3aaacd20",
-            "SchemaName": "cr51a_ChildBenefitClaimantSingleorCouple"
-        },
-        {
-            "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Integer",
-            "AttributeTypeName": {
-                "Value": "IntegerType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "Child Benefit Qualifying Children",
-                        "LanguageCode": 1033,
-                        "MetadataId": "3e1dd2ad-4fd5-475e-ab8e-2dfcfc357f01"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "Child Benefit Qualifying Children",
-                    "LanguageCode": 1033,
-                    "MetadataId": "3e1dd2ad-4fd5-475e-ab8e-2dfcfc357f01"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_childbenefitqualifyingchildren",
-            "MetadataId": "fcc77ef9-5c89-ee11-8179-000d3aaacd20",
-            "SchemaName": "cr51a_ChildBenefitQualifyingChildren"
-        },
-        {
             "@odata.type": "#Microsoft.Dynamics.CRM.IntegerAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Integer",
@@ -476,40 +408,6 @@
             "LogicalName": "cr51a_children",
             "MetadataId": "ffced2dd-5a89-ee11-8179-000d3abd864b",
             "SchemaName": "cr51a_Children"
-        },
-        {
-            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Boolean",
-            "AttributeTypeName": {
-                "Value": "BooleanType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "Children Eligible for Free School Meals",
-                        "LanguageCode": 1033,
-                        "MetadataId": "1cc3e104-c405-406b-9cd6-451a08577018"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "Children Eligible for Free School Meals",
-                    "LanguageCode": 1033,
-                    "MetadataId": "1cc3e104-c405-406b-9cd6-451a08577018"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_childreneligibleforfreeschoolmeals",
-            "MetadataId": "0a535056-5989-ee11-8179-000d3abd864b",
-            "SchemaName": "cr51a_ChildrenEligibleforFreeSchoolMeals"
         },
         {
             "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
@@ -680,40 +578,6 @@
             "LogicalName": "cr51a_counciltaxbracket",
             "MetadataId": "c839ba73-5089-ee11-8179-000d3aabaa34",
             "SchemaName": "cr51a_CouncilTaxBracket"
-        },
-        {
-            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Boolean",
-            "AttributeTypeName": {
-                "Value": "BooleanType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "Council Tax Reduction Entitlement",
-                        "LanguageCode": 1033,
-                        "MetadataId": "0596a889-fb76-4fe6-b584-9291834eddc3"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "Council Tax Reduction Entitlement",
-                    "LanguageCode": 1033,
-                    "MetadataId": "0596a889-fb76-4fe6-b584-9291834eddc3"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_counciltaxreductionentitlement",
-            "MetadataId": "b8afd228-5a89-ee11-8179-000d3aaacd20",
-            "SchemaName": "cr51a_CouncilTaxReductionEntitlement"
         },
         {
             "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
@@ -1425,40 +1289,6 @@
             "IsPrimaryId": false,
             "IsRequiredForForm": false,
             "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_past_means_tested_benefits",
-            "MetadataId": "1540ea50-10af-ee11-a569-000d3aaacd20",
-            "SchemaName": "cr51a_past_means_tested_benefits"
-        },
-        {
-            "@odata.type": "#Microsoft.Dynamics.CRM.MultiSelectPicklistAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Virtual",
-            "AttributeTypeName": {
-                "Value": "MultiSelectPicklistType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "zzzPotential Measures",
-                        "LanguageCode": 1033,
-                        "MetadataId": "674fc7b9-c65f-47ed-afd7-7ba58e5f2ae1"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "zzzPotential Measures",
-                    "LanguageCode": 1033,
-                    "MetadataId": "674fc7b9-c65f-47ed-afd7-7ba58e5f2ae1"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
             "LogicalName": "cr51a_potentialmeasures",
             "MetadataId": "119d2e28-e5ae-ee11-a569-000d3aaacd20",
             "SchemaName": "cr51a_PotentialMeasures"
@@ -1564,40 +1394,6 @@
             "LogicalName": "cr51a_realisticfuelbill",
             "MetadataId": "c7fdb2b1-0f6d-ee11-9ae7-000d3aabaa34",
             "SchemaName": "cr51a_RealisticFuelBill"
-        },
-        {
-            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Boolean",
-            "AttributeTypeName": {
-                "Value": "BooleanType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "Receives Child Benefit",
-                        "LanguageCode": 1033,
-                        "MetadataId": "7645ebab-0625-42c4-b610-17b27c9d5311"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "Receives Child Benefit",
-                    "LanguageCode": 1033,
-                    "MetadataId": "7645ebab-0625-42c4-b610-17b27c9d5311"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_receiveschildbenefit",
-            "MetadataId": "8b48c4aa-5b89-ee11-8179-000d3aaacd20",
-            "SchemaName": "cr51a_ReceivesChildBenefit"
         },
         {
             "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
