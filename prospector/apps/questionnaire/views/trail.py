@@ -162,7 +162,7 @@ class RespondentAddress(abstract_views.Question):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
-    next = "WillToContribute"
+    next = "PropertyPostcode"
     percent_complete = 27
     prefilled_addresses = {}
 
@@ -232,18 +232,6 @@ class RespondentAddress(abstract_views.Question):
           (would still have to check for a change in identifier before overwriting address?)
         - hide address selector if address fields are populated
         """
-
-
-class WillToContribute(abstract_views.SingleQuestion):
-    title = "Householder consent"
-    answer_field = "willing_to_contribute"
-    type_ = abstract_views.QuestionType.YesNo
-    question = (
-        "Would you be willing to contribute 33% of the cost toward retrofitting "
-        "the home if your application to a grant scheme is successful?"
-    )
-    percent_complete = 33
-    next = "PropertyPostcode"
 
 
 class PropertyPostcode(abstract_views.SingleQuestion):
