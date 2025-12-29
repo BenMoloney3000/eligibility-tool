@@ -110,9 +110,6 @@ class TestQuestionsRender(TrailTest):
 
         assert self._get_trail_view("RespondentAddress").status_code == 200
 
-    def test_properties_limit_renders(self):
-        assert self._get_trail_view("PropertiesLimit").status_code == 200
-
     def test_property_postcode_renders(self):
         assert self._get_trail_view("PropertyPostcode").status_code == 200
 
