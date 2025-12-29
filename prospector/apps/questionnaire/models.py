@@ -506,33 +506,6 @@ class Answers(models.Model):
         return self.household_income <= 36000
 
     @property
-    def is_income_under_or_equal_to_max_for_eco4_flex(self) -> Optional[bool]:
-        if self.children is not None and self.seniors is None:
-            dependents = self.children
-        elif self.seniors is not None and self.children is None:
-            dependents = self.seniors
-        elif self.children is None and self.seniors is None:
-            dependents = None
-        else:
-            dependents = self.children + self.seniors
-
-        if self.household_income is None:
-            return None
-        elif self.adults is None:
-            return None
-        elif self.adults >= 2:
-            if dependents == 3:
-                return self.household_income <= 32000
-            elif dependents == 4:
-                return self.household_income <= 36000
-            elif dependents >= 5:
-                return self.household_income <= 40000
-        elif self.adults == 1:
-            if dependents >= 5:
-                return self.household_income <= 31600
-        return False
-
-    @property
     def is_income_under_or_equal_to_max_for_whlg(self) -> Optional[bool]:
         if self.children is not None and self.seniors is None:
             dependents = self.children
@@ -741,10 +714,6 @@ class Answers(models.Model):
     def is_any_scheme_eligible(self) -> Optional[bool]:
         return (
             self.is_bus_eligible
-            or self.is_connected_for_warmth_eligible
-            or self.is_eco4_eligible
-            or self.is_eco4_flex_eligible
-            or self.is_gbis_eligible
             or self.is_whlg_eligible
         )
 

@@ -771,11 +771,6 @@ class RecommendedMeasures(abstract_views.Question):
         context["not_in_mains_gas"] = self.answers.is_property_not_heated_by_mains_gas
         context["any_scheme_eligible"] = self.answers.is_any_scheme_eligible
         context["bus_eligibility"] = self.answers.is_bus_eligible
-        context["eco4_eligibility"] = self.answers.is_eco4_eligible
-        context["eco4flex_eligibility"] = self.answers.is_eco4_flex_eligible
-        context["eco4_condition_1"] = self.answers.if_off_mains_gas_and_given_sap_score
-        context["eco4_condition_2"] = self.answers.sap_band == enums.EfficiencyBand.D
-        context["gbis_eligibility"] = self.answers.is_gbis_eligible
         context["whlg_eligibility"] = self.answers.is_whlg_eligible
         return context
 
