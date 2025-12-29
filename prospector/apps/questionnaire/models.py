@@ -358,12 +358,6 @@ class Answers(models.Model):
         blank=True,
         verbose_name="No more than 4 properties in landlord's portfolio",
     )
-    willing_to_contribute = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Landlord be willing to contribute 33% of all spending",
-    )
-
     advice_needed_warm = models.BooleanField(
         null=True,
         blank=True,
@@ -500,13 +494,6 @@ class Answers(models.Model):
     # rather assuming landlord's positive answer
     def does_landlord_own_no_more_than_4_properties(self) -> bool:
         return self.nmt4properties in [None, True]
-
-    @property
-    # Returns True even if value of willing_to_contribute is None
-    # because when respond by tenant we do not ask this straightforward
-    # rather assuming landlord's positive answer
-    def will_landlord_contribute(self) -> bool:
-        return self.willing_to_contribute in [None, True]
 
     @property
     def is_property_among_whlg_eligible_postcodes(self) -> bool:
