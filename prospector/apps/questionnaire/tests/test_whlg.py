@@ -43,3 +43,16 @@ class TestWHLGEligibility(TestCase):
         }
 
         assert set(answers.whlg_all_eligibility_routes) == expected
+
+    def test_whlg_routes_exclude_eco4_flex_route_2(self):
+        answers = factories.AnswersFactory(
+            tenure=enums.Tenure.OWNER_OCCUPIED,
+            sap_band=enums.EfficiencyBand.D,
+            household_income=40000,
+            means_tested_benefits=False,
+            vulnerabilities_general=True,
+            multiple_deprivation_index=4,
+        )
+
+        assert answers.is_whlg_eligible is False
+        assert "Pathway2: ECO Flex Route 2" not in answers.whlg_all_eligibility_routes

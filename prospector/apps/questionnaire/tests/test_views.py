@@ -146,21 +146,6 @@ class TestQuestionsRender(TrailTest):
     def test_means_tested_benefits_renders(self):
         assert self._get_trail_view("MeansTestedBenefits").status_code == 200
 
-    def test_past_means_tested_benefits_renders(self):
-        assert self._get_trail_view("PastMeansTestedBenefits").status_code == 200
-
-    def test_disability_benefits_renders(self):
-        assert self._get_trail_view("DisabilityBenefits").status_code == 200
-
-    def test_child_benefit_renders(self):
-        assert self._get_trail_view("ChildBenefit").status_code == 200
-
-    def test_child_benefit_claimant_type_renders(self):
-        assert self._get_trail_view("ChildBenefitClaimantType").status_code == 200
-
-    def test_child_benefit_number_renders(self):
-        assert self._get_trail_view("ChildBenefitNumber").status_code == 200
-
     def test_vulnerabilities_general_renders(self):
         assert self._get_trail_view("VulnerabilitiesGeneral").status_code == 200
 
@@ -172,12 +157,6 @@ class TestQuestionsRender(TrailTest):
 
     def test_housing_costs_renders(self):
         assert self._get_trail_view("HousingCosts").status_code == 200
-
-    def test_council_tax_reduction_renders(self):
-        assert self._get_trail_view("CouncilTaxReduction").status_code == 200
-
-    def test_free_school_meals_eligibility_renders(self):
-        assert self._get_trail_view("FreeSchoolMealsEligibility").status_code == 200
 
     def test_energy_advices_renders(self):
         assert self._get_trail_view("EnergyAdvices").status_code == 200

@@ -46,11 +46,6 @@ urlpatterns = [
         views.MeansTestedBenefits.as_view(),
         name="means-tested-benefits",
     ),
-    path(
-        "past-means-tested-benefits",
-        views.PastMeansTestedBenefits.as_view(),
-        name="past-means-tested-benefits",
-    ),
     path("income", views.HouseholdIncome.as_view(), name="household-income"),
     path(
         "after-tax-income",
@@ -59,37 +54,11 @@ urlpatterns = [
     ),
     path("housing-costs", views.HousingCosts.as_view(), name="housing-costs"),
     path(
-        "disability-benefits",
-        views.DisabilityBenefits.as_view(),
-        name="disability-benefits",
-    ),
-    path("child-benefit", views.ChildBenefit.as_view(), name="child-benefit"),
-    path(
-        "child-benefit-number",
-        views.ChildBenefitNumber.as_view(),
-        name="child-benefit-number",
-    ),
-    path(
-        "child-benefit-claimant-type",
-        views.ChildBenefitClaimantType.as_view(),
-        name="child-benefit-claimant-type",
-    ),
-    path(
-        "free-school-meals-eligibility",
-        views.FreeSchoolMealsEligibility.as_view(),
-        name="free-school-meals-eligibility",
-    ),
-    path(
         "vulnerabilities-general",
         views.VulnerabilitiesGeneral.as_view(),
         name="vulnerabilities-general",
     ),
     path("vulnerabilities", views.Vulnerabilities.as_view(), name="vulnerabilities"),
-    path(
-        "council-tax-reduction",
-        views.CouncilTaxReduction.as_view(),
-        name="council-tax-reduction",
-    ),
     path("answers-summary", views.AnswersSummary.as_view(), name="answers-summary"),
     path("energy-advices", views.EnergyAdvices.as_view(), name="energy-advices"),
     path(

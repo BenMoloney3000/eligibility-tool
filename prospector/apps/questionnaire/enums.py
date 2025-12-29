@@ -1,11 +1,6 @@
 from django.db import models
 
 
-class ChildBenefitClaimantType(models.TextChoices):
-    SINGLE = "SINGLE", "Single claimant"
-    JOINT = "JOINT", "Member of a couple"
-
-
 class ControlsAdequacy(models.TextChoices):
     OPTIMAL = "Optimal", "Optimal"
     SUB_OPTIMAL = "Sub Optimal", "Sub optimal"

@@ -489,16 +489,6 @@ def map_crm(answers: models.Answers) -> dict:
                 },
             )
         ),
-        "cr51a_childbenefitclaimantsingleorcouple": (
-            option_value_mapping(
-                "cr51a_childbenefitclaimantsingleorcouple",
-                answers.child_benefit_claimant_type,
-                {
-                    enums.ChildBenefitClaimantType.SINGLE: "Single",
-                    enums.ChildBenefitClaimantType.JOINT: "Couple",
-                },
-            )
-        ),
         "cr51a_counciltaxbracket": None,  # Leave blank until council tax data issue will be sorted
         "cr51a_propertyattachment": (
             option_value_mapping(
@@ -561,10 +551,7 @@ def map_crm(answers: models.Answers) -> dict:
         ),
         "cr51a_65andover": answers.seniors,
         "cr51a_adults": answers.adults,
-        "cr51a_childbenefitqualifyingchildren": answers.child_benefit_number,
         "cr51a_children": answers.children,
-        "cr51a_childreneligibleforfreeschoolmeals": answers.free_school_meals_eligibility,
-        "cr51a_counciltaxreductionentitlement": answers.council_tax_reduction,
         # Keep future schemes consent for backwards compatibility with Dynamics
         "cr51a_consented_callback": answers.consented_callback,
         "cr51a_consented_future_schemes": answers.consented_future_schemes,
@@ -598,7 +585,6 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_potentialmeasures": None,
         "cr51a_potentialschemeeligibility": None,
         "cr51a_realisticfuelbill": answers.realistic_fuel_bill,
-        "cr51a_receiveschildbenefit": answers.child_benefit,
         "cr51a_receivesmeanstestedbenefits": answers.means_tested_benefits,
         "cr51a_respondent_comments": answers.respondent_comments,
         "cr51a_respondent_relationship_to_property": (
@@ -650,7 +636,6 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_advice_needed_bills": answers.advice_needed_bills,
         "cr51a_advice_needed_supplier": answers.advice_needed_supplier,
         "cr51a_advice_needed_from_team": answers.advice_needed_from_team,
-        "cr51a_past_means_tested_benefits": answers.past_means_tested_benefits,
         # Potential schemes eligibility fields:
         "cr51a_bus": answers.is_bus_eligible,
         "cr51a_connectedforwarmth": answers.is_connected_for_warmth_eligible,
