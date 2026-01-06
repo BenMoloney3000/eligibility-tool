@@ -162,7 +162,7 @@ class RespondentAddress(abstract_views.Question):
     title = "Your address"
     form_class = questionnaire_forms.RespondentAddress
     template_name = "questionnaire/respondent_address.html"
-    next = "WillToContribute"
+    next = "PropertyPostcode"
     percent_complete = 27
     prefilled_addresses = {}
 
@@ -232,18 +232,6 @@ class RespondentAddress(abstract_views.Question):
           (would still have to check for a change in identifier before overwriting address?)
         - hide address selector if address fields are populated
         """
-
-
-class WillToContribute(abstract_views.SingleQuestion):
-    title = "Householder consent"
-    answer_field = "willing_to_contribute"
-    type_ = abstract_views.QuestionType.YesNo
-    question = (
-        "Would you be willing to contribute 33% of the cost toward retrofitting "
-        "the home if your application to a grant scheme is successful?"
-    )
-    percent_complete = 33
-    next = "PropertyPostcode"
 
 
 class PropertyPostcode(abstract_views.SingleQuestion):
@@ -437,70 +425,7 @@ class MeansTestedBenefits(abstract_views.SingleQuestion):
     percent_complete = 54
 
     def get_next(self):
-        if self.answers.means_tested_benefits:
-            return "DisabilityBenefits"
-        else:
-            return "PastMeansTestedBenefits"
-
-
-class PastMeansTestedBenefits(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.YesNo
-    title = "Means tested benefits in the past"
-    question = "Were you receiving means tested benefits in the last 18 months?"
-    percent_complete = 57
-    next = "DisabilityBenefits"
-
-
-class DisabilityBenefits(abstract_views.SingleQuestion):
-    title = "Diability benefits"
-    type_ = abstract_views.QuestionType.YesNo
-    question = (
-        "Does anybody living in the home receive any disability related benefits?"
-    )
-    note = (
-        "This would include: Attendance Allowance, Carers Allowance, Disability Living Allowance, "
-        "Income Related ESA, Personal Independence Payment, Armed Forces Independence Payment, "
-        "Industrial Injuries Disablement Benefit, Mobility Supplement or Severe Disablement Allowance."
-    )
-    percent_complete = 60
-    next = "ChildBenefit"
-
-
-class ChildBenefit(abstract_views.SingleQuestion):
-    title = "Child benefit"
-    type_ = abstract_views.QuestionType.YesNo
-    question = "Do you receive child benefit?"
-    percent_complete = 63
-
-    def get_next(self):
-        if self.answers.child_benefit:
-            return "ChildBenefitClaimantType"
-        else:
-            return "VulnerabilitiesGeneral"
-
-
-class ChildBenefitClaimantType(abstract_views.SingleQuestion):
-    title = "Type of Child Benefit claimant"
-    next = "ChildBenefitNumber"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.ChildBenefitClaimantType.choices
-    question = "Are you a single claimant or member of a couple?"
-    note = (
-        "Is the adult single and living with other adults, or living with a " "partner?"
-    )
-    percent_complete = 66
-
-
-class ChildBenefitNumber(abstract_views.SingleQuestion):
-    title = "Child Benefit number"
-    next = "VulnerabilitiesGeneral"
-    type_ = abstract_views.QuestionType.Choices
-    choices = enums.OneToFiveOrMore.choices
-    question = (
-        "How many children or qualifying young "
-        "people do you receive child benefit for?"
-    )
-    percent_complete = 69
+        return "VulnerabilitiesGeneral"
 
 
 class VulnerabilitiesGeneral(abstract_views.SingleQuestion):
@@ -639,7 +564,7 @@ class HousingCosts(abstract_views.SingleQuestion):
     question = "What are your monthly housing costs?"
     title = "Housing costs"
     icon = "house"
-    next = "CouncilTaxReduction"
+    next = "AnswersSummary"
     percent_complete = 81
 
     def get_supplementary(self):
@@ -685,25 +610,6 @@ class HousingCosts(abstract_views.SingleQuestion):
         return context
 
 
-class CouncilTaxReduction(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.YesNo
-    title = "Council Tax Reduction"
-    question = "Is the household entitled to a Council Tax reduction on the grounds of low income?"
-    next = "FreeSchoolMealsEligibility"
-    percent_complete = 86
-
-
-class FreeSchoolMealsEligibility(abstract_views.SingleQuestion):
-    type_ = abstract_views.QuestionType.YesNo
-    title = "Free school meals"
-    question = (
-        "Are any children living in the household eligible "
-        "for free school meals due to low income?"
-    )
-    next = "AnswersSummary"
-    percent_complete = 90
-
-
 class EnergyAdvices(abstract_views.Question):
     title = "Energy advice"
     template_name = "questionnaire/energy_advice.html"
@@ -739,7 +645,6 @@ class AnswersSummary(abstract_views.Question):
             "seniors": a.seniors,
             "household_income": a.household_income,
             "housing_costs": a.housing_costs,
-            "council_tax_reduction": a.council_tax_reduction,
             "vulnerable_cariovascular": a.vulnerable_cariovascular,
             "vulnerable_respiratory": a.vulnerable_respiratory,
             "vulnerable_mental_health": a.vulnerable_mental_health,
@@ -750,12 +655,6 @@ class AnswersSummary(abstract_views.Question):
             "vulnerable_pregnancy": a.vulnerable_pregnancy,
             "vulnerable_comments": a.vulnerable_comments or None,
             "means_tested_benefits": a.means_tested_benefits,
-            "past_means_tested_benefits": a.past_means_tested_benefits,
-            "disability_benefits": a.disability_benefits,
-            "child_benefit": a.child_benefit,
-            "child_benefit_number": a.get_child_benefit_number_display(),
-            "child_benefit_claimant_type": a.get_child_benefit_claimant_type_display(),
-            "free_school_meals_eligibility": a.free_school_meals_eligibility,
         }
 
         if a.respondent_address_1 or a.respondent_address_2 or a.respondent_address_3:
@@ -872,11 +771,6 @@ class RecommendedMeasures(abstract_views.Question):
         context["not_in_mains_gas"] = self.answers.is_property_not_heated_by_mains_gas
         context["any_scheme_eligible"] = self.answers.is_any_scheme_eligible
         context["bus_eligibility"] = self.answers.is_bus_eligible
-        context["eco4_eligibility"] = self.answers.is_eco4_eligible
-        context["eco4flex_eligibility"] = self.answers.is_eco4_flex_eligible
-        context["eco4_condition_1"] = self.answers.if_off_mains_gas_and_given_sap_score
-        context["eco4_condition_2"] = self.answers.sap_band == enums.EfficiencyBand.D
-        context["gbis_eligibility"] = self.answers.is_gbis_eligible
         context["whlg_eligibility"] = self.answers.is_whlg_eligible
         return context
 

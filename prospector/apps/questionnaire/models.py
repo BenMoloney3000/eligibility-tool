@@ -297,45 +297,6 @@ class Answers(models.Model):
         blank=True,
         verbose_name="Respondent receives means tested benefits",
     )
-    past_means_tested_benefits = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Respondent received means tested benefits in the past 18 months",
-    )
-    disability_benefits = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Anyone in the house is receiving any disability related benefit",
-    )
-    child_benefit = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Anyone in the house is receiving child benefit",
-    )
-    child_benefit_number = models.PositiveSmallIntegerField(
-        null=True,
-        blank=True,
-        verbose_name=(
-            "How many children child benefit is claimed for, or for which "
-            "at least £21.80 per week of maintenance payments are made?"
-        ),
-        choices=enums.OneToFiveOrMore.choices,
-    )
-    child_benefit_claimant_type = models.CharField(
-        max_length=10,
-        null=True,
-        blank=True,
-        verbose_name=(
-            "The person receiving child benefit is a single claimant (not "
-            "member of a couple), or joint claimant."
-        ),
-        choices=enums.ChildBenefitClaimantType.choices,
-    )
-    free_school_meals_eligibility = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Children living in household eligible for free school meals",
-    )
     vulnerabilities_general = models.BooleanField(
         null=True,
         blank=True,
@@ -392,22 +353,11 @@ class Answers(models.Model):
         null=True,
         verbose_name="Housing costs",
     )
-    council_tax_reduction = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Is the household entitled to a Council Tax reduction",
-    )
     nmt4properties = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="No more than 4 properties in landlord's portfolio",
     )
-    willing_to_contribute = models.BooleanField(
-        null=True,
-        blank=True,
-        verbose_name="Landlord be willing to contribute 33% of all spending",
-    )
-
     advice_needed_warm = models.BooleanField(
         null=True,
         blank=True,
@@ -546,13 +496,6 @@ class Answers(models.Model):
         return self.nmt4properties in [None, True]
 
     @property
-    # Returns True even if value of willing_to_contribute is None
-    # because when respond by tenant we do not ask this straightforward
-    # rather assuming landlord's positive answer
-    def will_landlord_contribute(self) -> bool:
-        return self.willing_to_contribute in [None, True]
-
-    @property
     def is_property_among_whlg_eligible_postcodes(self) -> bool:
         return self.property_postcode in WHLG_ELIGIBLE_POSTCODES
 
@@ -561,33 +504,6 @@ class Answers(models.Model):
         if self.household_income is None:
             return None
         return self.household_income <= 36000
-
-    @property
-    def is_income_under_or_equal_to_max_for_eco4_flex(self) -> Optional[bool]:
-        if self.children is not None and self.seniors is None:
-            dependents = self.children
-        elif self.seniors is not None and self.children is None:
-            dependents = self.seniors
-        elif self.children is None and self.seniors is None:
-            dependents = None
-        else:
-            dependents = self.children + self.seniors
-
-        if self.household_income is None:
-            return None
-        elif self.adults is None:
-            return None
-        elif self.adults >= 2:
-            if dependents == 3:
-                return self.household_income <= 32000
-            elif dependents == 4:
-                return self.household_income <= 36000
-            elif dependents >= 5:
-                return self.household_income <= 40000
-        elif self.adults == 1:
-            if dependents >= 5:
-                return self.household_income <= 31600
-        return False
 
     @property
     def is_income_under_or_equal_to_max_for_whlg(self) -> Optional[bool]:
@@ -661,93 +577,33 @@ class Answers(models.Model):
     def is_eco4_eligible(self) -> Optional[bool]:
         if (
             self.means_tested_benefits is None
-            or (
-                self.means_tested_benefits is False
-                and self.past_means_tested_benefits is None
-            )
             or self.sap_band is None
             or self.tenure is None
         ):
             return None
 
         return (
-            (self.means_tested_benefits or self.past_means_tested_benefits)
-            and self.sap_band in SAP_BANDS
-            and self.tenure in TENURES
+            self.means_tested_benefits and self.sap_band in SAP_BANDS and self.tenure in TENURES
         )
 
     @property
     def is_eco4_flex_eligible_route_1(self) -> Optional[bool]:
         if (
             self.household_income is None
-            or self.child_benefit is None
             or self.sap_band is None
             or self.tenure is None
         ):
             return None
 
         return (
-            (
-                self.household_income <= 31000
-                or (
-                    self.child_benefit
-                    and self.is_income_under_or_equal_to_max_for_eco4_flex
-                )
-            )
-            and self.sap_band in SAP_BANDS
-            and self.tenure in TENURES
-        )
-
-    @property
-    def is_eco4_flex_eligible_route_2_a(self) -> Optional[bool]:
-        if (
-            self.council_tax_reduction is None
-            or self.vulnerabilities_general is None
-            or self.multiple_deprivation_index is None
-            or self.sap_band is None
-            or self.tenure is None
-            or self.free_school_meals_eligibility is None
-        ):
-            return None
-
-        return (
-            self.council_tax_reduction
-            and (
-                self.vulnerabilities_general
-                or self.multiple_deprivation_index in [1, 2, 3]
-            )
-            and self.sap_band in SAP_BANDS
-            and self.tenure in TENURES
-        )
-
-    @property
-    def is_eco4_flex_eligible_route_2_b(self) -> Optional[bool]:
-        if (
-            self.free_school_meals_eligibility is None
-            or self.vulnerabilities_general is None
-            or self.multiple_deprivation_index is None
-            or self.sap_band is None
-            or self.tenure is None
-        ):
-            return None
-
-        return (
-            self.free_school_meals_eligibility
-            and (
-                self.vulnerabilities_general
-                or self.multiple_deprivation_index in [1, 2, 3]
-            )
+            self.household_income <= 31000
             and self.sap_band in SAP_BANDS
             and self.tenure in TENURES
         )
 
     @property
     def is_eco4_flex_eligible(self) -> Optional[bool]:
-        return (
-            self.is_eco4_flex_eligible_route_1
-            or self.is_eco4_flex_eligible_route_2_a
-            or self.is_eco4_flex_eligible_route_2_b
-        )
+        return self.is_eco4_flex_eligible_route_1
 
     @property
     def is_gbis_eligible__common_conditions(self) -> Optional[bool]:
@@ -817,16 +673,6 @@ class Answers(models.Model):
                 or self.means_tested_benefits
                 or self.household_income <= 36000
                 or self.is_income_under_or_equal_to_max_for_whlg
-                or self.is_eco4_flex_eligible_route_2_a
-                or self.is_eco4_flex_eligible_route_2_b
-                or (
-                    (
-                        self.vulnerabilities_general
-                        or self.multiple_deprivation_index in [1, 2, 3]
-                    )
-                    and self.council_tax_reduction
-                    or self.free_school_meals_eligibility
-                )
             )
         )
 
@@ -856,9 +702,6 @@ class Answers(models.Model):
         if self.means_tested_benefits:
             routes.append("Pathway 2: Means-Tested Benefits")
 
-        if self.is_eco4_flex_eligible_route_2_a or self.is_eco4_flex_eligible_route_2_b:
-            routes.append("Pathway2: ECO Flex Route 2")
-
         if self.household_income is not None and self.household_income <= 36000:
             routes.append("Pathway 3: Income ≤ £36k")
 
@@ -871,10 +714,6 @@ class Answers(models.Model):
     def is_any_scheme_eligible(self) -> Optional[bool]:
         return (
             self.is_bus_eligible
-            or self.is_connected_for_warmth_eligible
-            or self.is_eco4_eligible
-            or self.is_eco4_flex_eligible
-            or self.is_gbis_eligible
             or self.is_whlg_eligible
         )
 
