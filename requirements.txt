@@ -20,7 +20,7 @@ botocore==1.39.15
     # via
     #   boto3
     #   s3transfer
-brotli==1.1.0
+brotli==1.2.0
     # via whitenoise
 celery[redis]==5.5.3
     # via
@@ -59,7 +59,7 @@ cron-descriptor==1.4.5
     # via django-celery-beat
 diff-match-patch==20241021
     # via django-import-export
-django==5.2.9
+django==5.2.10
     # via
     #   -r requirements.in
     #   crispy-forms-gds
@@ -172,7 +172,7 @@ tzdata==2025.2
     #   django
     #   django-celery-beat
     #   kombu
-urllib3==2.6.0
+urllib3==2.6.3
     # via
     #   botocore
     #   requests
