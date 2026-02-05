@@ -473,6 +473,21 @@ def map_crm(answers: models.Answers) -> dict:
             if answers.respondent_role == enums.RespondentRole.LANDLORD.value
             else None
         ),
+        "cr51a_llcontactemail": (
+            answers.email
+            if answers.respondent_role == enums.RespondentRole.LANDLORD.value
+            else None
+        ),
+        "cr51a_llcontactmobile": (
+            answers.contact_mobile
+            if answers.respondent_role == enums.RespondentRole.LANDLORD.value
+            else None
+        ),
+        "cr51a_llcontacthomephone": (
+            answers.contact_phone
+            if answers.respondent_role == enums.RespondentRole.LANDLORD.value
+            else None
+        ),
         "pcc_website": None,
         "pcc_howdidyouhearaboutpec2": (
             option_value_mapping(
