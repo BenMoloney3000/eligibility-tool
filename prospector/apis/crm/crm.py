@@ -463,6 +463,16 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_lladdress1county": None,
         "pcc_lladdress1zippostalcode": answers.landlord_details["postcode"],
         "pcc_llmainphone": answers.landlord_details["phone"],
+        "cr51a_llcontactfirstname": (
+            answers.first_name
+            if answers.respondent_role == enums.RespondentRole.LANDLORD.value
+            else None
+        ),
+        "cr51a_llcontactlastname": (
+            answers.last_name
+            if answers.respondent_role == enums.RespondentRole.LANDLORD.value
+            else None
+        ),
         "pcc_website": None,
         "pcc_howdidyouhearaboutpec2": (
             option_value_mapping(
