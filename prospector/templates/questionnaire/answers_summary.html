@@ -88,7 +88,7 @@
         </tr>
 
         <tr>
-            <td>Do you receive means tested benefits?</td>
+            <td>Does anyone in your household receive means-tested benefits?</td>
             <td>{{ user_data.means_tested_benefits|yesno|capfirst }}</td>
             <td><a href='{% url "questionnaire:means-tested-benefits" %}'>CHANGE</a></td>
         </tr>
