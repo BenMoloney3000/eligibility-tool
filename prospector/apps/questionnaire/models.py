@@ -422,6 +422,10 @@ class Answers(models.Model):
                 "city": None,
                 "postcode": None,
                 "phone": None,
+                "mobile": None,
+                "first_name": None,
+                "last_name": None,
+                "email": None,
             }
         else:
             if self.contact_phone:
@@ -434,6 +438,10 @@ class Answers(models.Model):
                 "city": self.respondent_address_3,
                 "postcode": self.respondent_postcode,
                 "phone": phone,
+                "mobile": self.contact_mobile,
+                "first_name": self.first_name,
+                "last_name": self.last_name,
+                "email": self.email,
             }
 
     @property

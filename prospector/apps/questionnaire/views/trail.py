@@ -422,7 +422,7 @@ class Occupants(abstract_views.Question):
 class MeansTestedBenefits(abstract_views.SingleQuestion):
     type_ = abstract_views.QuestionType.YesNo
     title = "Means tested benefits"
-    question = "Do you receive means tested benefits?"
+    question = "Does anyone in your household receive means-tested benefits?"
     percent_complete = 54
 
     def get_next(self):

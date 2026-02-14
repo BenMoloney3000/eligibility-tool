@@ -463,6 +463,11 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_lladdress1county": None,
         "pcc_lladdress1zippostalcode": answers.landlord_details["postcode"],
         "pcc_llmainphone": answers.landlord_details["phone"],
+        "cr51a_llcontactfirstname": answers.landlord_details["first_name"],
+        "cr51a_llcontactlastname": answers.landlord_details["last_name"],
+        "cr51a_llcontactemail": answers.landlord_details["email"],
+        "cr51a_llcontactmobile": answers.landlord_details["mobile"],
+        "cr51a_llcontacthomephone": answers.landlord_details["phone"],
         "pcc_website": None,
         "pcc_howdidyouhearaboutpec2": (
             option_value_mapping(

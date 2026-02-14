@@ -322,6 +322,39 @@ def test_map_crm(answers):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "respondent_role,expected_first,expected_last,expected_email,expected_mobile,expected_phone",
+    [
+        (enums.RespondentRole.LANDLORD, "Lana", "Lord", "lana@example.com", "07000", "02000"),
+        (enums.RespondentRole.TENANT, None, None, None, None, None),
+    ],
+)
+def test_map_crm_landlord_contact_names(
+    answers,
+    respondent_role,
+    expected_first,
+    expected_last,
+    expected_email,
+    expected_mobile,
+    expected_phone,
+):
+    dummy_answers = answers(
+        respondent_role=respondent_role,
+        first_name="Lana",
+        last_name="Lord",
+        email="lana@example.com",
+        contact_mobile="07000",
+        contact_phone="02000",
+    )
+    crm_data = crm.map_crm(dummy_answers)
+    assert crm_data["cr51a_llcontactfirstname"] == expected_first
+    assert crm_data["cr51a_llcontactlastname"] == expected_last
+    assert crm_data["cr51a_llcontactemail"] == expected_email
+    assert crm_data["cr51a_llcontactmobile"] == expected_mobile
+    assert crm_data["cr51a_llcontacthomephone"] == expected_phone
+
+
+@pytest.mark.django_db
 def test_map_crm_does_not_populate_udprn(answers):
     """Ensure UDPRN fields are always left empty in CRM payload."""
     dummy_answers = answers(
