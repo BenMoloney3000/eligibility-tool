@@ -29,7 +29,7 @@ class ParityData(models.Model):
     heating = models.CharField(max_length=128)
     boiler_efficiency = models.CharField(max_length=1)
     main_fuel = models.CharField(max_length=128)
-    controls_adequacy = models.CharField(max_length=128)
+    heating_controls_detail = models.CharField(max_length=500)
     local_authority = models.CharField(max_length=128)
     ward = models.CharField(max_length=128)
     parliamentary_constituency = models.CharField(max_length=128)

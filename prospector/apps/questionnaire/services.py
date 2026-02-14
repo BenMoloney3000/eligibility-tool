@@ -1,10 +1,14 @@
+import json
 import logging
 
+from django.conf import settings
 from django.utils import timezone
 
 from . import models
 from prospector.apps.crm.tasks import crm_create
 from prospector.apps.parity.models import ParityData
+from ...apis.crm import crm
+from ...apis.parity import parity_api_fetch
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +16,7 @@ logger = logging.getLogger(__name__)
 def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
     parity_object = None
     if answers.uprn:
-        parity_object = ParityData.objects.filter(uprn=answers.uprn).first()
+        parity_object = parity_api_fetch.get_for_uprn(answers.uprn)
     if parity_object is None:
         parity_object = ParityData.objects.filter(
             address_1=answers.property_address_1,
@@ -41,7 +45,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.lodged_epc_band = po.lodged_epc_band
         answers.glazing = po.glazing
         answers.boiler_efficiency = po.boiler_efficiency
-        answers.controls_adequacy = po.controls_adequacy
+        answers.heating_controls_detail = po.heating_controls_detail
         answers.heated_rooms = po.heated_rooms
         answers.t_co2_current = po.tco2_current
         answers.realistic_fuel_bill = po.realistic_fuel_bill
@@ -66,6 +70,10 @@ def close_questionnaire(answers: models.Answers):
     answers.save()
 
     try:
-        crm_create.delay(str(answers.uuid))
+        if settings.ENV == "local":
+            logger.warning('Local environment - will not push data to CRM. Logging payload instead.')
+            logger.info(json.dumps(crm.map_crm(answers)))
+        else:
+            crm_create.delay(str(answers.uuid))
     except Exception as e:
         logger.error("close_questionnaire_func exception %s", str(e))

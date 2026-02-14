@@ -556,17 +556,11 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_consented_callback": answers.consented_callback,
         "cr51a_consented_future_schemes": answers.consented_future_schemes,
         "cr51a_heatedrooms": answers.heated_rooms,
-        "cr51a_heatingcontrolsadequacy": (
-            option_value_mapping(
-                "cr51a_heatingcontrolsadequacy",
-                answers.controls_adequacy,
-                {
-                    enums.ControlsAdequacy.OPTIMAL: "Optimal",
-                    enums.ControlsAdequacy.SUB_OPTIMAL: "Suboptimal",
-                    enums.ControlsAdequacy.TOP_SPEC: "Top-spec",
-                },
-            )
-        ),
+
+        # Superseded by cr51a_heatingcontrolsdetail
+        "cr51a_heatingcontrolsadequacy": "Unknown",
+        "cr51a_heatingcontrolsdetail": answers.heating_controls_detail,
+
         "cr51a_householdincome": answers.household_income,
         "cr51a_householdincomeaftertax": answers.household_income_after_tax,
         "cr51a_householdincome_base": None,

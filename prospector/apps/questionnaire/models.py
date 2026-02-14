@@ -2,6 +2,7 @@
 import uuid as uuid_lib
 from typing import Optional
 
+import pydash
 from django.db import models
 
 from . import enums
@@ -245,8 +246,8 @@ class Answers(models.Model):
         max_length=1, choices=enums.EfficiencyBand.choices, blank=True
     )
 
-    controls_adequacy = models.CharField(
-        max_length=128, choices=enums.ControlsAdequacy.choices, blank=True
+    heating_controls_detail = models.CharField(
+        max_length=500, blank=True
     )
 
     heated_rooms = models.IntegerField(blank=True, null=True)

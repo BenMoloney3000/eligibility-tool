@@ -5,6 +5,7 @@ class ControlsAdequacy(models.TextChoices):
     OPTIMAL = "Optimal", "Optimal"
     SUB_OPTIMAL = "Sub Optimal", "Sub optimal"
     TOP_SPEC = "Top Spec", "Top spec"
+    UNKNOWN = "Unknown", "Unknown"
 
 
 class CouncilTaxBand(models.TextChoices):
@@ -42,25 +43,25 @@ class FloorInsulation(models.TextChoices):
 
 
 class Glazing(models.TextChoices):
-    DOUBLE_2002_PLUS = "Double 2002 or later", "Double 2002 or later"
-    DOUBLE_BEFORE_2002 = "Double before 2002", "Double before 2002"
-    DOUBLE_UNKNOWN = "Double but age unknown", "Double but age unknown"
+    DOUBLE_2002_PLUS = "DoubleGlazing2002OrLater", "Double 2002 or later"
+    DOUBLE_BEFORE_2002 = "DoubleGlazingPre2002", "Double before 2002"
+    DOUBLE_UNKNOWN = "DoubleGlazingUnknownAge", "Double but age unknown"
     NOT_DEFINED = "NotDefined", "Not Defined"
-    SECONDARY = "Secondary", "Secondary"
-    SINGLE = "Single", "Single"
-    TRIPLE = "Triple", "Triple"
+    SECONDARY = "SecondaryGlazing", "Secondary"
+    SINGLE = "SingleGlazing", "Single"
+    TRIPLE = "TripleGlazing", "Triple"
 
 
 class Heating(models.TextChoices):
-    BOILERS = "Boilers", "Boilers"
+    BOILERS = "BoilerRadsOrUF", "Boilers"
     COMMUNITY = "Community", "Community"
-    EUF = "Electric underfloor", "Electric underfloor"
-    HP_WARM = "Heat pumps (warm air)", "Heat pumps (warm air)"
-    HP_WET = "Heat pumps (wet)", "Heat pumps (wet)"
-    OTHER = "Other systems", "Other systems"
-    RH = "Room heaters", "Room heaters"
-    SH = "Storage heaters", "Storage heaters"
-    AIR = "Warm Air (not heat pump)", "Warm air (not heat pump)"
+    EUF = "ElectricUnderfloor", "Electric underfloor"
+    HP_WARM = "HeatPumpWarmAir", "Heat pumps (warm air)"
+    HP_WET = "HeatPumpRadsOrUF", "Heat pumps (wet)"
+    OTHER = "OtherSystem", "Other systems"
+    RH = "RoomHeaters", "Room heaters"
+    SH = "StorageHeaters", "Storage heaters"
+    AIR = "WarmAirNotHeatPump", "Warm air (not heat pump)"
 
 
 class HowDidYouHearAboutPEC(models.TextChoices):
@@ -247,13 +248,13 @@ class Tenure(models.TextChoices):
 
 class WallConstruction(models.TextChoices):
     CAVITY = "Cavity", "Cavity"
-    COB = "Cob", "Cob"
-    GRANITE = "Granite", "Granite"
-    PARK_HOME = "Park Home", "Park home"
+    COB = "CobWall", "Cob"
+    GRANITE = "GraniteOrWhinstone", "Granite"
+    PARK_HOME = "ParkHomeWall", "Park home"
     SANDSTONE = "Sandstone", "Sandstone"
-    SOLID_BRICK = "Solid Brick", "Solid brick"
-    SYSTEM = "System", "System"
-    TIMBER_FRAME = "Timber Frame", "Timber frame"
+    SOLID_BRICK = "SolidBrick", "Solid brick"
+    SYSTEM = "SystemBuilt", "System"
+    TIMBER_FRAME = "TimberFrame", "Timber frame"
 
 
 class WallInsulation(models.TextChoices):

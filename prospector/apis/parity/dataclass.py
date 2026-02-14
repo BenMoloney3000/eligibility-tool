@@ -31,7 +31,7 @@ class ParityData:
     heating: str
     boiler_efficiency: str
     main_fuel: str
-    controls_adequacy: str
+    heating_controls_detail: str
     local_authority: str
     ward: str
     parliamentary_constituency: str
@@ -44,7 +44,7 @@ class ParityData:
     multiple_deprivation_index: int
     income_decile: int
 
-    def __repr__(self):
-        return (f"{self.address_1}, {self.address_2}".strip(", ")) + (
-            f", inspected on {self.date:%d/%m/%Y}" if self.date else ""
-        )
+    # def __repr__(self):
+    #     return (f"{self.address_1}, {self.address_2}".strip(", ")) + (
+    #         f", inspected on {self.date:%d/%m/%Y}" if self.date else ""
+    #     )

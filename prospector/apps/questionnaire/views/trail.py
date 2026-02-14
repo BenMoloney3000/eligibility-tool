@@ -1,6 +1,7 @@
 import logging
 import re
 
+import pydash
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
@@ -385,7 +386,7 @@ class PropertyMeasuresSummary(abstract_views.Question):
             "heating": f"{a.get_heating_display()}",
             "main_fuel": f"{a.get_main_fuel_display()}",
             "boiler_efficiency": f"{a.get_boiler_efficiency_display()}",
-            "controls_adequacy": f"{a.get_controls_adequacy_display()}",
+            "heating_controls_detail": f"{a.heating_controls_detail}",
             "realistic_fuel_bill": f"{a.realistic_fuel_bill}",
             "sap_band": f"{a.sap_band}",
         }
