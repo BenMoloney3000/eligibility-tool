@@ -69,8 +69,8 @@ def close_questionnaire(answers: models.Answers):
     answers.save()
 
     try:
-        if settings.ENV == "local":
-            logger.warning('Local environment - will not push data to CRM. Logging payload instead.')
+        if settings.ENV in ["local", "stage"]:
+            logger.warning('Local/stage environment - will not push data to CRM. Logging payload instead.')
             logger.info(json.dumps(crm.map_crm(answers)))
         else:
             crm_create.delay(str(answers.uuid))
