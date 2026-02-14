@@ -12,7 +12,7 @@ from django.conf import settings
 from prospector.apis.parity import ParityData
 from prospector.apps.parity.models import ParityData as ParityDataModel
 
-def get_for_uprn(uprn, output_results=True):
+def get_for_uprn(uprn, output_results=False):
 
     logger = logging.getLogger(__name__)
 
