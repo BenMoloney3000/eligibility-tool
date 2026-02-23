@@ -48,7 +48,6 @@ def mock_crm_response(mock_crm_api_settings):
         "cr51a_childreneligibleforfreeschoolmeals": False,
         "cr51a_counciltaxreductionentitlement": False,
         "cr51a_consented_callback": False,
-        "cr51a_consented_future_schemes": False,
         "cr51a_heatedrooms": 2,
         "cr51a_heatingcontrolsadequacy": 106870000,
         "cr51a_householdincome": 40000,

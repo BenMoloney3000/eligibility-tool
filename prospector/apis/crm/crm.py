@@ -557,9 +557,7 @@ def map_crm(answers: models.Answers) -> dict:
         "cr51a_65andover": answers.seniors,
         "cr51a_adults": answers.adults,
         "cr51a_children": answers.children,
-        # Keep future schemes consent for backwards compatibility with Dynamics
         "cr51a_consented_callback": answers.consented_callback,
-        "cr51a_consented_future_schemes": answers.consented_future_schemes,
         "cr51a_heatedrooms": answers.heated_rooms,
         "cr51a_heatingcontrolsadequacy": (
             option_value_mapping(

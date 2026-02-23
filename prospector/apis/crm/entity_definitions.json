@@ -478,40 +478,6 @@
             "SchemaName": "cr51a_consented_callBack"
         },
         {
-            "@odata.type": "#Microsoft.Dynamics.CRM.BooleanAttributeMetadata",
-            "AttributeOf": null,
-            "AttributeType": "Boolean",
-            "AttributeTypeName": {
-                "Value": "BooleanType"
-            },
-            "DisplayName": {
-                "LocalizedLabels": [
-                    {
-                        "HasChanged": null,
-                        "IsManaged": false,
-                        "Label": "Consent to future scheme communication",
-                        "LanguageCode": 1033,
-                        "MetadataId": "83364fe2-41ad-4409-97e1-115bf13ba6f7"
-                    }
-                ],
-                "UserLocalizedLabel": {
-                    "HasChanged": null,
-                    "IsManaged": false,
-                    "Label": "Consent to future scheme communication",
-                    "LanguageCode": 1033,
-                    "MetadataId": "83364fe2-41ad-4409-97e1-115bf13ba6f7"
-                }
-            },
-            "EntityLogicalName": "pcc_retrofitintermediate",
-            "IsCustomAttribute": true,
-            "IsPrimaryId": false,
-            "IsRequiredForForm": false,
-            "IsValidODataAttribute": true,
-            "LogicalName": "cr51a_consented_future_schemes",
-            "MetadataId": "a35b55c0-ebae-ee11-a569-000d3abd864b",
-            "SchemaName": "cr51a_consented_future_schemes"
-        },
-        {
             "@odata.type": "#Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
             "AttributeOf": null,
             "AttributeType": "Picklist",

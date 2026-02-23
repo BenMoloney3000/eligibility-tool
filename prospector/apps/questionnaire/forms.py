@@ -310,9 +310,6 @@ class Consents(AnswerFormMixin, forms.ModelForm):
         if data.get("consented_callback") is None:
             data["consented_callback"] = False
 
-        # Mirror the value for future schemes consent to maintain existing data
-        data["consented_future_schemes"] = data["consented_callback"]
-
         return data
 
 
