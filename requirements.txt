@@ -59,7 +59,7 @@ cron-descriptor==1.4.5
     # via django-celery-beat
 diff-match-patch==20241021
     # via django-import-export
-django==5.2.11
+django==5.2.13
     # via
     #   -r requirements.in
     #   crispy-forms-gds
@@ -142,7 +142,7 @@ redis==5.2.1
     #   django-rq
     #   kombu
     #   rq
-requests==2.32.4
+requests==2.33.0
     # via
     #   -r requirements.in
     #   django-anymail
