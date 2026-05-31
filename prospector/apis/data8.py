@@ -35,14 +35,6 @@ def _extract_additional_value(raw: dict, name: str) -> str:
     return ""
 
 
-def _extract_additional_value(raw: dict, name: str) -> str:
-    """Get a value from RawAddress.AdditionalData by Name."""
-    for kv in (raw or {}).get("AdditionalData", []) or []:
-        if kv.get("Name") == name and kv.get("Value"):
-            return str(kv["Value"])
-    return ""
-
-
 def _process_results(results: list) -> List[AddressData]:
     out: List[AddressData] = []
 
@@ -54,9 +46,6 @@ def _process_results(results: list) -> List[AddressData]:
 
         def _get(j: int) -> str:
             return lines[j] if j < len(lines) else ""
-
-        # UPRN is provided in RawAddress.AdditionalData as {"Name": "UPRN", "Value": "..."}
-        uprn = _extract_additional_value(raw, "UPRN") or str(row.get("UPRN") or raw.get("UPRN") or "")
 
         # UPRN is provided in RawAddress.AdditionalData as {"Name": "UPRN", "Value": "..."}
         uprn = _extract_additional_value(raw, "UPRN") or str(row.get("UPRN") or raw.get("UPRN") or "")

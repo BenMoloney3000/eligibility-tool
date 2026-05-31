@@ -18,7 +18,6 @@ class Command(BaseCommand):
             default=False,
             help="Return raw json response",
         )
-        pass
 
     def handle(self, *args, **options):
         postcode = options["postcode"][0]

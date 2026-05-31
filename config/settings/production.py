@@ -3,8 +3,6 @@ import requests
 from .base import *  # noqa
 from .base import env
 
-from pathlib import Path
-import requests
 
 
 
