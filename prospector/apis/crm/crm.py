@@ -402,7 +402,7 @@ def map_crm(answers: models.Answers) -> dict:
                     enums.WallInsulation.EXTERNAL: "External wall insulation",
                     enums.WallInsulation.FC: "Filled cavity",
                     enums.WallInsulation.FCE: "Filled cavity plus external wall insulation",
-                    enums.WallInsulation.FC: "Filled cavity plus internal wall insulation",
+                    enums.WallInsulation.FCI: "Filled cavity plus internal wall insulation",
                     enums.WallInsulation.INTERNAL: "Internal wall insulation",
                 },
             )
