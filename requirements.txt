@@ -59,7 +59,7 @@ cron-descriptor==1.4.5
     # via django-celery-beat
 diff-match-patch==20241021
     # via django-import-export
-django==5.2.13
+django==5.2.14
     # via
     #   -r requirements.in
     #   crispy-forms-gds
@@ -102,7 +102,7 @@ django-waffle==5.0.0
     # via -r requirements.in
 gunicorn==20.1.0
     # via -r requirements.in
-idna==3.10
+idna==3.15
     # via requests
 jmespath==1.0.1
     # via
@@ -172,7 +172,7 @@ tzdata==2025.2
     #   django
     #   django-celery-beat
     #   kombu
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   botocore
     #   requests
