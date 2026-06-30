@@ -422,6 +422,7 @@ def map_crm(answers: models.Answers) -> dict:
                 },
             )
         ),
+        "cr51a_totalflooraream": answers.total_floor_area,
         "pcc_propertyprofilecomments": None,  # Leave blank
         "pcc_epctype": None,  # Leave blank after Phase 3 changes
         "pcc_dateofmostrecentepc": None,  # leave blank

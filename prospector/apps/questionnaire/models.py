@@ -256,6 +256,8 @@ class Answers(models.Model):
 
     realistic_fuel_bill = models.CharField(max_length=9, blank=True, null=True)
 
+    total_floor_area = models.IntegerField(blank=True, null=True)
+
     """
     # Top level household income assessment
     """

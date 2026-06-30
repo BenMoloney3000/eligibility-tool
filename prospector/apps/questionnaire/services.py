@@ -49,6 +49,7 @@ def prepopulate_from_parity(answers: models.Answers) -> models.Answers:
         answers.income_decile = po.income_decile
         answers.council_tax_band = po.tax_band
         answers.parity_object_id = str(po.id)
+        answers.total_floor_area = po.total_floor_area
 
         return answers
 
