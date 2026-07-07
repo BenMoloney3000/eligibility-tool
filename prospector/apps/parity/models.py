@@ -46,6 +46,7 @@ class ParityData(models.Model):
     multiple_deprivation_index = models.SmallIntegerField()
     income_decile = models.SmallIntegerField()
     tax_band = models.CharField(max_length=1, blank=True, null=True)
+    total_floor_area = models.SmallIntegerField()
 
     class Meta:
         verbose_name_plural = "Parity data"
