@@ -54,5 +54,5 @@ class TestWHLGEligibility(TestCase):
             multiple_deprivation_index=4,
         )
 
-        assert answers.is_whlg_eligible is False
+        assert answers.is_whlg_eligible is None
         assert "Pathway2: ECO Flex Route 2" not in answers.whlg_all_eligibility_routes
