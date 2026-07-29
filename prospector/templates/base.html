@@ -17,7 +17,7 @@
         <title>{% block title %}Home upgrade eligibility{% endblock title %}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&amp;display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&amp;display=swap" rel="stylesheet">
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}">
         <link href="{% sass_src 'css/style.scss' %}" rel="stylesheet" type="text/css" />
     </head>
@@ -72,5 +72,9 @@
         {% block javascript %}
         {% endblock javascript %}
         <script defer src="{% static 'js/main.js' %}"></script>
+        <script
+          src="https://cdn.reciteme.com/reciteme_toolbar_launcher.min.js"
+          data-clientid="8ba77059228c9e0257283ab350ec9b557744a7aa">
+        </script>
     </body>
 </html>
