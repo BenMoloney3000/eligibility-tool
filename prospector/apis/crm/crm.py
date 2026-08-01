@@ -11,6 +11,7 @@ from requests_oauthlib import OAuth2Session
 
 from prospector.apps.questionnaire import enums
 from prospector.apps.questionnaire import models
+from prospector.dataformats import names
 
 logger = logging.getLogger(__name__)
 
@@ -438,8 +439,8 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_propertyeligibilityscore": None,  # Leave blank after Phase 3 changes
         # Contact
         "pcc_salutation": None,
-        "pcc_firstname": answers.occupant_details["first_name"],
-        "pcc_lastname": answers.occupant_details["last_name"],
+        "pcc_firstname": names.normalise(answers.occupant_details["first_name"]),
+        "pcc_lastname": names.normalise(answers.occupant_details["last_name"]),
         "pcc_homephone": answers.occupant_details["phone"],
         "pcc_mobile": answers.occupant_details["mobile"],
         "pcc_email": answers.occupant_details["email"],
@@ -464,8 +465,12 @@ def map_crm(answers: models.Answers) -> dict:
         "pcc_lladdress1county": None,
         "pcc_lladdress1zippostalcode": answers.landlord_details["postcode"],
         "pcc_llmainphone": answers.landlord_details["phone"],
-        "cr51a_llcontactfirstname": answers.landlord_details["first_name"],
-        "cr51a_llcontactlastname": answers.landlord_details["last_name"],
+        "cr51a_llcontactfirstname": names.normalise(
+            answers.landlord_details["first_name"]
+        ),
+        "cr51a_llcontactlastname": names.normalise(
+            answers.landlord_details["last_name"]
+        ),
         "cr51a_llcontactemail": answers.landlord_details["email"],
         "cr51a_llcontactmobile": answers.landlord_details["mobile"],
         "cr51a_llcontacthomephone": answers.landlord_details["phone"],
@@ -604,8 +609,8 @@ def map_crm(answers: models.Answers) -> dict:
             )
         ),
         "cr51a_respondentemailadress": answers.email,
-        "cr51a_respondentfirstname": answers.first_name,
-        "cr51a_respondentlastname": answers.last_name,
+        "cr51a_respondentfirstname": names.normalise(answers.first_name),
+        "cr51a_respondentlastname": names.normalise(answers.last_name),
         "cr51a_respondentmobile": answers.contact_mobile,
         "cr51a_respondentphonenumber": answers.contact_phone,
         "cr51a_respondentrelationshiptooccupier": answers.respondent_role_other,
