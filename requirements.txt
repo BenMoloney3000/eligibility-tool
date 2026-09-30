@@ -172,7 +172,7 @@ tzdata==2025.2
     #   django
     #   django-celery-beat
     #   kombu
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   botocore
     #   requests
