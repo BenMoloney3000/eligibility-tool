@@ -5,8 +5,6 @@ import os
 
 from django.core.management.base import CommandError
 
-from . import enums
-
 logger = logging.getLogger(__name__)
 
 MAX_64_BIT_INT = 9223372036854775807
@@ -30,50 +28,6 @@ def generate_id():
             id_string += chars[index]
 
     return "".join(random.sample(id_string, len(id_string)))
-
-
-def get_disruption(measure: enums.PossibleMeasures) -> str:
-    if measure in [
-        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
-        enums.PossibleMeasures.SOLID_WALL_INSULATION,
-    ]:
-        return "High"
-    elif measure in [
-        enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.BOILER_UPGRADE,
-    ]:
-        return "Medium"
-    else:
-        return "Low"
-
-
-def get_comfort_benefit(measure: enums.PossibleMeasures) -> str:
-    if measure in [
-        enums.PossibleMeasures.CAVITY_WALL_INSULATION,
-        enums.PossibleMeasures.SOLID_WALL_INSULATION,
-        enums.PossibleMeasures.RIR_INSULATION,
-        enums.PossibleMeasures.LOFT_INSULATION,
-    ]:
-        return "High"
-    elif measure in [
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
-    ]:
-        return "Medium"
-    else:
-        return "Low"
-
-
-def get_bill_impact(measure: enums.PossibleMeasures) -> str:
-    if measure in [
-        enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-        enums.PossibleMeasures.BATTERY_STORAGE,
-        enums.PossibleMeasures.HEATING_CONTROLS,
-    ]:
-        return "Medium"
-    else:
-        return "High"
 
 
 def get_whlg_eligible_postcodes():

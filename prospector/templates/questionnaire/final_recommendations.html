@@ -14,12 +14,6 @@
         Your submission has been recorded.
     </p>
 
-    {% if measures %}
-
-        {% include 'questionnaire/snippets/recommended_measures.html' %}
-
-    {% endif %}
-
     {% if any_scheme_eligible %}
         {% include 'questionnaire/snippets/eligible_schemes.html' %}
     {% else %}
