@@ -678,95 +678,12 @@ class AnswersSummary(abstract_views.Question):
 
 class RecommendedMeasures(abstract_views.Question):
     template_name = "questionnaire/final_recommendations.html"
-    title = "Recommendations for this property"
+    title = "Thank you for your submission"
     percent_complete = 100
-
-    def determine_recommended_measures(self):
-        measures = []
-        if self.answers.is_cavity_wall_insulation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.CAVITY_WALL_INSULATION,
-                    "label": enums.PossibleMeasures.CAVITY_WALL_INSULATION.label,
-                }
-            )
-        if self.answers.is_solid_wall_insulation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.SOLID_WALL_INSULATION,
-                    "label": enums.PossibleMeasures.SOLID_WALL_INSULATION.label,
-                }
-            )
-        if self.answers.is_underfloor_insulation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.UNDERFLOOR_INSULATION,
-                    "label": enums.PossibleMeasures.UNDERFLOOR_INSULATION.label,
-                }
-            )
-        if self.answers.is_loft_insulation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.LOFT_INSULATION,
-                    "label": enums.PossibleMeasures.LOFT_INSULATION.label,
-                }
-            )
-        if self.answers.is_rir_insulation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.RIR_INSULATION,
-                    "label": enums.PossibleMeasures.RIR_INSULATION.label,
-                }
-            )
-        if self.answers.is_boiler_upgrade_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.BOILER_UPGRADE,
-                    "label": enums.PossibleMeasures.BOILER_UPGRADE.label,
-                }
-            )
-        if self.answers.is_heatpump_installation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.HEAT_PUMP_INSTALLATION,
-                    "label": enums.PossibleMeasures.HEAT_PUMP_INSTALLATION.label,
-                }
-            )
-        if self.answers.is_solar_pv_installation_recommended:
-            measures.extend(
-                [
-                    {
-                        "type": enums.PossibleMeasures.SOLAR_PV_INSTALLATION,
-                        "label": enums.PossibleMeasures.SOLAR_PV_INSTALLATION.label,
-                    },
-                    {
-                        "type": enums.PossibleMeasures.BATTERY_STORAGE,
-                        "label": enums.PossibleMeasures.BATTERY_STORAGE.label,
-                    },
-                ]
-            )
-        if self.answers.is_heating_controls_installation_recommended:
-            measures.append(
-                {
-                    "type": enums.PossibleMeasures.HEATING_CONTROLS,
-                    "label": enums.PossibleMeasures.HEATING_CONTROLS.label,
-                }
-            )
-        if len(measures) == 0:
-            return None
-        return measures
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         services.close_questionnaire(self.answers)
-        measures = self.determine_recommended_measures()
-        if measures:
-            for measure in measures:
-                measure["disruption"] = utils.get_disruption(measure["type"])
-                measure["comfort_benefit"] = utils.get_comfort_benefit(measure["type"])
-                measure["bill_impact"] = utils.get_bill_impact(measure["type"])
-
-        context["measures"] = measures
         context["full_name"] = f"{self.answers.first_name} {self.answers.last_name}"
         context["not_in_mains_gas"] = self.answers.is_property_not_heated_by_mains_gas
         context["any_scheme_eligible"] = self.answers.is_any_scheme_eligible
